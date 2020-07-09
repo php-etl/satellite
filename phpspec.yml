@@ -1,0 +1,21 @@
+extensions:
+#  FriendsOfPhpSpec\PhpSpec\CodeCoverage\CodeCoverageExtension:
+#    format:
+#      - html
+#      - clover
+#      - xml
+#    output:
+#      html: reports/phpspec-coverage-html
+#      clover: reports/phpspec-coverage-clover/coverage.xml
+#      xml: reports/phpspec-coverage-xml
+#    blacklist:
+#      - vendor
+#    whitelist:
+#      - src
+formatter.name: pretty
+stop_on_failure: false
+suites:
+  fastmap_suite:
+    namespace: Kiboko\Component\ETL\Satellite
+    psr4_prefix: Kiboko\Component\ETL\Satellite
+    src_path: '%paths.config%'

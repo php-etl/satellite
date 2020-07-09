@@ -1,0 +1,56 @@
+{
+    "name": "php-etl/satellite",
+    "description": "This library aims at building and running lambda PHP functions",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kiboko SAS",
+            "homepage": "http://kiboko.fr"
+        },
+        {
+            "name": "Grégory Planchat",
+            "email": "gregory@kiboko.fr"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4",
+        "ext-json": "*",
+        "ext-zmq": "*",
+        "symfony/console": "^4.4",
+        "symfony/process": "^4.4",
+        "psr/log": "^1.1@dev",
+        "php-etl/promise": "^1.0@dev",
+        "ramsey/uuid": "^4.0@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "johnkary/phpunit-speedtrap": "^3.1@dev",
+        "mybuilder/phpunit-accelerator": "dev-master",
+        "phpstan/phpstan": "^0.12.0@dev",
+        "infection/infection": "dev-master",
+        "fzaninotto/faker": "^1.9@dev",
+        "friends-of-phpspec/phpspec-code-coverage": "^4.3",
+        "phpspec/phpspec": "^6.2@dev",
+        "php-etl/phpspec-extension": "^1.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kiboko\\Component\\ETL\\Satellite\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Kiboko\\Component\\ETL\\Satellite\\": "spec/",
+            "unit\\Kiboko\\Component\\ETL\\Satellite\\": "unit/",
+            "functional\\Kiboko\\Component\\ETL\\Satellite\\": "functional/",
+            "performance\\Kiboko\\Component\\ETL\\Satellite\\": "performance/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

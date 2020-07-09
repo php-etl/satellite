@@ -1,0 +1,54 @@
+version: '2.2'
+
+services:
+  blackfire:
+    image: blackfire/blackfire
+    environment:
+      - BLACKFIRE_SERVER_ID
+      - BLACKFIRE_SERVER_TOKEN
+
+  sh:
+    extends:
+      service: sh74
+    ports:
+      - 5557:5557
+      - 5558:5558
+      - 5559:5559
+
+  sh-xdebug:
+    extends:
+      service: sh74-xdebug
+
+  sh74:
+    build:
+      context: ./.docker/php@7.4/cli
+      args:
+        ORIGINAL_IMAGE: kiboko/php:7.4-cli-blackfire
+    user: root:root
+    volumes:
+      - ./.docker/php@7.4/cli/config/security.ini:/usr/local/etc/php/conf.d/security.ini:ro
+      - ./:/var/www/html
+      - $HOME/.composer/:/opt/docker/.composer/
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: "no"
+    command: [ "sleep", "31536000" ]
+    environment:
+      - BLACKFIRE_CLIENT_ID
+      - BLACKFIRE_CLIENT_TOKEN
+      - COMPOSER_GITHUB_TOKEN
+
+  sh74-xdebug:
+    build:
+      context: ./.docker/php@7.4/cli
+      args:
+        ORIGINAL_IMAGE: kiboko/php:7.4-cli-xdebug
+    user: root:root
+    volumes:
+      - ./.docker/php@7.4/cli-xdebug/config/security.ini:/usr/local/etc/php/conf.d/security.ini:ro
+      - ./:/var/www/html
+      - $HOME/.composer/:/opt/docker/.composer/
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: "no"
+    command: [ "sleep", "31536000" ]
+    environment:
+      - COMPOSER_GITHUB_TOKEN
