@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Asset;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Asset;
 
-use Kiboko\Component\ETL\Satellite\Docker\AssetInterface;
+use Kiboko\Component\ETL\Satellite\Adapter\Docker\AssetInterface;
 
 final class File implements AssetInterface
 {

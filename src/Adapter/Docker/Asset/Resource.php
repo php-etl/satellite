@@ -1,19 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Asset;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Asset;
 
-use Kiboko\Component\ETL\Satellite\Docker\AssetInterface;
+use Kiboko\Component\ETL\Satellite\Adapter\Docker\AssetInterface;
 
-final class InMemory implements AssetInterface
+final class Resource implements AssetInterface
 {
     /** @var resource */
     private $stream;
 
-    public function __construct(string $content)
+    public function __construct($resource)
     {
-        $this->stream = fopen('php://temp', 'rb+');
-        fwrite($this->stream, $content);
-        fseek($this->stream, 0, SEEK_SET);
+        if (!is_resource($resource)) {
+            throw new \TypeError(sprintf('Expected value of type resource, got %s', gettype($resource)));
+        }
+
+        $this->stream = $resource;
     }
 
     /** @return resource */

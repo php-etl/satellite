@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
 
 final class TarArchive implements AssetInterface
 {

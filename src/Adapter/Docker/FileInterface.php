@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Satellite\Docker;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
 
 interface FileInterface extends AssetInterface
 {

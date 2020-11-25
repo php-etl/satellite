@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Dockerfile;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
 
-final class Cmd implements LayerInterface
+final class Run implements LayerInterface
 {
     private string $command;
 
@@ -13,6 +13,6 @@ final class Cmd implements LayerInterface
 
     public function __toString()
     {
-        return sprintf('CMD %s', $this->command);
+        return sprintf('RUN %s', $this->command);
     }
 }

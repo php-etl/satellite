@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Dockerfile;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
 
 final class From implements LayerInterface
 {

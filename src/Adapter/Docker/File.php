@@ -1,22 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Dockerfile;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\Docker\File;
-
-final class Copy implements LayerInterface
+final class File implements FileInterface
 {
-    private string $source;
-    private string $destination;
+    private string $path;
+    private AssetInterface $content;
 
-    public function __construct(string $source, string $destination)
+    public function __construct(string $path, AssetInterface $content)
     {
-        $this->source = $source;
-        $this->destination = $destination;
+        $this->path = $path;
+        $this->content = $content;
     }
 
     /** @return \Iterator|self[] */
-    public static function directory(string $sourcePath, string $destinationPath): \Iterator
+    public static function directory(string $sourcePath): \Iterator
     {
         $iterator = new \RecursiveDirectoryIterator($sourcePath,
             \RecursiveDirectoryIterator::SKIP_DOTS
@@ -33,13 +31,18 @@ final class Copy implements LayerInterface
 
             yield new self(
                 preg_replace('/^'.preg_quote($sourcePath, '/').'/', '', $fileInfo->getPathname()),
-                preg_replace('/^'.preg_quote($sourcePath, '/').'/', $destinationPath, $fileInfo->getPathname()),
+                new Asset\File($fileInfo->getPathname())
             );
         }
     }
 
-    public function __toString()
+    public function getPath(): string
     {
-        return sprintf('COPY %s %s', $this->source, $this->destination);
+        return $this->path;
+    }
+
+    public function asResource()
+    {
+        return $this->content->asResource();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Satellite\Docker\Dockerfile;
+namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
 
 interface LayerInterface
 {
