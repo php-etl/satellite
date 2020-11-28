@@ -16,6 +16,11 @@ final class Dockerfile implements \IteratorAggregate, \Countable, FileInterface
         $this->layers = $layers;
     }
 
+    public function push(Dockerfile\LayerInterface ...$layers): void
+    {
+        array_push($this->layers, ...$layers);
+    }
+
     public function __toString()
     {
         return implode(PHP_EOL, array_map(function (LayerInterface $layer) {
@@ -38,11 +43,6 @@ final class Dockerfile implements \IteratorAggregate, \Countable, FileInterface
         $resource = fopen('php://temp', 'rb+');
         fwrite($resource, (string) $this);
         fseek($resource, 0, SEEK_SET);
-
-        stream_copy_to_stream($resource, STDOUT);
-        fseek($resource, 0, SEEK_SET);
-
-
 
         return $resource;
     }

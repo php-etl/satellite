@@ -38,13 +38,23 @@ final class TarArchive implements AssetInterface
 
     private function writeHeader(string $path, int $size)
     {
-        if (strlen($path) > 100) {
-            throw new \RuntimeException('File path is too long, standard Tar supports only 100 chars.');
+        $pathPrefix = null;
+        $filename = $path;
+        if (strlen($path) > 255) {
+            throw new \RuntimeException('File path is too long, standard Tar with ustar format supports only 255 chars.');
+        } else if (strlen($path) > 100) {
+            $index = strrpos($path, '/');
+            if ($index === false || $index > 155) {
+                throw new \RuntimeException('File name is too long, standard Tar with ustar format supports only 155 chars.');
+            }
+
+            $pathPrefix = substr($path, 0, $index);
+            $filename = substr($path, $index);
         }
 
         $header = pack(
             'Z100Z8Z8Z8a12a12Z8ccZ100Z6ccZ32Z32Z8Z8Z155Z12',
-            $path,
+            $filename,
             sprintf('%06o ', 0644),
             sprintf('%06o ', getmyuid()),
             sprintf('%06o ', getmygid()),
@@ -57,10 +67,10 @@ final class TarArchive implements AssetInterface
             0x30, 0x30,                         // version
             'docker',                           // uname
             'docker',                           // gname
-            sprintf('%06o ', 0),   // devmajor
-            sprintf('%06o ', 0),   // devminor
-            '',                                 // prefix
-            '',                                 // pad``
+            sprintf('%06o ', 0),                // devmajor
+            sprintf('%06o ', 0),                // devminor
+            $pathPrefix,                        // prefix
+            '',                                 // pad
         );
 
         for ($i = 0, $checksum = 0; $i < 512; $i++) {

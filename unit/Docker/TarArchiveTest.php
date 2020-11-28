@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace unit\Kiboko\Component\ETL\Satellite\Docker;
+namespace unit\Kiboko\Component\ETL\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\Docker\Dockerfile;
-use Kiboko\Component\ETL\Satellite\Docker\TarArchive;
+use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
+use Kiboko\Component\ETL\Satellite\Adapter\Docker\TarArchive;
 use PHPUnit\Framework\TestCase;
 
 final class TarArchiveTest extends TestCase

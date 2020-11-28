@@ -14,6 +14,14 @@ final class File implements FileInterface
     }
 
     /** @return \Iterator|self[] */
+    public static function directories(string ...$sourcePaths): \Iterator
+    {
+        foreach ($sourcePaths as $sourcePath) {
+            yield from self::directory($sourcePath);
+        }
+    }
+
+    /** @return \Iterator|self[] */
     public static function directory(string $sourcePath): \Iterator
     {
         $iterator = new \RecursiveDirectoryIterator($sourcePath,
@@ -30,7 +38,7 @@ final class File implements FileInterface
             }
 
             yield new self(
-                preg_replace('/^'.preg_quote($sourcePath, '/').'/', '', $fileInfo->getPathname()),
+                $fileInfo->getPathname(),
                 new Asset\File($fileInfo->getPathname())
             );
         }

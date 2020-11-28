@@ -17,14 +17,12 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
-        "ext-zmq": "*",
         "symfony/console": "^4.4 || ^5.0",
         "symfony/process": "^4.4",
         "psr/log": "^1.1@dev",
         "php-etl/promise": "^1.0@dev",
         "ramsey/uuid": "^4.0@dev",
         "monolog/monolog": "^2.0@dev",
-        "docker-php/docker-php": "^2.0@dev",
         "symfony/messenger": "^5.2@dev"
     },
     "require-dev": {

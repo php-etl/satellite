@@ -1,0 +1,20 @@
+satellite:
+  image: kiboko/php:7.4-fpm
+  context: .
+  composer:
+#    from-local: true
+    require:
+      - "psr/http-message:^1.0@dev"
+      - "psr/http-factory:^1.0@dev"
+      - "psr/http-server-handler:^1.0@dev"
+      - "middlewares/request-handler:dev-master"
+      - "middlewares/fast-route:dev-master"
+      - "nyholm/psr7:^1.0@dev"
+      - "nyholm/psr7-server:dev-master"
+      - "laminas/laminas-httphandlerrunner:1.2.x-dev"
+  runtime:
+    type: api
+    routes:
+      - path: /events/products
+        function:
+
