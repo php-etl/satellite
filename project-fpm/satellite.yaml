@@ -1,6 +1,5 @@
 satellite:
   image: kiboko/php:7.4-fpm
-  context: .
   composer:
 #    from-local: true
     require:
@@ -16,5 +15,6 @@ satellite:
     type: api
     routes:
       - path: /events/products
-        function:
+        function: Kiboko\Component\ETL\Pipeline\Pipeline
+
 

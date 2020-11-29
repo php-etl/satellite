@@ -32,15 +32,15 @@ final class PHP implements SatelliteInterface
                     RUN),
                 new Docker\Dockerfile\Run(<<<RUN
                     set -ex \\
-                        && mkdir -p /app \\
-                        && cd /app \\
+                        && mkdir -p /var/www/html \\
+                        && cd /var/www/html \\
                         && composer require ramsey/uuid
                     RUN),
-                new Docker\Dockerfile\Workdir('/app/'),
-                new Docker\Dockerfile\Copy('main.php', '/app/main.php'),
-                new Docker\Dockerfile\Copy('function.php', '/app/function.php'),
+                new Docker\Dockerfile\Workdir('/var/www/html/'),
+                new Docker\Dockerfile\Copy('main.php', '/var/www/html/main.php'),
+                new Docker\Dockerfile\Copy('function.php', '/var/www/html/function.php'),
                 new Docker\Dockerfile\Cmd('php main.php tcp://host.docker.internal:5557 tcp://host.docker.internal:5559'),
-                ...Docker\Dockerfile\Copy::directory(__DIR__ . '/../src/', '/app/library/'),
+                ...Docker\Dockerfile\Copy::directory(__DIR__ . '/../src/', '/var/www/html/library/'),
             ),
             new Docker\File('main.php', new Docker\Asset\File(__DIR__ . '/../src/Docker/Runtime/main.php')),
             new Docker\File('function.php', new Docker\Asset\InMemory(<<<SOURCE

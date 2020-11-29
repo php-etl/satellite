@@ -29,7 +29,7 @@ final class BuildCommand extends Command
 
         $dockerfile = new Docker\Dockerfile(
             new Docker\Dockerfile\From($configuration['image']),
-            new Docker\Dockerfile\Workdir('/app/'),
+            new Docker\Dockerfile\Workdir('/var/www/html/'),
         );
 
         $satellite = new Docker\Satellite(
@@ -37,9 +37,11 @@ final class BuildCommand extends Command
             $dockerfile,
         );
 
-        foreach ($configuration['include'] as $path) {
-            $dockerfile->push(new Docker\Dockerfile\Copy($path, '/app/' . $path));
-            $satellite->push(new Docker\File($path, new Docker\Asset\File($path)));
+        if (isset($configuration['include'])) {
+            foreach ($configuration['include'] as $path) {
+                $dockerfile->push(new Docker\Dockerfile\Copy($path, '/var/www/html/' . $path));
+                $satellite->push(new Docker\File($path, new Docker\Asset\File($path)));
+            }
         }
 
         if (isset($configuration['composer'])) {
@@ -49,9 +51,9 @@ final class BuildCommand extends Command
 
             if (isset($configuration['composer']['from-local'])) {
                 $dockerfile->push(
-                    new Docker\Dockerfile\Copy('composer.json', '/app/composer.json'),
-                    new Docker\Dockerfile\Copy('composer.lock', '/app/composer.lock'),
-                    new Docker\Dockerfile\Copy('vendor/', '/app/vendor/'),
+                    new Docker\Dockerfile\Copy('composer.json', '/var/www/html/composer.json'),
+                    new Docker\Dockerfile\Copy('composer.lock', '/var/www/html/composer.lock'),
+                    new Docker\Dockerfile\Copy('vendor/', '/var/www/html/vendor/'),
                 );
                 $satellite->push(
                     new Docker\File('composer.json', new Docker\Asset\File('composer.json')),
@@ -84,7 +86,7 @@ final class BuildCommand extends Command
         );
 
         $dockerfile->push(
-            new Docker\Dockerfile\Copy('index.php','/app/index.php')
+            new Docker\Dockerfile\Copy('index.php','/var/www/html/index.php')
         );
 
         $logger = new class implements Log\LoggerInterface {

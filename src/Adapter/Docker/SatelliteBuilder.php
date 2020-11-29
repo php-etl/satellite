@@ -89,7 +89,6 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
                 new Dockerfile\From(sprintf('kiboko/php:%s-cli', $this->phpVersion)),
                 new PHP\Extension\ZMQ(),
                 new PHP\ComposerRequire('ramsey/uuid'),
-                new Dockerfile\Workdir('/app/'),
                 ...(function(array $paths){
                     yield new Dockerfile\Copy(...$paths);
                 })($this->paths)

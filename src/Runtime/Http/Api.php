@@ -11,7 +11,7 @@ final class Api implements RuntimeInterface
     public function build(): array
     {
         return [
-//            new Node\Stmt\Namespace_(new Node\Name('Foo')),
+            new Node\Stmt\Namespace_(new Node\Name('Foo')),
             new Node\Stmt\Expression(
                 new Node\Expr\Include_(
                     new Node\Expr\BinaryOp\Concat(
@@ -21,6 +21,7 @@ final class Api implements RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
@@ -147,14 +148,86 @@ final class Api implements RuntimeInterface
 
     private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): array
     {
-//                $r->post('/events/products', function (\Psr\Http\Message\ServerRequestInterface $request) use ($psr17Factory) {
-//                    return $psr17Factory->createResponse(200)->withBody('{"status":"Ok"}');
-//                });
         return [
             new Node\Stmt\Expression(
                 new Node\Expr\MethodCall(
                     $router,
-                    'post',
+                    'get',
+                    [
+                        new Node\Arg(
+                            new Node\Scalar\String_('/hello')
+                        ),
+                        new Node\Arg(
+                            new Node\Expr\Closure(
+                                [
+                                    'params' => [
+                                        new Node\Param(
+                                            new Node\Expr\Variable('request'),
+                                            null,
+                                            new Node\Name('Psr\Http\Message\ServerRequestInterface')
+                                        )
+                                    ],
+                                    'uses' => [
+                                        $factory
+                                    ],
+                                    'stmts' => [
+                                        new Node\Stmt\Return_(
+                                            new Node\Expr\MethodCall(
+                                                new Node\Expr\MethodCall(
+                                                    $factory,
+                                                    'createResponse',
+                                                    [
+                                                        new Node\Arg(
+                                                            new Node\Scalar\LNumber(200)
+                                                        )
+                                                    ]
+                                                ),
+                                                'withBody',
+                                                [
+                                                    new Node\Arg(
+                                                        new Node\Expr\StaticCall(
+                                                            new Node\Name('Psr7\Stream'),
+                                                            'create',
+                                                            [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\FuncCall(
+                                                                        new Node\Name('json_encode'),
+                                                                        [
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Array_(
+                                                                                    [
+                                                                                        new Node\Expr\ArrayItem(
+                                                                                            new Node\Scalar\String_('Hello World!'),
+                                                                                            new Node\Scalar\String_('message'),
+                                                                                        ),
+                                                                                        new Node\Expr\ArrayItem(
+                                                                                            new Node\Expr\FuncCall(new Node\Name('gethostname')),
+                                                                                            new Node\Scalar\String_('server'),
+                                                                                        ),
+                                                                                    ],
+                                                                                ),
+                                                                            ),
+                                                                        ],
+                                                                    ),
+                                                                ),
+                                                            ],
+                                                        ),
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ],
+                                ],
+                            )
+                        ),
+                    ],
+                ),
+            ),
+
+            new Node\Stmt\Expression(
+                new Node\Expr\MethodCall(
+                    $router,
+                    'get',
                     [
                         new Node\Arg(
                             new Node\Scalar\String_('/events/products')
@@ -187,8 +260,34 @@ final class Api implements RuntimeInterface
                                                 'withBody',
                                                 [
                                                     new Node\Arg(
-                                                        new Node\Scalar\String_('{"status":"Ok"}')
-                                                    )
+                                                        new Node\Expr\StaticCall(
+                                                            new Node\Name('Psr7\Stream'),
+                                                            'create',
+                                                            [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\FuncCall(
+                                                                        new Node\Name('json_encode'),
+                                                                        [
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Array_(
+                                                                                    [
+                                                                                        new Node\Expr\ArrayItem(
+                                                                                            new Node\Scalar\String_('Ok'),
+                                                                                            new Node\Scalar\String_('status'),
+                                                                                        ),
+                                                                                        new Node\Expr\ArrayItem(
+                                                                                            new Node\Expr\FuncCall(new Node\Name('gethostname')),
+                                                                                            new Node\Scalar\String_('server'),
+                                                                                        ),
+                                                                                    ],
+                                                                                ),
+                                                                            ),
+                                                                        ],
+                                                                    ),
+                                                                ),
+                                                            ],
+                                                        ),
+                                                    ),
                                                 ],
                                             ),
                                         ),
