@@ -3,11 +3,22 @@
 namespace Kiboko\Component\ETL\Satellite\Runtime\Http;
 
 use Kiboko\Component\ETL\Satellite\Runtime\RuntimeInterface;
+use Kiboko\Component\ETL\Satellite\SatelliteInterface;
 use PhpParser\Node;
-use PhpParser\Builder;
 
 final class Api implements RuntimeInterface
 {
+    private array $config;
+
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
+    public function prepare(SatelliteInterface $satellite): void
+    {
+    }
+
     public function build(): array
     {
         return [
@@ -76,10 +87,10 @@ final class Api implements RuntimeInterface
                                     'uses' => [
                                         new Node\Expr\Variable('psr17Factory')
                                     ],
-                                    'stmts' => $this->compileRoutes(
+                                    'stmts' => iterator_to_array($this->compileRoutes(
                                         new Node\Expr\Variable('router'),
                                         new Node\Expr\Variable('psr17Factory'),
-                                    ),
+                                    )),
                                 ])
                             ),
                         ]
@@ -96,6 +107,21 @@ final class Api implements RuntimeInterface
                             new Node\Arg(
                                 new Node\Expr\Array_(
                                     [
+                                        new Node\Expr\ArrayItem(
+                                            new Node\Expr\New_(
+                                                new Node\Name('Middlewares\\Uuid'),
+                                            ),
+                                        ),
+                                        new Node\Expr\ArrayItem(
+                                            new Node\Expr\New_(
+                                                new Node\Name(' Middlewares\\BasePath'),
+                                                [
+                                                    new Node\Arg(
+                                                        new Node\Scalar\String_($this->config['path'] ?? '/')
+                                                    )
+                                                ],
+                                            ),
+                                        ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
                                                 new Node\Name('Middlewares\\FastRoute'),
@@ -146,158 +172,31 @@ final class Api implements RuntimeInterface
         ];
     }
 
-    private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): array
+    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory): Node\Stmt\Expression
     {
-        return [
-            new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    $router,
-                    'get',
-                    [
-                        new Node\Arg(
-                            new Node\Scalar\String_('/hello')
-                        ),
-                        new Node\Arg(
-                            new Node\Expr\Closure(
-                                [
-                                    'params' => [
-                                        new Node\Param(
-                                            new Node\Expr\Variable('request'),
-                                            null,
-                                            new Node\Name('Psr\Http\Message\ServerRequestInterface')
-                                        )
-                                    ],
-                                    'uses' => [
-                                        $factory
-                                    ],
-                                    'stmts' => [
-                                        new Node\Stmt\Return_(
-                                            new Node\Expr\MethodCall(
-                                                new Node\Expr\MethodCall(
-                                                    $factory,
-                                                    'createResponse',
-                                                    [
-                                                        new Node\Arg(
-                                                            new Node\Scalar\LNumber(200)
-                                                        )
-                                                    ]
-                                                ),
-                                                'withBody',
-                                                [
-                                                    new Node\Arg(
-                                                        new Node\Expr\StaticCall(
-                                                            new Node\Name('Psr7\Stream'),
-                                                            'create',
-                                                            [
-                                                                new Node\Arg(
-                                                                    new Node\Expr\FuncCall(
-                                                                        new Node\Name('json_encode'),
-                                                                        [
-                                                                            new Node\Arg(
-                                                                                new Node\Expr\Array_(
-                                                                                    [
-                                                                                        new Node\Expr\ArrayItem(
-                                                                                            new Node\Scalar\String_('Hello World!'),
-                                                                                            new Node\Scalar\String_('message'),
-                                                                                        ),
-                                                                                        new Node\Expr\ArrayItem(
-                                                                                            new Node\Expr\FuncCall(new Node\Name('gethostname')),
-                                                                                            new Node\Scalar\String_('server'),
-                                                                                        ),
-                                                                                    ],
-                                                                                ),
-                                                                            ),
-                                                                        ],
-                                                                    ),
-                                                                ),
-                                                            ],
-                                                        ),
-                                                    ),
-                                                ],
-                                            ),
-                                        ),
-                                    ],
-                                ],
-                            )
-                        ),
-                    ],
-                ),
+        return new Node\Stmt\Expression(
+            new Node\Expr\MethodCall(
+                $router,
+                $routeConfig['method'] ?? 'get',
+                [
+                    new Node\Arg(
+                        new Node\Scalar\String_($routeConfig['path'])
+                    ),
+                    new Node\Arg(
+                        new Node\Expr\Include_(
+                            new Node\Scalar\String_($routeConfig['function']),
+                            Node\Expr\Include_::TYPE_REQUIRE,
+                        )
+                    ),
+                ],
             ),
+        );
+    }
 
-            new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    $router,
-                    'get',
-                    [
-                        new Node\Arg(
-                            new Node\Scalar\String_('/events/products')
-                        ),
-                        new Node\Arg(
-                            new Node\Expr\Closure(
-                                [
-                                    'params' => [
-                                        new Node\Param(
-                                            new Node\Expr\Variable('request'),
-                                            null,
-                                            new Node\Name('Psr\Http\Message\ServerRequestInterface')
-                                        )
-                                    ],
-                                    'uses' => [
-                                        $factory
-                                    ],
-                                    'stmts' => [
-                                        new Node\Stmt\Return_(
-                                            new Node\Expr\MethodCall(
-                                                new Node\Expr\MethodCall(
-                                                    $factory,
-                                                    'createResponse',
-                                                    [
-                                                        new Node\Arg(
-                                                            new Node\Scalar\LNumber(200)
-                                                        )
-                                                    ]
-                                                ),
-                                                'withBody',
-                                                [
-                                                    new Node\Arg(
-                                                        new Node\Expr\StaticCall(
-                                                            new Node\Name('Psr7\Stream'),
-                                                            'create',
-                                                            [
-                                                                new Node\Arg(
-                                                                    new Node\Expr\FuncCall(
-                                                                        new Node\Name('json_encode'),
-                                                                        [
-                                                                            new Node\Arg(
-                                                                                new Node\Expr\Array_(
-                                                                                    [
-                                                                                        new Node\Expr\ArrayItem(
-                                                                                            new Node\Scalar\String_('Ok'),
-                                                                                            new Node\Scalar\String_('status'),
-                                                                                        ),
-                                                                                        new Node\Expr\ArrayItem(
-                                                                                            new Node\Expr\FuncCall(new Node\Name('gethostname')),
-                                                                                            new Node\Scalar\String_('server'),
-                                                                                        ),
-                                                                                    ],
-                                                                                ),
-                                                                            ),
-                                                                        ],
-                                                                    ),
-                                                                ),
-                                                            ],
-                                                        ),
-                                                    ),
-                                                ],
-                                            ),
-                                        ),
-                                    ],
-                                ],
-                            )
-                        ),
-                    ],
-                ),
-            ),
-        ];
+    private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
+    {
+        foreach ($this->config['routes'] as $route) {
+            yield $this->routeToAST($route, $router, $factory);
+        }
     }
 }

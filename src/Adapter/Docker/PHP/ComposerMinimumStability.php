@@ -4,13 +4,13 @@ namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\PHP;
 
 use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
 
-final class ComposerRequire implements Dockerfile\LayerInterface
+final class ComposerMinimumStability implements Dockerfile\LayerInterface
 {
-    private iterable $packages;
+    private string $minimumStability;
 
-    public function __construct(string ...$packages)
+    public function __construct(string $minimumStability)
     {
-        $this->packages = $packages;
+        $this->minimumStability = $minimumStability;
     }
 
     public function __toString()
@@ -19,7 +19,7 @@ final class ComposerRequire implements Dockerfile\LayerInterface
             set -ex \\
                 && mkdir -p /var/www/html \\
                 && cd /var/www/html \\
-                && composer require %s
-            RUN, implode(' ', $this->packages)));
+                && composer config minimum-stability %s
+            RUN, $this->minimumStability));
     }
 }

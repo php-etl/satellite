@@ -7,7 +7,7 @@ use Kiboko\Component\ETL\Satellite\SatelliteInterface;
 
 final class SatelliteBuilder implements SatelliteBuilderInterface
 {
-    private string $phpVersion;
+    private string $fromImage;
     /** @var iterable<string> */
     private iterable $phpExtensions;
     private ?string $composerJsonFile;
@@ -17,9 +17,9 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
     /** @var iterable<string,\SplFileInfo> */
     private \Iterator $files;
 
-    public function __construct(string $phpVersion)
+    public function __construct(string $fromImage)
     {
-        $this->phpVersion = $phpVersion;
+        $this->fromImage = $fromImage;
         $this->phpExtensions = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
@@ -27,9 +27,9 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
         $this->files = new \AppendIterator();
     }
 
-    public function setPHPVersion(string $versionConstraint): SatelliteBuilderInterface
+    public function fromImage(string $fromImage): SatelliteBuilderInterface
     {
-        $this->phpVersion = $versionConstraint;
+        $this->fromImage = $fromImage;
 
         return $this;
     }
@@ -86,7 +86,7 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
         return new Satellite(
             uniqid(),
             new Dockerfile(
-                new Dockerfile\From(sprintf('kiboko/php:%s-cli', $this->phpVersion)),
+                new Dockerfile\From(sprintf('kiboko/php:%s-cli', $this->fromImage)),
                 new PHP\Extension\ZMQ(),
                 new PHP\ComposerRequire('ramsey/uuid'),
                 ...(function(array $paths){

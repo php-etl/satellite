@@ -1,0 +1,37 @@
+satellite:
+  image: kiboko/php:7.4-fpm
+  composer:
+#    from-local: true
+    autoload:
+      psr-4:
+        "Pipeline\\": ""
+    require:
+      - "php-etl/pipeline:@dev"
+      - "php-etl/fast-map:@dev"
+  runtime:
+    type: pipeline
+    steps:
+    - extract: Pipeline\FooExtractor
+    - transform: Pipeline\FastMapTransformer
+      array:
+      - field: '[sku]'
+        copy: '[sku]'
+      - field: '[title]'
+        expression: 'input["sku"] ~" | "~ input["name"]'
+      - field: '[name]'
+        copy: '[name]'
+      - field: '[staticValue]'
+        constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
+      - field: '[descriptions]'
+        class: 'Pipeline\\Usage'
+        expression: 'input'
+        object:
+        - field: 'usage'
+          expression: '"Usage: " ~ input["usage"]'
+        - field: 'warning'
+          copy: '[warning]'
+        - field: 'notice'
+          copy: '[notice]'
+    - load: Pipeline\BarLoader
+
+

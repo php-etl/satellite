@@ -1,10 +1,10 @@
 localhost:4000 {
-    reverse_proxy /hello satellite-1:9000 {
+    reverse_proxy /foo/* satellite-1:9000 {
         transport fastcgi {
             root /var/www/html/index.php
         }
     }
-    reverse_proxy /events/* satellite-2:9000 {
+    reverse_proxy /bar/* satellite-2:9000 {
         transport fastcgi {
             root /var/www/html/index.php
         }

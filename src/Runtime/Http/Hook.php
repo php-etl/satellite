@@ -3,15 +3,26 @@
 namespace Kiboko\Component\ETL\Satellite\Runtime\Http;
 
 use Kiboko\Component\ETL\Satellite\Runtime\RuntimeInterface;
+use Kiboko\Component\ETL\Satellite\SatelliteInterface;
 use PhpParser\Node;
-use PhpParser\Builder;
 
 final class Hook implements RuntimeInterface
 {
+    private array $config;
+
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
+
+    public function prepare(SatelliteInterface $satellite): void
+    {
+    }
+
     public function build(): array
     {
         return [
-//            new Node\Stmt\Namespace_(new Node\Name('Foo')),
+            new Node\Stmt\Namespace_(new Node\Name('Foo')),
             new Node\Stmt\Expression(
                 new Node\Expr\Include_(
                     new Node\Expr\BinaryOp\Concat(
@@ -21,9 +32,11 @@ final class Hook implements RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Psr'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
 
             new Node\Stmt\Expression(
@@ -67,7 +80,23 @@ final class Hook implements RuntimeInterface
                                     [
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\RequestHandler'),
+                                                new Node\Name('Middlewares\\Uuid'),
+                                            ),
+                                        ),
+                                        new Node\Expr\ArrayItem(
+                                            new Node\Expr\New_(
+                                                new Node\Name(' Middlewares\\BasePath'),
+                                                [
+                                                    new Node\Arg(
+                                                        new Node\Scalar\String_($this->config['path'] ?? '/')
+                                                    )
+                                                ],
+                                            ),
+                                        ),
+                                        new Node\Expr\ArrayItem(
+                                            new Node\Expr\Include_(
+                                                new Node\Scalar\String_($this->config['function']),
+                                                Node\Expr\Include_::TYPE_REQUIRE
                                             ),
                                         ),
                                     ],

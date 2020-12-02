@@ -20,12 +20,17 @@ final class BuildCommand extends Command
     protected function configure()
     {
         $this->setDescription('Build the satellite docker image.');
+        $this->addOption('config', null, InputOption::VALUE_REQUIRED);
         $this->addArgument('image-name', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configuration = Yaml::parse(file_get_contents(getcwd() . '/satellite.yaml'))['satellite'];
+        $filename = $input->getOption('config');
+        if ($filename === null) {
+            $filename = getcwd() . '/satellite.yaml';
+        }
+        $configuration = Yaml::parse(file_get_contents($filename))['satellite'];
 
         $dockerfile = new Docker\Dockerfile(
             new Docker\Dockerfile\From($configuration['image']),
@@ -62,7 +67,10 @@ final class BuildCommand extends Command
                 );
                 $dockerfile->push(new Docker\PHP\ComposerInstall());
             } else {
-                $dockerfile->push(new Docker\PHP\ComposerInit());
+                $dockerfile->push(
+                    new Docker\PHP\ComposerInit(),
+                    new Docker\PHP\ComposerMinimumStability('dev'),
+                );
             }
 
 
@@ -71,22 +79,31 @@ final class BuildCommand extends Command
             }
         }
 
-        if ($configuration['runtime']['type'] === 'cli') {
-            $runtime = new Runtime\Cli();
+        if ($configuration['runtime']['type'] === 'pipeline') {
+            $runtime = new Runtime\Pipeline($configuration['runtime']);
         } else if ($configuration['runtime']['type'] === 'api') {
-            $runtime = new Runtime\Http\Api();
+            $runtime = new Runtime\Http\Api($configuration['runtime']);
         } else if ($configuration['runtime']['type'] === 'http-hook') {
-            $runtime = new Runtime\Http\Hook();
+            $runtime = new Runtime\Http\Hook($configuration['runtime']);
         }
+
+        if (!file_exists($input->getArgument('image-name'))) {
+            mkdir($input->getArgument('image-name'), 0775, true);
+        }
+        file_put_contents($input->getArgument('image-name').'/index.php', '<?php' . PHP_EOL . (new PhpParser\PrettyPrinter\Standard())->prettyPrint($runtime->build()));
 
         $satellite->push(
             new Docker\File('index.php', new Docker\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PhpParser\PrettyPrinter\Standard())->prettyPrint($runtime->build())
-            ))
+            )),
+            new Docker\File('hello.php', new Docker\Asset\File('hello.php')),
+            new Docker\File('events/products.php', new Docker\Asset\File('events/products.php')),
         );
 
         $dockerfile->push(
-            new Docker\Dockerfile\Copy('index.php','/var/www/html/index.php')
+            new Docker\Dockerfile\Copy('index.php','/var/www/html/index.php'),
+            new Docker\Dockerfile\Copy('hello.php', '/var/www/html/hello.php'),
+            new Docker\Dockerfile\Copy('events/products.php', '/var/www/html/events/products.php'),
         );
 
         $logger = new class implements Log\LoggerInterface {

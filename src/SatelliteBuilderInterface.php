@@ -4,7 +4,7 @@ namespace Kiboko\Component\ETL\Satellite;
 
 interface SatelliteBuilderInterface
 {
-    public function setPHPVersion(string $versionConstraint): SatelliteBuilderInterface;
+    public function fromImage(string $fromImage): SatelliteBuilderInterface;
     public function addPHPExtension(string $extension): SatelliteBuilderInterface;
 
     public function addComposerInstall(string $composerJsonFile, ?string $composerLockFile = null): SatelliteBuilderInterface;
