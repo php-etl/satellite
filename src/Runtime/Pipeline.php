@@ -78,11 +78,10 @@ final class Pipeline implements RuntimeInterface
 
     private function buildPipelineTransformer(Node\Expr $pipeline, array $config): Node\Expr
     {
-        $compiler = new FastMap\Compiler\Strategy\Spaghetti();
         if (isset($config['array'])) {
-            $mapper = $this->buildArrayMapper($compiler, $config['array']);
+            $mapper = $this->buildArrayMapper($config['array']);
         } else if (isset($config['object'])) {
-            $mapper = $this->buildObjectMapper($compiler, $config['object']);
+            $mapper = $this->buildObjectMapper($config['object']);
         }
 
         return new Node\Expr\MethodCall(
@@ -91,7 +90,12 @@ final class Pipeline implements RuntimeInterface
             [
                 new Node\Arg(
                     new Node\Expr\New_(
-                        new Node\Name\FullyQualified($config['transform'])
+                        new Node\Name\FullyQualified($config['transform']),
+                        [
+                            new Node\Arg(
+                                new Node\Expr\New_($mapper)
+                            )
+                        ]
                     )
                 )
             ]
@@ -113,7 +117,7 @@ final class Pipeline implements RuntimeInterface
         );
     }
 
-    private function buildArrayMapper(FastMap\Compiler\Strategy\StrategyInterface $compiler, array $config): array
+    private function buildArrayMapper(array $config): Node
     {
         $builder = new ArrayBuilder();
         $node = $builder->children();
@@ -128,11 +132,10 @@ final class Pipeline implements RuntimeInterface
         }
         $node = $node->end();
 
-        return $compiler->buildTree(
+        return (new Pipeline\Spaghetti(
             new FastMap\PropertyAccess\EmptyPropertyPath(),
-            new ClassReferenceMetadata('Lorem', 'Ipsum'),
             $node->getMapper()
-        );
+        ))->getNode();
     }
 
     public function build(): array
