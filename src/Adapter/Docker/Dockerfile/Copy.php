@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
+namespace Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\File;
+use Kiboko\Component\Satellite\Adapter\Docker\File;
 
 final class Copy implements LayerInterface
 {

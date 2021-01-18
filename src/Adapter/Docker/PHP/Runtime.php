@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\PHP;
+namespace Kiboko\Component\Satellite\Adapter\Docker\PHP;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
-use Kiboko\Component\ETL\Satellite\Runtime\RuntimeInterface;
+use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
+use Kiboko\Component\Satellite\Runtime\RuntimeInterface;
 
 final class Runtime implements Dockerfile\LayerInterface
 {

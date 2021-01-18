@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite;
+namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\ETL\Config\ArrayBuilder;
+use Kiboko\Component\Config\ArrayBuilder;
 use Kiboko\Plugin\CSV;
-use Kiboko\Component\ETL\Flow\Akeneo;
-use Kiboko\Component\ETL\Flow\FastMap;
-use Kiboko\Contract\ETL\Configurator\ConfigurationExceptionInterface;
-use Kiboko\Contract\ETL\Configurator\FactoryInterface;
-use Kiboko\Contract\ETL\Configurator\InvalidConfigurationException;
+use Kiboko\Component\Flow\Akeneo;
+use Kiboko\Component\Flow\FastMap;
+use Kiboko\Contract\Configurator\ConfigurationExceptionInterface;
+use Kiboko\Contract\Configurator\FactoryInterface;
+use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -104,7 +104,7 @@ final class Service implements FactoryInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Kiboko\\Component\\ETL\\Pipeline'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Kiboko\\Component\\Pipeline'))]),
 
             ...$this->buildPipeline($this->config['steps'])
         ];

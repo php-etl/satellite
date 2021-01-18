@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Builder;
+namespace Kiboko\Component\Satellite\Builder;
 
 use PhpParser\Builder;
 use PhpParser\Node;

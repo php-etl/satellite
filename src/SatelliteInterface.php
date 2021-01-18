@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiboko\Component\ETL\Satellite;
+namespace Kiboko\Component\Satellite;
 
 use Psr\Log\LoggerInterface;
 

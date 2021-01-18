@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
+namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\SatelliteBuilderInterface;
-use Kiboko\Component\ETL\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite\SatelliteBuilderInterface;
+use Kiboko\Component\Satellite\SatelliteInterface;
 
 final class SatelliteBuilder implements SatelliteBuilderInterface
 {

@@ -3,7 +3,7 @@
 namespace Pipeline;
 
 use Faker\Factory;
-use Kiboko\Component\ETL\Contracts\ExtractorInterface;
+use Kiboko\Component\Contracts\ExtractorInterface;
 
 final class FooExtractor implements ExtractorInterface
 {

@@ -15,7 +15,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-json": "*",
         "symfony/console": "^4.4 || ^5.0",
         "symfony/process": "^4.4",
@@ -29,26 +29,19 @@
         "php-etl/fast-map-config": "@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
-        "johnkary/phpunit-speedtrap": "^3.1@dev",
-        "mybuilder/phpunit-accelerator": "dev-master",
-        "phpstan/phpstan": "^0.12.0@dev",
-        "fzaninotto/faker": "^1.9@dev",
-        "friends-of-phpspec/phpspec-code-coverage": "^4.3",
-        "phpspec/phpspec": "^6.2@dev",
-        "infection/infection": "dev-master"
+        "phpunit/phpunit": "10.0.x-dev",
+        "phpspec/phpspec": "8.0.x-dev",
+        "fzaninotto/faker": "1.9.x-dev"
     },
     "autoload": {
         "psr-4": {
-            "Kiboko\\Component\\ETL\\Satellite\\": "src/"
+            "Kiboko\\Component\\Satellite\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\Kiboko\\Component\\ETL\\Satellite\\": "spec/",
-            "unit\\Kiboko\\Component\\ETL\\Satellite\\": "unit/",
-            "functional\\Kiboko\\Component\\ETL\\Satellite\\": "functional/",
-            "performance\\Kiboko\\Component\\ETL\\Satellite\\": "performance/"
+            "spec\\Kiboko\\Component\\Satellite\\": "tests/spec/",
+            "unit\\Kiboko\\Component\\Satellite\\": "tests/unit/"
         }
     },
     "extra": {

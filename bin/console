@@ -9,7 +9,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $app = new \Symfony\Component\Console\Application();
 
 $app->addCommands([
-    new \Kiboko\Component\ETL\Satellite\Console\Command\BuildCommand(),
+    new \Kiboko\Component\Satellite\Console\Command\BuildCommand(),
 ]);
 
 $app->run(new Input\ArgvInput(), new Output\ConsoleOutput());

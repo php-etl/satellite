@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
+namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\PHP\ComposerRequire;
-use Kiboko\Component\ETL\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite\Adapter\Docker\PHP\ComposerRequire;
+use Kiboko\Component\Satellite\SatelliteInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 

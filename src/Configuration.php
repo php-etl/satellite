@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite;
+namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\ETL\Flow\Akeneo;
-use Kiboko\Component\ETL\Flow\FastMap;
+use Kiboko\Component\Flow\Akeneo;
+use Kiboko\Component\Flow\FastMap;
 use Kiboko\Plugin\CSV;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

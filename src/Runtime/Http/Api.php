@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Runtime\Http;
+namespace Kiboko\Component\Satellite\Runtime\Http;
 
-use Kiboko\Component\ETL\Satellite\Runtime\RuntimeInterface;
-use Kiboko\Component\ETL\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite\Runtime\RuntimeInterface;
+use Kiboko\Component\Satellite\SatelliteInterface;
 use PhpParser\Node;
 
 final class Api implements RuntimeInterface

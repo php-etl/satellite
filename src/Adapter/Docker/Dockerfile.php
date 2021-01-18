@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker;
+namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile\LayerInterface;
+use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile\LayerInterface;
 
 final class Dockerfile implements \IteratorAggregate, \Countable, FileInterface
 {

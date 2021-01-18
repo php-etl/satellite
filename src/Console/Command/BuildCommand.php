@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Console\Command;
+namespace Kiboko\Component\Satellite\Console\Command;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker;
-use Kiboko\Component\ETL\Satellite\Runtime;
+use Kiboko\Component\Satellite\Adapter\Docker;
+use Kiboko\Component\Satellite\Runtime;
 use PhpParser;
 use Psr\Log;
 use Symfony\Component\Console\Command\Command;
@@ -153,7 +153,7 @@ final class BuildCommand extends Command
                 fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
             }
         };
-        
+
         $satellite->build($logger);
 
         return 0;

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Adapter\Docker\PHP\Extension;
+namespace Kiboko\Component\Satellite\Adapter\Docker\PHP\Extension;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
+use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 
 final class ZMQ implements Dockerfile\LayerInterface
 {

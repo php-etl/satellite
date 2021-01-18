@@ -2,7 +2,7 @@
 
 namespace spec\Kiboko\Component\ETL\Satellite\Adapter\Docker;
 
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\Dockerfile;
+use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 use PhpSpec\ObjectBehavior;
 
 class TarArchiveSpec extends ObjectBehavior

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Runtime;
+namespace Kiboko\Component\Satellite\Runtime;
 
-use Kiboko\Component\ETL\Config\ArrayBuilder;
-use Kiboko\Component\ETL\FastMap;
-use Kiboko\Component\ETL\Metadata\ClassReferenceMetadata;
-use Kiboko\Component\ETL\Satellite\SatelliteInterface;
+use Kiboko\Component\Config\ArrayBuilder;
+use Kiboko\Component\FastMap;
+use Kiboko\Component\Metadata\ClassReferenceMetadata;
+use Kiboko\Component\Satellite\SatelliteInterface;
 use PhpParser\Node;
 
 final class Pipeline implements RuntimeInterface
@@ -151,7 +151,7 @@ final class Pipeline implements RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Kiboko\\Component\\ETL\\Pipeline'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Kiboko\\Component\\Pipeline'))]),
 
             ...$this->buildPipeline($this->config['steps'])
         ];

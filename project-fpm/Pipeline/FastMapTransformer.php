@@ -2,10 +2,10 @@
 
 namespace Pipeline;
 
-use Kiboko\Component\ETL\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\ETL\Config\ArrayBuilder;
-use Kiboko\Component\ETL\Contracts\TransformerInterface;
-use Kiboko\Component\ETL\FastMap\Contracts\CompiledMapperInterface;
+use Kiboko\Component\Bucket\AcceptanceResultBucket;
+use Kiboko\Component\Config\ArrayBuilder;
+use Kiboko\Component\Contracts\TransformerInterface;
+use Kiboko\Component\FastMap\Contracts\CompiledMapperInterface;
 
 final class FastMapTransformer implements TransformerInterface
 {

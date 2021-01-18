@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\ETL\Satellite\Runtime;
+namespace Kiboko\Component\Satellite\Runtime;
 
-use Kiboko\Component\ETL\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite\SatelliteInterface;
 
 interface RuntimeInterface
 {
