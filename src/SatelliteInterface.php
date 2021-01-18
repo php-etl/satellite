@@ -2,8 +2,6 @@
 
 namespace Kiboko\Component\ETL\Satellite;
 
-use Kiboko\Component\ETL\Promise\DeferredInterface;
-use Kiboko\Component\ETL\Satellite\Adapter\Docker\NetworkInterface;
 use Psr\Log\LoggerInterface;
 
 interface SatelliteInterface

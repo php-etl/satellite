@@ -12,7 +12,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
-final class Spaghetti implements Builder
+final class FastMapBuilder implements Builder
 {
     private PropertyPathInterface $outputPath;
     /** @var iterable|CompilableMapperInterface[] */
@@ -31,7 +31,7 @@ final class Spaghetti implements Builder
         $stmts = [];
         foreach ($this->mappers as $mapper) {
             array_push($stmts, ...$mapper->compile(
-                (new PropertyPathBuilder($this->outputPath, new Node\Expr\Variable('output')))->getNode()
+                (new PropertyPathBuilder($this->outputPath, $output = new Node\Expr\Variable('output')))->getNode()
             ));
         }
 
@@ -42,7 +42,7 @@ final class Spaghetti implements Builder
                 ->addParam($factory->param('input'))
                 ->addParam($factory->param('output')->setDefault(null))
                 ->addStmts($stmts)
-                ->addStmt(new Node\Stmt\Return_(new Node\Expr\Variable('output')))
+                ->addStmt(new Node\Stmt\Return_($output))
             )->getNode();
     }
 }

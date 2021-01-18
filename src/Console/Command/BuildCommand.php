@@ -81,7 +81,7 @@ final class BuildCommand extends Command
 
         if ($configuration['runtime']['type'] === 'pipeline') {
             $runtime = new Runtime\Pipeline($configuration['runtime']);
-        } else if ($configuration['runtime']['type'] === 'api') {
+        } else if ($configuration['runtime']['type'] === 'http-api') {
             $runtime = new Runtime\Http\Api($configuration['runtime']);
         } else if ($configuration['runtime']['type'] === 'http-hook') {
             $runtime = new Runtime\Http\Hook($configuration['runtime']);
