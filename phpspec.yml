@@ -16,6 +16,6 @@ formatter.name: pretty
 stop_on_failure: false
 suites:
   fastmap_suite:
-    namespace: Kiboko\Component\ETL\Satellite
-    psr4_prefix: Kiboko\Component\ETL\Satellite
+    namespace: Kiboko\Component\Satellite
+    psr4_prefix: Kiboko\Component\Satellite
     src_path: '%paths.config%'

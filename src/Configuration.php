@@ -2,8 +2,8 @@
 
 namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\Flow\Akeneo;
-use Kiboko\Component\Flow\FastMap;
+use Kiboko\Plugin\Akeneo;
+use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\CSV;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -2,7 +2,7 @@
 
 namespace Pipeline;
 
-use Kiboko\Component\Contracts\LoaderInterface;
+use Kiboko\Contract\Pipeline\LoaderInterface;
 
 final class BarLoader implements LoaderInterface
 {

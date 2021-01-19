@@ -4,8 +4,8 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Config\ArrayBuilder;
 use Kiboko\Plugin\CSV;
-use Kiboko\Component\Flow\Akeneo;
-use Kiboko\Component\Flow\FastMap;
+use Kiboko\Plugin\Akeneo;
+use Kiboko\Plugin\FastMap;
 use Kiboko\Contract\Configurator\ConfigurationExceptionInterface;
 use Kiboko\Contract\Configurator\FactoryInterface;
 use Kiboko\Contract\Configurator\InvalidConfigurationException;
@@ -66,22 +66,22 @@ final class Service implements FactoryInterface
                     $pipeline->addExtractor(
                         (new Akeneo\Service())->compile($step['akeneo'])->getNode()
                     );
-                } else if (array_key_exists('loader', $step['akeneo'])) {
+                } elseif (array_key_exists('loader', $step['akeneo'])) {
                     $pipeline->addLoader(
                         (new Akeneo\Service())->compile($step['akeneo'])->getNode()
                     );
                 }
-            } else if (array_key_exists('csv', $step)) {
+            } elseif (array_key_exists('csv', $step)) {
                 if (array_key_exists('extractor', $step['csv'])) {
                     $pipeline->addExtractor(
                         (new CSV\Service())->compile($step['csv'])->getNode()
                     );
-                } else if (array_key_exists('loader', $step['csv'])) {
+                } elseif (array_key_exists('loader', $step['csv'])) {
                     $pipeline->addLoader(
                         (new CSV\Service())->compile($step['csv'])->getNode()
                     );
                 }
-            } else if (array_key_exists('fastmap', $step)) {
+            } elseif (array_key_exists('fastmap', $step)) {
                 $pipeline->addTransformer(
                     (new FastMap\Service())->compile($step['fastmap'])->getNode()
                 );

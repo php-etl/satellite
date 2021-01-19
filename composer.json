@@ -24,7 +24,6 @@
         "symfony/config": "^5.2",
         "monolog/monolog": "^2.0@dev",
         "ramsey/uuid": "^4.0@dev",
-        "php-etl/pipeline": "^0.2",
         "php-etl/fast-map-plugin": "^0.1",
         "php-etl/csv-plugin": "^0.1",
         "php-etl/akeneo-plugin": "dev-master"
@@ -34,25 +33,26 @@
         "johnkary/phpunit-speedtrap": "*",
         "mybuilder/phpunit-accelerator": "*",
         "phpunit/php-invoker": "*",
-        "phpstan/phpstan": "^0.12",
         "fzaninotto/faker": "^1.9@dev",
         "phpspec/phpspec": "^7.0",
-        "php-etl/phpspec-extension": "^0.2@dev",
         "friends-of-phpspec/phpspec-code-coverage": "^6.0",
-        "infection/infection": "^0.20"
+        "php-etl/pipeline": "0.2.x-dev"
     },
     "autoload": {
         "psr-4": {
-            "Kiboko\\Component\\ETL\\Satellite\\": "src/"
+            "Kiboko\\Component\\Satellite\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\Kiboko\\Component\\ETL\\Satellite\\": "spec/",
-            "unit\\Kiboko\\Component\\ETL\\Satellite\\": "unit/",
-            "functional\\Kiboko\\Component\\ETL\\Satellite\\": "functional/",
-            "performance\\Kiboko\\Component\\ETL\\Satellite\\": "performance/"
+            "spec\\Kiboko\\Component\\Satellite\\": "spec/",
+            "unit\\Kiboko\\Component\\Satellite\\": "unit/",
+            "functional\\Kiboko\\Component\\Satellite\\": "functional/",
+            "performance\\Kiboko\\Component\\Satellite\\": "performance/"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {

@@ -8,7 +8,8 @@ final class ComposerInit implements Dockerfile\LayerInterface
 {
     public function __toString()
     {
-        return (string) new Dockerfile\Run(<<<RUN
+        return (string) new Dockerfile\Run(
+            <<<RUN
             composer init --no-interaction && pwd
             RUN
         );

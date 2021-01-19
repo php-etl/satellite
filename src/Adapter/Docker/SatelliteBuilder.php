@@ -65,10 +65,11 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
         $this->paths->append([$sourcePath, $destinationPath]);
 
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($sourcePath), \RecursiveIteratorIterator::SELF_FIRST
+            new \RecursiveDirectoryIterator($sourcePath),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $this->files->append((function(\Iterator $iterator, string $sourcePath, string $destinationPath) {
+        $this->files->append((function (\Iterator $iterator, string $sourcePath, string $destinationPath) {
             /** @var \SplFileInfo $file */
             foreach ($iterator as $fileInfo) {
                 yield new File(
@@ -89,7 +90,7 @@ final class SatelliteBuilder implements SatelliteBuilderInterface
                 new Dockerfile\From(sprintf('kiboko/php:%s-cli', $this->fromImage)),
                 new PHP\Extension\ZMQ(),
                 new PHP\ComposerRequire('ramsey/uuid'),
-                ...(function(array $paths){
+                ...(function (array $paths) {
                     yield new Dockerfile\Copy(...$paths);
                 })($this->paths)
             ),

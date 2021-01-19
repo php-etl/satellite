@@ -42,7 +42,7 @@ final class TarArchive implements AssetInterface
         $filename = $path;
         if (strlen($path) > 255) {
             throw new \RuntimeException('File path is too long, standard Tar with ustar format supports only 255 chars.');
-        } else if (strlen($path) > 100) {
+        } elseif (strlen($path) > 100) {
             $index = strrpos($path, '/');
             if ($index === false || $index > 155) {
                 throw new \RuntimeException('File name is too long, standard Tar with ustar format supports only 155 chars.');
@@ -61,10 +61,12 @@ final class TarArchive implements AssetInterface
             sprintf('%011o ', $size),
             sprintf('%011o ', time()),
             "\x20\x20\x20\x20\x20\x20\x20\x20", // Checksum
-            0x20, 0x30,                         // type flag
+            0x20,
+            0x30,                         // type flag
             '',                                 // linkname
             'ustar',                            // magic
-            0x30, 0x30,                         // version
+            0x30,
+            0x30,                         // version
             'docker',                           // uname
             'docker',                           // gname
             sprintf('%06o ', 0),                // devmajor

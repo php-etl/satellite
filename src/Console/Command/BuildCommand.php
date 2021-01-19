@@ -81,9 +81,9 @@ final class BuildCommand extends Command
 
         if ($configuration['runtime']['type'] === 'pipeline') {
             $runtime = new Runtime\Pipeline($configuration['runtime']);
-        } else if ($configuration['runtime']['type'] === 'http-api') {
+        } elseif ($configuration['runtime']['type'] === 'http-api') {
             $runtime = new Runtime\Http\Api($configuration['runtime']);
-        } else if ($configuration['runtime']['type'] === 'http-hook') {
+        } elseif ($configuration['runtime']['type'] === 'http-hook') {
             $runtime = new Runtime\Http\Hook($configuration['runtime']);
         }
 
@@ -101,7 +101,7 @@ final class BuildCommand extends Command
         );
 
         $dockerfile->push(
-            new Docker\Dockerfile\Copy('index.php','/var/www/html/index.php'),
+            new Docker\Dockerfile\Copy('index.php', '/var/www/html/index.php'),
             new Docker\Dockerfile\Copy('hello.php', '/var/www/html/hello.php'),
             new Docker\Dockerfile\Copy('events/products.php', '/var/www/html/events/products.php'),
         );

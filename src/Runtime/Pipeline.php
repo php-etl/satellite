@@ -2,9 +2,8 @@
 
 namespace Kiboko\Component\Satellite\Runtime;
 
-use Kiboko\Component\Config\ArrayBuilder;
+use Kiboko\Component\FastMapConfig\ArrayBuilder;
 use Kiboko\Component\FastMap;
-use Kiboko\Component\Metadata\ClassReferenceMetadata;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use PhpParser\Node;
 
@@ -37,9 +36,9 @@ final class Pipeline implements RuntimeInterface
         foreach ($config as $step) {
             if (isset($step['extract'])) {
                 $pipeline = $this->buildPipelineExtractor($pipeline, $step);
-            } else if (isset($step['transform'])) {
+            } elseif (isset($step['transform'])) {
                 $pipeline = $this->buildPipelineTransformer($pipeline, $step);
-            } else if (isset($step['load'])) {
+            } elseif (isset($step['load'])) {
                 $pipeline = $this->buildPipelineLoader($pipeline, $step);
             }
         }
@@ -80,7 +79,7 @@ final class Pipeline implements RuntimeInterface
     {
         if (isset($config['array'])) {
             $mapper = $this->buildArrayMapper($config['array']);
-        } else if (isset($config['object'])) {
+        } elseif (isset($config['object'])) {
             $mapper = $this->buildObjectMapper($config['object']);
         }
 
@@ -124,9 +123,9 @@ final class Pipeline implements RuntimeInterface
         foreach ($config as $fieldMapping) {
             if (isset($fieldMapping['copy'])) {
                 $node->copy($fieldMapping['field'], $fieldMapping['copy']);
-            } else if (isset($fieldMapping['expression'])) {
+            } elseif (isset($fieldMapping['expression'])) {
                 $node->expression($fieldMapping['field'], $fieldMapping['expression']);
-            } else if (isset($fieldMapping['constant'])) {
+            } elseif (isset($fieldMapping['constant'])) {
                 $node->constant($fieldMapping['field'], $fieldMapping['constant']);
             }
         }

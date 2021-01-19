@@ -3,10 +3,8 @@
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
 use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
-use Kiboko\Component\FastMap\Compiler\Strategy\StrategyInterface;
 use Kiboko\Component\FastMap\Contracts\CompilableMapperInterface;
 use Kiboko\Component\FastMap\Contracts\CompiledMapperInterface;
-use Kiboko\Component\Metadata\ClassMetadataInterface;
 use PhpParser\Builder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
@@ -37,7 +35,8 @@ final class FastMapBuilder implements Builder
 
         return $factory->class('Anonymous')
             ->implement(new Node\Name\FullyQualified(CompiledMapperInterface::class))
-            ->addStmt($factory->method('__invoke')
+            ->addStmt(
+                $factory->method('__invoke')
                 ->makePublic()
                 ->addParam($factory->param('input'))
                 ->addParam($factory->param('output')->setDefault(null))

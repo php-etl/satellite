@@ -24,7 +24,8 @@ final class File implements FileInterface
     /** @return \Iterator|self[] */
     public static function directory(string $sourcePath): \Iterator
     {
-        $iterator = new \RecursiveDirectoryIterator($sourcePath,
+        $iterator = new \RecursiveDirectoryIterator(
+            $sourcePath,
             \RecursiveDirectoryIterator::SKIP_DOTS
             | \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
             | \RecursiveDirectoryIterator::CURRENT_AS_FILEINFO

@@ -79,7 +79,7 @@ final class Api implements RuntimeInterface
                                 new Node\Expr\Closure([
                                     'params' => [
                                         new Node\Param(
-                                             new Node\Expr\Variable('router'),
+                                            new Node\Expr\Variable('router'),
                                             null,
                                             new Node\Name('FastRoute\\RouteCollector')
                                         )

@@ -2,8 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 
-use Kiboko\Component\Satellite\Adapter\Docker\File;
-
 final class Copy implements LayerInterface
 {
     private string $source;
@@ -18,7 +16,8 @@ final class Copy implements LayerInterface
     /** @return \Iterator|self[] */
     public static function directory(string $sourcePath, string $destinationPath): \Iterator
     {
-        $iterator = new \RecursiveDirectoryIterator($sourcePath,
+        $iterator = new \RecursiveDirectoryIterator(
+            $sourcePath,
             \RecursiveDirectoryIterator::SKIP_DOTS
             | \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
             | \RecursiveDirectoryIterator::CURRENT_AS_FILEINFO
