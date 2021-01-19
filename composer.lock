@@ -311,18 +311,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "d20c35a994b496e41aaa98b70f268c85ed29dc5b"
+                "reference": "662c052e664a092453119c93ce3e71b89b7ffeff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/d20c35a994b496e41aaa98b70f268c85ed29dc5b",
-                "reference": "d20c35a994b496e41aaa98b70f268c85ed29dc5b",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/662c052e664a092453119c93ce3e71b89b7ffeff",
+                "reference": "662c052e664a092453119c93ce3e71b89b7ffeff",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.9@dev",
-                "php": "8.0",
+                "php": "^8.0",
                 "php-etl/configurator-contracts": "dev-master",
                 "symfony/config": "^4.0 || ^5.0"
             },
@@ -365,7 +365,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-01-19T10:39:29+00:00"
+            "time": "2021-01-19T11:31:36+00:00"
         },
         {
             "name": "php-etl/bucket",
