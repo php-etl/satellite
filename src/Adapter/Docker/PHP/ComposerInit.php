@@ -6,12 +6,21 @@ use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 
 final class ComposerInit implements Dockerfile\LayerInterface
 {
+    private string $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function __toString()
     {
-        return (string) new Dockerfile\Run(
+        return (string) new Dockerfile\Run(sprintf(
             <<<RUN
-            composer init --no-interaction && pwd
-            RUN
-        );
+            set -ex \\
+                && composer init --no-interaction --name=%s && pwd
+            RUN,
+            $this->name
+        ));
     }
 }

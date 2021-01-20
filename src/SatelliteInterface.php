@@ -6,7 +6,9 @@ use Psr\Log\LoggerInterface;
 
 interface SatelliteInterface
 {
-    public function dependsOn(string ...$dependencies): void;
+    public function dependsOn(string ...$dependencies): self;
+
+    public function withFile(FileInterface|DirectoryInterface ...$files): self;
 
     public function build(LoggerInterface $logger): void;
 

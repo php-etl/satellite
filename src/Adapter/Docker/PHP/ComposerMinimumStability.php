@@ -17,8 +17,6 @@ final class ComposerMinimumStability implements Dockerfile\LayerInterface
     {
         return (string) new Dockerfile\Run(sprintf(<<<RUN
             set -ex \\
-                && mkdir -p /var/www/html \\
-                && cd /var/www/html \\
                 && composer config minimum-stability %s
             RUN, $this->minimumStability));
     }

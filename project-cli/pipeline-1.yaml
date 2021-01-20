@@ -1,0 +1,95 @@
+satellite:
+#  docker:
+#    from: php:8.0-cli-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:foo
+#      - kiboko/satellite:bar
+  filesystem:
+    path: foo
+#  composer:
+#    from_local: true
+#    autoload:
+#      psr4:
+#      - namespace: "Pipeline\\\\"
+#        paths: [""]
+#      - namespace: "Pipeline2\\\\"
+#        path: ""
+#    require:
+#      - "php-etl/pipeline:^0.2"
+#      - "php-etl/fast-map:^0.2"
+  pipeline:
+    steps:
+    - akeneo:
+        enterprise: true
+        extractor:
+          type: productModel
+          method: all
+          search:
+            - { field: enabled, operator: '=', value: true }
+            - { field: completeness, operator: '>', value: 70, scope: ecommerce }
+            - { field: completeness, operator: '<', value: 85, scope: ecommerce }
+            - { field: categories, operator: IN, value: winter_collection }
+            - { field: family, operator: IN, value: [camcorders, digital_cameras] }
+        logger:
+          type: 'stderr'
+        client:
+          context:
+            http_client: Http\Mock\Client
+            http_request_factory: 'Foo\Mock\RequestFactory::bar'
+            http_stream_factory: 'Foo\Mock\StreamFactory::foo'
+            filesystem: Foo\Mock\Filesystem
+          api_url: 'https://demo.akeneo.com'
+          client_id: '1234567890'
+          secret: qwertyuiop
+          username: '%env(USERNAME)%'
+          password: lkjhgfdsa
+    - fastmap:
+        map:
+          - field: '[sku]'
+            copy: '[sku]'
+          - field: '[title]'
+            expression: 'input["sku"] ~" | "~ input["name"]'
+          - field: '[name]'
+            copy: '[name]'
+          - field: '[staticValue]'
+            constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
+#          - field: '[foo]'
+#            expression: 'input'
+#            map:
+#            - field: '[bar]'
+#              copy: '[bar]'
+          - field: '[foo]'
+            expression: 'input'
+            list:
+            - field: '[bar]'
+              copy: '[bar]'
+          - field: '[descriptions]'
+            class: 'Pipeline\\Usage'
+            expression: 'input["foo"]'
+            object:
+              - field: 'usage'
+                expression: '"Usage: " ~ input["usage"]'
+              - field: 'warning'
+                copy: '[warning]'
+              - field: 'notice'
+                copy: '[notice]'
+          - field: '[messages]'
+            class: 'Foo\\DTO\\Messages'
+            expression: 'input'
+            collection:
+            - field: 'usage'
+              expression: '"Usage: " ~ input["usage"]'
+            - field: 'warning'
+              copy: '[warning]'
+            - field: 'notice'
+              copy: '[notice]'
+    - csv:
+        loader:
+          file_path: output.csv
+          delimiter: ','
+          enclosure: '"'
+          escape: '\'
+        logger:
+          type: stderr
+

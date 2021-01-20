@@ -4,13 +4,10 @@ namespace Kiboko\Component\Satellite;
 
 interface SatelliteBuilderInterface
 {
-    public function fromImage(string $fromImage): SatelliteBuilderInterface;
-    public function addPHPExtension(string $extension): SatelliteBuilderInterface;
+    public function withComposerFile(FileInterface|AssetInterface $composerJsonFile, null|FileInterface|AssetInterface $composerLockFile = null): SatelliteBuilderInterface;
 
-    public function addComposerInstall(string $composerJsonFile, ?string $composerLockFile = null): SatelliteBuilderInterface;
-
-    public function addFile(string $sourcePath, ?string $destinationPath = null): SatelliteBuilderInterface;
-    public function addDirectory(string $sourcePath, ?string $destinationPath = null): SatelliteBuilderInterface;
+    public function withFile(FileInterface|AssetInterface $source, ?string $destinationPath = null): SatelliteBuilderInterface;
+    public function withDirectory(DirectoryInterface $source, ?string $destinationPath = null): SatelliteBuilderInterface;
 
     public function build(): SatelliteInterface;
 }

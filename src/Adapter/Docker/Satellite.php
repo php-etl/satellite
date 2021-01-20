@@ -4,49 +4,73 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\Satellite\Adapter\Docker\PHP\ComposerRequire;
+use Kiboko\Component\Satellite\Adapter\Docker;
+use Kiboko\Component\Satellite\DirectoryInterface;
+use Kiboko\Component\Satellite\FileInterface;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
 final class Satellite implements SatelliteInterface
 {
-    private string $imageTag;
+    /** @var string[] */
+    private array $imageTags;
+    private string $workdir;
     private Dockerfile $dockerfile;
+    /** @var iterable<DirectoryInterface|FileInterface> */
     private iterable $files;
     private iterable $dependencies;
 
     public function __construct(
-        string $imageTag,
         Dockerfile $dockerfile,
-        FileInterface ...$files
+        string $workdir,
+        FileInterface|DirectoryInterface ...$files
     ) {
-        $this->imageTag = $imageTag;
+        $this->imageTags = [];
+        $this->workdir = $workdir;
         $this->dockerfile = $dockerfile;
         $this->files = $files;
         $this->dependencies = [];
     }
 
-    public function dependsOn(string ...$dependencies): void
+    public function addTags(string ...$imageTags): self
     {
-        array_push($this->dependencies, ...$dependencies);
+        array_push($this->imageTags, ...$imageTags);
+
+        return $this;
     }
 
-    public function push(FileInterface ...$files): void
+    public function withFile(DirectoryInterface|FileInterface ...$files): self
     {
         array_push($this->files, ...$files);
+
+        foreach ($files as $file) {
+            $this->dockerfile->push(new Docker\Dockerfile\Copy($file->getPath(), $this->workdir));
+        }
+
+        return $this;
+    }
+
+    public function dependsOn(string ...$dependencies): self
+    {
+        array_push($this->dependencies, ...$dependencies);
+
+        return $this;
     }
 
     public function build(LoggerInterface $logger): void
     {
-        $this->dockerfile->push(
-            new ComposerRequire(...$this->dependencies),
-        );
-
         $archive = new TarArchive($this->dockerfile, ...$this->files);
 
+        $iterator = function (iterable $tags) {
+            foreach ($tags as $tag) {
+                yield '-t';
+                yield $tag;
+            }
+        };
+
         $process = new Process([
-            'docker', 'build', '-t', $this->imageTag, '--rm', '-'
+            'docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags))
         ]);
 
         $process->setInput($archive->asResource());

@@ -17,9 +17,7 @@ final class ComposerRequire implements Dockerfile\LayerInterface
     {
         return (string) new Dockerfile\Run(sprintf(<<<RUN
             set -ex \\
-                && mkdir -p /var/www/html \\
-                && cd /var/www/html \\
-                && composer require %s
+                && composer require --prefer-dist --no-suggest --no-progress --prefer-stable --sort-packages --optimize-autoloader %s
             RUN, implode(' ', $this->packages)));
     }
 }

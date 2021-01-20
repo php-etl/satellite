@@ -4,17 +4,29 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
+use Kiboko\Component\Satellite\AssetInterface;
+use Kiboko\Component\Satellite\DirectoryInterface;
+use Kiboko\Component\Satellite\FileInterface;
+
 final class TarArchive implements AssetInterface
 {
+    private const TYPE_REGULAR_FILE = 0x30;
+    private const TYPE_LINK = 0x31;
+    private const TYPE_DIRECTORY = 0x35;
+
     /** @var resource */
     private $stream;
 
-    public function __construct(FileInterface ...$files)
+    public function __construct(FileInterface|DirectoryInterface ...$files)
     {
         $this->stream = fopen('php://temp', 'rb+');
 
         foreach ($files as $file) {
-            $this->addFile($file);
+            if ($file instanceof DirectoryInterface) {
+                $this->addDirectory($file);
+            } else {
+                $this->addFile($file);
+            }
         }
     }
 
@@ -23,12 +35,17 @@ final class TarArchive implements AssetInterface
         $this->addAsset($file->getPath(), $file);
     }
 
+    public function addDirectory(DirectoryInterface $directory): void
+    {
+        $this->writeHeader($directory->getPath(), 0, self::TYPE_DIRECTORY);
+    }
+
     public function addAsset(string $path, AssetInterface $asset): void
     {
         $resource = $asset->asResource();
         $length = fstat($resource)['size'];
 
-        $this->writeHeader($path, $length);
+        $this->writeHeader($path, $length, self::TYPE_REGULAR_FILE);
         stream_copy_to_stream($resource, $this->stream);
 
         if (($length % 512) !== 0) {
@@ -36,7 +53,7 @@ final class TarArchive implements AssetInterface
         }
     }
 
-    private function writeHeader(string $path, int $size)
+    private function writeHeader(string $path, int $size, int $type)
     {
         $pathPrefix = null;
         $filename = $path;
@@ -62,15 +79,15 @@ final class TarArchive implements AssetInterface
             sprintf('%011o ', time()),
             "\x20\x20\x20\x20\x20\x20\x20\x20", // Checksum
             0x20,
-            0x30,                         // type flag
+            $type,                              // type flag
             '',                                 // linkname
             'ustar',                            // magic
             0x30,
-            0x30,                         // version
+            0x30,                               // version
             'docker',                           // uname
             'docker',                           // gname
-            sprintf('%06o ', 0),                // devmajor
-            sprintf('%06o ', 0),                // devminor
+            sprintf('%06o ', 0), // devmajor
+            sprintf('%06o ', 0), // devminor
             $pathPrefix,                        // prefix
             '',                                 // pad
         );

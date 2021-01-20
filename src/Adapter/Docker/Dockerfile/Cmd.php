@@ -4,15 +4,15 @@ namespace Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
 
 final class Cmd implements LayerInterface
 {
-    private string $command;
+    private iterable $command;
 
-    public function __construct(string $command)
+    public function __construct(string ...$command)
     {
         $this->command = $command;
     }
 
     public function __toString()
     {
-        return sprintf('CMD %s', $this->command);
+        return sprintf('CMD [%s]', implode(', ', $this->command));
     }
 }

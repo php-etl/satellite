@@ -2,19 +2,16 @@
 
 namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\Config\ArrayBuilder;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\FastMap;
-use Kiboko\Contract\Configurator\ConfigurationExceptionInterface;
-use Kiboko\Contract\Configurator\FactoryInterface;
-use Kiboko\Contract\Configurator\InvalidConfigurationException;
+use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 
-final class Service implements FactoryInterface
+final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
@@ -31,14 +28,14 @@ final class Service implements FactoryInterface
     }
 
     /**
-     * @throws ConfigurationExceptionInterface
+     * @throws Configurator\ConfigurationExceptionInterface
      */
     public function normalize(array $config): array
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
         } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
-            throw new InvalidConfigurationException($exception->getMessage(), 0, $exception);
+            throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
 
@@ -54,13 +51,13 @@ final class Service implements FactoryInterface
     }
 
     /**
-     * @throws ConfigurationExceptionInterface
+     * @throws Configurator\ConfigurationExceptionInterface
      */
     public function compile(array $config): \PhpParser\Builder
     {
         $pipeline = new Builder\Pipeline();
 
-        foreach ($config['runtime']['steps'] as $step) {
+        foreach ($config['pipeline']['steps'] as $step) {
             if (array_key_exists('akeneo', $step)) {
                 if (array_key_exists('extractor', $step['akeneo'])) {
                     $pipeline->addExtractor(
@@ -91,7 +88,7 @@ final class Service implements FactoryInterface
         return $pipeline;
     }
 
-    public function build(): array
+    public function build(array $config): array
     {
         return [
             new Node\Stmt\Namespace_(new Node\Name('Foo')),
@@ -106,7 +103,10 @@ final class Service implements FactoryInterface
             ),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Kiboko\\Component\\Pipeline'))]),
 
-            ...$this->buildPipeline($this->config['steps'])
+            new Node\Expr\MethodCall(
+                var: $this->compile($config)->getNode(),
+                name: 'run'
+            ),
         ];
     }
 }

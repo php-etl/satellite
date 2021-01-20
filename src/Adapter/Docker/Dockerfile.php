@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile\LayerInterface;
+use Kiboko\Component\Satellite\FileInterface;
 
 final class Dockerfile implements \IteratorAggregate, \Countable, FileInterface
 {
     /** @var iterable|Dockerfile\LayerInterface[] */
     private iterable $layers;
 
-    public function __construct(Dockerfile\LayerInterface ...$layers)
+    public function __construct(null|Dockerfile\LayerInterface ...$layers)
     {
         $this->layers = $layers;
     }

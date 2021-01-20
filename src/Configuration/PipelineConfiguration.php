@@ -1,0 +1,31 @@
+<?php declare(strict_types=1);
+
+namespace Kiboko\Component\Satellite\Configuration;
+
+use Kiboko\Plugin\Akeneo;
+use Kiboko\Plugin\FastMap;
+use Kiboko\Plugin\CSV;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+final class PipelineConfiguration implements ConfigurationInterface
+{
+    public function getConfigTreeBuilder()
+    {
+        $builder = new TreeBuilder('pipeline');
+
+        $builder->getRootNode()
+            ->children()
+                ->arrayNode('steps')
+                    ->isRequired()
+                    ->arrayPrototype()
+                        ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
+                    ->end()
+                ->end()
+            ->end();
+
+        return $builder;
+    }
+}

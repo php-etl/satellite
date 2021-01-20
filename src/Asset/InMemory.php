@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Docker\Asset;
+namespace Kiboko\Component\Satellite\Asset;
 
-use Kiboko\Component\Satellite\Adapter\Docker\AssetInterface;
+use Kiboko\Component\Satellite\AssetInterface;
 
 final class InMemory implements AssetInterface
 {
