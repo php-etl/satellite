@@ -11,12 +11,12 @@ final class Composer
     public function __construct(private string $workdir, private ?LoggerInterface $logger = null)
     {
         $this->logger = $this->logger ?? new class extends AbstractLogger {
-                public function log($level, $message, array $context = array())
-                {
-                    $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                    fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
-                }
-            };
+            public function log($level, $message, array $context = array())
+            {
+                $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
+                fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+            }
+        };
     }
 
     private function execute(string ...$command): void

@@ -8,15 +8,13 @@ use PhpParser\Node;
 final class Pipeline implements Builder
 {
     private array $steps = [];
-    private array $transformers = [];
-    private array $loaders = [];
 
     public function addExtractor(Node\Expr $extractor): self
     {
         array_push($this->steps, function (Node\Expr $pipeline) use ($extractor) {
             return new Node\Expr\MethodCall(
                 var: $pipeline,
-                name: new Node\Identifier('extractor'),
+                name: new Node\Identifier('extract'),
                 args: [
                     new Node\Arg($extractor)
                 ]
@@ -59,11 +57,11 @@ final class Pipeline implements Builder
     public function getNode(): Node
     {
         $pipeline = new Node\Expr\New_(
-            new Node\Name('Pipeline\\Pipeline'),
+            new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
             [
                 new Node\Arg(
                     new Node\Expr\New_(
-                        new Node\Name('Pipeline\\PipelineRunner'),
+                        new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
                     ),
                 ),
             ],

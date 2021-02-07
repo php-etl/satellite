@@ -5,7 +5,7 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 
-final class Factory implements Satellite\FactoryInterface
+final class Factory implements Satellite\Adapter\FactoryInterface
 {
     public function __invoke(array $configuration): SatelliteBuilderInterface
     {

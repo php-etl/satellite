@@ -44,9 +44,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerRequire(string $package): self
+    public function withComposerRequire(string ...$package): self
     {
-        $this->composerRequire[] = $package;
+        array_push($this->composerRequire, ...$package);
 
         return $this;
     }

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace unit\Kiboko\Component\Satellite\Adapter\Docker;
+namespace unit\Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
-use Kiboko\Component\Satellite\Adapter\Docker\TarArchive;
+use Kiboko\Component\Satellite\TarArchive;
 use PHPUnit\Framework\TestCase;
 
 final class TarArchiveTest extends TestCase
@@ -48,7 +48,7 @@ final class TarArchiveTest extends TestCase
 
         $data = unpack('Z7uid', fread($resource, 512), 108);
 
-        $this->assertEquals((binary) '000000 ', $data['uid']);
+        $this->assertMatchesRegularExpression('/\d{6}\s/', $data['uid']);
     }
 
     public function testArchiveFileHeaderContainsGroupId()
@@ -60,7 +60,7 @@ final class TarArchiveTest extends TestCase
 
         $data = unpack('Z7gid', fread($resource, 512), 116);
 
-        $this->assertEquals((binary) '000000 ', $data['gid']);
+        $this->assertMatchesRegularExpression('/\d{6}\s/', $data['gid']);
     }
 
     public function testArchiveFileHeaderContainsSize()
@@ -84,7 +84,7 @@ final class TarArchiveTest extends TestCase
 
         $data = unpack('Z11time', fread($resource, 512), 136);
 
-        $this->assertRegExp('/^\d+$/ ', $data['time']);
+        $this->assertMatchesRegularExpression('/^\d+$/ ', $data['time']);
     }
 
     public function testArchiveFileHeaderContainsChecksum()
@@ -96,7 +96,7 @@ final class TarArchiveTest extends TestCase
 
         $data = unpack('Z8checksum', fread($resource, 512), 148);
 
-        $this->assertRegExp('/^\d+\s$/ ', $data['checksum']);
+        $this->assertMatchesRegularExpression('/^\d+\s?$/ ', $data['checksum']);
     }
 
     public function testArchiveFileHeaderContainsTypeFlag()

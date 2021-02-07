@@ -4,7 +4,7 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite;
 
-final class Factory implements Satellite\FactoryInterface
+final class Factory implements Satellite\Adapter\FactoryInterface
 {
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {

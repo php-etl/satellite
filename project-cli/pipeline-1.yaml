@@ -1,23 +1,25 @@
 satellite:
-#  docker:
-#    from: php:8.0-cli-alpine
-#    workdir: /var/www/html
-#    tags:
-#      - kiboko/satellite:foo
-#      - kiboko/satellite:bar
-  filesystem:
-    path: foo
-#  composer:
+  docker:
+    from: php:8.0-cli-alpine
+    workdir: /var/www/html
+    tags:
+      - kiboko/satellite:foo
+      - kiboko/satellite:bar
+#  filesystem:
+#    path: foo
+  composer:
 #    from_local: true
-#    autoload:
-#      psr4:
-#      - namespace: "Pipeline\\\\"
-#        paths: [""]
-#      - namespace: "Pipeline2\\\\"
-#        path: ""
-#    require:
-#      - "php-etl/pipeline:^0.2"
-#      - "php-etl/fast-map:^0.2"
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\AkeneoToSylius\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "akeneo/api-php-client-ee"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
   pipeline:
     steps:
     - akeneo:
@@ -44,6 +46,8 @@ satellite:
           secret: qwertyuiop
           username: '%env(USERNAME)%'
           password: lkjhgfdsa
+#          token: foo
+#          refresh_token: bar
     - fastmap:
         map:
           - field: '[sku]'
@@ -57,33 +61,33 @@ satellite:
 #          - field: '[foo]'
 #            expression: 'input'
 #            map:
-#            - field: '[bar]'
-#              copy: '[bar]'
+#              - field: '[bar]'
+#                copy: '[bar]'
           - field: '[foo]'
             expression: 'input'
             list:
-            - field: '[bar]'
-              copy: '[bar]'
-          - field: '[descriptions]'
-            class: 'Pipeline\\Usage'
-            expression: 'input["foo"]'
-            object:
-              - field: 'usage'
-                expression: '"Usage: " ~ input["usage"]'
-              - field: 'warning'
-                copy: '[warning]'
-              - field: 'notice'
-                copy: '[notice]'
-          - field: '[messages]'
-            class: 'Foo\\DTO\\Messages'
-            expression: 'input'
-            collection:
-            - field: 'usage'
-              expression: '"Usage: " ~ input["usage"]'
-            - field: 'warning'
-              copy: '[warning]'
-            - field: 'notice'
-              copy: '[notice]'
+              - field: '[bar]'
+                copy: '[bar]'
+#          - field: '[descriptions]'
+#            class: 'Pipeline\Usage'
+#            expression: 'input["foo"]'
+#            object:
+#              - field: 'usage'
+#                expression: '"Usage: " ~ input["usage"]'
+#              - field: 'warning'
+#                copy: '[warning]'
+#              - field: 'notice'
+#                copy: '[notice]'
+#          - field: '[messages]'
+#            class: 'Foo\DTO\Messages'
+#            expression: 'input'
+#            collection:
+#            - field: 'usage'
+#              expression: '"Usage: " ~ input["usage"]'
+#            - field: 'warning'
+#              copy: '[warning]'
+#            - field: 'notice'
+#              copy: '[notice]'
     - csv:
         loader:
           file_path: output.csv
@@ -92,4 +96,4 @@ satellite:
           escape: '\'
         logger:
           type: stderr
-
+    - api:

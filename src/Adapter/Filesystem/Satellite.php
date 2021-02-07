@@ -42,12 +42,12 @@ final class Satellite implements SatelliteInterface
         foreach ($this->files as $file) {
             if ($file instanceof DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
-                    $stream = fopen($current->getPath(), 'wb');
+                    $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
                     stream_copy_to_stream($current->asResource(), $stream);
                     fclose($stream);
                 }
             } else {
-                $stream = fopen($file->getPath(), 'wb');
+                $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
                 stream_copy_to_stream($file->asResource(), $stream);
                 fclose($stream);
             }

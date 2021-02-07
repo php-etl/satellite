@@ -1,0 +1,93 @@
+satellite:
+#  docker:
+#    from: php:8.0-cli-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:akeneo-to-sylius
+  filesystem:
+    path: akeneo-to-sylius
+  composer:
+#    from_local: true
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "php-etl/akeneo-expression-language:^0.2"
+      - "akeneo/api-php-client-ee"
+      - "diglin/sylius-api-php-client"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    steps:
+    - akeneo:
+        enterprise: true
+        extractor:
+          type: product
+          method: all
+          search:
+            - { field: enabled, operator: '=', value: true }
+            - { field: completeness, operator: '=', value: 100, scope: ecommerce }
+        logger:
+          type: 'stderr'
+        client:
+          api_url: 'http://localhost:8080'
+          client_id: '1_4bp53pdh1zi8g88w8gw0888s8oo00g4g8wwg800swsc0wco8o0'
+          secret: 5pkxk7lhsycc404cs0kgg4gossww84sow0gk4kksckss4ggswo
+          username: 'sylius_7380'
+          password: 56e94b109
+#          token: foo
+#          refresh_token: bar
+    - fastmap:
+        expression_language:
+          - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+        map:
+          - field: '[sku]'
+            copy: '[identifier]'
+#          - field: '[title]'
+#            expression: 'input["sku"] ~" | "~ input["name"]'
+#          - field: '[name]'
+#            copy: '[name]'
+#          - field: '[staticValue]'
+#            constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
+#          - field: '[foo]'
+#            expression: 'input'
+#            map:
+#              - field: '[bar]'
+#                copy: '[bar]'
+#          - field: '[foo]'
+#            expression: 'input'
+#            list:
+#              - field: '[bar]'
+#                copy: '[bar]'
+#          - field: '[descriptions]'
+#            class: 'Pipeline\Usage'
+#            expression: 'input["foo"]'
+#            object:
+#              - field: 'usage'
+#                expression: '"Usage: " ~ input["usage"]'
+#              - field: 'warning'
+#                copy: '[warning]'
+#              - field: 'notice'
+#                copy: '[notice]'
+#          - field: '[messages]'
+#            class: 'Foo\DTO\Messages'
+#            expression: 'input'
+#            collection:
+#            - field: 'usage'
+#              expression: '"Usage: " ~ input["usage"]'
+#            - field: 'warning'
+#              copy: '[warning]'
+#            - field: 'notice'
+#              copy: '[notice]'
+    - csv:
+        loader:
+          file_path: output.csv
+          delimiter: ','
+          enclosure: '"'
+          escape: '\'
+        logger:
+          type: stderr

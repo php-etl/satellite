@@ -1,6 +1,8 @@
 <?php
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Adapter;
+
+use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 
 interface FactoryInterface
 {

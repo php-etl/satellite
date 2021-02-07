@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Docker;
+namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite\AssetInterface;
 use Kiboko\Component\Satellite\DirectoryInterface;

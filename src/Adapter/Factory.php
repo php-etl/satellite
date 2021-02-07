@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Adapter;
 
 use Kiboko\Component\Satellite;
 
 final class Factory implements FactoryInterface
 {
-    public function __invoke(array $configuration): SatelliteBuilderInterface
+    public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
         if (array_key_exists('docker', $configuration)) {
             $factory = new Satellite\Adapter\Docker\Factory();

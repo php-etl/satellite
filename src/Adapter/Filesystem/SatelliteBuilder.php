@@ -33,9 +33,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerRequire(string $package): self
+    public function withComposerRequire(string ...$package): self
     {
-        $this->composerRequire[] = $package;
+        array_push($this->composerRequire, ...$package);
 
         return $this;
     }
@@ -88,9 +88,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
         $composer = new Composer($this->workdir);
         if ($this->composerJsonFile !== null) {
-            copy($this->composerJsonFile, $this->workdir);
+            $satellite->withFile($this->composerJsonFile);
             if ($this->composerLockFile !== null) {
-                copy($this->composerLockFile, $this->workdir);
+                $satellite->withFile($this->composerLockFile);
             }
             $composer->install();
         } else if (count($this->composerRequire) > 0) {

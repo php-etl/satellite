@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Runtime\Http;
+namespace Kiboko\Component\Satellite\Runtime\Api;
 
-use Kiboko\Component\Satellite\Runtime\RuntimeInterface;
-use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite;
 use PhpParser\Node;
+use PhpParser\PrettyPrinter;
+use Psr\Log\LoggerInterface;
 
-final class Hook implements RuntimeInterface
+final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
     private array $config;
 
@@ -15,14 +16,20 @@ final class Hook implements RuntimeInterface
         $this->config = $config;
     }
 
-    public function prepare(SatelliteInterface $satellite): void
+    public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
+        $satellite->withFile(
+            new Satellite\File('function.php', new Satellite\Asset\InMemory(
+                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
+            )),
+        );
     }
 
     public function build(): array
     {
+        $service = new Satellite\Service();
+
         return [
-            new Node\Stmt\Namespace_(new Node\Name('Foo')),
             new Node\Stmt\Expression(
                 new Node\Expr\Include_(
                     new Node\Expr\BinaryOp\Concat(
@@ -71,6 +78,35 @@ final class Hook implements RuntimeInterface
 
             new Node\Stmt\Expression(
                 new Node\Expr\Assign(
+                    new Node\Expr\Variable('fastRouteDispatcher'),
+                    new Node\Expr\FuncCall(
+                        new Node\Name('FastRoute\\simpleDispatcher'),
+                        [
+                            new Node\Arg(
+                                new Node\Expr\Closure([
+                                    'params' => [
+                                        new Node\Param(
+                                            new Node\Expr\Variable('router'),
+                                            null,
+                                            new Node\Name('FastRoute\\RouteCollector')
+                                        )
+                                    ],
+                                    'uses' => [
+                                        new Node\Expr\Variable('psr17Factory')
+                                    ],
+                                    'stmts' => iterator_to_array($this->compileRoutes(
+                                        new Node\Expr\Variable('router'),
+                                        new Node\Expr\Variable('psr17Factory'),
+                                    )),
+                                ])
+                            ),
+                        ]
+                    )
+                ),
+            ),
+
+            new Node\Stmt\Expression(
+                new Node\Expr\Assign(
                     new Node\Expr\Variable('dispatcher'),
                     new Node\Expr\New_(
                         new Node\Name('Middlewares\\Utils\\Dispatcher'),
@@ -85,7 +121,7 @@ final class Hook implements RuntimeInterface
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name(' Middlewares\\BasePath'),
+                                                new Node\Name('Middlewares\\BasePath'),
                                                 [
                                                     new Node\Arg(
                                                         new Node\Scalar\String_($this->config['path'] ?? '/')
@@ -94,9 +130,18 @@ final class Hook implements RuntimeInterface
                                             ),
                                         ),
                                         new Node\Expr\ArrayItem(
-                                            new Node\Expr\Include_(
-                                                new Node\Scalar\String_($this->config['function']),
-                                                Node\Expr\Include_::TYPE_REQUIRE
+                                            new Node\Expr\New_(
+                                                new Node\Name('Middlewares\\FastRoute'),
+                                                [
+                                                    new Node\Arg(
+                                                        new Node\Expr\Variable('fastRouteDispatcher')
+                                                    )
+                                                ]
+                                            ),
+                                        ),
+                                        new Node\Expr\ArrayItem(
+                                            new Node\Expr\New_(
+                                                new Node\Name('Middlewares\\RequestHandler'),
                                             ),
                                         ),
                                     ],
@@ -132,5 +177,33 @@ final class Hook implements RuntimeInterface
                 ),
             ),
         ];
+    }
+
+    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory): Node\Stmt\Expression
+    {
+        return new Node\Stmt\Expression(
+            new Node\Expr\MethodCall(
+                $router,
+                $routeConfig['method'] ?? 'get',
+                [
+                    new Node\Arg(
+                        new Node\Scalar\String_($routeConfig['path'])
+                    ),
+                    new Node\Arg(
+                        new Node\Expr\Include_(
+                            new Node\Scalar\String_($routeConfig['function']),
+                            Node\Expr\Include_::TYPE_REQUIRE,
+                        )
+                    ),
+                ],
+            ),
+        );
+    }
+
+    private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
+    {
+        foreach ($this->config['routes'] as $route) {
+            yield $this->routeToAST($route, $router, $factory);
+        }
     }
 }

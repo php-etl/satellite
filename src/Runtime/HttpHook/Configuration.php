@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Filesystem;
+namespace Kiboko\Component\Satellite\Runtime\HttpHook;
 
-use Kiboko\Component\Satellite\NamedConfigurationInterface;
+use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements NamedConfigurationInterface
+final class Configuration implements Satellite\NamedConfigurationInterface
 {
     public function getName(): string
     {
-        return 'filesystem';
+        return 'http_hook';
     }
 
     public function getConfigTreeBuilder()
@@ -19,6 +19,7 @@ final class Configuration implements NamedConfigurationInterface
         $builder->getRootNode()
             ->children()
                 ->scalarNode('path')->end()
+                ->append((new Satellite\Runtime\Pipeline\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
         return $builder;
