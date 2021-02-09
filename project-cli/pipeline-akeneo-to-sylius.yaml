@@ -16,7 +16,6 @@ satellite:
       - "php-etl/pipeline:^0.2"
       - "php-etl/fast-map:^0.2"
       - "php-etl/csv-flow:^0.1"
-      - "php-etl/akeneo-expression-language:^0.2"
       - "akeneo/api-php-client-ee"
       - "diglin/sylius-api-php-client"
       - "laminas/laminas-diactoros"
@@ -45,49 +44,17 @@ satellite:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
         map:
-          - field: '[sku]'
+          - field: '[code]'
             copy: '[identifier]'
-#          - field: '[title]'
-#            expression: 'input["sku"] ~" | "~ input["name"]'
-#          - field: '[name]'
-#            copy: '[name]'
-#          - field: '[staticValue]'
-#            constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
-#          - field: '[foo]'
-#            expression: 'input'
-#            map:
-#              - field: '[bar]'
-#                copy: '[bar]'
-#          - field: '[foo]'
-#            expression: 'input'
-#            list:
-#              - field: '[bar]'
-#                copy: '[bar]'
-#          - field: '[descriptions]'
-#            class: 'Pipeline\Usage'
-#            expression: 'input["foo"]'
-#            object:
-#              - field: 'usage'
-#                expression: '"Usage: " ~ input["usage"]'
-#              - field: 'warning'
-#                copy: '[warning]'
-#              - field: 'notice'
-#                copy: '[notice]'
-#          - field: '[messages]'
-#            class: 'Foo\DTO\Messages'
-#            expression: 'input'
-#            collection:
-#            - field: 'usage'
-#              expression: '"Usage: " ~ input["usage"]'
-#            - field: 'warning'
-#              copy: '[warning]'
-#            - field: 'notice'
-#              copy: '[notice]'
-    - csv:
+          - field: '[name]'
+            expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
+          - field: '[translations][en_US]'
+            expression: 'input'
+            map:
+              - field: '[name]'
+                expression: 'input["identifier"] ~" | "~ attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
+              - field: '[description]'
+                expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+    - stream:
         loader:
-          file_path: output.csv
-          delimiter: ','
-          enclosure: '"'
-          escape: '\'
-        logger:
-          type: stderr
+          destination: stderr

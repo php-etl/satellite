@@ -9,6 +9,8 @@ use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
+use Kiboko\Component\Satellite\Plugin\Custom;
+use Kiboko\Component\Satellite\Plugin\Log;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -110,13 +112,23 @@ final class Service implements Configurator\FactoryInterface
                 } elseif (array_key_exists('loader', $step['api'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
-            } elseif (array_key_exists('custom', $step)) {
-                $repository = (new Satellite\Plugin\Custom\Service())->compile($step['custom']);
-                if (array_key_exists('extractor', $step['custom'])) {
-                    $pipeline->addExtractor($repository->getBuilder()->getNode());
-                } elseif (array_key_exists('transformer', $step['custom'])) {
-                    $pipeline->addTransformer($repository->getBuilder()->getNode());
-                } elseif (array_key_exists('loader', $step['custom'])) {
+//            } elseif (array_key_exists('custom', $step)) {
+//                $repository = (new Satellite\Plugin\Custom\Service())->compile($step['custom']);
+//                if (array_key_exists('extractor', $step['custom'])) {
+//                    $pipeline->addExtractor($repository->getBuilder()->getNode());
+//                } elseif (array_key_exists('transformer', $step['custom'])) {
+//                    $pipeline->addTransformer($repository->getBuilder()->getNode());
+//                } elseif (array_key_exists('loader', $step['custom'])) {
+//                    $pipeline->addLoader($repository->getBuilder()->getNode());
+//                }
+//            } elseif (array_key_exists('log', $step)) {
+//                $repository = (new Satellite\Plugin\Log\Service())->compile($step['log']);
+//                if (array_key_exists('loader', $step['log'])) {
+//                    $pipeline->addLoader($repository->getBuilder()->getNode());
+//                }
+            } elseif (array_key_exists('stream', $step)) {
+                $repository = (new Satellite\Plugin\Stream\Service())->compile($step['stream']);
+                if (array_key_exists('loader', $step['stream'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
             } elseif (array_key_exists('fastmap', $step)) {

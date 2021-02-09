@@ -31,7 +31,9 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                         ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new API\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
+//                        ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
+//                        ->append((new Satellite\Plugin\Log\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
                     ->end()
                 ->end()
             ->end();
