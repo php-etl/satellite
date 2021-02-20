@@ -8,6 +8,7 @@ use Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Satellite\DirectoryInterface;
 use Kiboko\Component\Satellite\FileInterface;
 use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Component\Satellite\TarArchive;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
