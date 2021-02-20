@@ -13,7 +13,7 @@ final class Configuration implements ConfigurationInterface
         $transformer = new Configuration\Transformer();
         $loader = new Configuration\Loader();
 
-        $builder = new TreeBuilder('sylius');
+        $builder = new TreeBuilder('custom');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()

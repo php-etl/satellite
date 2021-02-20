@@ -46,6 +46,16 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        // TODO: Implement compile() method.
+        if (array_key_exists('extractor', $config)) {
+            return new Repository(new CustomBuilder($config['extractor']['class']));
+        }
+        if (array_key_exists('transformer', $config)) {
+            return new Repository(new CustomBuilder($config['transformer']['class']));
+        }
+        if (array_key_exists('loader', $config)) {
+            return new Repository(new CustomBuilder($config['loader']['class']));
+        }
+
+        throw new \RuntimeException('No possible pipeline step, expecing "extractor", "transformer" or "loader"');
     }
 }

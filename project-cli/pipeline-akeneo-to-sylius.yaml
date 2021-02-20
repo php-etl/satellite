@@ -7,7 +7,6 @@ satellite:
   filesystem:
     path: akeneo-to-sylius
   composer:
-#    from_local: true
     autoload:
       psr4:
       - namespace: "Pipeline\\"
@@ -33,28 +32,38 @@ satellite:
         logger:
           type: 'stderr'
         client:
-          api_url: 'http://localhost:8080'
+          api_url: 'http://akeneo.example.com'
           client_id: '1_4bp53pdh1zi8g88w8gw0888s8oo00g4g8wwg800swsc0wco8o0'
           secret: 5pkxk7lhsycc404cs0kgg4gossww84sow0gk4kksckss4ggswo
           username: 'sylius_7380'
           password: 56e94b109
-#          token: foo
-#          refresh_token: bar
     - fastmap:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
         map:
           - field: '[code]'
             copy: '[identifier]'
-          - field: '[name]'
-            expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
           - field: '[translations][en_US]'
             expression: 'input'
             map:
               - field: '[name]'
                 expression: 'input["identifier"] ~" | "~ attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
+              - field: '[slug]'
+                expression: 'input["identifier"]'
               - field: '[description]'
                 expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
-    - stream:
+    - sylius:
         loader:
-          destination: stderr
+          type: products
+          method: create
+        logger:
+          type: 'stderr'
+        client:
+          api_url: 'http://sylius.example.com'
+          client_id: '2lgsix9qgvms0gckwss8wsc00g0os4sksw08kcw4gcowckssgk'
+          secret: '2l4i15fitdyc480owss48sw08ow88s48wgkk4cgcs40400ockc'
+          username: 'admin'
+          password: password
+    - custom:
+        loader:
+          class: Foo\BarLoader

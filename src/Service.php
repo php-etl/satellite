@@ -112,15 +112,15 @@ final class Service implements Configurator\FactoryInterface
                 } elseif (array_key_exists('loader', $step['api'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
-//            } elseif (array_key_exists('custom', $step)) {
-//                $repository = (new Satellite\Plugin\Custom\Service())->compile($step['custom']);
-//                if (array_key_exists('extractor', $step['custom'])) {
-//                    $pipeline->addExtractor($repository->getBuilder()->getNode());
-//                } elseif (array_key_exists('transformer', $step['custom'])) {
-//                    $pipeline->addTransformer($repository->getBuilder()->getNode());
-//                } elseif (array_key_exists('loader', $step['custom'])) {
-//                    $pipeline->addLoader($repository->getBuilder()->getNode());
-//                }
+            } elseif (array_key_exists('custom', $step)) {
+                $repository = (new Satellite\Plugin\Custom\Service())->compile($step['custom']);
+                if (array_key_exists('extractor', $step['custom'])) {
+                    $pipeline->addExtractor($repository->getBuilder()->getNode());
+                } elseif (array_key_exists('transformer', $step['custom'])) {
+                    $pipeline->addTransformer($repository->getBuilder()->getNode());
+                } elseif (array_key_exists('loader', $step['custom'])) {
+                    $pipeline->addLoader($repository->getBuilder()->getNode());
+                }
 //            } elseif (array_key_exists('log', $step)) {
 //                $repository = (new Satellite\Plugin\Log\Service())->compile($step['log']);
 //                if (array_key_exists('loader', $step['log'])) {
