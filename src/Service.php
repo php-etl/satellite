@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
@@ -70,9 +72,9 @@ final class Service implements Configurator\FactoryInterface
     {
         if (array_key_exists('pipeline', $config)) {
             return $this->compilePipeline($config);
-        } else if (array_key_exists('http_hook', $config)) {
+        } elseif (array_key_exists('http_hook', $config)) {
             return $this->compileHook($config);
-        } else if (array_key_exists('http_api', $config)) {
+        } elseif (array_key_exists('http_api', $config)) {
             return $this->compileApi($config);
         }
 

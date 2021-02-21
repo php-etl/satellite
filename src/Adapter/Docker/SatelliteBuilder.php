@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
@@ -134,7 +136,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInstall());
-        } else if (count($this->composerRequire) > 0) {
+        } elseif (count($this->composerRequire) > 0) {
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));

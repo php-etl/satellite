@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Stream;
 
@@ -50,7 +52,7 @@ final class Service implements Configurator\FactoryInterface
         ) {
             if ($config['loader']['destination'] === 'stderr') {
                 return new Repository(new Builder\StderrLoader());
-            } else if ($config['loader']['destination'] === 'stdout') {
+            } elseif ($config['loader']['destination'] === 'stdout') {
                 return new Repository(new Builder\StdoutLoader());
             }
         }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
@@ -8,7 +10,8 @@ use PhpParser\Node;
 final class CustomBuilder implements Builder
 {
     public function __construct(private string $className)
-    {}
+    {
+    }
 
     public function getNode(): Node
     {

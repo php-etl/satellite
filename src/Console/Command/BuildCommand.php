@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command;
 
@@ -44,7 +46,7 @@ final class BuildCommand extends Console\Command\Command
 
         $factory = new Satellite\Runtime\Factory(
             new Satellite\Adapter\Factory(),
-            new class extends Log\AbstractLogger {
+            new class() extends Log\AbstractLogger {
                 public function log($level, $message, array $context = array())
                 {
                     $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));

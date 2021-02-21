@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
@@ -10,7 +12,7 @@ final class Composer
 {
     public function __construct(private string $workdir, private ?LoggerInterface $logger = null)
     {
-        $this->logger = $this->logger ?? new class extends AbstractLogger {
+        $this->logger = $this->logger ?? new class() extends AbstractLogger {
             public function log($level, $message, array $context = array())
             {
                 $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));

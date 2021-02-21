@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
@@ -93,7 +95,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
                 $satellite->withFile($this->composerLockFile);
             }
             $composer->install();
-        } else if (count($this->composerRequire) > 0) {
+        } elseif (count($this->composerRequire) > 0) {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
         }

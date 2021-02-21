@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter;
 
@@ -10,7 +12,7 @@ final class Factory implements FactoryInterface
     {
         if (array_key_exists('docker', $configuration)) {
             $factory = new Satellite\Adapter\Docker\Factory();
-        } else if (array_key_exists('filesystem', $configuration)) {
+        } elseif (array_key_exists('filesystem', $configuration)) {
             $factory = new Satellite\Adapter\Filesystem\Factory();
         } else {
             throw new \RuntimeException('No compatible adapter was found for your satellite configuration.');

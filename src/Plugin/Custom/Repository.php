@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
@@ -9,7 +11,8 @@ use PhpParser\Builder;
 final class Repository implements RepositoryInterface
 {
     public function __construct(private Builder $builder)
-    {}
+    {
+    }
 
     public function addFiles(FileInterface ...$files): RepositoryInterface
     {

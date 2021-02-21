@@ -47,7 +47,8 @@
         "friends-of-phpspec/phpspec-code-coverage": "^6.0",
         "php-etl/pipeline": "0.2.x-dev",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "php-cs-fixer/diff": "^2.0"
+        "php-cs-fixer/diff": "^2.0",
+        "phpstan/phpstan": "0.12.x-dev"
     },
     "autoload": {
         "psr-4": {

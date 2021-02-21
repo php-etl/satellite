@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\HttpHook;
 
@@ -10,7 +12,8 @@ use Psr\Log\LoggerInterface;
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
     public function __construct(private array $config, private string $filename = 'function.php')
-    {}
+    {
+    }
 
     public function getFilename(): string
     {
