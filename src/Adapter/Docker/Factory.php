@@ -22,7 +22,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 if (is_dir($path)) {
                     $builder->withDirectory(new Satellite\Directory($path));
                 } else {
-                    $builder->withFile(new Satellite\Asset\File($path));
+                    $builder->withFile(new Satellite\Asset\LocalFile($path));
                 }
             }
         }
@@ -32,7 +32,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 if (is_dir($path)) {
                     $builder->withDirectory(new Satellite\Directory($path));
                 } else {
-                    $builder->withFile(new Satellite\Asset\File($path));
+                    $builder->withFile(new Satellite\Asset\LocalFile($path));
                 }
             }
         }
@@ -40,9 +40,9 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         if (array_key_exists('composer', $configuration)) {
             if (array_key_exists('from-local', $configuration['composer']) && $configuration['composer']['from-local'] === true) {
                 if (file_exists('composer.lock')) {
-                    $builder->withComposerFile(new Satellite\Asset\File('composer.json'), new Satellite\Asset\File('composer.lock'));
+                    $builder->withComposerFile(new Satellite\Asset\LocalFile('composer.json'), new Satellite\Asset\LocalFile('composer.lock'));
                 } else {
-                    $builder->withComposerFile(new Satellite\Asset\File('composer.json'));
+                    $builder->withComposerFile(new Satellite\Asset\LocalFile('composer.json'));
                 }
                 if (file_exists('vendor')) {
                     $builder->withDirectory(new Satellite\Directory('vendor/'));

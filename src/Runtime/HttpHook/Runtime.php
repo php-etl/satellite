@@ -9,17 +9,18 @@ use Psr\Log\LoggerInterface;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    private array $config;
+    public function __construct(private array $config, private string $filename = 'function.php')
+    {}
 
-    public function __construct(array $config)
+    public function getFilename(): string
     {
-        $this->config = $config;
+        return $this->filename;
     }
 
     public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
         $satellite->withFile(
-            new Satellite\File('function.php', new Satellite\Asset\InMemory(
+            new Satellite\File($this->filename, new Satellite\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
             )),
         );

@@ -9,4 +9,5 @@ interface RuntimeInterface
 {
     public function prepare(SatelliteInterface $satellite, LoggerInterface $logger): void;
     public function build(): array;
+    public function getFilename(): string;
 }

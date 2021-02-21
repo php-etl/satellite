@@ -20,7 +20,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private null|Satellite\FileInterface|Satellite\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var iterable<string,\SplFileInfo> */
+    /** @var \AppendIterator<string,Satellite\FileInterface> */
     private iterable $files;
 
     public function __construct(string $fromImage)
@@ -120,10 +120,18 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         }
 
         if ($this->composerJsonFile !== null) {
-            $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy($this->composerJsonFile->getPath(), 'composer.json'));
+            $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.json'));
+            $this->files->append(new \ArrayIterator([
+                new Satellite\File('composer.json', $this->composerJsonFile),
+            ]));
+
             if ($this->composerLockFile !== null) {
-                $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy($this->composerLockFile->getPath(), 'composer.lock'));
+                $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.lock'));
+                $this->files->append(new \ArrayIterator([
+                    new Satellite\File('composer.lock', $this->composerLockFile),
+                ]));
             }
+
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInstall());
         } else if (count($this->composerRequire) > 0) {

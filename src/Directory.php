@@ -47,7 +47,7 @@ final class Directory implements Satellite\DirectoryInterface
 
         return new Satellite\File(
             $current->getPathname(),
-            new Satellite\Asset\File($current->getPathname())
+            new Satellite\Asset\LocalFile($current->getPathname())
         );
     }
 

@@ -4,7 +4,7 @@ namespace Kiboko\Component\Satellite\Asset;
 
 use Kiboko\Component\Satellite\AssetInterface;
 
-final class File implements AssetInterface
+final class LocalFile implements AssetInterface
 {
     private string $path;
 
