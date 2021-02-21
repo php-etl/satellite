@@ -11,6 +11,7 @@ final class Loader implements ConfigurationInterface
     {
         $builder = new TreeBuilder('loader');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('class')

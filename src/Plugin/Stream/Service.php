@@ -35,7 +35,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }
@@ -54,5 +54,7 @@ final class Service implements Configurator\FactoryInterface
                 return new Repository(new Builder\StdoutLoader());
             }
         }
+
+        throw new \RuntimeException('No suitable build with the provided configuration.');
     }
 }

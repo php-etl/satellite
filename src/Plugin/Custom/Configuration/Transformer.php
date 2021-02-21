@@ -11,6 +11,7 @@ final class Transformer implements ConfigurationInterface
     {
         $builder = new TreeBuilder('transformer');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('class')

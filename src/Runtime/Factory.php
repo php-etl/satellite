@@ -17,7 +17,7 @@ final class Factory implements FactoryInterface
         $satellite = ($this->adapterFactory)($configuration)->build();
 
         if (array_key_exists('http_api', $configuration)) {
-            $factory = new Satellite\Runtime\API\Factory();
+            $factory = new Satellite\Runtime\Api\Factory();
         } else if (array_key_exists('http_hook', $configuration)) {
             $factory = new Satellite\Runtime\HttpHook\Factory();
         } else if (array_key_exists('pipeline', $configuration)) {

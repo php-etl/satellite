@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -36,6 +37,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('satellite');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_map(
@@ -57,6 +59,16 @@ final class Configuration implements ConfigurationInterface
             ->end();
 
         $root = $builder->getRootNode();
+
+        if (!$root instanceof ArrayNodeDefinition) {
+            throw new \RuntimeException(strtr(
+                'Expected an instance of %expected%, but got %actual%.',
+                [
+                    '%expected%' => ArrayNodeDefinition::class,
+                    '%actual%' => get_debug_type($root),
+                ]
+            ));
+        }
         $children = $root->children();
 
         foreach ($this->adapters as $config) {

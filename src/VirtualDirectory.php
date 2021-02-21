@@ -5,7 +5,7 @@ namespace Kiboko\Component\Satellite;
 final class VirtualDirectory implements DirectoryInterface
 {
     private string $path;
-    private \Iterator $children;
+    private \ArrayIterator $children;
 
     public function __construct()
     {

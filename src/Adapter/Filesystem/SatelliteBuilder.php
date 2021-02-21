@@ -13,7 +13,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private null|Satellite\FileInterface|Satellite\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var iterable<string,\SplFileInfo> */
+    /** @var \AppendIterator<string,Satellite\FileInterface> */
     private iterable $files;
 
     public function __construct(string $workdir)

@@ -102,7 +102,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                             ),
                                         ),
                                         new Node\Expr\ArrayItem(
-                                            $service->compile($this->config['http_hook'])->getNode(),
+                                            $service->compile($this->config['http_hook'])->getBuilder()->getNode(),
                                         ),
                                     ],
                                     [

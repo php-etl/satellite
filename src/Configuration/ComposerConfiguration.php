@@ -12,6 +12,7 @@ final class ComposerConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('composer');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->booleanNode('from_local')->defaultFalse()->end()

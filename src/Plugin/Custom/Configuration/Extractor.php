@@ -11,6 +11,7 @@ final class Extractor implements ConfigurationInterface
     {
         $builder = new TreeBuilder('extractor');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('class')

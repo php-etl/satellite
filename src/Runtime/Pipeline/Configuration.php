@@ -8,6 +8,7 @@ use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\API;
 use Kiboko\Component\Satellite;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements Satellite\NamedConfigurationInterface
@@ -21,6 +22,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
     {
         $builder = new TreeBuilder($this->getName());
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('steps')
