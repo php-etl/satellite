@@ -34,6 +34,7 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\Api\Configuration(),
                 new Runtime\HttpHook\Configuration(),
                 new Runtime\Pipeline\Configuration(),
+                new Runtime\Workflow\Configuration(),
             );
     }
 

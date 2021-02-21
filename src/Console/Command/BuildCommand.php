@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Console\Command;
 use Kiboko\Component\Satellite;
 use Psr\Log;
 use Symfony\Component\Config;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Console;
 use Symfony\Component\Yaml;
 
@@ -29,11 +30,33 @@ final class BuildCommand extends Console\Command\Command
             $output,
         );
 
+        $locator = new Config\FileLocator([getcwd()]);
+
+        $loaderResolver = new Config\Loader\LoaderResolver([
+            new Satellite\Console\Config\YamlFileLoader($locator),
+            new Satellite\Console\Config\JsonFileLoader($locator),
+        ]);
+
+        $delegatingLoader = new Config\Loader\DelegatingLoader($loaderResolver);
+
         $filename = $input->getArgument('config');
-        if ($filename === null) {
-            $filename = getcwd() . '/satellite.yaml';
+        if ($filename !== null) {
+            $configuration = $delegatingLoader->load($filename);
+        } else {
+            $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
+
+            foreach ($possibleFiles as $filename) {
+                try {
+                    $configuration = $delegatingLoader->load($filename);
+                    break;
+                } catch (LoaderLoadException) {
+                }
+            }
+
+            if (!isset($configuration)) {
+                throw new \RuntimeException('Could not find configuration file.');
+            }
         }
-        $configuration = Yaml\Yaml::parse(input: file_get_contents($filename));
 
         try {
             $configuration = $service->normalize($configuration);

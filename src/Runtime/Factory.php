@@ -25,6 +25,8 @@ final class Factory implements FactoryInterface
             $factory = new Satellite\Runtime\HttpHook\Factory();
         } elseif (array_key_exists('pipeline', $configuration)) {
             $factory = new Satellite\Runtime\Pipeline\Factory();
+        } elseif (array_key_exists('workflow', $configuration)) {
+            $factory = new Satellite\Runtime\Workflow\Factory();
         } else {
             throw new \RuntimeException('No compatible runtime was found for your satellite configuration.');
         }
