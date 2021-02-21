@@ -4,7 +4,7 @@
   <coverage/>
   <testsuites>
     <testsuite name="unit">
-      <directory>unit/</directory>
+      <directory>tests/unit/</directory>
       <exclude>vendor/</exclude>
     </testsuite>
   </testsuites>

@@ -32,7 +32,7 @@ jobs:
                     php_version: 8.0
 
             -   name: Run tests & generate Coverage
-                run: bin/phpunit tests --coverage-html var/coverage --whitelist=src
+                run: bin/phpunit --configuration=phpunit.xml tests --coverage-html var/coverage --whitelist=src
 
             -   name: Store coverage files
                 uses: actions/upload-artifact@v2

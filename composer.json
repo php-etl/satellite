@@ -45,7 +45,9 @@
         "fzaninotto/faker": "^1.9@dev",
         "phpspec/phpspec": "^7.0",
         "friends-of-phpspec/phpspec-code-coverage": "^6.0",
-        "php-etl/pipeline": "0.2.x-dev"
+        "php-etl/pipeline": "0.2.x-dev",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "php-cs-fixer/diff": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -55,9 +57,9 @@
     "autoload-dev": {
         "psr-4": {
             "spec\\Kiboko\\Component\\Satellite\\": "spec/",
-            "unit\\Kiboko\\Component\\Satellite\\": "unit/",
-            "functional\\Kiboko\\Component\\Satellite\\": "functional/",
-            "performance\\Kiboko\\Component\\Satellite\\": "performance/"
+            "unit\\Kiboko\\Component\\Satellite\\": "tests/unit/",
+            "functional\\Kiboko\\Component\\Satellite\\": "tests/functional/",
+            "performance\\Kiboko\\Component\\Satellite\\": "tests/performance/"
         }
     },
     "config": {
