@@ -33,8 +33,11 @@
         "jane-php/open-api-3": "dev-next as 7.0.0",
         "jane-php/open-api-runtime": "dev-next as 7.0.0",
         "jane-php/open-api-common": "dev-next as 7.0.0",
-        "php-etl/api-plugin": "0.1.x-dev",
-        "php-etl/sylius-plugin": "0.1.x-dev",
+        "php-etl/api-plugin": "^0.1",
+        "php-etl/sylius-plugin": "^0.1",
+        "php-etl/log-plugin": "^0.1",
+        "php-etl/json-plugin": "^0.1",
+        "php-etl/spreadsheet-plugin": "dev-feature/csv",
         "php-etl/akeneo-expression-language": "^0.2"
     },
     "require-dev": {
@@ -45,7 +48,7 @@
         "fzaninotto/faker": "^1.9@dev",
         "phpspec/phpspec": "^7.0",
         "friends-of-phpspec/phpspec-code-coverage": "^6.0",
-        "php-etl/pipeline": "0.2.x-dev",
+        "php-etl/pipeline": "^0.2",
         "friendsofphp/php-cs-fixer": "^3.0",
         "php-cs-fixer/diff": "^2.0",
         "phpstan/phpstan": "0.12.x-dev"

@@ -8,11 +8,12 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Kiboko\Plugin\API;
 use Kiboko\Plugin\CSV;
+use Kiboko\Plugin\Spreadsheet;
+use Kiboko\Plugin\JSON;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
-use Kiboko\Component\Satellite\Plugin\Custom;
-use Kiboko\Component\Satellite\Plugin\Log;
+use Kiboko\Plugin\Log;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -108,7 +109,21 @@ final class Service implements Configurator\FactoryInterface
                 } elseif (array_key_exists('loader', $step['csv'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
-            } elseif (array_key_exists('api', $step)) {
+            } elseif (array_key_exists('spreadsheet', $step)) {
+                $repository = (new Spreadsheet\Service())->compile($step['spreadsheet']);
+                if (array_key_exists('extractor', $step['spreadsheet'])) {
+                    $pipeline->addExtractor($repository->getBuilder()->getNode());
+                } elseif (array_key_exists('loader', $step['spreadsheet'])) {
+                    $pipeline->addLoader($repository->getBuilder()->getNode());
+                }
+            } elseif (array_key_exists('json', $step)) {
+                $repository = (new JSON\Service())->compile($step['json']);
+                if (array_key_exists('extractor', $step['json'])) {
+                    $pipeline->addExtractor($repository->getBuilder()->getNode());
+                } elseif (array_key_exists('loader', $step['json'])) {
+                    $pipeline->addLoader($repository->getBuilder()->getNode());
+                }
+            }elseif (array_key_exists('api', $step)) {
                 $repository = (new API\Service())->compile($step['api']);
                 if (array_key_exists('extractor', $step['api'])) {
                     $pipeline->addExtractor($repository->getBuilder()->getNode());
@@ -124,11 +139,11 @@ final class Service implements Configurator\FactoryInterface
                 } elseif (array_key_exists('loader', $step['custom'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
-//            } elseif (array_key_exists('log', $step)) {
-//                $repository = (new Satellite\Plugin\Log\Service())->compile($step['log']);
-//                if (array_key_exists('loader', $step['log'])) {
-//                    $pipeline->addLoader($repository->getBuilder()->getNode());
-//                }
+            } elseif (array_key_exists('log', $step)) {
+                $repository = (new Log\Service())->compile($step['log']);
+                if (array_key_exists('loader', $step['log'])) {
+                    $pipeline->addLoader($repository->getBuilder()->getNode());
+                }
             } elseif (array_key_exists('stream', $step)) {
                 $repository = (new Satellite\Plugin\Stream\Service())->compile($step['stream']);
                 if (array_key_exists('loader', $step['stream'])) {
