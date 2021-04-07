@@ -123,7 +123,7 @@ final class Service implements Configurator\FactoryInterface
                 } elseif (array_key_exists('loader', $step['json'])) {
                     $pipeline->addLoader($repository->getBuilder()->getNode());
                 }
-            }elseif (array_key_exists('api', $step)) {
+            } elseif (array_key_exists('api', $step)) {
                 $repository = (new API\Service())->compile($step['api']);
                 if (array_key_exists('extractor', $step['api'])) {
                     $pipeline->addExtractor($repository->getBuilder()->getNode());

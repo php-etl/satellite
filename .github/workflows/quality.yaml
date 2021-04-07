@@ -30,6 +30,7 @@ jobs:
                 with:
                     args: --prefer-dist
                     php_version: 8.0
+                    php_extensions: zip
 
             -   name: Run tests & generate Coverage
                 run: bin/phpunit --configuration=phpunit.xml tests --coverage-html var/coverage --whitelist=src
@@ -53,6 +54,7 @@ jobs:
                 with:
                     args: --prefer-dist
                     php_version: 8.0
+                    php_extensions: zip
 
             -   name: PHPStan
                 uses: php-actions/phpstan@v2
