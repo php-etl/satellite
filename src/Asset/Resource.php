@@ -8,7 +8,6 @@ use Kiboko\Component\Satellite\AssetInterface;
 
 final class Resource implements AssetInterface
 {
-    /** @var resource */
     private $stream;
 
     public function __construct($resource)
@@ -20,7 +19,6 @@ final class Resource implements AssetInterface
         $this->stream = $resource;
     }
 
-    /** @return resource */
     public function asResource()
     {
         $resource = fopen('php://temp', 'rb+');

@@ -15,7 +15,6 @@ final class LocalFile implements AssetInterface
         $this->path = $path;
     }
 
-    /** @return resource */
     public function asResource()
     {
         return fopen($this->path, 'rb');

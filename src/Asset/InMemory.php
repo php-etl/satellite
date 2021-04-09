@@ -8,7 +8,6 @@ use Kiboko\Component\Satellite\AssetInterface;
 
 final class InMemory implements AssetInterface
 {
-    /** @var resource */
     private $stream;
 
     public function __construct(string $content)
@@ -18,7 +17,6 @@ final class InMemory implements AssetInterface
         fseek($this->stream, 0, SEEK_SET);
     }
 
-    /** @return resource */
     public function asResource()
     {
         $resource = fopen('php://temp', 'rb+');
