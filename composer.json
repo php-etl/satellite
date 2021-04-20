@@ -35,7 +35,8 @@
         "jane-php/open-api-common": "dev-next as 7.0.0",
         "php-etl/api-plugin": "0.1.x-dev",
         "php-etl/sylius-plugin": "0.1.x-dev",
-        "php-etl/akeneo-expression-language": "^0.2"
+        "php-etl/akeneo-expression-language": "^0.2",
+        "php-etl/phpunit-extension": "0.1.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
@@ -60,6 +61,7 @@
             "spec\\Kiboko\\Component\\Satellite\\": "spec/",
             "unit\\Kiboko\\Component\\Satellite\\": "tests/unit/",
             "functional\\Kiboko\\Component\\Satellite\\": "tests/functional/",
+            "integration\\Kiboko\\Component\\Satellite\\": "tests/integration/",
             "performance\\Kiboko\\Component\\Satellite\\": "tests/performance/"
         }
     },

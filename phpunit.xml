@@ -7,6 +7,14 @@
       <directory>tests/unit/</directory>
       <exclude>vendor/</exclude>
     </testsuite>
+    <testsuite name="functional">
+      <directory>tests/functional/</directory>
+      <exclude>vendor/</exclude>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>tests/integration/</directory>
+      <exclude>vendor/</exclude>
+    </testsuite>
   </testsuites>
   <php>
     <ini name="error_reporting" value="-1"/>

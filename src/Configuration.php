@@ -54,10 +54,7 @@ final class Configuration implements ConfigurationInterface
                 )))
             ->end()
             ->children()
-                ->append((new Configuration\ComposerConfiguration())->getConfigTreeBuilder()->getRootNode())
-//                ->arrayNode('include')
-//                    ->scalarPrototype()->end()
-//                ->end()
+                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
         $root = $builder->getRootNode();

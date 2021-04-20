@@ -11,14 +11,14 @@ final class Pipeline implements Builder
 {
     private array $steps = [];
 
-    public function addExtractor(Node\Expr $extractor): self
+    public function addExtractor(Node\Expr|Builder $extractor): self
     {
         array_push($this->steps, function (Node\Expr $pipeline) use ($extractor) {
             return new Node\Expr\MethodCall(
                 var: $pipeline,
                 name: new Node\Identifier('extract'),
                 args: [
-                    new Node\Arg($extractor)
+                    new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor)
                 ]
             );
         });
@@ -26,14 +26,14 @@ final class Pipeline implements Builder
         return $this;
     }
 
-    public function addTransformer(Node\Expr $transformer): self
+    public function addTransformer(Node\Expr|Builder $transformer): self
     {
         array_push($this->steps, function (Node\Expr $pipeline) use ($transformer) {
             return new Node\Expr\MethodCall(
                 var: $pipeline,
                 name: new Node\Identifier('transform'),
                 args: [
-                    new Node\Arg($transformer)
+                    new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer)
                 ]
             );
         });
@@ -41,14 +41,14 @@ final class Pipeline implements Builder
         return $this;
     }
 
-    public function addLoader(Node\Expr $loader): self
+    public function addLoader(Node\Expr|Builder $loader): self
     {
         array_push($this->steps, function (Node\Expr $pipeline) use ($loader) {
             return new Node\Expr\MethodCall(
                 var: $pipeline,
                 name: new Node\Identifier('load'),
                 args: [
-                    new Node\Arg($loader)
+                    new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader)
                 ]
             );
         });
@@ -56,7 +56,7 @@ final class Pipeline implements Builder
         return $this;
     }
 
-    public function getNode(): Node
+    public function getNode(): Node\Expr
     {
         $pipeline = new Node\Expr\New_(
             new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),

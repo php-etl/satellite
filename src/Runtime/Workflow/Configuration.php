@@ -21,7 +21,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->arrayNode('actions')
+                ->arrayNode('jobs')
                     ->arrayPrototype()
                         ->children()
                             ->append((new Satellite\Runtime\Pipeline\Configuration())->getConfigTreeBuilder()->getRootNode())

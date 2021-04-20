@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
 use Kiboko\Component\Satellite;
+use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
@@ -22,17 +23,20 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
     public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
+        $service = new Satellite\Service();
+        $repository = $service->compile($this->config);
+
         $satellite->withFile(
             new Satellite\File($this->filename, new Satellite\Asset\InMemory(
-                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
+                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
         );
+
+        $satellite->dependsOn(...$repository->getPackages());
     }
 
-    public function build(): array
+    public function build(Builder $builder): array
     {
-        $service = new Satellite\Service();
-
         return [
             new Node\Stmt\Expression(
                 new Node\Expr\Include_(
@@ -45,7 +49,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
             ),
             new Node\Stmt\Expression(
                 new Node\Expr\MethodCall(
-                    var: $service->compile($this->config)->getBuilder()->getNode(),
+                    var: $builder->getNode(),
                     name: 'run'
                 ),
             )

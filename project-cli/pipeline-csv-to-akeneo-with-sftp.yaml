@@ -1,0 +1,82 @@
+satellite:
+#  docker:
+#    from: php:8.0-cli-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:akeneo-to-sylius
+  filesystem:
+    path: akeneo-to-sylius-sftp
+  composer:
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "akeneo/api-php-client-ee"
+      - "diglin/sylius-api-php-client"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    steps:
+    - csv:
+        extractor:
+          file_path: 'foo.csv'
+      logger:
+        type: 'stderr'
+    - fastmap:
+        map:
+        - field: '[identifier]'
+          copy: '[sku]'
+        - field: '[values]'
+          expression: 'input'
+          map:
+          - field: '[name]'
+            expression: '[ { name: input["name"], locale: null, scope: null } ]'
+      logger:
+        type: 'stderr'
+      rejection:
+        destinations:
+          - kafka:
+              brokers:
+                - 'kafka.example.com:3200'
+              topics:
+                - 'lorem.ipsum'
+          - rabbitmq:
+              servers:
+                - host: 'rabbitmq.example.com'
+                  port: '1234'
+                  vhost: '/'
+              channels:
+                - 'lorem.ipsum'
+      state:
+        destinations:
+          - redis:
+              servers:
+                - host: 'redis.example.com'
+                  port: '1234'
+                  dbindex: 1
+                  timeout: 100
+          - memcached:
+              servers:
+                - host: 'memcached.example.com'
+                  port: '1234'
+                  timeout: 100
+#    - akeneo:
+#        enterprise: true
+#        extractor:
+#          type: product
+#          method: all
+#          search:
+#            - { field: enabled, operator: '=', value: true }
+#            - { field: completeness, operator: '=', value: 100, scope: ecommerce }
+#        client:
+#          api_url: 'http://akeneo.example.com'
+#          client_id: '1_4bp53pdh1zi8g88w8gw0888s8oo00g4g8wwg800swsc0wco8o0'
+#          secret: 5pkxk7lhsycc404cs0kgg4gossww84sow0gk4kksckss4ggswo
+#          username: 'sylius_7380'
+#          password: 56e94b109
+#      logger:
+#        type: 'stderr'
