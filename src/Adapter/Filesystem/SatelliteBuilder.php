@@ -11,11 +11,11 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private string $workdir;
     /** @var iterable<string> */
     private iterable $composerRequire;
-    private null|Satellite\FileInterface|Satellite\AssetInterface $composerJsonFile;
-    private null|Satellite\FileInterface|Satellite\AssetInterface $composerLockFile;
+    private null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerJsonFile;
+    private null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var \AppendIterator<string,Satellite\FileInterface> */
+    /** @var \AppendIterator<string,Satellite\Filesystem\FileInterface> */
     private iterable $files;
 
     public function __construct(string $workdir)
@@ -43,8 +43,8 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     }
 
     public function withComposerFile(
-        Satellite\FileInterface|Satellite\AssetInterface $composerJsonFile,
-        null|Satellite\FileInterface|Satellite\AssetInterface $composerLockFile = null
+        Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerJsonFile,
+        null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -53,23 +53,23 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     }
 
     public function withFile(
-        Satellite\FileInterface|Satellite\AssetInterface $source,
+        Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $source,
         ?string $destinationPath = null
     ): self {
-        if (!$source instanceof Satellite\FileInterface) {
-            $source = new Satellite\VirtualFile($source);
+        if (!$source instanceof Satellite\Filesystem\FileInterface) {
+            $source = new Satellite\Filesystem\VirtualFile($source);
         }
 
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
         $this->files->append(new \ArrayIterator([
-            new Satellite\File($destinationPath, $source),
+            new Satellite\Filesystem\File($destinationPath, $source),
         ]));
 
         return $this;
     }
 
-    public function withDirectory(Satellite\DirectoryInterface $source, ?string $destinationPath = null): self
+    public function withDirectory(Satellite\Filesystem\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 

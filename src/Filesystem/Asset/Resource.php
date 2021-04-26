@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Asset;
+namespace Kiboko\Component\Satellite\Filesystem\Asset;
 
-use Kiboko\Component\Satellite\AssetInterface;
+use Kiboko\Component\Satellite\Filesystem\AssetInterface;
 
 final class Resource implements AssetInterface
 {

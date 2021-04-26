@@ -2,7 +2,6 @@
 
 namespace functional\Kiboko\Component\Satellite\Feature\Logger\Service;
 
-use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use Kiboko\Component\Satellite\Feature\Logger;
 use PHPUnit\Framework\TestCase;
 

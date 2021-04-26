@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace unit\Kiboko\Component\Satellite;
+namespace unit\Kiboko\Component\Satellite\Filesystem;
 
 use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile;
-use Kiboko\Component\Satellite\TarArchive;
+use Kiboko\Component\Satellite\Filesystem\TarArchive;
 use PHPUnit\Framework\TestCase;
 
 final class TarArchiveTest extends TestCase

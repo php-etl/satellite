@@ -33,8 +33,6 @@ satellite:
             - { field: completeness, operator: '<', value: 85, scope: ecommerce }
             - { field: categories, operator: IN, value: winter_collection }
             - { field: family, operator: IN, value: [camcorders, digital_cameras] }
-        logger:
-          type: 'stderr'
         client:
           context:
             http_client: Http\Mock\Client
@@ -48,6 +46,13 @@ satellite:
           password: lkjhgfdsa
 #          token: foo
 #          refresh_token: bar
+      logger:
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200
     - fastmap:
         map:
           - field: '[sku]'
@@ -88,6 +93,13 @@ satellite:
 #              copy: '[warning]'
 #            - field: 'notice'
 #              copy: '[notice]'
+      logger:
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200
     - csv:
         loader:
           file_path: output.csv
@@ -96,4 +108,10 @@ satellite:
           escape: '\'
         logger:
           type: stderr
-    - api:
+      logger:
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200

@@ -27,7 +27,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
-            new Satellite\File($this->filename, new Satellite\Asset\InMemory(
+            new Satellite\Filesystem\File($this->filename, new Satellite\Filesystem\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
             )),
         );

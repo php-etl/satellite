@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Filesystem;
 
-final class VirtualFile implements FileInterface
+final class File implements FileInterface
 {
     private string $path;
     private AssetInterface $content;
 
-    public function __construct(AssetInterface $content)
+    public function __construct(string $path, AssetInterface $content)
     {
-        $this->path = hash('sha512', random_bytes(64)).'.temp';
+        $this->path = $path;
         $this->content = $content;
     }
 

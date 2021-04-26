@@ -25,7 +25,12 @@ satellite:
         extractor:
           file_path: 'foo.csv'
       logger:
-        type: 'stderr'
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200
     - fastmap:
         map:
         - field: '[identifier]'
@@ -36,7 +41,12 @@ satellite:
           - field: '[name]'
             expression: '[ { name: input["name"], locale: null, scope: null } ]'
       logger:
-        type: 'stderr'
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200
       rejection:
         destinations:
           - kafka:
@@ -79,4 +89,9 @@ satellite:
 #          username: 'sylius_7380'
 #          password: 56e94b109
 #      logger:
-#        type: 'stderr'
+#        channel: pipeline
+#        destinations:
+#          - elasticsearch:
+#              level: warning
+#              hosts:
+#                - elasticsearch.example.com:9200

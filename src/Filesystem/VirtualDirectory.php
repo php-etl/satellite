@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Filesystem;
 
 final class VirtualDirectory implements DirectoryInterface
 {

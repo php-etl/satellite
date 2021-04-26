@@ -1,0 +1,23 @@
+logger:
+  channel: pipeline
+  destinations:
+  - stream:
+      path: 'php://stderr'
+      use_locking: true
+      file_permissions: 0644
+      level: warning
+  - syslog:
+      ident: 'conmon'
+      facility: 40
+      logopts: 48
+      level: warning
+  - logstash:
+      level: warning
+      application_name: pipeline
+      tcp:
+        host: amqp.example.com
+        port: 4000
+  - elasticsearch:
+      level: warning
+      hosts:
+        - elasticsearch.example.com:9200

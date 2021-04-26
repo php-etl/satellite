@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Filesystem;
 
 use Kiboko\Component\Satellite;
 
-final class Directory implements Satellite\DirectoryInterface
+final class Directory implements Satellite\Filesystem\DirectoryInterface
 {
     private string $path;
     private \RecursiveIterator $iterator;

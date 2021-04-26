@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Filesystem;
 
-use Kiboko\Component\Satellite\AssetInterface;
-use Kiboko\Component\Satellite\DirectoryInterface;
-use Kiboko\Component\Satellite\FileInterface;
+use Kiboko\Component\Satellite\Filesystem\AssetInterface;
+use Kiboko\Component\Satellite\Filesystem\DirectoryInterface;
+use Kiboko\Component\Satellite\Filesystem\FileInterface;
 
 final class TarArchive implements AssetInterface
 {

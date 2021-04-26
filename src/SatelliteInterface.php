@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\Satellite;
 
+use Kiboko\Component\Satellite\Filesystem\DirectoryInterface;
+use Kiboko\Component\Satellite\Filesystem\FileInterface;
 use Psr\Log\LoggerInterface;
 
 interface SatelliteInterface
