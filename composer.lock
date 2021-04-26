@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef20d08b8f185cf6fc634fa028de7f50",
+    "content-hash": "fb9c2e4dcea407d4cbe1adf242f180e0",
     "packages": [
         {
             "name": "adlawson/vfs",
@@ -1644,12 +1644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "dc0ac076d40d1aa412bfa1c117a46b6dd9e7d535"
+                "reference": "4512eb8a09c688e3cd64f1a57c9f277e8f8750d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/dc0ac076d40d1aa412bfa1c117a46b6dd9e7d535",
-                "reference": "dc0ac076d40d1aa412bfa1c117a46b6dd9e7d535",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/4512eb8a09c688e3cd64f1a57c9f277e8f8750d1",
+                "reference": "4512eb8a09c688e3cd64f1a57c9f277e8f8750d1",
                 "shasum": ""
             },
             "require": {
@@ -1673,6 +1673,11 @@
             },
             "default-branch": true,
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Kiboko\\Plugin\\Spreadsheet\\": "src/"
@@ -1693,7 +1698,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/master"
             },
-            "time": "2021-04-26T20:30:26+00:00"
+            "time": "2021-04-26T20:47:45+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -5993,6 +5998,72 @@
             "time": "2021-01-20T07:15:06+00:00"
         },
         {
+            "name": "fakerphp/faker",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FakerPHP/Faker.git",
+                "reference": "0a49ad2c765102934a7085bfa522c2b6fc8805d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/0a49ad2c765102934a7085bfa522c2b6fc8805d6",
+                "reference": "0a49ad2c765102934a7085bfa522c2b6fc8805d6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "psr/container": "^1.0",
+                "symfony/deprecation-contracts": "^2.2"
+            },
+            "conflict": {
+                "fzaninotto/faker": "*"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4.1",
+                "ext-intl": "*",
+                "symfony/phpunit-bridge": "^4.4 || ^5.2"
+            },
+            "suggest": {
+                "ext-curl": "Required by Faker\\Provider\\Image to download images.",
+                "ext-dom": "Required by Faker\\Provider\\HtmlLorem for generating random HTML.",
+                "ext-iconv": "Required by Faker\\Provider\\ru_RU\\Text::realText() for generating real Russian text.",
+                "ext-mbstring": "Required for multibyte Unicode string functionality."
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "v1.15-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "support": {
+                "issues": "https://github.com/FakerPHP/Faker/issues",
+                "source": "https://github.com/FakerPHP/Faker/tree/main"
+            },
+            "time": "2021-04-26T10:25:40+00:00"
+        },
+        {
             "name": "friends-of-phpspec/phpspec-code-coverage",
             "version": "dev-master",
             "source": {
@@ -6170,62 +6241,6 @@
                 }
             ],
             "time": "2021-04-24T20:34:33+00:00"
-        },
-        {
-            "name": "fzaninotto/faker",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "5ffe7db6c80f441f150fc88008d64e64af66634b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/5ffe7db6c80f441f150fc88008d64e64af66634b",
-                "reference": "5ffe7db6c80f441f150fc88008d64e64af66634b",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.3 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "ext-intl": "*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7",
-                "squizlabs/php_codesniffer": "^2.9.2"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.9-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Faker\\": "src/Faker/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Zaninotto"
-                }
-            ],
-            "description": "Faker is a PHP library that generates fake data for you.",
-            "keywords": [
-                "data",
-                "faker",
-                "fixtures"
-            ],
-            "support": {
-                "issues": "https://github.com/fzaninotto/Faker/issues",
-                "source": "https://github.com/fzaninotto/Faker/tree/master"
-            },
-            "abandoned": true,
-            "time": "2020-12-11T09:59:14+00:00"
         },
         {
             "name": "johnkary/phpunit-speedtrap",
@@ -7146,12 +7161,7 @@
     "stability-flags": {
         "monolog/monolog": 20,
         "ramsey/uuid": 20,
-        "php-etl/sylius-plugin": 20,
-        "php-etl/phpunit-extension": 20,
-        "php-etl/spreadsheet-plugin": 20,
-        "fzaninotto/faker": 20,
-        "php-etl/pipeline": 20,
-        "phpstan/phpstan": 20
+        "fakerphp/faker": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

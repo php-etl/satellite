@@ -24,26 +24,25 @@
         "symfony/config": "^5.2",
         "monolog/monolog": "^2.0@dev",
         "ramsey/uuid": "^4.0@dev",
-        "php-etl/fast-map-plugin": "^0.1",
-        "php-etl/csv-plugin": "^0.1",
-        "php-etl/akeneo-plugin": "^0.1",
-        "php-etl/sylius-plugin": "0.1.x-dev",
-        "php-etl/akeneo-expression-language": "^0.2",
-        "php-etl/phpunit-extension": "0.1.x-dev",
-        "php-etl/spreadsheet-plugin": "dev-master"
+        "php-etl/fast-map-plugin": "^0.1.0",
+        "php-etl/csv-plugin": "^0.1.0",
+        "php-etl/akeneo-plugin": "^0.1.0",
+        "php-etl/sylius-plugin": "^0.1.0",
+        "php-etl/akeneo-expression-language": "^0.2.0",
+        "php-etl/phpunit-extension": "^0.1.0",
+        "php-etl/spreadsheet-plugin": "^0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
         "johnkary/phpunit-speedtrap": "*",
         "mybuilder/phpunit-accelerator": "*",
         "phpunit/php-invoker": "*",
-        "fzaninotto/faker": "^1.9@dev",
         "phpspec/phpspec": "^7.0",
-        "friends-of-phpspec/phpspec-code-coverage": "^6.0",
-        "php-etl/pipeline": "0.2.x-dev",
         "friendsofphp/php-cs-fixer": "^3.0",
         "php-cs-fixer/diff": "^2.0",
-        "phpstan/phpstan": "0.12.x-dev"
+        "phpstan/phpstan": "^0.12",
+        "friends-of-phpspec/phpspec-code-coverage": "*",
+        "fakerphp/faker": "^1.9@dev"
     },
     "autoload": {
         "psr-4": {
