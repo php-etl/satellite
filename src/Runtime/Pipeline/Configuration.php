@@ -8,7 +8,6 @@ use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\API;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
@@ -51,7 +50,6 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                         ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new API\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
                         // Flow features

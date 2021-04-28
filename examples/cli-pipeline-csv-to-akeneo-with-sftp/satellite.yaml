@@ -5,7 +5,7 @@ satellite:
 #    tags:
 #      - kiboko/satellite:akeneo-to-sylius
   filesystem:
-    path: akeneo-to-sylius-sftp
+    path: build/
   composer:
     autoload:
       psr4:

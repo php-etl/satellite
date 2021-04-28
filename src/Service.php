@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Plugin\API;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
@@ -127,12 +126,6 @@ final class Service implements Configurator\FactoryInterface
                     ->withExtractor()
                     ->withLoader()
                     ->appendTo($step['csv'], $repository);
-            } elseif (array_key_exists('openapi', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier(new API\Service()))
-                    ->withPackages('laminas/laminas-diactoros', 'php-http/guzzle7-adapter')
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step['openapi'], $repository);
             } elseif (array_key_exists('custom', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier(new Satellite\Plugin\Custom\Service()))
                     ->withExtractor()

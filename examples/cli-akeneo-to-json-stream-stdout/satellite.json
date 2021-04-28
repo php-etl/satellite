@@ -1,7 +1,7 @@
 {
   "satellite": {
     "filesystem": {
-      "path": "akeneo-to-jsonld-stdout"
+      "path": "build/"
     },
     "composer": {
       "autoload": {
