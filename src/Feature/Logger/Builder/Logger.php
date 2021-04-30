@@ -13,6 +13,13 @@ final class Logger implements Builder
     {
     }
 
+    public function withLogger(Node\Expr $logger): Logger
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
     public function getNode(): Node\Expr
     {
         if ($this->logger === null) {
