@@ -3,9 +3,9 @@
 namespace Kiboko\Component\Satellite\Pipeline;
 
 use Kiboko\Component\Satellite\Builder\Pipeline;
-use Kiboko\Contract\Configurator\RepositoryInterface;
+use Kiboko\Contract\Configurator\StepRepositoryInterface;
 
 interface StepInterface
 {
-    public function __invoke(array $config, Pipeline $pipeline, RepositoryInterface $repository): void;
+    public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void;
 }

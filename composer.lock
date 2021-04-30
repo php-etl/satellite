@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e31d920eba942987e7a822ca6266ab71",
+    "content-hash": "2ff85fe3652e8473fbb2eb6262759bbb",
     "packages": [
         {
             "name": "adlawson/vfs",
@@ -849,12 +849,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "3db6cdeb130c0dda05d21401fe5e0e8b8a380628"
+                "reference": "c2a334976099dc756be41e89d760e6fe65fab9ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/3db6cdeb130c0dda05d21401fe5e0e8b8a380628",
-                "reference": "3db6cdeb130c0dda05d21401fe5e0e8b8a380628",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/c2a334976099dc756be41e89d760e6fe65fab9ad",
+                "reference": "c2a334976099dc756be41e89d760e6fe65fab9ad",
                 "shasum": ""
             },
             "require": {
@@ -893,7 +893,7 @@
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
                 "source": "https://github.com/php-etl/configurator-contracts/tree/master"
             },
-            "time": "2021-02-21T09:10:43+00:00"
+            "time": "2021-04-30T06:29:12+00:00"
         },
         {
             "name": "php-etl/contracts",
@@ -3777,12 +3777,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/amqp-messenger.git",
-                "reference": "48c00255a78567f412bf56326656f75c23387c2a"
+                "reference": "99c851eef569742604f1c8d6ce46ba80d8520d52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/amqp-messenger/zipball/48c00255a78567f412bf56326656f75c23387c2a",
-                "reference": "48c00255a78567f412bf56326656f75c23387c2a",
+                "url": "https://api.github.com/repos/symfony/amqp-messenger/zipball/99c851eef569742604f1c8d6ce46ba80d8520d52",
+                "reference": "99c851eef569742604f1c8d6ce46ba80d8520d52",
                 "shasum": ""
             },
             "require": {
@@ -3823,7 +3823,7 @@
             "description": "Symfony AMQP extension Messenger Bridge",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/amqp-messenger/tree/v5.3.0-BETA1"
+                "source": "https://github.com/symfony/amqp-messenger/tree/5.x"
             },
             "funding": [
                 {
@@ -3839,7 +3839,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-07T16:44:23+00:00"
+            "time": "2021-04-27T22:28:04+00:00"
         },
         {
             "name": "symfony/cache",
@@ -4024,12 +4024,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "28c3b17accd1c9cf2bd180b828df56e93d30188f"
+                "reference": "9c9953f87bdb44ba3f2d8a47d69aad97a88525ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/28c3b17accd1c9cf2bd180b828df56e93d30188f",
-                "reference": "28c3b17accd1c9cf2bd180b828df56e93d30188f",
+                "url": "https://api.github.com/repos/symfony/config/zipball/9c9953f87bdb44ba3f2d8a47d69aad97a88525ec",
+                "reference": "9c9953f87bdb44ba3f2d8a47d69aad97a88525ec",
                 "shasum": ""
             },
             "require": {
@@ -4095,7 +4095,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-27T12:08:31+00:00"
+            "time": "2021-04-28T21:13:43+00:00"
         },
         {
             "name": "symfony/console",
@@ -4103,12 +4103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "1d077bd682f7c0794d5f5b794b16e2b30febec6b"
+                "reference": "17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/1d077bd682f7c0794d5f5b794b16e2b30febec6b",
-                "reference": "1d077bd682f7c0794d5f5b794b16e2b30febec6b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843",
+                "reference": "17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843",
                 "shasum": ""
             },
             "require": {
@@ -4178,7 +4178,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.3.0-BETA1"
+                "source": "https://github.com/symfony/console/tree/5.x"
             },
             "funding": [
                 {
@@ -4194,7 +4194,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-16T17:36:28+00:00"
+            "time": "2021-04-29T13:43:07+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -5596,12 +5596,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "afe64a9ce7718524116c9a3b0913e5163b49c405"
+                "reference": "23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/afe64a9ce7718524116c9a3b0913e5163b49c405",
-                "reference": "afe64a9ce7718524116c9a3b0913e5163b49c405",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507",
+                "reference": "23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5664,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-23T16:57:12+00:00"
+            "time": "2021-04-29T20:52:27+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5929,12 +5929,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "c66f06b7c83e9a2a7523351a9d5a4b55f885e574"
+                "reference": "03cb2123a67d4be806554fe670d0adc298199808"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/c66f06b7c83e9a2a7523351a9d5a4b55f885e574",
-                "reference": "c66f06b7c83e9a2a7523351a9d5a4b55f885e574",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/03cb2123a67d4be806554fe670d0adc298199808",
+                "reference": "03cb2123a67d4be806554fe670d0adc298199808",
                 "shasum": ""
             },
             "require": {
@@ -5944,7 +5944,7 @@
                 "psr/cache": "^1 || ^2 || ^3"
             },
             "require-dev": {
-                "doctrine/cache": "1.*",
+                "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/coding-standard": "^6.0 || ^8.1",
                 "phpstan/phpstan": "^0.12.20",
                 "phpunit/phpunit": "^7.5 || ^9.1.5",
@@ -5994,7 +5994,7 @@
                 "issues": "https://github.com/doctrine/annotations/issues",
                 "source": "https://github.com/doctrine/annotations/tree/1.13.x"
             },
-            "time": "2021-02-28T12:43:30+00:00"
+            "time": "2021-04-29T07:39:39+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -6077,12 +6077,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "0a49ad2c765102934a7085bfa522c2b6fc8805d6"
+                "reference": "8760b4a0cee10c5b8fecb8bdca066781deeaa2a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/0a49ad2c765102934a7085bfa522c2b6fc8805d6",
-                "reference": "0a49ad2c765102934a7085bfa522c2b6fc8805d6",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/8760b4a0cee10c5b8fecb8bdca066781deeaa2a1",
+                "reference": "8760b4a0cee10c5b8fecb8bdca066781deeaa2a1",
                 "shasum": ""
             },
             "require": {
@@ -6135,7 +6135,7 @@
                 "issues": "https://github.com/FakerPHP/Faker/issues",
                 "source": "https://github.com/FakerPHP/Faker/tree/main"
             },
-            "time": "2021-04-26T10:25:40+00:00"
+            "time": "2021-04-28T16:13:01+00:00"
         },
         {
             "name": "friends-of-phpspec/phpspec-code-coverage",
@@ -6234,12 +6234,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "e0c63e451448337f11fd9b124e3afd34a6704672"
+                "reference": "a9f3afa8b0a5a5cd8151784583893b1e80f8bb16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/e0c63e451448337f11fd9b124e3afd34a6704672",
-                "reference": "e0c63e451448337f11fd9b124e3afd34a6704672",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/a9f3afa8b0a5a5cd8151784583893b1e80f8bb16",
+                "reference": "a9f3afa8b0a5a5cd8151784583893b1e80f8bb16",
                 "shasum": ""
             },
             "require": {
@@ -6314,7 +6314,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-24T20:34:33+00:00"
+            "time": "2021-04-28T19:07:29+00:00"
         },
         {
             "name": "johnkary/phpunit-speedtrap",
@@ -6607,12 +6607,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "f077501dc41138aa7dfc691e91dbdbcf8c9f3818"
+                "reference": "321c3466ecc3c629877e0910bad36347c543521c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f077501dc41138aa7dfc691e91dbdbcf8c9f3818",
-                "reference": "f077501dc41138aa7dfc691e91dbdbcf8c9f3818",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/321c3466ecc3c629877e0910bad36347c543521c",
+                "reference": "321c3466ecc3c629877e0910bad36347c543521c",
                 "shasum": ""
             },
             "require": {
@@ -6660,7 +6660,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-27T13:53:53+00:00"
+            "time": "2021-04-29T17:42:38+00:00"
         },
         {
             "name": "psr/event-dispatcher",
