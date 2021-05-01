@@ -487,12 +487,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "0df336f4a5898720b0ccecf6edc4c037af3bdc4a"
+                "reference": "3c671baad4ed4683a538ba6cad6b58abf132dbb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/0df336f4a5898720b0ccecf6edc4c037af3bdc4a",
-                "reference": "0df336f4a5898720b0ccecf6edc4c037af3bdc4a",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/3c671baad4ed4683a538ba6cad6b58abf132dbb6",
+                "reference": "3c671baad4ed4683a538ba6cad6b58abf132dbb6",
                 "shasum": ""
             },
             "require": {
@@ -538,7 +538,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/master"
             },
-            "time": "2021-05-01T16:52:32+00:00"
+            "time": "2021-05-01T17:31:36+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -965,12 +965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "bbc324da5ee057f6c6b814cc60939eedf534e780"
+                "reference": "82c07d787f10c99d2f549f93257d0922ca09bf36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/bbc324da5ee057f6c6b814cc60939eedf534e780",
-                "reference": "bbc324da5ee057f6c6b814cc60939eedf534e780",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/82c07d787f10c99d2f549f93257d0922ca09bf36",
+                "reference": "82c07d787f10c99d2f549f93257d0922ca09bf36",
                 "shasum": ""
             },
             "require": {
@@ -1023,7 +1023,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-01T16:54:23+00:00"
+            "time": "2021-05-01T17:29:23+00:00"
         },
         {
             "name": "phpactor/docblock",
