@@ -369,12 +369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "49bd41b54f480f513edf373872e24d9c1b15355d"
+                "reference": "39f22864e6d13e43400706e0a7a11ca2832c02c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/49bd41b54f480f513edf373872e24d9c1b15355d",
-                "reference": "49bd41b54f480f513edf373872e24d9c1b15355d",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/39f22864e6d13e43400706e0a7a11ca2832c02c1",
+                "reference": "39f22864e6d13e43400706e0a7a11ca2832c02c1",
                 "shasum": ""
             },
             "require": {
@@ -427,7 +427,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-05-01T18:34:31+00:00"
+            "time": "2021-05-01T18:56:59+00:00"
         },
         {
             "name": "php-etl/configurator-contracts",
@@ -965,12 +965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "2877bc64f77c578ab7a28c5be1bbd603b454b85e"
+                "reference": "05173db6b663bf2b911f90f7db6ca1f757dec1d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/2877bc64f77c578ab7a28c5be1bbd603b454b85e",
-                "reference": "2877bc64f77c578ab7a28c5be1bbd603b454b85e",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/05173db6b663bf2b911f90f7db6ca1f757dec1d1",
+                "reference": "05173db6b663bf2b911f90f7db6ca1f757dec1d1",
                 "shasum": ""
             },
             "require": {
@@ -1023,7 +1023,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-01T18:37:25+00:00"
+            "time": "2021-05-01T18:57:43+00:00"
         },
         {
             "name": "phpactor/docblock",
