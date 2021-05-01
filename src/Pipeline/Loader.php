@@ -11,12 +11,15 @@ use PhpParser\Node;
 
 final class Loader implements StepInterface
 {
-    public function __construct(private ?string $key)
+    public function __construct(private ?string $plugin, private ?string $key)
     {}
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
-        if ($this->key !== null && !array_key_exists($this->key, $config)) {
+        if ($this->key !== null
+            && !array_key_exists($this->plugin, $config)
+            && !array_key_exists($this->key, $config[$this->plugin])
+        ) {
             return;
         }
 
@@ -25,7 +28,7 @@ final class Loader implements StepInterface
 
             $compiled = $service->compile($config['logger']);
             $repository->merge($compiled);
-            $logger = $compiled->getBuilder();
+            $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
                 new Node\Name\FullyQualified('Psr\Log\NullLogger'),
@@ -37,7 +40,7 @@ final class Loader implements StepInterface
 
             $compiled = $service->compile($config['rejection']);
             $repository->merge($compiled);
-            $rejection = $compiled->getBuilder();
+            $rejection = $compiled->getBuilder()->getNode();
         } else {
             $rejection = new Node\Expr\New_(
                 new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\NullRejection'),
@@ -49,7 +52,7 @@ final class Loader implements StepInterface
 
             $compiled = $service->compile($config['state']);
             $repository->merge($compiled);
-            $state = $compiled->getBuilder();
+            $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
                 new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\NullState'),

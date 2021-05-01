@@ -10,26 +10,26 @@ final class ConfigurationApplier
     private array $steps = [];
     private array $packages = [];
 
-    public function __construct(private FactoryInterface $service)
+    public function __construct(private string $plugin, private FactoryInterface $service)
     {}
 
     public function withExtractor(?string $key = 'extractor'): self
     {
-        $this->steps[] = new Extractor($key);
+        $this->steps[] = new Extractor($this->plugin, $key);
 
         return $this;
     }
 
     public function withTransformer(?string $key = 'transformer'): self
     {
-        $this->steps[] = new Transformer($key);
+        $this->steps[] = new Transformer($this->plugin, $key);
 
         return $this;
     }
 
     public function withLoader(?string $key = 'loader'): self
     {
-        $this->steps[] = new Loader($key);
+        $this->steps[] = new Loader($this->plugin, $key);
 
         return $this;
     }
@@ -43,7 +43,7 @@ final class ConfigurationApplier
 
     public function appendTo(array $config, Pipeline $pipeline): void
     {
-        $repository = $this->service->compile($config);
+        $repository = $this->service->compile($config[$this->plugin]);
 
         /** @var StepInterface $step */
         foreach ($this->steps as $step) {
