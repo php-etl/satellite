@@ -369,12 +369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "b76a3e0808092d851c07d2ab0599748621305322"
+                "reference": "49bd41b54f480f513edf373872e24d9c1b15355d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/b76a3e0808092d851c07d2ab0599748621305322",
-                "reference": "b76a3e0808092d851c07d2ab0599748621305322",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/49bd41b54f480f513edf373872e24d9c1b15355d",
+                "reference": "49bd41b54f480f513edf373872e24d9c1b15355d",
                 "shasum": ""
             },
             "require": {
@@ -427,7 +427,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-05-01T16:55:27+00:00"
+            "time": "2021-05-01T18:34:31+00:00"
         },
         {
             "name": "php-etl/configurator-contracts",
@@ -965,12 +965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "82c07d787f10c99d2f549f93257d0922ca09bf36"
+                "reference": "2877bc64f77c578ab7a28c5be1bbd603b454b85e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/82c07d787f10c99d2f549f93257d0922ca09bf36",
-                "reference": "82c07d787f10c99d2f549f93257d0922ca09bf36",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/2877bc64f77c578ab7a28c5be1bbd603b454b85e",
+                "reference": "2877bc64f77c578ab7a28c5be1bbd603b454b85e",
                 "shasum": ""
             },
             "require": {
@@ -1023,7 +1023,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-01T17:29:23+00:00"
+            "time": "2021-05-01T18:37:25+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -1450,7 +1450,7 @@
             "description": "Symfony AMQP extension Messenger Bridge",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/amqp-messenger/tree/5.x"
+                "source": "https://github.com/symfony/amqp-messenger/tree/v5.3.0-BETA2"
             },
             "funding": [
                 {
@@ -1730,12 +1730,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843"
+                "reference": "959bfea5f92bd9b0b278f458a69cfd3f96dd411d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843",
-                "reference": "17cbb9e9e631c20bd5fd9ba3f507e6de6adcf843",
+                "url": "https://api.github.com/repos/symfony/console/zipball/959bfea5f92bd9b0b278f458a69cfd3f96dd411d",
+                "reference": "959bfea5f92bd9b0b278f458a69cfd3f96dd411d",
                 "shasum": ""
             },
             "require": {
@@ -1805,7 +1805,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/5.x"
+                "source": "https://github.com/symfony/console/tree/v5.3.0-BETA2"
             },
             "funding": [
                 {
@@ -1821,7 +1821,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-29T13:43:07+00:00"
+            "time": "2021-05-01T00:53:07+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3223,12 +3223,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507"
+                "reference": "505f470743c125b7c3f1662f0e726c4f77ec4d85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507",
-                "reference": "23cdfa5e7cf0c752bffa2e5dd5b11cb90c367507",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/505f470743c125b7c3f1662f0e726c4f77ec4d85",
+                "reference": "505f470743c125b7c3f1662f0e726c4f77ec4d85",
                 "shasum": ""
             },
             "require": {
@@ -3275,7 +3275,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/5.x"
+                "source": "https://github.com/symfony/yaml/tree/v5.3.0-BETA2"
             },
             "funding": [
                 {
@@ -3291,7 +3291,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-29T20:52:27+00:00"
+            "time": "2021-05-01T00:53:07+00:00"
         }
     ],
     "packages-dev": [
@@ -3664,12 +3664,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "8760b4a0cee10c5b8fecb8bdca066781deeaa2a1"
+                "reference": "6f12c131e396c9552e4a917843d7c5dc78c09c8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/8760b4a0cee10c5b8fecb8bdca066781deeaa2a1",
-                "reference": "8760b4a0cee10c5b8fecb8bdca066781deeaa2a1",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/6f12c131e396c9552e4a917843d7c5dc78c09c8b",
+                "reference": "6f12c131e396c9552e4a917843d7c5dc78c09c8b",
                 "shasum": ""
             },
             "require": {
@@ -3722,7 +3722,7 @@
                 "issues": "https://github.com/FakerPHP/Faker/issues",
                 "source": "https://github.com/FakerPHP/Faker/tree/main"
             },
-            "time": "2021-04-28T16:13:01+00:00"
+            "time": "2021-05-01T08:37:51+00:00"
         },
         {
             "name": "friends-of-phpspec/phpspec-code-coverage",
@@ -3821,12 +3821,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "a9f3afa8b0a5a5cd8151784583893b1e80f8bb16"
+                "reference": "108dd806c0bbc04a04bc64bb8558763c9cf57b2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/a9f3afa8b0a5a5cd8151784583893b1e80f8bb16",
-                "reference": "a9f3afa8b0a5a5cd8151784583893b1e80f8bb16",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/108dd806c0bbc04a04bc64bb8558763c9cf57b2d",
+                "reference": "108dd806c0bbc04a04bc64bb8558763c9cf57b2d",
                 "shasum": ""
             },
             "require": {
@@ -3901,7 +3901,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-28T19:07:29+00:00"
+            "time": "2021-04-30T09:30:08+00:00"
         },
         {
             "name": "johnkary/phpunit-speedtrap",
@@ -3909,12 +3909,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnkary/phpunit-speedtrap.git",
-                "reference": "b2f2226a7df1fda996e7abbd84d0a56cee5b60d7"
+                "reference": "f398a2d824c14b66690edfa58424186437610457"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnkary/phpunit-speedtrap/zipball/b2f2226a7df1fda996e7abbd84d0a56cee5b60d7",
-                "reference": "b2f2226a7df1fda996e7abbd84d0a56cee5b60d7",
+                "url": "https://api.github.com/repos/johnkary/phpunit-speedtrap/zipball/f398a2d824c14b66690edfa58424186437610457",
+                "reference": "f398a2d824c14b66690edfa58424186437610457",
                 "shasum": ""
             },
             "require": {
@@ -3954,7 +3954,7 @@
                 "issues": "https://github.com/johnkary/phpunit-speedtrap/issues",
                 "source": "https://github.com/johnkary/phpunit-speedtrap/tree/master"
             },
-            "time": "2021-03-14T16:20:39+00:00"
+            "time": "2021-04-30T20:07:30+00:00"
         },
         {
             "name": "mybuilder/phpunit-accelerator",
@@ -4338,31 +4338,32 @@
         },
         {
             "name": "php-etl/phpunit-extension",
-            "version": "v0.1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/phpunit-extension.git",
-                "reference": "b3a0437d0272156d6e41065727ba4a1c95d5bc22"
+                "reference": "7cae2d970ddff06e653a88b280a8ff1e8a85b98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/b3a0437d0272156d6e41065727ba4a1c95d5bc22",
-                "reference": "b3a0437d0272156d6e41065727ba4a1c95d5bc22",
+                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/7cae2d970ddff06e653a88b280a8ff1e8a85b98e",
+                "reference": "7cae2d970ddff06e653a88b280a8ff1e8a85b98e",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/pipeline": "^0.2.0",
+                "php-etl/pipeline": "^0.3.0",
                 "phpunit/phpunit": "^9"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.1.x-dev"
+                    "dev-master": "0.2.x-dev"
                 }
             },
             "autoload": {
@@ -4385,27 +4386,27 @@
                 "issues": "https://github.com/php-etl/phpunit-extension/issues",
                 "source": "https://github.com/php-etl/phpunit-extension/tree/master"
             },
-            "time": "2021-04-26T22:10:52+00:00"
+            "time": "2021-04-26T22:12:34+00:00"
         },
         {
             "name": "php-etl/pipeline",
-            "version": "v0.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline.git",
-                "reference": "3ea13f50b38e8845dd7242a732603435de068e1c"
+                "reference": "7225f196ca73728b7440e5bd3260d880b9cd1330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/3ea13f50b38e8845dd7242a732603435de068e1c",
-                "reference": "3ea13f50b38e8845dd7242a732603435de068e1c",
+                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/7225f196ca73728b7440e5bd3260d880b9cd1330",
+                "reference": "7225f196ca73728b7440e5bd3260d880b9cd1330",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0",
                 "php-etl/bucket": "^0.1.0",
                 "php-etl/bucket-contracts": "^0.1.0",
-                "php-etl/pipeline-contracts": "^0.1.0",
+                "php-etl/pipeline-contracts": "^0.2.0",
                 "psr/log": "^1.1@dev"
             },
             "require-dev": {
@@ -4417,10 +4418,11 @@
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -4447,30 +4449,31 @@
                 "issues": "https://github.com/php-etl/pipeline/issues",
                 "source": "https://github.com/php-etl/pipeline/tree/master"
             },
-            "time": "2021-02-19T18:49:35+00:00"
+            "time": "2021-04-26T21:54:01+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",
-            "version": "v0.1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "1d5ce72ecbea43e4d591223c3b015273af431a79"
+                "reference": "ad8a336419c31a31bb18a1a42f9aaa2a93fd1722"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/1d5ce72ecbea43e4d591223c3b015273af431a79",
-                "reference": "1d5ce72ecbea43e4d591223c3b015273af431a79",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/ad8a336419c31a31bb18a1a42f9aaa2a93fd1722",
+                "reference": "ad8a336419c31a31bb18a1a42f9aaa2a93fd1722",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0",
-                "php-etl/bucket-contracts": "^0.1"
+                "php-etl/bucket-contracts": "^0.1.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.1.x-dev"
+                    "dev-master": "0.2.x-dev"
                 }
             },
             "autoload": {
@@ -4497,7 +4500,7 @@
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
                 "source": "https://github.com/php-etl/pipeline-contracts/tree/master"
             },
-            "time": "2021-04-23T21:15:31+00:00"
+            "time": "2021-04-26T21:54:36+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -4864,12 +4867,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "321c3466ecc3c629877e0910bad36347c543521c"
+                "reference": "6a4d98601a88bc564c2b796ca516e871c0d2248c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/321c3466ecc3c629877e0910bad36347c543521c",
-                "reference": "321c3466ecc3c629877e0910bad36347c543521c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6a4d98601a88bc564c2b796ca516e871c0d2248c",
+                "reference": "6a4d98601a88bc564c2b796ca516e871c0d2248c",
                 "shasum": ""
             },
             "require": {
@@ -4917,7 +4920,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-29T17:42:38+00:00"
+            "time": "2021-05-01T10:30:28+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -6607,12 +6610,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "5d0f633f9bbfcf7ec642a2b5037268e61b0a62ce"
+                "reference": "5029d040f2a0c5cb245d3106695b7d119922f2a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/5d0f633f9bbfcf7ec642a2b5037268e61b0a62ce",
-                "reference": "5d0f633f9bbfcf7ec642a2b5037268e61b0a62ce",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/5029d040f2a0c5cb245d3106695b7d119922f2a2",
+                "reference": "5029d040f2a0c5cb245d3106695b7d119922f2a2",
                 "shasum": ""
             },
             "require": {
@@ -6653,7 +6656,7 @@
                 "options"
             ],
             "support": {
-                "source": "https://github.com/symfony/options-resolver/tree/v5.3.0-BETA1"
+                "source": "https://github.com/symfony/options-resolver/tree/v5.3.0-BETA2"
             },
             "funding": [
                 {
@@ -6669,7 +6672,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T12:56:27+00:00"
+            "time": "2021-04-18T13:39:20+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
