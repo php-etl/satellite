@@ -57,7 +57,7 @@ final class ElasticSearchFactory implements Configurator\FactoryInterface
         }
 
         if (array_key_exists('hosts', $config)) {
-            $builder->withHosts($config['hosts']);
+            $builder->withHosts(...$config['hosts']);
         }
 
         if (array_key_exists('index', $config)) {
