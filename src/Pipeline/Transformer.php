@@ -17,8 +17,7 @@ final class Transformer implements StepInterface
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
         if ($this->key !== null
-            && !array_key_exists($this->plugin, $config)
-            && !array_key_exists($this->key, $config[$this->plugin])
+            && (!array_key_exists($this->plugin, $config) || !array_key_exists($this->key, $config[$this->plugin]))
         ) {
             return;
         }
