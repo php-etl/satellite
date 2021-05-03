@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    require __DIR__ . '/../../../../vendor/autoload.php';
+} else if (file_exists(__DIR__ . '/../../../vendor/autoload.php')) {
+    require __DIR__ . '/../../../vendor/autoload.php';
+} else if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require __DIR__ . '/../../vendor/autoload.php';
+} else {
+    require __DIR__ . '/../vendor/autoload.php';
+}
+
+use Symfony\Component\Console\Input;
+use Symfony\Component\Console\Output;
+
+$app = new \Symfony\Component\Console\Application();
+
+$app->addCommands([
+    new \Kiboko\Component\Satellite\Console\Command\BuildCommand(),
+    new \Kiboko\Component\Satellite\Console\Command\ValidateCommand(),
+]);
+
+$app->run(new Input\ArgvInput(), new Output\ConsoleOutput());

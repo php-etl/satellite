@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Stream;
 
+use Kiboko\Component\Satellite\Plugin\Stream\Builder\StderrLoader;
+use Kiboko\Component\Satellite\Plugin\Stream\Builder\StdoutLoader;
 use Kiboko\Contract\Configurator\FileInterface;
 use Kiboko\Contract\Configurator\RepositoryInterface;
-use PhpParser\Builder;
+use Kiboko\Contract\Configurator\StepRepositoryInterface;
 
-final class Repository implements RepositoryInterface
+final class Repository implements StepRepositoryInterface
 {
-    public function __construct(private Builder $builder)
+    public function __construct(private StderrLoader|StdoutLoader $builder)
     {
     }
 
-    public function addFiles(FileInterface ...$files): RepositoryInterface
+    public function addFiles(FileInterface ...$files): Repository
     {
         return $this;
     }
@@ -24,7 +26,7 @@ final class Repository implements RepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function addPackages(string ...$packages): RepositoryInterface
+    public function addPackages(string ...$packages): Repository
     {
         return $this;
     }
@@ -34,12 +36,12 @@ final class Repository implements RepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Builder
+    public function getBuilder(): StderrLoader|StdoutLoader
     {
         return $this->builder;
     }
 
-    public function merge(RepositoryInterface $friend): RepositoryInterface
+    public function merge(RepositoryInterface $friend): Repository
     {
         return $this;
     }

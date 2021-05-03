@@ -1,0 +1,8 @@
+logger:
+  channel: pipeline
+  destinations:
+  - syslog:
+      ident: 'conmon'
+      facility: 40
+      logopts: 48
+      level: warning

@@ -8,7 +8,6 @@ use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\API;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
@@ -27,16 +26,36 @@ final class Configuration implements Satellite\NamedConfigurationInterface
         $builder->getRootNode()
             ->children()
                 ->arrayNode('steps')
+                    ->requiresAtLeastOneElement()
+                    ->cannotBeEmpty()
                     ->isRequired()
+                    ->fixXmlConfig('step')
+                    ->validate()
+                        ->ifTrue(function ($value) {
+                            return 1 <= count(array_filter([
+                                array_key_exists('akeneo', $value),
+                                array_key_exists('sylius', $value),
+                                array_key_exists('csv', $value),
+                                array_key_exists('fastmap', $value),
+                                array_key_exists('api', $value),
+                                array_key_exists('custom', $value),
+                                array_key_exists('stream', $value),
+                            ]));
+                        })
+                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "fastmap", "api", "custom" and "stream".')
+                    ->end()
                     ->arrayPrototype()
+                        // Plugins
                         ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new API\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
-//                        ->append((new Satellite\Plugin\Log\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        // Flow features
+                        ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Satellite\Feature\State\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Satellite\Feature\Rejection\Configuration())->getConfigTreeBuilder()->getRootNode())
                     ->end()
                 ->end()
             ->end();

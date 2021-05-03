@@ -1,0 +1,8 @@
+logger:
+  channel: pipeline
+  destinations:
+  - elasticsearch:
+      level: warning
+      hosts:
+        - elasticsearch.example.com:9200
+

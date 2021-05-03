@@ -1,0 +1,10 @@
+logger:
+  channel: pipeline
+  destinations:
+  - logstash:
+      level: warning
+      application_name: pipeline
+      tcp:
+        host: amqp.example.com
+        port: 4000
+

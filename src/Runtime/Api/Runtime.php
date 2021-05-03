@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Runtime\Api;
 
 use Kiboko\Component\Satellite;
+use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
@@ -22,17 +23,20 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
     public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
+        $service = new Satellite\Service();
+        $repository = $service->compile($this->config);
+
         $satellite->withFile(
-            new Satellite\File($this->filename, new Satellite\Asset\InMemory(
+            new Satellite\Filesystem\File($this->filename, new Satellite\Filesystem\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
             )),
         );
+
+        $satellite->dependsOn(...$repository->getPackages());
     }
 
     public function build(): array
     {
-        $service = new Satellite\Service();
-
         return [
             new Node\Stmt\Expression(
                 new Node\Expr\Include_(
