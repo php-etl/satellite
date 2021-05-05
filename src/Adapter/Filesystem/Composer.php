@@ -30,7 +30,7 @@ final class Composer
 
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
-                $this->logger->error($buffer);
+                $this->logger->info($buffer);
             } else {
                 $this->logger->debug($buffer);
             }
@@ -46,6 +46,7 @@ final class Composer
         $this->execute(
             'composer',
             'require',
+            '--with-dependencies',
             '--prefer-dist',
             '--no-suggest',
             '--no-progress',

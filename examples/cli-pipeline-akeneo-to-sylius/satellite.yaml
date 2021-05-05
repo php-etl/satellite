@@ -7,18 +7,16 @@ satellite:
   filesystem:
     path: build
   composer:
-    autoload:
-      psr4:
-      - namespace: "Pipeline\\"
-        paths: [ "" ]
     require:
-      - "php-etl/pipeline:^0.2"
+      - "php-etl/pipeline:^0.3"
       - "php-etl/fast-map:^0.2"
-      - "php-etl/csv-flow:^0.1"
+      - "php-etl/csv-flow:^0.2"
       - "akeneo/api-php-client-ee"
       - "diglin/sylius-api-php-client"
       - "laminas/laminas-diactoros"
       - "php-http/guzzle7-adapter"
+      - "monolog/monolog"
+      - "elasticsearch/elasticsearch"
   pipeline:
     steps:
     - akeneo:
@@ -30,11 +28,11 @@ satellite:
             - { field: enabled, operator: '=', value: true }
             - { field: completeness, operator: '=', value: 100, scope: ecommerce }
         client:
-          api_url: 'http://akeneo.example.com'
-          client_id: '1_4bp53pdh1zi8g88w8gw0888s8oo00g4g8wwg800swsc0wco8o0'
-          secret: 5pkxk7lhsycc404cs0kgg4gossww84sow0gk4kksckss4ggswo
-          username: 'sylius_7380'
-          password: 56e94b109
+          api_url: 'https://unlock-hippopotamus.demo.cloud.akeneo.com'
+          client_id: '5_2hogwrsqgj40owc8c8sw0swwwos80ccgkck84kok8kwkwswowk'
+          secret: '2pjdo95m1i0w8sw0wowowgcs4wgk8g0g4co4gw0wc88w8osk8'
+          username: 'sylius_3225'
+          password: 'ad6893ba0'
       logger:
         channel: pipeline
         destinations:
@@ -45,18 +43,68 @@ satellite:
     - fastmap:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
-        map:
-          - field: '[code]'
-            copy: '[identifier]'
-          - field: '[translations][en_US]'
-            expression: 'input'
+        conditional:
+          - condition: 'input["family"] === "clothing"'
             map:
-              - field: '[name]'
-                expression: 'input["identifier"] ~" | "~ attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
-              - field: '[slug]'
-                expression: 'input["identifier"]'
-              - field: '[description]'
-                expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+              - field: '[code]'
+                copy: '[identifier]'
+              - field: '[family]'
+                copy: '[family]'
+              - field: '[translations][en_US]'
+                expression: 'input'
+                map:
+                  - field: '[name]'
+                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+                  - field: '[slug]'
+                    expression: 'input["identifier"]'
+                  - field: '[description]'
+                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+                  - field: '[composition]'
+                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
+                  - field: '[wash_temperature]'
+                    expression: 'attribute(input["values"]["wash_temperature"], locale(null), scope(null))'
+                  - field: '[care_instructions]'
+                    expression: 'attribute(input["values"]["care_instructions"], locale(null), scope(null))'
+                  - field: '[material]'
+                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
+          - condition: 'input["family"] === "led_tvs"'
+            map:
+              - field: '[code]'
+                copy: '[identifier]'
+              - field: '[family]'
+                copy: '[family]'
+              - field: '[translations][en_US]'
+                expression: 'input'
+                map:
+                  - field: '[name]'
+                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+                  - field: '[slug]'
+                    expression: 'input["identifier"]'
+                  - field: '[description]'
+                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+          - condition: 'input["family"] === "accessories"'
+            map:
+              - field: '[code]'
+                copy: '[identifier]'
+              - field: '[family]'
+                copy: '[family]'
+              - field: '[translations][en_US]'
+                expression: 'input'
+                map:
+                  - field: '[name]'
+                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+                  - field: '[slug]'
+                    expression: 'input["identifier"]'
+                  - field: '[composition]'
+                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
+                  - field: '[material]'
+                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
+          - condition: 'true'
+            map:
+              - field: '[code]'
+                copy: '[identifier]'
+              - field: '[family]'
+                copy: '[family]'
       logger:
         channel: pipeline
         destinations:
@@ -69,11 +117,11 @@ satellite:
           type: products
           method: create
         client:
-          api_url: 'http://sylius.example.com'
-          client_id: '2lgsix9qgvms0gckwss8wsc00g0os4sksw08kcw4gcowckssgk'
-          secret: '2l4i15fitdyc480owss48sw08ow88s48wgkk4cgcs40400ockc'
-          username: 'admin'
-          password: password
+          api_url: 'http://localhost'
+          client_id: '414yc7d9mnk044ko4wswgw80o8ssw80gssos488kk8ogss40ko'
+          secret: '4k8ee6n44m4gkkg0coc8o4w4coscw0w4cg0wg8sc0wsk0sw8gs'
+          username: 'api'
+          password: 'sylius-api'
       logger:
         channel: pipeline
         destinations:
@@ -81,9 +129,9 @@ satellite:
               level: warning
               hosts:
                 - elasticsearch.example.com:9200
-    - custom:
+    - stream:
         loader:
-          class: Pipeline\BarLoader
+          destination: 'stdout'
       logger:
         channel: pipeline
         destinations:

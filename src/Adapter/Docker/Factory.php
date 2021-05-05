@@ -22,9 +22,9 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         if (isset($configuration['docker']['include']) && is_iterable($configuration['docker']['include'])) {
             foreach ($configuration['docker']['include'] as $path) {
                 if (is_dir($path)) {
-                    $builder->withDirectory(new Satellite\Directory($path));
+                    $builder->withDirectory(new Satellite\Filesystem\Directory($path));
                 } else {
-                    $builder->withFile(new Satellite\Asset\LocalFile($path));
+                    $builder->withFile(new Satellite\Filesystem\Asset\LocalFile($path));
                 }
             }
         }
@@ -32,9 +32,9 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         if (isset($configuration['include'])) {
             foreach ($configuration['include'] as $path) {
                 if (is_dir($path)) {
-                    $builder->withDirectory(new Satellite\Directory($path));
+                    $builder->withDirectory(new Satellite\Filesystem\Directory($path));
                 } else {
-                    $builder->withFile(new Satellite\Asset\LocalFile($path));
+                    $builder->withFile(new Satellite\Filesystem\Asset\LocalFile($path));
                 }
             }
         }
@@ -42,12 +42,12 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         if (array_key_exists('composer', $configuration)) {
             if (array_key_exists('from-local', $configuration['composer']) && $configuration['composer']['from-local'] === true) {
                 if (file_exists('composer.lock')) {
-                    $builder->withComposerFile(new Satellite\Asset\LocalFile('composer.json'), new Satellite\Asset\LocalFile('composer.lock'));
+                    $builder->withComposerFile(new Satellite\Filesystem\Asset\LocalFile('composer.json'), new Satellite\Filesystem\Asset\LocalFile('composer.lock'));
                 } else {
-                    $builder->withComposerFile(new Satellite\Asset\LocalFile('composer.json'));
+                    $builder->withComposerFile(new Satellite\Filesystem\Asset\LocalFile('composer.json'));
                 }
                 if (file_exists('vendor')) {
-                    $builder->withDirectory(new Satellite\Directory('vendor/'));
+                    $builder->withDirectory(new Satellite\Filesystem\Directory('vendor/'));
                 }
             }
 
