@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fe982632cb1bb195a38ec69990ff5d2",
+    "content-hash": "6636bbbab74dee5e2df6fe389854a624",
     "packages": [
         {
             "name": "brick/math",
@@ -430,6 +430,53 @@
             "time": "2021-05-01T18:56:59+00:00"
         },
         {
+            "name": "php-etl/array-expression-language",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/array-expression-language.git",
+                "reference": "942aaa92991a065eb38e0dd8d77476cfd63d568d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/942aaa92991a065eb38e0dd8d77476cfd63d568d",
+                "reference": "942aaa92991a065eb38e0dd8d77476cfd63d568d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0",
+                "symfony/expression-language": "^5.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\ArrayExpressionLanguage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements functions for manipulating array data in ExpressionLanguage",
+            "support": {
+                "issues": "https://github.com/php-etl/array-expression-language/issues",
+                "source": "https://github.com/php-etl/array-expression-language/tree/master"
+            },
+            "time": "2021-05-03T10:21:36+00:00"
+        },
+        {
             "name": "php-etl/configurator-contracts",
             "version": "dev-master",
             "source": {
@@ -546,12 +593,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map.git",
-                "reference": "c4604544b7ed1286c01cd89581aa227d5325c39d"
+                "reference": "2117039a83a7c31d50205aef3ebc9c8421ff6989"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/c4604544b7ed1286c01cd89581aa227d5325c39d",
-                "reference": "c4604544b7ed1286c01cd89581aa227d5325c39d",
+                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/2117039a83a7c31d50205aef3ebc9c8421ff6989",
+                "reference": "2117039a83a7c31d50205aef3ebc9c8421ff6989",
                 "shasum": ""
             },
             "require": {
@@ -606,7 +653,7 @@
                 "issues": "https://github.com/php-etl/fast-map/issues",
                 "source": "https://github.com/php-etl/fast-map/tree/master"
             },
-            "time": "2021-05-01T16:47:31+00:00"
+            "time": "2021-05-01T22:24:47+00:00"
         },
         {
             "name": "php-etl/fast-map-config",
@@ -678,12 +725,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "222c67702f473edcf04eb6cbdbc96013bac7aac0"
+                "reference": "2c51a861aa9a51531670c86be1ab943ae97ea9cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/222c67702f473edcf04eb6cbdbc96013bac7aac0",
-                "reference": "222c67702f473edcf04eb6cbdbc96013bac7aac0",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/2c51a861aa9a51531670c86be1ab943ae97ea9cf",
+                "reference": "2c51a861aa9a51531670c86be1ab943ae97ea9cf",
                 "shasum": ""
             },
             "require": {
@@ -732,7 +779,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
             },
-            "time": "2021-05-01T16:49:52+00:00"
+            "time": "2021-05-01T22:26:48+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -965,12 +1012,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "05173db6b663bf2b911f90f7db6ca1f757dec1d1"
+                "reference": "8f47c7678023df602b0a6895a42b5f622a84e608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/05173db6b663bf2b911f90f7db6ca1f757dec1d1",
-                "reference": "05173db6b663bf2b911f90f7db6ca1f757dec1d1",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/8f47c7678023df602b0a6895a42b5f622a84e608",
+                "reference": "8f47c7678023df602b0a6895a42b5f622a84e608",
                 "shasum": ""
             },
             "require": {
@@ -1023,7 +1070,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-01T18:57:43+00:00"
+            "time": "2021-05-01T20:36:50+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -1181,12 +1228,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/a18c1e692e02b84abbafe4856c3cd7cc6903908c",
-                "reference": "a18c1e692e02b84abbafe4856c3cd7cc6903908c",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
@@ -1222,9 +1269,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/master"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2021-03-02T15:02:34+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "ramsey/collection",
@@ -3905,23 +3952,22 @@
         },
         {
             "name": "johnkary/phpunit-speedtrap",
-            "version": "dev-master",
+            "version": "4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnkary/phpunit-speedtrap.git",
-                "reference": "f398a2d824c14b66690edfa58424186437610457"
+                "reference": "5f9b160eac87e975f1c6ca9faee5125f0616fba3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnkary/phpunit-speedtrap/zipball/f398a2d824c14b66690edfa58424186437610457",
-                "reference": "f398a2d824c14b66690edfa58424186437610457",
+                "url": "https://api.github.com/repos/johnkary/phpunit-speedtrap/zipball/5f9b160eac87e975f1c6ca9faee5125f0616fba3",
+                "reference": "5f9b160eac87e975f1c6ca9faee5125f0616fba3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
                 "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3952,9 +3998,9 @@
             ],
             "support": {
                 "issues": "https://github.com/johnkary/phpunit-speedtrap/issues",
-                "source": "https://github.com/johnkary/phpunit-speedtrap/tree/master"
+                "source": "https://github.com/johnkary/phpunit-speedtrap/tree/v4.0.0"
             },
-            "time": "2021-04-30T20:07:30+00:00"
+            "time": "2021-05-03T02:37:05+00:00"
         },
         {
             "name": "mybuilder/phpunit-accelerator",
@@ -4867,12 +4913,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "6a4d98601a88bc564c2b796ca516e871c0d2248c"
+                "reference": "699d89b2736aae12a10c08a3c4c7c4212ceeba96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6a4d98601a88bc564c2b796ca516e871c0d2248c",
-                "reference": "6a4d98601a88bc564c2b796ca516e871c0d2248c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/699d89b2736aae12a10c08a3c4c7c4212ceeba96",
+                "reference": "699d89b2736aae12a10c08a3c4c7c4212ceeba96",
                 "shasum": ""
             },
             "require": {
@@ -4920,7 +4966,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-01T10:30:28+00:00"
+            "time": "2021-05-03T13:30:51+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5250,12 +5296,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0421783c33f5a0bd297e02db2bd5f5d9f99699f5"
+                "reference": "20f7cb13b26ccf7c2fdf10c0232ba7361814020e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0421783c33f5a0bd297e02db2bd5f5d9f99699f5",
-                "reference": "0421783c33f5a0bd297e02db2bd5f5d9f99699f5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/20f7cb13b26ccf7c2fdf10c0232ba7361814020e",
+                "reference": "20f7cb13b26ccf7c2fdf10c0232ba7361814020e",
                 "shasum": ""
             },
             "require": {
@@ -5345,7 +5391,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-27T12:28:58+00:00"
+            "time": "2021-05-03T12:46:18+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -6926,7 +6972,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "php-etl/array-expression-language": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
