@@ -1,0 +1,69 @@
+satellite:
+  filesystem:
+    path: build
+  composer:
+    require:
+      - "php-etl/pipeline:^0.3"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.2"
+      - "akeneo/api-php-client-ee"
+      - "diglin/sylius-api-php-client"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+      - "monolog/monolog"
+      - "elasticsearch/elasticsearch"
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: true
+          extractor:
+            type: product
+            method: all
+          client:
+            api_url: 'https://unlock-hippopotamus.demo.cloud.akeneo.com/'
+            client_id: '5_2hogwrsqgj40owc8c8sw0swwwos80ccgkck84kok8kwkwswowk'
+            secret: '2pjdo95m1i0w8sw0wowowgcs4wgk8g0g4co4gw0wc88w8osk8'
+            username: 'sylius_3225'
+            password: 'ad6893ba0'
+      - fastmap:
+          expression_language:
+            - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+            - 'Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider'
+          map:
+            - field: '[code]'
+              copy: '[identifier]'
+            - field: '[productTaxons]'
+              expression: 'join(",", input["categories"])'
+#            - field: '[attributes]'
+#              expression: 'input'
+#              map:
+#                - field: '[attribute]'
+#                  expression: 'attribute(input["values"], locale("null"), scope("null"))'
+            - field: '[translations][en_US]'
+              expression: 'input'
+              map:
+                - field: '[name]'
+                  expression: 'input["identifier"] ~" | "~ attribute(input["values"]["variation_name"], locale("en_US"), scope(null, "ecommerce"))'
+                - field: '[slug]'
+                  expression: 'input["identifier"]'
+                - field: '[description]'
+                  expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+      - sylius:
+          loader:
+            type: products
+            method: create
+          client:
+            api_url: 'http://127.0.0.1:8000/'
+            client_id: 'demo_client'
+            secret: 'secret_demo_client'
+            username: 'api@example.com'
+            password: 'sylius-api'
+      - logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: notice
+                hosts:
+                  host: http://localhost
+                  port: 9200
+#                  - { host: 'http://localhost', port: 9200 }
