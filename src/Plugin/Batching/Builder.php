@@ -104,7 +104,7 @@ final class Builder implements StepBuilderInterface
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
                                             var: new Node\Expr\Variable('count'),
-                                            expr: new Node\Scalar\LNumber(0)
+                                            expr: new Node\Scalar\LNumber(1)
                                         ),
                                     ),
                                     new Node\Stmt\While_(
@@ -114,11 +114,19 @@ final class Builder implements StepBuilderInterface
                                         stmts: [
                                             new Node\Stmt\If_(
                                                 cond: new Node\Expr\BinaryOp\GreaterOrEqual(
-                                                    new Node\Expr\Variable('count'),
+                                                    new Node\Expr\PostInc(
+                                                        new Node\Expr\Variable('count'),
+                                                    ),
                                                     new Node\Scalar\LNumber($this->size),
                                                 ),
                                                 subNodes: [
                                                     'stmts' => [
+                                                        new Node\Stmt\Expression(
+                                                            new Node\Expr\Assign(
+                                                                var: new Node\Expr\Variable('count'),
+                                                                expr: new Node\Scalar\LNumber(0)
+                                                            ),
+                                                        ),
                                                         new Node\Stmt\Expression(
                                                             expr: new Node\Expr\Assign(
                                                                 var: new Node\Expr\Variable('line'),
