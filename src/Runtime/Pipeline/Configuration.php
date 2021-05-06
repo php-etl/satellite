@@ -52,6 +52,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Satellite\Plugin\Batching\Configuration())->getConfigTreeBuilder()->getRootNode())
                         // Flow features
                         ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Feature\State\Configuration())->getConfigTreeBuilder()->getRootNode())

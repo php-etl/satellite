@@ -136,6 +136,10 @@ final class Service implements Configurator\FactoryInterface
                 (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
                     ->withLoader()
                     ->appendTo($step, $repository);
+            } elseif (array_key_exists('batch', $step)) {
+                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service()))
+                    ->withTransformer('merge')
+                    ->appendTo($step, $repository);
             } elseif (array_key_exists('fastmap', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service()))
                     ->withPackages('php-etl/fast-map:^0.2')
