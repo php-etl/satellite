@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\Custom;
+namespace Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository;
 
 use Kiboko\Contract\Configurator\FileInterface;
 use Kiboko\Contract\Configurator\RepositoryInterface;

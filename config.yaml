@@ -1,0 +1,50 @@
+satellite:
+  filesystem:
+    path: foo
+  pipeline:
+    steps:
+      - custom:
+          loader:
+            services:
+              App\Security\Encrypt:
+                arguments:
+                  $cipher: '%cipher%'
+              App\Loader:
+                arguments:
+                  $client: '@App\Http\Client'
+                  $encrypt: '@App\Security\Encrypt'
+            use: 'App\Loader'
+            parameters:
+              cipher: '14588F18B77FA61EE237D2435A567'
+#satellite:
+#  filesystem:
+#    path: foo
+#  pipeline:
+#    steps:
+#      - custom:
+#          extractor:
+#            services:
+#              App\Extractor:
+#                arguments:
+#                  $client: '@App\Http\Client'
+#                  $decrypt: '@App\Security\Decrypt'
+#              App\Http\Client: ~
+#              App\Security\Decrypt:
+#               arguments:
+#                  $cipher: '%cipher%'
+#            use: 'App\Extractor'
+#            parameters:
+#              cipher: '14588F18B77FA61EE237D2435A567'
+
+#satellite:
+#  filesystem:
+#    path: foo
+#  pipeline:
+#    steps:
+#      - custom:
+#          transformer:
+#            services:
+#              App\Transformer:
+#                arguments:
+#                  $logger: '@Psr\Log\LoggerInterface'
+#            use: 'App\Transformer'

@@ -16,7 +16,25 @@ final class Transformer implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('class')
+                ->arrayNode('services')
+                    ->useAttributeAsKey('class')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('class')->end()
+                            ->arrayNode('arguments')
+                                ->useAttributeAsKey('key')
+                                ->scalarPrototype()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->scalarNode('use')->end()
+                ->arrayNode('parameters')
+                    ->useAttributeAsKey('keyparam')
+                    ->scalarPrototype()
+                    ->end()
+                ->end()
             ->end();
 
         return $builder;

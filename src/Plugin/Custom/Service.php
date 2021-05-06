@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
-use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Plugin\Custom\Factory\Factory;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -48,26 +48,16 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('extractor', $config) && array_key_exists('class', $config['extractor'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['extractor']['class'],
-                )
-            );
-        }
-        if (array_key_exists('transformer', $config) && array_key_exists('class', $config['transformer'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['transformer']['class'],
-                )
-            );
-        }
-        if (array_key_exists('loader', $config) && array_key_exists('class', $config['loader'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['loader']['class'],
-                )
-            );
+        if (array_key_exists('extractor', $config)) {
+            $extractorFactory = new Factory();
+            return $extractorFactory->compile($config['extractor']);
+
+        } else if (array_key_exists('transformer', $config) && array_key_exists('class', $config['transformer'])) {
+            $transformerFactory = new Factory();
+            return $transformerFactory->compile($config['transformer']);
+        } else if (array_key_exists('loader', $config) && array_key_exists('class', $config['loader'])) {
+            $loaderFactory = new Factory();
+            return $loaderFactory->compile($config['loader']);
         }
 
         throw new \RuntimeException('No possible pipeline step, expecing "extractor", "transformer" or "loader"');
