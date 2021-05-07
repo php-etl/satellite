@@ -2,15 +2,14 @@
 
 namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\Satellite\Filesystem\DirectoryInterface;
-use Kiboko\Component\Satellite\Filesystem\FileInterface;
+use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
 interface SatelliteInterface
 {
     public function dependsOn(string ...$dependencies): self;
 
-    public function withFile(FileInterface|DirectoryInterface ...$files): self;
+    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self;
 
     public function build(LoggerInterface $logger): void;
 

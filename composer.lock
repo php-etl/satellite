@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fe982632cb1bb195a38ec69990ff5d2",
+    "content-hash": "526afcf5e7070a6e1b916809fcffa25c",
     "packages": [
         {
             "name": "brick/math",
@@ -369,33 +369,31 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "39f22864e6d13e43400706e0a7a11ca2832c02c1"
+                "reference": "1a8f6f9d7b07d8c25eed6ea45950589366890c85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/39f22864e6d13e43400706e0a7a11ca2832c02c1",
-                "reference": "39f22864e6d13e43400706e0a7a11ca2832c02c1",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/1a8f6f9d7b07d8c25eed6ea45950589366890c85",
+                "reference": "1a8f6f9d7b07d8c25eed6ea45950589366890c85",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/configurator-contracts": "^0.2.0",
+                "php-etl/configurator-contracts": "^0.3.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop",
                 "akeneo/api-php-client-ee": "^4.0",
-                "friends-of-phpspec/phpspec-code-coverage": "*",
                 "johnkary/phpunit-speedtrap": "*",
                 "laminas/laminas-diactoros": "^2.6",
                 "mybuilder/phpunit-accelerator": "*",
                 "php-etl/bucket-contracts": "^0.1.0",
-                "php-etl/phpspec-extension": "*",
                 "php-etl/pipeline-contracts": "^0.1.0",
                 "php-http/mock-client": "^1.4@dev",
-                "phpspec/phpspec": "^7.0",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.0",
                 "symfony/yaml": "^5.2"
@@ -404,7 +402,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -427,7 +425,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-05-01T18:56:59+00:00"
+            "time": "2021-05-07T11:38:36+00:00"
         },
         {
             "name": "php-etl/configurator-contracts",
@@ -435,24 +433,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "90bbde976e48e4578ec47c2b2407ca6f11928e1e"
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/90bbde976e48e4578ec47c2b2407ca6f11928e1e",
-                "reference": "90bbde976e48e4578ec47c2b2407ca6f11928e1e",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "^4.9@dev",
+                "nikic/php-parser": "^4.10",
                 "php": "^8.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -479,7 +478,7 @@
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
                 "source": "https://github.com/php-etl/configurator-contracts/tree/master"
             },
-            "time": "2021-04-30T10:02:17+00:00"
+            "time": "2021-05-07T11:22:52+00:00"
         },
         {
             "name": "php-etl/csv-plugin",
@@ -487,19 +486,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "3c671baad4ed4683a538ba6cad6b58abf132dbb6"
+                "reference": "37f22e329d0aecfc7bae16f878a37311c6453751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/3c671baad4ed4683a538ba6cad6b58abf132dbb6",
-                "reference": "3c671baad4ed4683a538ba6cad6b58abf132dbb6",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/37f22e329d0aecfc7bae16f878a37311c6453751",
+                "reference": "37f22e329d0aecfc7bae16f878a37311c6453751",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/configurator-contracts": "^0.2.0",
+                "php-etl/configurator-contracts": "^0.3.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "require-dev": {
@@ -515,7 +515,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -538,7 +538,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/master"
             },
-            "time": "2021-05-01T17:31:36+00:00"
+            "time": "2021-05-07T11:43:41+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -678,21 +678,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "d9d53aabd4c556ff0711570bb533740176dc4e8d"
+                "reference": "413b920de9d16ff6c0bbea6d8417652c1b8fa1b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/d9d53aabd4c556ff0711570bb533740176dc4e8d",
-                "reference": "d9d53aabd4c556ff0711570bb533740176dc4e8d",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/413b920de9d16ff6c0bbea6d8417652c1b8fa1b2",
+                "reference": "413b920de9d16ff6c0bbea6d8417652c1b8fa1b2",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/configurator-contracts": "^0.2.0",
+                "php-etl/configurator-contracts": "^0.3.0",
                 "php-etl/fast-map": "^0.2.0",
                 "php-etl/fast-map-config": "^0.2.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "require-dev": {
@@ -709,7 +710,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -732,7 +733,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
             },
-            "time": "2021-05-05T20:47:17+00:00"
+            "time": "2021-05-07T11:27:17+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -900,24 +901,134 @@
             "time": "2021-02-04T13:29:20+00:00"
         },
         {
+            "name": "php-etl/packaging",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/packaging.git",
+                "reference": "225196d56b26b65a7793dc9f24f46b8d4fc78e91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/packaging/zipball/225196d56b26b65a7793dc9f24f46b8d4fc78e91",
+                "reference": "225196d56b26b65a7793dc9f24f46b8d4fc78e91",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.0",
+                "php-etl/packaging-contracts": "^0.1.0"
+            },
+            "require-dev": {
+                "johnkary/phpunit-speedtrap": "*",
+                "mybuilder/phpunit-accelerator": "*",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^9.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Packaging\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library aims at building TAR archives, using PHP resources and streams",
+            "support": {
+                "issues": "https://github.com/php-etl/packaging/issues",
+                "source": "https://github.com/php-etl/packaging/tree/master"
+            },
+            "time": "2021-05-07T11:16:33+00:00"
+        },
+        {
+            "name": "php-etl/packaging-contracts",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/packaging-contracts.git",
+                "reference": "dafc1dd7cffc004442e9072172e88eb430b78185"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/packaging-contracts/zipball/dafc1dd7cffc004442e9072172e88eb430b78185",
+                "reference": "dafc1dd7cffc004442e9072172e88eb430b78185",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Contract\\Packaging\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library aims at providing contracts for building TAR archives, using PHP resources and streams",
+            "support": {
+                "issues": "https://github.com/php-etl/packaging-contracts/issues",
+                "source": "https://github.com/php-etl/packaging-contracts/tree/master"
+            },
+            "time": "2021-05-07T11:10:40+00:00"
+        },
+        {
             "name": "php-etl/spreadsheet-plugin",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "3ca579c0609a68a5766fe95b80c508818e925c7f"
+                "reference": "a472ecd183618379c26f3dc2091d25234165cf04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/3ca579c0609a68a5766fe95b80c508818e925c7f",
-                "reference": "3ca579c0609a68a5766fe95b80c508818e925c7f",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/a472ecd183618379c26f3dc2091d25234165cf04",
+                "reference": "a472ecd183618379c26f3dc2091d25234165cf04",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/configurator-contracts": "^0.2.0",
+                "php-etl/configurator-contracts": "^0.3.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "require-dev": {
@@ -934,7 +1045,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -957,7 +1068,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/master"
             },
-            "time": "2021-05-01T17:20:17+00:00"
+            "time": "2021-05-07T11:54:37+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -965,33 +1076,31 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "8f47c7678023df602b0a6895a42b5f622a84e608"
+                "reference": "f68b4173d7958b69dde17abfd483722af5c5a278"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/8f47c7678023df602b0a6895a42b5f622a84e608",
-                "reference": "8f47c7678023df602b0a6895a42b5f622a84e608",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/f68b4173d7958b69dde17abfd483722af5c5a278",
+                "reference": "f68b4173d7958b69dde17abfd483722af5c5a278",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.0",
-                "php-etl/configurator-contracts": "^0.2.0",
+                "php-etl/configurator-contracts": "^0.3.0",
+                "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop",
                 "diglin/sylius-api-php-client": "^1.2",
-                "friends-of-phpspec/phpspec-code-coverage": "*",
                 "johnkary/phpunit-speedtrap": "*",
                 "laminas/laminas-diactoros": "^2.6",
                 "mybuilder/phpunit-accelerator": "*",
                 "php-etl/bucket-contracts": "^0.1.0",
-                "php-etl/phpspec-extension": "*",
                 "php-etl/pipeline-contracts": "^0.1.0",
                 "php-http/mock-client": "^1.4@dev",
-                "phpspec/phpspec": "^7.0",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.0",
                 "symfony/yaml": "^5.2"
@@ -1000,7 +1109,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -1023,7 +1132,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-01T20:36:50+00:00"
+            "time": "2021-05-07T11:40:40+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -1822,6 +1931,95 @@
                 }
             ],
             "time": "2021-05-01T00:53:07+00:00"
+        },
+        {
+            "name": "symfony/dependency-injection",
+            "version": "5.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dependency-injection.git",
+                "reference": "f47b3fb3e01c18b3b065c957342cd5308a69f336"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/f47b3fb3e01c18b3b065c957342cd5308a69f336",
+                "reference": "f47b3fb3e01c18b3b065c957342cd5308a69f336",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/container": "^1.1.1",
+                "symfony/deprecation-contracts": "^2.1",
+                "symfony/polyfill-php80": "^1.15",
+                "symfony/service-contracts": "^1.1.6|^2"
+            },
+            "conflict": {
+                "ext-psr": "<1.1|>=2",
+                "symfony/config": "<5.3",
+                "symfony/finder": "<4.4",
+                "symfony/proxy-manager-bridge": "<4.4",
+                "symfony/yaml": "<4.4"
+            },
+            "provide": {
+                "psr/container-implementation": "1.0",
+                "symfony/service-implementation": "1.0|2.0"
+            },
+            "require-dev": {
+                "symfony/config": "^5.3",
+                "symfony/expression-language": "^4.4|^5.0",
+                "symfony/yaml": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/config": "",
+                "symfony/expression-language": "For using expressions in service container configuration",
+                "symfony/finder": "For using double-star glob patterns or when GLOB_BRACE portability is required",
+                "symfony/proxy-manager-bridge": "Generate service proxies to lazy load them",
+                "symfony/yaml": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DependencyInjection\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Allows you to standardize and centralize the way objects are constructed in your application",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dependency-injection/tree/5.x"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-30T09:43:05+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4867,12 +5065,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "4aceff64d282385bca37d3bc57356962223c3bdd"
+                "reference": "76880b47ff9249e5affc434aca6a49ee5e107ca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4aceff64d282385bca37d3bc57356962223c3bdd",
-                "reference": "4aceff64d282385bca37d3bc57356962223c3bdd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/76880b47ff9249e5affc434aca6a49ee5e107ca7",
+                "reference": "76880b47ff9249e5affc434aca6a49ee5e107ca7",
                 "shasum": ""
             },
             "require": {
@@ -4920,7 +5118,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-05T15:39:56+00:00"
+            "time": "2021-05-07T09:49:08+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5250,12 +5448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "437086932a9c08a01e70b02d603f9bd7dc9286bc"
+                "reference": "d624c877ce25051b14a576aa0eb2b64425af6711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/437086932a9c08a01e70b02d603f9bd7dc9286bc",
-                "reference": "437086932a9c08a01e70b02d603f9bd7dc9286bc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d624c877ce25051b14a576aa0eb2b64425af6711",
+                "reference": "d624c877ce25051b14a576aa0eb2b64425af6711",
                 "shasum": ""
             },
             "require": {
@@ -5345,7 +5543,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-04T13:18:22+00:00"
+            "time": "2021-05-06T13:37:12+00:00"
         },
         {
             "name": "psr/event-dispatcher",

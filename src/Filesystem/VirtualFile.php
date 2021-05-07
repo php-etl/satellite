@@ -2,26 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Filesystem;
+use Kiboko\Component\Packaging;
 
-final class VirtualFile implements FileInterface
-{
-    private string $path;
-    private AssetInterface $content;
+trigger_deprecation('php-etl/satellite', '0.2', 'The "%s" class is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\Filesystem\\VirtualFile', Packaging\VirtualFile::class);
 
-    public function __construct(AssetInterface $content)
-    {
-        $this->path = hash('sha512', random_bytes(64)).'.temp';
-        $this->content = $content;
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function asResource()
-    {
-        return $this->content->asResource();
-    }
-}
+/**
+ * @deprecated since Satellite 0.1, use Kiboko\Component\Packaging\VirtualFile instead.
+ */
+class_alias(Packaging\VirtualFile::class, 'Kiboko\\Component\\Satellite\\Filesystem\\VirtualFile');

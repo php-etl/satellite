@@ -2,65 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Filesystem;
+use Kiboko\Component\Packaging;
 
-final class VirtualDirectory implements DirectoryInterface
-{
-    private string $path;
-    private \ArrayIterator $children;
+trigger_deprecation('php-etl/satellite', '0.2', 'The "%s" class is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\Filesystem\\VirtualDirectory', Packaging\VirtualDirectory::class);
 
-    public function __construct()
-    {
-        $this->path = hash('sha512', random_bytes(64)).'.temp';
-        $this->children = new \ArrayIterator();
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function add(FileInterface|DirectoryInterface ...$files): self
-    {
-        foreach ($files as $file) {
-            $this->children->append($file);
-        }
-
-        return $this;
-    }
-
-    public function hasChildren()
-    {
-        return $this->current() instanceof DirectoryInterface;
-    }
-
-    public function getChildren()
-    {
-        return $this->current();
-    }
-
-    public function current()
-    {
-        return $this->children->current();
-    }
-
-    public function next()
-    {
-        $this->children->next();
-    }
-
-    public function key()
-    {
-        return $this->children->key();
-    }
-
-    public function valid()
-    {
-        return $this->children->valid();
-    }
-
-    public function rewind()
-    {
-        $this->children->rewind();
-    }
-}
+/**
+ * @deprecated since Satellite 0.1, use Kiboko\Component\Packaging\VirtualDirectory instead.
+ */
+class_alias(Packaging\VirtualDirectory::class, 'Kiboko\\Component\\Satellite\\Filesystem\\VirtualDirectory');

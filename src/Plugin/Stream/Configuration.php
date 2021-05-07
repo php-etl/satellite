@@ -19,7 +19,7 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('loader')
                     ->children()
-                        ->enumNode('destination')->values(['stdout', 'stderr'])->end()
+                        ->scalarNode('destination')->end()
                     ->end()
                 ->end()
             ->end()

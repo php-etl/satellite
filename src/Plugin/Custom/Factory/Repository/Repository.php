@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository;
 
-use Kiboko\Contract\Configurator\FileInterface;
-use Kiboko\Contract\Configurator\RepositoryInterface;
-use Kiboko\Contract\Configurator\StepBuilderInterface;
-use Kiboko\Contract\Configurator\StepRepositoryInterface;
+use Kiboko\Contract\Configurator;
+use Kiboko\Contract\Packaging;
 
-final class Repository implements StepRepositoryInterface
+final class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private StepBuilderInterface $builder)
+    public function __construct(private Configurator\StepBuilderInterface $builder)
     {
     }
 
-    public function addFiles(FileInterface ...$files): Repository
+    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Repository
     {
         return $this;
     }
@@ -35,12 +33,12 @@ final class Repository implements StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): StepBuilderInterface
+    public function getBuilder(): Configurator\StepBuilderInterface
     {
         return $this->builder;
     }
 
-    public function merge(RepositoryInterface $friend): Repository
+    public function merge(Configurator\RepositoryInterface $friend): Repository
     {
         return $this;
     }

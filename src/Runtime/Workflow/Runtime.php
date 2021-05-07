@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Packaging;
 use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
@@ -27,7 +28,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
-            new Satellite\Filesystem\File($this->filename, new Satellite\Filesystem\Asset\InMemory(
+            new Packaging\File($this->filename, new Packaging\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
         );

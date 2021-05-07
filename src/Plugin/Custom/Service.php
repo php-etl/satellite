@@ -51,15 +51,14 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('extractor', $config)) {
             $extractorFactory = new Factory();
             return $extractorFactory->compile($config['extractor']);
-
-        } else if (array_key_exists('transformer', $config) && array_key_exists('class', $config['transformer'])) {
+        } else if (array_key_exists('transformer', $config)) {
             $transformerFactory = new Factory();
             return $transformerFactory->compile($config['transformer']);
-        } else if (array_key_exists('loader', $config) && array_key_exists('class', $config['loader'])) {
+        } else if (array_key_exists('loader', $config)) {
             $loaderFactory = new Factory();
             return $loaderFactory->compile($config['loader']);
         }
 
-        throw new \RuntimeException('No possible pipeline step, expecing "extractor", "transformer" or "loader"');
+        throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');
     }
 }

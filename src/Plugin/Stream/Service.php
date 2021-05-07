@@ -54,6 +54,8 @@ final class Service implements Configurator\FactoryInterface
                 return new Repository(new Builder\StderrLoader());
             } elseif ($config['loader']['destination'] === 'stdout') {
                 return new Repository(new Builder\StdoutLoader());
+            } else {
+
             }
         }
 

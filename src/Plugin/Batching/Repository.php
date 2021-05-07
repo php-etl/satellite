@@ -2,17 +2,16 @@
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
-use Kiboko\Contract\Configurator\FileInterface;
-use Kiboko\Contract\Configurator\RepositoryInterface;
-use Kiboko\Contract\Configurator\StepRepositoryInterface;
+use Kiboko\Contract\Configurator;
+use Kiboko\Contract\Packaging;
 
-final class Repository implements StepRepositoryInterface
+final class Repository implements Configurator\StepRepositoryInterface
 {
     public function __construct(private Builder $builder)
     {
     }
 
-    public function addFiles(FileInterface ...$files): Repository
+    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Repository
     {
         return $this;
     }
@@ -37,7 +36,7 @@ final class Repository implements StepRepositoryInterface
         return $this->builder;
     }
 
-    public function merge(RepositoryInterface $friend): Repository
+    public function merge(Configurator\RepositoryInterface $friend): Repository
     {
         return $this;
     }

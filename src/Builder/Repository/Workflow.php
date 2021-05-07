@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Builder\Repository;
 
 use Kiboko\Contract\Configurator;
+use Kiboko\Contract\Packaging;
 use Kiboko\Component\Satellite;
 
 final class Workflow implements Configurator\RepositoryInterface
 {
-    /** @var Configurator\FileInterface[] */
+    /** @var Packaging\FileInterface[] */
     private array $files;
     /** @var string[] */
     private array $packages;
@@ -20,14 +21,14 @@ final class Workflow implements Configurator\RepositoryInterface
         $this->packages = [];
     }
 
-    public function addFiles(Configurator\FileInterface ...$files): Configurator\RepositoryInterface
+    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface
     {
         array_push($this->files, ...$files);
 
         return $this;
     }
 
-    /** @return iterable<Configurator\FileInterface> */
+    /** @return iterable<Packaging\FileInterface> */
     public function getFiles(): iterable
     {
         return $this->files;
