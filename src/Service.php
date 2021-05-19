@@ -112,6 +112,7 @@ final class Service implements Configurator\FactoryInterface
                 (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service()))
                     ->withPackages('akeneo/api-php-client-ee')
                     ->withExtractor()
+                    ->withTransformer('lookup')
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('sylius', $step)) {

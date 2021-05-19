@@ -46,7 +46,8 @@
         "phpstan/phpstan": "^0.12",
         "friends-of-phpspec/phpspec-code-coverage": "*",
         "fakerphp/faker": "^1.9",
-        "php-etl/phpunit-extension": "*"
+        "php-etl/phpunit-extension": "*",
+        "composer/composer": "2.1.x-dev"
     },
     "autoload": {
         "psr-4": {
@@ -70,5 +71,13 @@
         "branch-alias": {
             "dev-master": "0.2.x-dev"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Kiboko\\Component\\Satellite\\ComposerScripts::postInstall"
+        ],
+        "post-update-cmd": [
+            "Kiboko\\Component\\Satellite\\ComposerScripts::postUpdate"
+        ]
     }
 }

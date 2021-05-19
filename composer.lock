@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "526afcf5e7070a6e1b916809fcffa25c",
+    "content-hash": "03a52b90569873a7d25d4313ac580d85",
     "packages": [
         {
             "name": "brick/math",
@@ -369,12 +369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "1a8f6f9d7b07d8c25eed6ea45950589366890c85"
+                "reference": "490b456bc1f4449c185caabcc8990b6c6baafc1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/1a8f6f9d7b07d8c25eed6ea45950589366890c85",
-                "reference": "1a8f6f9d7b07d8c25eed6ea45950589366890c85",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/490b456bc1f4449c185caabcc8990b6c6baafc1e",
+                "reference": "490b456bc1f4449c185caabcc8990b6c6baafc1e",
                 "shasum": ""
             },
             "require": {
@@ -399,10 +399,13 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "library",
+            "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
+                },
+                "satellite": {
+                    "class": "Kiboko\\Plugin\\Akeneo\\Service"
                 }
             },
             "autoload": {
@@ -425,7 +428,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-05-07T11:38:36+00:00"
+            "time": "2021-05-09T20:40:01+00:00"
         },
         {
             "name": "php-etl/configurator-contracts",
@@ -486,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "37f22e329d0aecfc7bae16f878a37311c6453751"
+                "reference": "ad6e339052b23b909b330974fc9b2ea5758209b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/37f22e329d0aecfc7bae16f878a37311c6453751",
-                "reference": "37f22e329d0aecfc7bae16f878a37311c6453751",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/ad6e339052b23b909b330974fc9b2ea5758209b6",
+                "reference": "ad6e339052b23b909b330974fc9b2ea5758209b6",
                 "shasum": ""
             },
             "require": {
@@ -512,10 +515,13 @@
                 "phpunit/phpunit": "^9.0"
             },
             "default-branch": true,
-            "type": "library",
+            "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
+                },
+                "satellite": {
+                    "class": "Kiboko\\Plugin\\CSV\\Service"
                 }
             },
             "autoload": {
@@ -538,7 +544,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/master"
             },
-            "time": "2021-05-07T11:43:41+00:00"
+            "time": "2021-05-09T20:44:07+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -678,12 +684,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "413b920de9d16ff6c0bbea6d8417652c1b8fa1b2"
+                "reference": "8c3e87227ab237312305478ea6cef9e48dba2ef6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/413b920de9d16ff6c0bbea6d8417652c1b8fa1b2",
-                "reference": "413b920de9d16ff6c0bbea6d8417652c1b8fa1b2",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/8c3e87227ab237312305478ea6cef9e48dba2ef6",
+                "reference": "8c3e87227ab237312305478ea6cef9e48dba2ef6",
                 "shasum": ""
             },
             "require": {
@@ -707,10 +713,13 @@
                 "phpunit/phpunit": "^9.0"
             },
             "default-branch": true,
-            "type": "library",
+            "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
+                },
+                "satellite": {
+                    "class": "Kiboko\\Plugin\\FastMap\\Service"
                 }
             },
             "autoload": {
@@ -733,7 +742,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
             },
-            "time": "2021-05-07T11:27:17+00:00"
+            "time": "2021-05-09T20:44:18+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -1015,12 +1024,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "a472ecd183618379c26f3dc2091d25234165cf04"
+                "reference": "92d9a4e1143b6c4f85508af77e3c5a22f2ee5c21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/a472ecd183618379c26f3dc2091d25234165cf04",
-                "reference": "a472ecd183618379c26f3dc2091d25234165cf04",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/92d9a4e1143b6c4f85508af77e3c5a22f2ee5c21",
+                "reference": "92d9a4e1143b6c4f85508af77e3c5a22f2ee5c21",
                 "shasum": ""
             },
             "require": {
@@ -1042,10 +1051,13 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "library",
+            "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
+                },
+                "satellite": {
+                    "class": "Kiboko\\Plugin\\Spreadsheet\\Service"
                 }
             },
             "autoload": {
@@ -1068,7 +1080,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/master"
             },
-            "time": "2021-05-07T11:54:37+00:00"
+            "time": "2021-05-09T20:44:29+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -1076,12 +1088,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "f68b4173d7958b69dde17abfd483722af5c5a278"
+                "reference": "717d3f131e4d2f3ae9ab0c9489d022a2de9e3683"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/f68b4173d7958b69dde17abfd483722af5c5a278",
-                "reference": "f68b4173d7958b69dde17abfd483722af5c5a278",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/717d3f131e4d2f3ae9ab0c9489d022a2de9e3683",
+                "reference": "717d3f131e4d2f3ae9ab0c9489d022a2de9e3683",
                 "shasum": ""
             },
             "require": {
@@ -1106,10 +1118,13 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "library",
+            "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
+                },
+                "satellite": {
+                    "class": "Kiboko\\Plugin\\Sylius\\Service"
                 }
             },
             "autoload": {
@@ -1132,7 +1147,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-05-07T11:40:40+00:00"
+            "time": "2021-05-09T20:42:48+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -1583,12 +1598,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "7b024c6726af21fd4984ac8d1eae2b9f3d90de88"
+                "reference": "0668d5599d1929d7740de4ddc68d750de9c0a046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/7b024c6726af21fd4984ac8d1eae2b9f3d90de88",
-                "reference": "7b024c6726af21fd4984ac8d1eae2b9f3d90de88",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/0668d5599d1929d7740de4ddc68d750de9c0a046",
+                "reference": "0668d5599d1929d7740de4ddc68d750de9c0a046",
                 "shasum": ""
             },
             "require": {
@@ -1656,7 +1671,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.3.0-BETA2"
+                "source": "https://github.com/symfony/cache/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -1672,7 +1687,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-23T16:57:12+00:00"
+            "time": "2021-05-07T14:34:05+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1760,12 +1775,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "9c9953f87bdb44ba3f2d8a47d69aad97a88525ec"
+                "reference": "03ac25f909c121a885e50d386b18c6248f059fd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/9c9953f87bdb44ba3f2d8a47d69aad97a88525ec",
-                "reference": "9c9953f87bdb44ba3f2d8a47d69aad97a88525ec",
+                "url": "https://api.github.com/repos/symfony/config/zipball/03ac25f909c121a885e50d386b18c6248f059fd6",
+                "reference": "03ac25f909c121a885e50d386b18c6248f059fd6",
                 "shasum": ""
             },
             "require": {
@@ -1815,7 +1830,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/config/tree/v5.3.0-BETA2"
+                "source": "https://github.com/symfony/config/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -1831,7 +1846,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-28T21:13:43+00:00"
+            "time": "2021-05-07T14:34:05+00:00"
         },
         {
             "name": "symfony/console",
@@ -1839,12 +1854,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "959bfea5f92bd9b0b278f458a69cfd3f96dd411d"
+                "reference": "eac8e550585cd4264656a4585f58d7c94920d584"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/959bfea5f92bd9b0b278f458a69cfd3f96dd411d",
-                "reference": "959bfea5f92bd9b0b278f458a69cfd3f96dd411d",
+                "url": "https://api.github.com/repos/symfony/console/zipball/eac8e550585cd4264656a4585f58d7c94920d584",
+                "reference": "eac8e550585cd4264656a4585f58d7c94920d584",
                 "shasum": ""
             },
             "require": {
@@ -1914,7 +1929,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.3.0-BETA2"
+                "source": "https://github.com/symfony/console/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -1930,7 +1945,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-01T00:53:07+00:00"
+            "time": "2021-05-07T14:48:44+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1938,12 +1953,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "f47b3fb3e01c18b3b065c957342cd5308a69f336"
+                "reference": "3b05369ea6ee3c54b7b81b668f0a7beecb66ad78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/f47b3fb3e01c18b3b065c957342cd5308a69f336",
-                "reference": "f47b3fb3e01c18b3b065c957342cd5308a69f336",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/3b05369ea6ee3c54b7b81b668f0a7beecb66ad78",
+                "reference": "3b05369ea6ee3c54b7b81b668f0a7beecb66ad78",
                 "shasum": ""
             },
             "require": {
@@ -2003,7 +2018,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/5.x"
+                "source": "https://github.com/symfony/dependency-injection/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -2019,7 +2034,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-30T09:43:05+00:00"
+            "time": "2021-05-09T15:44:29+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3024,12 +3039,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "3349bf2b7702d240e0b2b4eb0086270be1909f49"
+                "reference": "c2ec6e753c5ffd3ece5925aa8bf0ca0a6ba7dc20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/3349bf2b7702d240e0b2b4eb0086270be1909f49",
-                "reference": "3349bf2b7702d240e0b2b4eb0086270be1909f49",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/c2ec6e753c5ffd3ece5925aa8bf0ca0a6ba7dc20",
+                "reference": "c2ec6e753c5ffd3ece5925aa8bf0ca0a6ba7dc20",
                 "shasum": ""
             },
             "require": {
@@ -3091,7 +3106,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-info/tree/v5.3.0-BETA1"
+                "source": "https://github.com/symfony/property-info/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -3107,7 +3122,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-16T17:25:45+00:00"
+            "time": "2021-05-07T14:34:05+00:00"
         },
         {
             "name": "symfony/redis-messenger",
@@ -3323,7 +3338,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/5.x"
+                "source": "https://github.com/symfony/string/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -3347,12 +3362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "01184a5ab95eb9500b9b0ef3e525979e003d9c81"
+                "reference": "d26db2d2b2d7eb2c1adb8545179f8803998b8237"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/01184a5ab95eb9500b9b0ef3e525979e003d9c81",
-                "reference": "01184a5ab95eb9500b9b0ef3e525979e003d9c81",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/d26db2d2b2d7eb2c1adb8545179f8803998b8237",
+                "reference": "d26db2d2b2d7eb2c1adb8545179f8803998b8237",
                 "shasum": ""
             },
             "require": {
@@ -3397,7 +3412,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v5.3.0-BETA1"
+                "source": "https://github.com/symfony/var-exporter/tree/v5.3.0-BETA3"
             },
             "funding": [
                 {
@@ -3413,7 +3428,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-01T10:42:13+00:00"
+            "time": "2021-05-07T13:42:21+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -3493,6 +3508,252 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "composer/ca-bundle",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "9dea32b6bb602918b0144d4784b166cb95d45099"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/9dea32b6bb602918b0144d4784b166cb95d45099",
+                "reference": "9dea32b6bb602918b0144d4784b166cb95d45099",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.55",
+                "psr/log": "^1.0",
+                "symfony/phpunit-bridge": "^4.2 || ^5",
+                "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "support": {
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/ca-bundle/issues",
+                "source": "https://github.com/composer/ca-bundle/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-02-01T12:43:46+00:00"
+        },
+        {
+            "name": "composer/composer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/composer.git",
+                "reference": "649087d6de158dc4da73a06c7759dec5932be5a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/composer/zipball/649087d6de158dc4da73a06c7759dec5932be5a5",
+                "reference": "649087d6de158dc4da73a06c7759dec5932be5a5",
+                "shasum": ""
+            },
+            "require": {
+                "composer/ca-bundle": "^1.0",
+                "composer/metadata-minifier": "^1.0",
+                "composer/semver": "^3.0",
+                "composer/spdx-licenses": "^1.2",
+                "composer/xdebug-handler": "^2.0",
+                "justinrainbow/json-schema": "^5.2.10",
+                "php": "^5.3.2 || ^7.0 || ^8.0",
+                "psr/log": "^1.0",
+                "react/promise": "^1.2 || ^2.7",
+                "seld/jsonlint": "^1.4",
+                "seld/phar-utils": "^1.0",
+                "symfony/console": "^2.8.52 || ^3.4.35 || ^4.4 || ^5.0",
+                "symfony/filesystem": "^2.8.52 || ^3.4.35 || ^4.4 || ^5.0",
+                "symfony/finder": "^2.8.52 || ^3.4.35 || ^4.4 || ^5.0",
+                "symfony/process": "^2.8.52 || ^3.4.35 || ^4.4 || ^5.0"
+            },
+            "require-dev": {
+                "phpspec/prophecy": "^1.10",
+                "symfony/phpunit-bridge": "^4.2 || ^5.0"
+            },
+            "suggest": {
+                "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
+                "ext-zip": "Enabling the zip extension allows you to unzip archives",
+                "ext-zlib": "Allow gzip compression of HTTP requests"
+            },
+            "default-branch": true,
+            "bin": [
+                "bin/composer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\": "src/Composer"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "https://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "https://seld.be"
+                }
+            ],
+            "description": "Composer helps you declare, manage and install dependencies of PHP projects. It ensures you have the right stack everywhere.",
+            "homepage": "https://getcomposer.org/",
+            "keywords": [
+                "autoload",
+                "dependency",
+                "package"
+            ],
+            "support": {
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/composer/issues",
+                "source": "https://github.com/composer/composer/tree/master"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-05-04T14:47:54+00:00"
+        },
+        {
+            "name": "composer/metadata-minifier",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/metadata-minifier.git",
+                "reference": "c549d23829536f0d0e984aaabbf02af91f443207"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/metadata-minifier/zipball/c549d23829536f0d0e984aaabbf02af91f443207",
+                "reference": "c549d23829536f0d0e984aaabbf02af91f443207",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2",
+                "phpstan/phpstan": "^0.12.55",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\MetadataMinifier\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Small utility library that handles metadata minification and expansion.",
+            "keywords": [
+                "composer",
+                "compression"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/metadata-minifier/issues",
+                "source": "https://github.com/composer/metadata-minifier/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-07T13:37:33+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "dev-main",
@@ -3574,6 +3835,87 @@
                 }
             ],
             "time": "2020-12-10T07:55:43+00:00"
+        },
+        {
+            "name": "composer/spdx-licenses",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/spdx-licenses.git",
+                "reference": "8729d194e028b76ea3e84cd157bba3950203a7db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/8729d194e028b76ea3e84cd157bba3950203a7db",
+                "reference": "8729d194e028b76ea3e84cd157bba3950203a7db",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.55",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Spdx\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "SPDX licenses list and validation library.",
+            "keywords": [
+                "license",
+                "spdx",
+                "validator"
+            ],
+            "support": {
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/spdx-licenses/issues",
+                "source": "https://github.com/composer/spdx-licenses/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-03-09T12:00:19+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -4153,6 +4495,76 @@
                 "source": "https://github.com/johnkary/phpunit-speedtrap/tree/v4.0.0"
             },
             "time": "2021-05-03T02:37:05+00:00"
+        },
+        {
+            "name": "justinrainbow/json-schema",
+            "version": "5.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/justinrainbow/json-schema.git",
+                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.2.20||~2.15.1",
+                "json-schema/json-schema-test-suite": "1.2.0",
+                "phpunit/phpunit": "^4.8.35"
+            },
+            "bin": [
+                "bin/validate-json"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JsonSchema\\": "src/JsonSchema/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bruno Prieto Reis",
+                    "email": "bruno.p.reis@gmail.com"
+                },
+                {
+                    "name": "Justin Rainbow",
+                    "email": "justin.rainbow@gmail.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                },
+                {
+                    "name": "Robert Schönthal",
+                    "email": "seroscho@googlemail.com"
+                }
+            ],
+            "description": "A library to validate a json schema.",
+            "homepage": "https://github.com/justinrainbow/json-schema",
+            "keywords": [
+                "json",
+                "schema"
+            ],
+            "support": {
+                "issues": "https://github.com/justinrainbow/json-schema/issues",
+                "source": "https://github.com/justinrainbow/json-schema/tree/5.2.10"
+            },
+            "time": "2020-05-27T16:41:55+00:00"
         },
         {
             "name": "mybuilder/phpunit-accelerator",
@@ -5065,12 +5477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "76880b47ff9249e5affc434aca6a49ee5e107ca7"
+                "reference": "c9e8123050acc9ce932ea15f3f74c77a971a8fb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/76880b47ff9249e5affc434aca6a49ee5e107ca7",
-                "reference": "76880b47ff9249e5affc434aca6a49ee5e107ca7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c9e8123050acc9ce932ea15f3f74c77a971a8fb0",
+                "reference": "c9e8123050acc9ce932ea15f3f74c77a971a8fb0",
                 "shasum": ""
             },
             "require": {
@@ -5118,7 +5530,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-07T09:49:08+00:00"
+            "time": "2021-05-08T21:16:34+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5448,12 +5860,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d624c877ce25051b14a576aa0eb2b64425af6711"
+                "reference": "3d0f17b1f0e1764dda0200cfac89d5f745e457cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d624c877ce25051b14a576aa0eb2b64425af6711",
-                "reference": "d624c877ce25051b14a576aa0eb2b64425af6711",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3d0f17b1f0e1764dda0200cfac89d5f745e457cf",
+                "reference": "3d0f17b1f0e1764dda0200cfac89d5f745e457cf",
                 "shasum": ""
             },
             "require": {
@@ -5543,7 +5955,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-06T13:37:12+00:00"
+            "time": "2021-05-08T15:05:30+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -5597,6 +6009,66 @@
                 "source": "https://github.com/php-fig/event-dispatcher/tree/master"
             },
             "time": "2021-02-08T21:15:39+00:00"
+        },
+        {
+            "name": "react/promise",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/promise.git",
+                "reference": "a9752a861e21c0fe0b380c9f9e55beddc0ed7d31"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/a9752a861e21c0fe0b380c9f9e55beddc0ed7d31",
+                "reference": "a9752a861e21c0fe0b380c9f9e55beddc0ed7d31",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.36"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com"
+                }
+            ],
+            "description": "A lightweight implementation of CommonJS Promises/A for PHP",
+            "keywords": [
+                "promise",
+                "promises"
+            ],
+            "support": {
+                "issues": "https://github.com/reactphp/promise/issues",
+                "source": "https://github.com/reactphp/promise/tree/2.x"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/WyriHaximus",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/clue",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-02-09T15:06:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -6575,6 +7047,117 @@
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
+            "name": "seld/jsonlint",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/jsonlint.git",
+                "reference": "9ad6ce79c342fbd44df10ea95511a1b24dee5b57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/9ad6ce79c342fbd44df10ea95511a1b24dee5b57",
+                "reference": "9ad6ce79c342fbd44df10ea95511a1b24dee5b57",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0"
+            },
+            "bin": [
+                "bin/jsonlint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Seld\\JsonLint\\": "src/Seld/JsonLint/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "JSON Linter",
+            "keywords": [
+                "json",
+                "linter",
+                "parser",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/Seldaek/jsonlint/issues",
+                "source": "https://github.com/Seldaek/jsonlint/tree/1.8.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Seldaek",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/seld/jsonlint",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-11-11T09:19:24+00:00"
+        },
+        {
+            "name": "seld/phar-utils",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/phar-utils.git",
+                "reference": "8674b1d84ffb47cc59a101f5d5a3b61e87d23796"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/8674b1d84ffb47cc59a101f5d5a3b61e87d23796",
+                "reference": "8674b1d84ffb47cc59a101f5d5a3b61e87d23796",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seld\\PharUtils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "PHAR file format utilities, for when PHP phars you up",
+            "keywords": [
+                "phar"
+            ],
+            "support": {
+                "issues": "https://github.com/Seldaek/phar-utils/issues",
+                "source": "https://github.com/Seldaek/phar-utils/tree/master"
+            },
+            "time": "2020-07-07T18:42:57+00:00"
+        },
+        {
             "name": "symfony/event-dispatcher",
             "version": "5.x-dev",
             "source": {
@@ -7124,7 +7707,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "composer/composer": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
