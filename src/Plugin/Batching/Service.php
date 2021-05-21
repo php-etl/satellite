@@ -14,6 +14,12 @@ final class Service implements Configurator\FactoryInterface
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
+    public function __construct()
+    {
+        $this->processor = new Processor();
+        $this->configuration = new Configuration();
+    }
+
     public function configuration(): ConfigurationInterface
     {
         return $this->configuration;

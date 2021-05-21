@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Plugin\SQL;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class Configuration implements ConfigurationInterface
 {

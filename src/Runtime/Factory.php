@@ -37,6 +37,6 @@ final class Factory implements FactoryInterface
 
         $satellite->build($this->logger);
 
-        return $factory($configuration);
+        return $runtime;
     }
 }

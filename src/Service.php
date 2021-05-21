@@ -105,46 +105,71 @@ final class Service implements Configurator\FactoryInterface
         $pipeline = new Satellite\Builder\Pipeline();
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        $repository->addPackages('php-etl/pipeline:^0.2');
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+
+        $repository->addPackages(
+            'php-etl/pipeline:^0.3.0',
+            'monolog/monolog',
+            'symfony/dependency-injection:^5.2',
+        );
 
         foreach ($config['pipeline']['steps'] as $step) {
             if (array_key_exists('akeneo', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service()))
-                    ->withPackages('akeneo/api-php-client-ee')
+                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service($interpreter)))
+                    ->withPackages(
+                        'akeneo/api-php-client-ee',
+                        'laminas/laminas-diactoros',
+                        'php-http/guzzle7-adapter',
+                    )
                     ->withExtractor()
                     ->withTransformer('lookup')
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('sylius', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service()))
-                    ->withPackages('diglin/sylius-api-php-client')
+                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service($interpreter)))
+                    ->withPackages(
+                        'diglin/sylius-api-php-client',
+                        'laminas/laminas-diactoros',
+                        'php-http/guzzle7-adapter',
+                    )
                     ->withExtractor()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('csv', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service()))
-                    ->withPackages('php-etl/csv-flow:^0.1')
+                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service($interpreter)))
+                    ->withPackages(
+                        'php-etl/csv-flow:^0.2.0',
+                    )
                     ->withExtractor()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('custom', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service()))
+                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service($interpreter)))
                     ->withExtractor()
                     ->withTransformer()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('stream', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
+                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service($interpreter)))
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('batch', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service()))
+                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service($interpreter)))
                     ->withTransformer('merge')
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('fastmap', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service()))
-                    ->withPackages('php-etl/fast-map:^0.2')
+                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service($interpreter)))
+                    ->withPackages(
+                        'php-etl/fast-map:^0.2.0',
+                    )
                     ->withTransformer(null)
+                    ->appendTo($step, $repository);
+            } elseif (array_key_exists('sftp', $step)) {
+                (new Satellite\Pipeline\ConfigurationApplier('sftp', new Satellite\Plugin\SFTP\Service($interpreter)))
+                    ->withPackages(
+                        'ext-ssh2',
+                    )
+                    ->withLoader()
                     ->appendTo($step, $repository);
             }
         }

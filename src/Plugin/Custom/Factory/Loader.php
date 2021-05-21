@@ -4,7 +4,6 @@
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -12,9 +11,10 @@ use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Kiboko\Component\Satellite\Plugin\Custom;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Reference;
 
-
-class Factory implements Configurator\FactoryInterface
+class Loader implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
@@ -47,13 +47,25 @@ class Factory implements Configurator\FactoryInterface
         return false;
     }
 
-    public function compile(array $config): Repository
+    public function compile(array $config): Repository\Loader
     {
-        $builder = new Custom\Builder\LoaderBuilder();
+        $builder = new Custom\Builder\Loader();
 
         $container = new ContainerBuilder();
 
-        if (array_key_exists('services', $config)) {
+        if (array_key_exists('parameters', $config)
+            && is_array($config['parameters'])
+            && count($config['parameters']) > 0
+        ) {
+            foreach ($config['parameters'] as $identifier => $parameter) {
+                $container->setParameter($identifier, $parameter);
+            }
+        }
+
+        if (array_key_exists('services', $config)
+            && is_array($config['services'])
+            && count($config['services']) > 0
+        ) {
             foreach ($config['services'] as $identifier => $service) {
                 if (array_key_exists('class', $service)) {
                     $class = $service['class'];
@@ -66,6 +78,12 @@ class Factory implements Configurator\FactoryInterface
                     && count($service['arguments']) > 0
                 ) {
                     foreach ($service['arguments'] as $key => $argument) {
+                        if (substr($argument, 0, 1) === '@'
+                            && substr($argument, 1, 1) !== '@'
+                        ) {
+                            $argument = new Reference(substr($argument, 1));
+                        }
+
                         if (is_numeric($key)) {
                             $definition->addArgument($argument);
                         } else {
@@ -85,12 +103,20 @@ class Factory implements Configurator\FactoryInterface
             }
         }
 
-        $repository = new Repository($builder);
+        if (array_key_exists('use', $config)) {
+            $container->getDefinition($config['use'])->setPublic(true);
+        }
 
+        $repository = new Repository\Loader($builder);
+
+        $container->compile();
+        $dumper = new PhpDumper($container);
         $repository->addFiles(
             new Packaging\File(
                 'container.php',
-                new Packaging\Asset\Resource()
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
             ),
         );
 

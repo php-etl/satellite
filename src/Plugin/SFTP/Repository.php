@@ -1,15 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository;
+namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
 final class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Configurator\StepBuilderInterface $builder)
+    public function __construct(private Builder\Loader $builder)
     {
     }
 
@@ -33,7 +31,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Configurator\StepBuilderInterface
+    public function getBuilder(): Builder\Loader
     {
         return $this->builder;
     }

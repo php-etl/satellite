@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Plugin\Stream;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class Configuration implements ConfigurationInterface
 {
@@ -19,7 +20,26 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('loader')
                     ->children()
-                        ->scalarNode('destination')->end()
+                        ->scalarNode('destination')
+                            ->validate()
+                                ->ifTrue(fn ($value) => in_array($value, ['stderr', 'stdout']))
+                                ->then(fn ($value) => sprintf('php://%s', $value))
+                            ->end()
+                            ->setDeprecated()
+                            ->cannotBeEmpty()
+                            ->validate()
+                                ->ifTrue(fn ($data) => is_string($data) && $data !== '' && str_starts_with($data, '@='))
+                                ->then(fn ($data) => new Expression(substr($data, 2)))
+                            ->end()
+                        ->end()
+                        ->enumNode('format')
+                            ->values(['json', 'debug'])
+                            ->cannotBeEmpty()
+                            ->validate()
+                                ->ifTrue(fn ($data) => is_string($data) && $data !== '' && str_starts_with($data, '@='))
+                                ->then(fn ($data) => new Expression(substr($data, 2)))
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()

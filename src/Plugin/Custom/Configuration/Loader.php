@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class Loader implements ConfigurationInterface
 {
@@ -21,6 +22,11 @@ final class Loader implements ConfigurationInterface
                 ->arrayNode('parameters')
                     ->useAttributeAsKey('keyparam')
                     ->scalarPrototype()
+                        ->cannotBeEmpty()
+                        ->validate()
+                            ->ifTrue(fn ($data) => is_string($data) && $data !== '' && str_starts_with($data, '@='))
+                            ->then(fn ($data) => new Expression(substr($data, 2)))
+                        ->end()
                     ->end()
                 ->end()
             ->end();

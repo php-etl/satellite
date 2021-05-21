@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\Custom;
+namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
-use Kiboko\Component\Satellite\Plugin\Custom\Factory\Loader;
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -15,7 +15,7 @@ final class Service implements Configurator\FactoryInterface
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
-    public function __construct()
+    public function __construct(private ExpressionLanguage $interpreter)
     {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
@@ -44,7 +44,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }
@@ -54,17 +54,33 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('extractor', $config)) {
-            $extractorFactory = new Loader();
-            return $extractorFactory->compile($config['extractor']);
-        } else if (array_key_exists('transformer', $config)) {
-            $transformerFactory = new Loader();
-            return $transformerFactory->compile($config['transformer']);
-        } else if (array_key_exists('loader', $config)) {
-            $loaderFactory = new Loader();
-            return $loaderFactory->compile($config['loader']);
+        if (array_key_exists('loader', $config)) {
+            $loader = new Builder\Loader($this->interpreter);
+            if (array_key_exists('servers', $config['loader'])
+                && is_array($config['loader']['servers'])
+            ) {
+                foreach ($config['loader']['servers'] as $server) {
+                    $loader->withServer(
+                        (new Builder\Server($server['host'], $server['port'] ?? null))->getNode()
+                    );
+                }
+            }
+            if (array_key_exists('put', $config['loader'])
+                && is_array($config['loader']['put'])
+            ) {
+                foreach ($config['loader']['put'] as $put) {
+                    $loader->withPut(
+                        $put['path'],
+                        $put['content'],
+                        $put['mode'] ?? null,
+                        $put['if'] ?? null,
+                    );
+                }
+            }
+
+            return new Repository($loader);
         }
 
-        throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');
+        throw new \RuntimeException('No suitable build with the provided configuration.');
     }
 }

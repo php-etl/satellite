@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Plugin\Stream\Builder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
-final class StreamLoader implements StepBuilderInterface
+final class DebugLoader implements StepBuilderInterface
 {
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
@@ -20,21 +20,21 @@ final class StreamLoader implements StepBuilderInterface
         $this->state = null;
     }
 
-    public function withLogger(Node\Expr $logger): StreamLoader
+    public function withLogger(Node\Expr $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): StreamLoader
+    public function withRejection(Node\Expr $rejection): self
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): StreamLoader
+    public function withState(Node\Expr $state): self
     {
         $this->state = $state;
 
@@ -44,7 +44,12 @@ final class StreamLoader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\StderrLoader'),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\DebugLoader'),
+            args: [
+                new Node\Arg(
+                    value: new Node\Scalar\String_($this->stream),
+                ),
+            ],
         );
     }
 }

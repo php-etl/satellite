@@ -33,6 +33,10 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
             )),
         );
 
+        $satellite->withFile(
+            ...$repository->getFiles(),
+        );
+
         $satellite->dependsOn(...$repository->getPackages());
     }
 

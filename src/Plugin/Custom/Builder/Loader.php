@@ -7,27 +7,27 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Builder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
-final class LoaderBuilder implements StepBuilderInterface
+final class Loader implements StepBuilderInterface
 {
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
-    public function withLogger(Node\Expr $logger): LoaderBuilder
+    public function withLogger(Node\Expr $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): LoaderBuilder
+    public function withRejection(Node\Expr $rejection): self
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): LoaderBuilder
+    public function withState(Node\Expr $state): self
     {
         $this->state = $state;
 

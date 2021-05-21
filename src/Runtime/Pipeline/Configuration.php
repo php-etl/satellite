@@ -40,9 +40,11 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                                 array_key_exists('api', $value),
                                 array_key_exists('custom', $value),
                                 array_key_exists('stream', $value),
+                                array_key_exists('sftp', $value),
+                                array_key_exists('batch', $value),
                             ]));
                         })
-                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "fastmap", "api", "custom" and "stream".')
+                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "fastmap", "api", "custom", "stream", "sftp" and "batch".')
                     ->end()
                     ->arrayPrototype()
                         // Plugins
@@ -52,6 +54,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Satellite\Plugin\SFTP\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Batching\Configuration())->getConfigTreeBuilder()->getRootNode())
                         // Flow features
                         ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
