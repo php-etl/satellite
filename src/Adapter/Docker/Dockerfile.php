@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite\Adapter\Docker\Dockerfile\LayerInterface;
-use Kiboko\Component\Packaging\FileInterface;
+use Kiboko\Contract\Packaging\FileInterface;
 
 final class Dockerfile implements \IteratorAggregate, \Countable, FileInterface
 {
