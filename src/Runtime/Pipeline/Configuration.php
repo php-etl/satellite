@@ -8,6 +8,7 @@ use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\CSV;
+use Kiboko\Plugin\Spreadsheet;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
@@ -36,6 +37,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                                 array_key_exists('akeneo', $value),
                                 array_key_exists('sylius', $value),
                                 array_key_exists('csv', $value),
+                                array_key_exists('spreadsheet', $value),
                                 array_key_exists('fastmap', $value),
                                 array_key_exists('api', $value),
                                 array_key_exists('custom', $value),
@@ -44,13 +46,14 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                                 array_key_exists('batch', $value),
                             ]));
                         })
-                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "fastmap", "api", "custom", "stream", "sftp" and "batch".')
+                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp" and "batch".')
                     ->end()
                     ->arrayPrototype()
                         // Plugins
                         ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->append((new Spreadsheet\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
+use Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider;
+use Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
+use Kiboko\Plugin\Spreadsheet;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -105,7 +108,10 @@ final class Service implements Configurator\FactoryInterface
         $pipeline = new Satellite\Builder\Pipeline();
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage(null, [
+            new ArrayExpressionLanguageProvider(),
+            new AkeneoFilterProvider()
+        ]);
 
         $repository->addPackages(
             'php-etl/pipeline:^0.3.0',
@@ -140,6 +146,11 @@ final class Service implements Configurator\FactoryInterface
                     ->withPackages(
                         'php-etl/csv-flow:^0.2.0',
                     )
+                    ->withExtractor()
+                    ->withLoader()
+                    ->appendTo($step, $repository);
+            } elseif (array_key_exists('spreadsheet', $step)) {
+                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service($interpreter)))
                     ->withExtractor()
                     ->withLoader()
                     ->appendTo($step, $repository);
