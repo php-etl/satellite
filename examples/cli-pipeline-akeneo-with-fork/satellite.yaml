@@ -1,0 +1,44 @@
+satellite:
+  filesystem:
+    path: build
+  composer:
+    require:
+        - "php-etl/pipeline:^0.3"
+        - "php-etl/fast-map:^0.2"
+        - "akeneo/api-php-client-ee"
+        - "laminas/laminas-diactoros"
+        - "php-http/guzzle7-adapter"
+        - "php-etl/mapping-contracts:dev-fix-dependencies as 0.2.0"
+        - "monolog/monolog"
+        - "elasticsearch/elasticsearch"
+
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: false
+          extractor:
+              type: product
+              method: all
+          client:
+              api_url: 'http://localhost:8080'
+              client_id: '1_1pfmqgqw53r4w4g0kscoc0wckkkco8swcoowk484840wco4koo'
+              secret: '11oo1el7nrn4o408kgokoccoswg4wgc4440w8w8sgsko84wssg'
+              username: 'proximis_7215'
+              password: '00e666b44'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: notice
+                hosts:
+                  - 'http://localhost:9200'
+      - batch:
+          expression_language:
+          - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+          fork:
+            foreach: '@=["Nom_produit", "coloris", "code_tfp"]'
+            do: '@={ code: input["identifier"], LCID: "fr_FR", attributeName: item, attributeValue: attribute(input["values"][item], locale("fr_FR", null)) }'
+
+      - stream:
+            loader:
+                destination: stdout

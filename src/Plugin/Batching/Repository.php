@@ -2,12 +2,14 @@
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
+use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
+use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
 final class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Builder $builder)
+    public function __construct(private Merge|Fork $builder)
     {
     }
 
@@ -31,7 +33,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Builder
+    public function getBuilder(): Merge|Fork
     {
         return $this->builder;
     }

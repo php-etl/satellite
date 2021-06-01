@@ -5,6 +5,8 @@ namespace Kiboko\Component\Satellite\Plugin\Batching;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class Configuration implements ConfigurationInterface
 {
@@ -14,12 +16,28 @@ final class Configuration implements ConfigurationInterface
 
         $builder->getRootNode()
             ->children()
+                ->variableNode('expression_language')->end()
                 ->arrayNode('merge')
                     ->children()
-                        ->integerNode('size')
+                        ->integerNode('size')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('fork')
+                    ->children()
+                        ->scalarNode('foreach')
+                            ->isRequired()
+                            ->cannotBeEmpty()
                             ->validate()
-                                ->ifTrue(fn ($data) => is_string($data) && $data !== '' && str_starts_with($data, '@='))
-                                ->then(fn ($data) => new Expression(substr($data, 2)))
+                                ->ifTrue(isExpression())
+                                ->then(asExpression())
+                            ->end()
+                        ->end()
+                        ->scalarNode('do')
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                            ->validate()
+                                ->ifTrue(isExpression())
+                                ->then(asExpression())
                             ->end()
                         ->end()
                     ->end()

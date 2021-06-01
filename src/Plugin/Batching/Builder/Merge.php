@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\Batching;
+namespace Kiboko\Component\Satellite\Plugin\Batching\Builder;
 
 use Kiboko\Contract\Bucket\ResultBucketInterface;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
-final class Builder implements StepBuilderInterface
+final class Merge implements StepBuilderInterface
 {
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
@@ -15,21 +15,21 @@ final class Builder implements StepBuilderInterface
     public function __construct(private int $size)
     {}
 
-    public function withLogger(Node\Expr $logger): Builder
+    public function withLogger(Node\Expr $logger): Merge
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): Builder
+    public function withRejection(Node\Expr $rejection): Merge
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): Builder
+    public function withState(Node\Expr $state): Merge
     {
         $this->state = $state;
 

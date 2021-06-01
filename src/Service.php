@@ -167,6 +167,7 @@ final class Service implements Configurator\FactoryInterface
             } elseif (array_key_exists('batch', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service($interpreter)))
                     ->withTransformer('merge')
+                    ->withTransformer('fork')
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('fastmap', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service($interpreter)))
