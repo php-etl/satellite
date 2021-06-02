@@ -22,8 +22,8 @@ final class Pipeline implements Builder
                 name: new Node\Identifier('extract'),
                 args: [
                     new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor),
-//                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-//                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
         });
@@ -42,8 +42,8 @@ final class Pipeline implements Builder
                 name: new Node\Identifier('transform'),
                 args: [
                     new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer),
-//                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-//                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
         });
@@ -62,8 +62,8 @@ final class Pipeline implements Builder
                 name: new Node\Identifier('load'),
                 args: [
                     new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader),
-//                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-//                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
         });
