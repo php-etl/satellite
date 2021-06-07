@@ -10,8 +10,30 @@ final class File extends ExpressionFunction
     {
         parent::__construct(
             $name,
-            fn ($value) => sprintf('file_get_contents(%s)', $value),
-            fn ($value) => file_get_contents($value),
+            function (string $value): string {
+                $pattern = <<<PHP
+                    \$resource = tmpfile();
+                    if (\$resource === false) {
+                        throw new \RuntimeException('Could not open temporary file.');
+                    }
+
+                    fwrite(\$resource, getenv(%s));
+
+                    return stream_get_meta_data(\$resource)['uri'];
+                    PHP;
+
+                return sprintf($pattern, $value);
+            },
+            function (string $value): string {
+                $resource = tmpfile();
+                if ($resource === false) {
+                    throw new \RuntimeException('Could not open temporary file.');
+                }
+
+                fwrite($resource, getenv($value));
+
+                return stream_get_meta_data($resource)['uri'];
+            },
         );
     }
 }
