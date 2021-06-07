@@ -10,6 +10,7 @@ final class Provider implements ExpressionFunctionProviderInterface
     {
         return [
             new Env('env'),
+            new EnvAsFile('envAsFile'),
             new File('file'),
         ];
     }
