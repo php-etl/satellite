@@ -84,6 +84,7 @@ final class Loader implements StepBuilderInterface
                                                     dim: new Node\Scalar\LNumber($index)
                                                 ),
                                                 new Node\Scalar\EncapsedStringPart('/'),
+                                                new Node\Expr\Variable('serverPath'),
                                                 new Node\Scalar\EncapsedStringPart('/'),
                                             ]),
                                             compileValueWhenExpression($this->interpreter, $path),
