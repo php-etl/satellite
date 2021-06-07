@@ -78,7 +78,7 @@ final class Service implements Configurator\FactoryInterface
                     ) {
                         $serverBuilder->withPrivateKeyAuthentication($server['username'],(string) $server['public_key'],(string) $server['private_key'], $server['private_key_passphrase'] ?? null );
                     }
-                    $loader->withServer($serverBuilder->getNode());
+                    $loader->withServer($server, $serverBuilder->getNode());
                 }
             }
             if (array_key_exists('put', $config['loader'])

@@ -43,9 +43,9 @@ final class Loader implements StepBuilderInterface
         return $this;
     }
 
-    public function withServer(Node\Expr ...$server): self
+    public function withServer(array $config, Node ...$server): self
     {
-        array_push($this->servers, ...$server);
+        array_push($this->servers, array_merge($config, [...$server]));
 
         return $this;
     }
@@ -74,19 +74,29 @@ final class Loader implements StepBuilderInterface
                                 args: [
                                     new Node\Arg(
                                         value: new Node\Expr\BinaryOp\Concat(
-                                            new Node\Scalar\Encapsed([
-                                                new Node\Scalar\EncapsedStringPart('ssh2.sftp://'),
-                                                new Node\Expr\ArrayDimFetch(
-                                                    var: new Node\Expr\PropertyFetch(
-                                                        var: new Node\Expr\Variable('this'),
-                                                        name: new Node\Identifier('server'),
-                                                    ),
-                                                    dim: new Node\Scalar\LNumber($index)
+                                            new Node\Expr\BinaryOp\Concat(
+                                                new Node\Expr\BinaryOp\Concat(
+                                                    new Node\Scalar\String_('ssh2.sftp://'),
+                                                    new Node\Expr\FuncCall(
+                                                        name: new Node\Name('intval'),
+                                                        args: [
+                                                            new Node\Arg(
+                                                                new Node\Expr\ArrayDimFetch(
+                                                                    var: new Node\Expr\PropertyFetch(
+                                                                    var: new Node\Expr\Variable('this'),
+                                                                    name: new Node\Identifier('servers'),
+                                                                ),
+                                                                    dim: new Node\Scalar\LNumber($index)
+                                                                ),
+                                                            ),
+                                                        ]
+                                                    )
                                                 ),
-                                                new Node\Scalar\EncapsedStringPart('/'),
-                                                new Node\Expr\Variable('serverPath'),
-                                                new Node\Scalar\EncapsedStringPart('/'),
-                                            ]),
+                                                new Node\Scalar\Encapsed([
+                                                    new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                                    new Node\Scalar\EncapsedStringPart('/'),
+                                                ])
+                                            ),
                                             compileValueWhenExpression($this->interpreter, $path),
                                         ),
                                     ),
@@ -156,17 +166,24 @@ final class Loader implements StepBuilderInterface
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
+                                'params' => [
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable(name: 'servers'),
+                                        type: new Node\Identifier('array'),
+                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE
+                                    )
+                                ],
                                 'stmts' => array_map(
                                     fn ($server, $index) => new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
                                             new Node\Expr\ArrayDimFetch(
                                                 new Node\Expr\PropertyFetch(
                                                     new Node\Expr\Variable('this'),
-                                                    new Node\Identifier('server')
+                                                    new Node\Identifier('servers')
                                                 ),
                                                 new Node\Scalar\LNumber($index),
                                             ),
-                                            $server
+                                            $server[0]
                                         )
                                     ),
                                     $this->servers,
@@ -187,7 +204,7 @@ final class Loader implements StepBuilderInterface
                                     ),
                                     new Node\Stmt\Do_(
                                         cond: new Node\Expr\Assign(
-                                            var: new Node\Expr\Variable('line'),
+                                            var: new Node\Expr\Variable('input'),
                                             expr: new Node\Expr\Yield_(
                                                 value: new Node\Expr\New_(
                                                     class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
