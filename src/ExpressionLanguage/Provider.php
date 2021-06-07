@@ -11,6 +11,7 @@ final class Provider implements ExpressionFunctionProviderInterface
         return [
             new Env('env'),
             new File('file'),
+            new Base64Decode('base64Decode'),
         ];
     }
 }

@@ -64,33 +64,79 @@ final class Loader implements StepBuilderInterface
     private function compilePutStatements(): iterable
     {
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
-            if ($condition === null) {
-                yield new Node\Stmt\Expression(
-                    new Node\Expr\MethodCall(
-                        new Node\Expr\PropertyFetch(
-                            new Node\Expr\Variable('this'),
-                            new Node\Identifier('connection')
-                        ),
-                        new Node\Identifier('put')
-                    )
-                );
-            } else {
-                yield new Node\Stmt\If_(
-                    cond: compileValueWhenExpression($this->interpreter, $condition),
-                    subNodes: [
-                        'stmts' => [
-                            new Node\Stmt\Expression(
-                                new Node\Expr\MethodCall(
-                                    new Node\Expr\PropertyFetch(
-                                        new Node\Expr\Variable('this'),
-                                        new Node\Identifier('connection')
+            foreach ($this->servers as $index => $server) {
+                if ($condition === null) {
+                    yield new Node\Stmt\Expression(
+                        new Node\Expr\Assign(
+                            var: new Node\Expr\Variable('stream'),
+                            expr: new Node\Expr\FuncCall(
+                                name: new Node\Name('fopen'),
+                                args: [
+                                    new Node\Arg(
+                                        value: new Node\Expr\BinaryOp\Concat(
+                                            new Node\Scalar\Encapsed([
+                                                new Node\Scalar\EncapsedStringPart('ssh2.sftp://'),
+                                                new Node\Expr\ArrayDimFetch(
+                                                    var: new Node\Expr\PropertyFetch(
+                                                        var: new Node\Expr\Variable('this'),
+                                                        name: new Node\Identifier('server'),
+                                                    ),
+                                                    dim: new Node\Scalar\LNumber($index)
+                                                ),
+                                                new Node\Scalar\EncapsedStringPart('/'),
+                                                new Node\Scalar\EncapsedStringPart('/'),
+                                            ]),
+                                            compileValueWhenExpression($this->interpreter, $path),
+                                        ),
                                     ),
-                                    new Node\Identifier('put')
-                                )
-                            )
+                                    new Node\Arg(new Node\Scalar\String_('w')),
+                                ],
+                            ),
+                        ),
+                    );
+                    yield new Node\Stmt\If_(
+                        cond: new Node\Expr\BooleanNot(
+                            new Node\Expr\FuncCall(
+                                name: new Node\Name('fwrite'),
+                                args: [
+                                    new Node\Arg(new Node\Expr\Variable('stream')),
+                                    new Node\Arg(compileValueWhenExpression($this->interpreter, $content)),
+                                ],
+                            ),
+                        ),
+                        subNodes: [
+                            'stmts' => [
+                                new Node\Stmt\Expression(
+                                    new Node\Expr\Throw_(
+                                        expr: new Node\Expr\New_(
+                                            class: new Node\Name('Kiboko\Component\Satellite\Plugin\SFTP\UploadFileException'),
+                                            args: [
+                                                new Node\Arg(new Node\Scalar\String_(sprintf('Error while uploading file to server'))),
+                                            ],
+                                        ),
+                                    ),
+                                ),
+                            ],
                         ],
-                    ]
-                );
+                    );
+                } else {
+                    yield new Node\Stmt\If_(
+                        cond: compileValueWhenExpression($this->interpreter, $condition),
+                        subNodes: [
+                            'stmts' => [
+                                new Node\Stmt\Expression(
+                                    new Node\Expr\MethodCall(
+                                        new Node\Expr\PropertyFetch(
+                                            new Node\Expr\Variable('this'),
+                                            new Node\Identifier('connection')
+                                        ),
+                                        new Node\Identifier('put')
+                                    )
+                                )
+                            ],
+                        ]
+                    );
+                }
             }
         }
     }
@@ -102,20 +148,33 @@ final class Loader implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\FlushableInterface'),
+                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'stmts' => [
-                                ],
+                                'stmts' => array_map(
+                                    fn ($server, $index) => new Node\Stmt\Expression(
+                                        new Node\Expr\Assign(
+                                            new Node\Expr\ArrayDimFetch(
+                                                new Node\Expr\PropertyFetch(
+                                                    new Node\Expr\Variable('this'),
+                                                    new Node\Identifier('server')
+                                                ),
+                                                new Node\Scalar\LNumber($index),
+                                            ),
+                                            $server
+                                        )
+                                    ),
+                                    $this->servers,
+                                    array_keys($this->servers),
+                                ),
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('transform'),
+                            name: new Node\Identifier('load'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'stmts' => [
@@ -143,14 +202,16 @@ final class Loader implements StepBuilderInterface
                                             ...$this->compilePutStatements(),
                                         ],
                                     ),
-                                    new Node\Expr\Yield_(
-                                        value: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
-                                            args: [
-                                                new Node\Arg(
-                                                    new Node\Expr\Variable('input'),
-                                                ),
-                                            ],
+                                    new Node\Stmt\Expression(
+                                        new Node\Expr\Yield_(
+                                            value: new Node\Expr\New_(
+                                                class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        new Node\Expr\Variable('input'),
+                                                    ),
+                                                ],
+                                            ),
                                         ),
                                     ),
                                 ],

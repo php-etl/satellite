@@ -60,9 +60,25 @@ final class Service implements Configurator\FactoryInterface
                 && is_array($config['loader']['servers'])
             ) {
                 foreach ($config['loader']['servers'] as $server) {
-                    $loader->withServer(
-                        (new Builder\Server($server['host'], $server['port'] ?? null))->getNode()
-                    );
+                    $serverBuilder = new Builder\Server($server['host']);
+                    if (array_key_exists('port', $server)) {
+                        $serverBuilder->withPort($server['port']);
+                    }
+                    if (array_key_exists('base_path', $server)) {
+                        $serverBuilder->withBasePath($server['base_path']);
+                    }
+                    if (array_key_exists('username', $server)
+                        && array_key_exists('password', $server)
+                    ) {
+                        $serverBuilder->withPasswordAuthentication($server['username'], $server['password']);
+                    }
+                    if (array_key_exists('username', $server)
+                        && array_key_exists('public_key', $server)
+                        && array_key_exists('private_key', $server)
+                    ) {
+                        $serverBuilder->withPrivateKeyAuthentication($server['username'],(string) $server['public_key'],(string) $server['private_key'], $server['private_key_passphrase'] ?? null );
+                    }
+                    $loader->withServer($serverBuilder->getNode());
                 }
             }
             if (array_key_exists('put', $config['loader'])
