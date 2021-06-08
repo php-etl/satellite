@@ -5,19 +5,20 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 use Kiboko\Component\SatelliteToolbox\Builder\IsolatedServerBuilder;
 use PhpParser\Builder;
 use PhpParser\Node;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Server implements Builder
 {
-    private string $host;
-    private ?int $port;
-    private ?string $username;
-    private ?string $password;
-    private ?string $publicKey;
-    private ?string $privateKey;
-    private ?string $privateKeyPassphrase;
-    private ?string $basePath;
+    private string|Expression $host;
+    private null|int|Expression $port;
+    private null|string|Expression $username;
+    private null|string|Expression $password;
+    private null|string|Expression $publicKey;
+    private null|string|Expression $privateKey;
+    private null|string|Expression $privateKeyPassphrase;
+    private null|string|Expression $basePath;
 
     public function __construct(
         string $host,
@@ -66,7 +67,7 @@ final class Server implements Builder
     }
 
 
-    public function withPrivateKeyAuthentication(string $username, string $publicKey, string $privateKey, ?string $privateKeyPassphrase = null): self
+    public function withPrivateKeyAuthentication(string|Expression $username, string|Expression $publicKey, string|Expression $privateKey, null|string|Expression $privateKeyPassphrase = null): self
     {
         $this->username = $username;
         $this->publicKey = $publicKey;
