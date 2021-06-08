@@ -12,15 +12,17 @@ final class File extends ExpressionFunction
             $name,
             function (string $value): string {
                 $pattern = <<<PHP
-                    \$resource = \\tmpfile();
-                    if (\$resource === false) {
-                        throw new \\RuntimeException('Could not open temporary file.');
-                    }
-
-                    \\fwrite(\$resource, %s);
-                    \\fseek(\$resource, 0, \\SEEK_SET);
-
-                    return \\stream_get_meta_data(\$resource)['uri'];
+                    (function () {
+                        \$resource = \\tmpfile();
+                        if (\$resource === false) {
+                            throw new \\RuntimeException('Could not open temporary file.');
+                        }
+    
+                        \\fwrite(\$resource, %s);
+                        \\fseek(\$resource, 0, \\SEEK_SET);
+    
+                        return \\stream_get_meta_data(\$resource)['uri'];
+                    })();
                     PHP;
 
                 return \sprintf($pattern, $value);
