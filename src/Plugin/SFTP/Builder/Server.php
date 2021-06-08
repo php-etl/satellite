@@ -3,10 +3,10 @@
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
 use Kiboko\Component\SatelliteToolbox\Builder\IsolatedCodeBuilder;
-use PhpParser\Builder;
+use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
-final class Server implements Builder
+final class Server implements StepBuilderInterface
 {
     private ?Node\Expr $username;
     private ?Node\Expr $password;
@@ -25,6 +25,27 @@ final class Server implements Builder
         $this->privateKey = null;
         $this->privateKeyPassphrase = null;
         $this->basePath = null;
+    }
+
+    public function withLogger(Node\Expr $logger): self
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    public function withRejection(Node\Expr $rejection): self
+    {
+        $this->rejection = $rejection;
+
+        return $this;
+    }
+
+    public function withState(Node\Expr $state): self
+    {
+        $this->state = $state;
+
+        return $this;
     }
 
     public function getHost(): Node\Expr

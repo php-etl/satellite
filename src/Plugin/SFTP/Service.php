@@ -9,7 +9,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Service implements Configurator\FactoryInterface
 {
@@ -67,60 +66,12 @@ final class Service implements Configurator\FactoryInterface
         }
 
         if (array_key_exists('loader', $config)) {
-            $loader = new Builder\Loader($this->interpreter);
-            if (array_key_exists('servers', $config['loader'])
-                && is_array($config['loader']['servers'])
-            ) {
-                foreach ($config['loader']['servers'] as $server) {
-                    if (array_key_exists('port', $server)) {
-                        $serverBuilder = new Builder\Server(
-                            compileValueWhenExpression($this->interpreter, $server['host']),
-                            compileValueWhenExpression($this->interpreter, $server['port']),
-                        );
-                    } else {
-                        $serverBuilder = new Builder\Server(
-                            compileValueWhenExpression($this->interpreter, $server['host']),
-                        );
-                    }
-                    if (array_key_exists('base_path', $server)) {
-                        $serverBuilder->withBasePath(compileValueWhenExpression($this->interpreter, $server['base_path']));
-                    }
-                    if (array_key_exists('username', $server)
-                        && array_key_exists('password', $server)
-                    ) {
-                        $serverBuilder->withPasswordAuthentication(
-                            compileValueWhenExpression($this->interpreter, $server['username']),
-                            compileValueWhenExpression($this->interpreter, $server['password'])
-                        );
-                    }
-                    if (array_key_exists('username', $server)
-                        && array_key_exists('public_key', $server)
-                        && array_key_exists('private_key', $server)
-                    ) {
-                        $serverBuilder->withPrivateKeyAuthentication(
-                            compileValueWhenExpression($this->interpreter, $server['username']),
-                            compileValueWhenExpression($this->interpreter, $server['public_key']),
-                            compileValueWhenExpression($this->interpreter, $server['private_key']),
-                            array_key_exists('private_key_passphrase', $server) ? compileValueWhenExpression($this->interpreter, $server['private_key_passphrase']) : null,
-                        );
-                    }
-                    $loader->withServer($server, $serverBuilder->getNode());
-                }
-            }
-            if (array_key_exists('put', $config['loader'])
-                && is_array($config['loader']['put'])
-            ) {
-                foreach ($config['loader']['put'] as $put) {
-                    $loader->withPut(
-                        $put['path'],
-                        $put['content'],
-                        $put['mode'] ?? null,
-                        $put['if'] ?? null,
-                    );
-                }
-            }
+            $loaderFactory = new Factory\Loader($this->interpreter);
 
-            return new Repository($loader);
+            $loaderCompilation = $loaderFactory->compile($config);
+            $loaderBuilder = $loaderCompilation->getBuilder();
+
+            return new Repository($loaderBuilder);
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');

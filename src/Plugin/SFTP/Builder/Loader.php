@@ -5,9 +5,7 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Loader implements StepBuilderInterface
 {
@@ -52,10 +50,10 @@ final class Loader implements StepBuilderInterface
     }
 
     public function withPut(
-        string|Expression $path,
-        string|Expression $content,
-        string|Expression|null $mode,
-        string|Expression|null $condition,
+        Node\Expr $path,
+        Node\Expr $content,
+        ?Node\Expr $mode,
+        ?Node\Expr $condition,
     ): self {
         $this->putStatements[] = [$path, $content, $mode, $condition];
 
@@ -66,143 +64,17 @@ final class Loader implements StepBuilderInterface
     {
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
             foreach ($this->servers as $index => $server) {
-                if ($condition === null) {
-                    yield new Node\Stmt\Expression(
-                        new Node\Expr\Assign(
-                            var: new Node\Expr\Variable('stream'),
-                            expr: new Node\Expr\FuncCall(
-                                name: new Node\Name('fopen'),
-                                args: [
-                                    new Node\Arg(
-                                        value: new Node\Expr\BinaryOp\Concat(
-                                            new Node\Expr\BinaryOp\Concat(
-                                                new Node\Expr\BinaryOp\Concat(
-                                                    new Node\Scalar\String_('ssh2.sftp://'),
-                                                    new Node\Expr\FuncCall(
-                                                        name: new Node\Name('intval'),
-                                                        args: [
-                                                            new Node\Arg(
-                                                                new Node\Expr\ArrayDimFetch(
-                                                                    var: new Node\Expr\PropertyFetch(
-                                                                    var: new Node\Expr\Variable('this'),
-                                                                    name: new Node\Identifier('servers'),
-                                                                ),
-                                                                    dim: new Node\Scalar\LNumber($index)
-                                                                ),
-                                                            ),
-                                                        ]
-                                                    )
-                                                ),
-                                                new Node\Scalar\Encapsed([
-                                                    new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                                    new Node\Scalar\EncapsedStringPart('/'),
-                                                ])
-                                            ),
-                                            compileValueWhenExpression($this->interpreter, $path),
-                                        ),
-                                    ),
-                                    new Node\Arg(new Node\Scalar\String_('w')),
-                                ],
-                            ),
-                        ),
-                    );
+                if ($condition != null) {
                     yield new Node\Stmt\If_(
-                        cond: new Node\Expr\BooleanNot(
-                            new Node\Expr\FuncCall(
-                                name: new Node\Name('fwrite'),
-                                args: [
-                                    new Node\Arg(new Node\Expr\Variable('stream')),
-                                    new Node\Arg(compileValueWhenExpression($this->interpreter, $content)),
-                                ],
-                            ),
-                        ),
+                        cond: $condition,
                         subNodes: [
                             'stmts' => [
-                                new Node\Stmt\Expression(
-                                    new Node\Expr\MethodCall(
-                                        var: new Node\Expr\PropertyFetch(
-                                            var: new Node\Expr\Variable('this'),
-                                            name: new Node\Name('logger'),
-                                        ),
-                                        name: new Node\Name('alert'),
-                                        args: [
-                                            new Node\Arg(
-                                                new Node\Expr\FuncCall(
-                                                    name: new Node\Name('strtr'),
-                                                    args: [
-                                                        new Node\Arg(
-                                                            new Node\Scalar\String_('Error while uploading file "%path%" to "%server%" server')
-                                                        ),
-                                                        new Node\Arg(
-                                                            new Node\Expr\Array_(
-                                                                array_merge(
-                                                                    [
-                                                                        new Node\Expr\ArrayItem(
-                                                                            value:  new Node\Scalar\String_($server["base_path"]),
-                                                                            key: new Node\Scalar\String_('%path%'),
-                                                                        )
-                                                                    ],
-                                                                    [
-                                                                        new Node\Expr\ArrayItem(
-                                                                            value: new Node\Scalar\String_($server["host"]),
-                                                                            key:  new Node\Scalar\String_('%server%'),
-                                                                        )
-                                                                    ]
-                                                                )
-                                                            )
-                                                        )
-                                                    ]
-                                                )
-                                            )
-                                        ]
-                                    )
-                                ),
-                                new Node\Stmt\Expression(
-                                    new Node\Expr\MethodCall(
-                                        var: new Node\Expr\Variable('bucket'),
-                                        name: new Node\Name('reject'),
-                                        args: [
-                                            new Node\Arg(
-                                                new Node\Expr\Array_(
-                                                    array_merge(
-                                                        [
-                                                            new Node\Expr\ArrayItem(
-                                                                value:  new Node\Scalar\String_($server["base_path"]),
-                                                                key: new Node\Scalar\String_('%path%'),
-                                                            )
-                                                        ],
-                                                        [
-                                                            new Node\Expr\ArrayItem(
-                                                                value: new Node\Scalar\String_($server["host"]),
-                                                                key:  new Node\Scalar\String_('%server%'),
-                                                            )
-                                                        ]
-                                                    )
-                                                )
-                                            )
-                                        ]
-                                    )
-                                )
-                            ],
-                        ],
-                    );
-                } else {
-                    yield new Node\Stmt\If_(
-                        cond: compileValueWhenExpression($this->interpreter, $condition),
-                        subNodes: [
-                            'stmts' => [
-                                new Node\Stmt\Expression(
-                                    new Node\Expr\MethodCall(
-                                        new Node\Expr\PropertyFetch(
-                                            new Node\Expr\Variable('this'),
-                                            new Node\Identifier('connection')
-                                        ),
-                                        new Node\Identifier('put')
-                                    )
-                                )
+                                ...$this->getPutNode($index, $server, $path, $content)
                             ],
                         ]
                     );
+                } else {
+                    yield from $this->getPutNode($index, $server, $path, $content);
                 }
             }
         }
@@ -222,18 +94,6 @@ final class Loader implements StepBuilderInterface
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'params' => [
-                                    new Node\Param(
-                                        var: new Node\Expr\Variable(name: 'servers'),
-                                        type: new Node\Identifier('array'),
-                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE
-                                    ),
-                                    new Node\Param(
-                                        var: new Node\Expr\Variable(name: 'logger'),
-                                        type: new Node\Identifier('\Psr\Log\LoggerInterface'),
-                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE
-                                    )
-                                ],
                                 'stmts' => array_map(
                                     fn ($server, $index) => new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
@@ -306,5 +166,130 @@ final class Loader implements StepBuilderInterface
                 ],
             ),
         );
+    }
+
+    private function getPutNode($index, $server, $path, $content): array
+    {
+        return [
+            new Node\Stmt\Expression(
+                new Node\Expr\Assign(
+                    var: new Node\Expr\Variable('stream'),
+                    expr: new Node\Expr\FuncCall(
+                        name: new Node\Name('fopen'),
+                        args: [
+                            new Node\Arg(
+                                value: new Node\Expr\BinaryOp\Concat(
+                                    new Node\Expr\BinaryOp\Concat(
+                                        new Node\Expr\BinaryOp\Concat(
+                                            new Node\Scalar\String_('ssh2.sftp://'),
+                                            new Node\Expr\FuncCall(
+                                                name: new Node\Name('intval'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        new Node\Expr\ArrayDimFetch(
+                                                            var: new Node\Expr\PropertyFetch(
+                                                            var: new Node\Expr\Variable('this'),
+                                                            name: new Node\Identifier('servers'),
+                                                        ),
+                                                            dim: new Node\Scalar\LNumber($index)
+                                                        ),
+                                                    ),
+                                                ]
+                                            )
+                                        ),
+                                        new Node\Scalar\Encapsed([
+                                            new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                            new Node\Scalar\EncapsedStringPart('/'),
+                                        ])
+                                    ),
+                                    $path,
+                                ),
+                            ),
+                            new Node\Arg(new Node\Scalar\String_('w')),
+                        ],
+                    ),
+                ),
+            ),
+            new Node\Stmt\If_(
+                cond: new Node\Expr\BooleanNot(
+                    expr: new Node\Expr\FuncCall(
+                        name: new Node\Name('fwrite'),
+                        args: [
+                            new Node\Arg(new Node\Expr\Variable('stream')),
+                            new Node\Arg($content),
+                        ],
+                    ),
+                ),
+                subNodes: [
+                    'stmts' => [
+                        new Node\Stmt\Expression(
+                            new Node\Expr\MethodCall(
+                                var: new Node\Expr\PropertyFetch(
+                                    var: new Node\Expr\Variable('this'),
+                                    name: new Node\Name('logger'),
+                                ),
+                                name: new Node\Name('alert'),
+                                args: [
+                                    new Node\Arg(
+                                        new Node\Expr\FuncCall(
+                                            name: new Node\Name('strtr'),
+                                            args: [
+                                                new Node\Arg(
+                                                    new Node\Scalar\String_('Error while uploading file "%path%" to "%server%" server')
+                                                ),
+                                                new Node\Arg(
+                                                    new Node\Expr\Array_(
+                                                        array_merge(
+                                                            [
+                                                                new Node\Expr\ArrayItem(
+                                                                    value:  new Node\Scalar\String_($server["base_path"]),
+                                                                    key: new Node\Scalar\String_('%path%'),
+                                                                )
+                                                            ],
+                                                            [
+                                                                new Node\Expr\ArrayItem(
+                                                                    value: new Node\Scalar\String_($server["host"]),
+                                                                    key:  new Node\Scalar\String_('%server%'),
+                                                                )
+                                                            ]
+                                                        )
+                                                    )
+                                                )
+                                            ]
+                                        )
+                                    )
+                                ]
+                            )
+                        ),
+                        new Node\Stmt\Expression(
+                            new Node\Expr\MethodCall(
+                                var: new Node\Expr\Variable('bucket'),
+                                name: new Node\Name('reject'),
+                                args: [
+                                    new Node\Arg(
+                                        new Node\Expr\Array_(
+                                            array_merge(
+                                                [
+                                                    new Node\Expr\ArrayItem(
+                                                        value:  new Node\Scalar\String_($server["base_path"]),
+                                                        key: new Node\Scalar\String_('%path%'),
+                                                    )
+                                                ],
+                                                [
+                                                    new Node\Expr\ArrayItem(
+                                                        value: new Node\Scalar\String_($server["host"]),
+                                                        key:  new Node\Scalar\String_('%server%'),
+                                                    )
+                                                ]
+                                            )
+                                        )
+                                    )
+                                ]
+                            )
+                        )
+                    ],
+                ],
+            )
+        ];
     }
 }

@@ -7,7 +7,7 @@ use Kiboko\Contract\Packaging;
 
 final class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Builder\Loader $builder)
+    public function __construct(private Builder\Loader|Builder\Server $builder)
     {
     }
 
@@ -31,7 +31,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Builder\Loader
+    public function getBuilder(): Builder\Loader|Builder\Server
     {
         return $this->builder;
     }
