@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
@@ -18,6 +17,9 @@ final class Configuration implements ConfigurationInterface
 
         $builder->getRootNode()
             ->children()
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
                 ->arrayNode('loader')
                     ->children()
                         ->arrayNode('servers')

@@ -5,6 +5,8 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 use Kiboko\Component\SatelliteToolbox\Builder\IsolatedServerBuilder;
 use PhpParser\Builder;
 use PhpParser\Node;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Server implements Builder
 {
@@ -19,6 +21,7 @@ final class Server implements Builder
 
     public function __construct(
         string $host,
+        private ExpressionLanguage $interpreter
     ) {
         $this->host = $host;
         $this->port = null;
@@ -84,10 +87,10 @@ final class Server implements Builder
                             new Node\Expr\Variable('connection'),
                         ),
                         new Node\Arg(
-                            new Node\Scalar\String_($this->username),
+                            compileValueWhenExpression($this->interpreter, $this->username),
                         ),
                         new Node\Arg(
-                            new Node\Scalar\String_($this->password),
+                            compileValueWhenExpression($this->interpreter, $this->password),
                         )
                     ],
                 ),
@@ -101,16 +104,16 @@ final class Server implements Builder
                             new Node\Expr\Variable('connection'),
                         ),
                         new Node\Arg(
-                            new Node\Scalar\String_($this->username),
+                            compileValueWhenExpression($this->interpreter, $this->username),
                         ),
                         new Node\Arg(
-                            new Node\Scalar\String_($this->publicKey),
+                            compileValueWhenExpression($this->interpreter, $this->publicKey),
                         ),
                         new Node\Arg(
-                            new Node\Scalar\String_($this->privateKey),
+                            compileValueWhenExpression($this->interpreter, $this->privateKey),
                         ),
                         new Node\Arg(
-                            null !== $this->privateKeyPassphrase ? new Node\Scalar\String_($this->privateKeyPassphrase) : new Node\Expr\ConstFetch(new Node\Name('null')),
+                            null !== $this->privateKeyPassphrase ? compileValueWhenExpression($this->interpreter, $this->privateKeyPassphrase) : new Node\Expr\ConstFetch(new Node\Name('null')),
                         )
                     ],
                 ),
@@ -129,10 +132,10 @@ final class Server implements Builder
                             name: new Node\Name('ssh2_connect'),
                             args: [
                                 new Node\Arg(
-                                    new Node\Scalar\String_($this->host),
+                                    compileValueWhenExpression($this->interpreter, $this->host),
                                 ),
                                 new Node\Arg(
-                                    new Node\Scalar\LNumber($this->port),
+                                    compileValueWhenExpression($this->interpreter, $this->port),
                                 )
                             ],
                         ),

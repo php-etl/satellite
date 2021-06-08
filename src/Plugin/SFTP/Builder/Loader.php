@@ -2,10 +2,11 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
-use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
+
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Loader implements StepBuilderInterface
@@ -118,15 +119,70 @@ final class Loader implements StepBuilderInterface
                         subNodes: [
                             'stmts' => [
                                 new Node\Stmt\Expression(
-                                    new Node\Expr\Throw_(
-                                        expr: new Node\Expr\New_(
-                                            class: new Node\Name('Kiboko\Component\Satellite\Plugin\SFTP\UploadFileException'),
-                                            args: [
-                                                new Node\Arg(new Node\Scalar\String_(sprintf('Error while uploading file to server'))),
-                                            ],
+                                    new Node\Expr\MethodCall(
+                                        var: new Node\Expr\PropertyFetch(
+                                            var: new Node\Expr\Variable('this'),
+                                            name: new Node\Name('logger'),
                                         ),
-                                    ),
+                                        name: new Node\Name('alert'),
+                                        args: [
+                                            new Node\Arg(
+                                                new Node\Expr\FuncCall(
+                                                    name: new Node\Name('strtr'),
+                                                    args: [
+                                                        new Node\Arg(
+                                                            new Node\Scalar\String_('Error while uploading file "%path%" to "%server%" server')
+                                                        ),
+                                                        new Node\Arg(
+                                                            new Node\Expr\Array_(
+                                                                array_merge(
+                                                                    [
+                                                                        new Node\Expr\ArrayItem(
+                                                                            value:  new Node\Scalar\String_($server["base_path"]),
+                                                                            key: new Node\Scalar\String_('%path%'),
+                                                                        )
+                                                                    ],
+                                                                    [
+                                                                        new Node\Expr\ArrayItem(
+                                                                            value: new Node\Scalar\String_($server["host"]),
+                                                                            key:  new Node\Scalar\String_('%server%'),
+                                                                        )
+                                                                    ]
+                                                                )
+                                                            )
+                                                        )
+                                                    ]
+                                                )
+                                            )
+                                        ]
+                                    )
                                 ),
+                                new Node\Stmt\Expression(
+                                    new Node\Expr\MethodCall(
+                                        var: new Node\Expr\Variable('bucket'),
+                                        name: new Node\Name('reject'),
+                                        args: [
+                                            new Node\Arg(
+                                                new Node\Expr\Array_(
+                                                    array_merge(
+                                                        [
+                                                            new Node\Expr\ArrayItem(
+                                                                value:  new Node\Scalar\String_($server["base_path"]),
+                                                                key: new Node\Scalar\String_('%path%'),
+                                                            )
+                                                        ],
+                                                        [
+                                                            new Node\Expr\ArrayItem(
+                                                                value: new Node\Scalar\String_($server["host"]),
+                                                                key:  new Node\Scalar\String_('%server%'),
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+                                            )
+                                        ]
+                                    )
+                                )
                             ],
                         ],
                     );
@@ -171,6 +227,11 @@ final class Loader implements StepBuilderInterface
                                         var: new Node\Expr\Variable(name: 'servers'),
                                         type: new Node\Identifier('array'),
                                         flags: Node\Stmt\Class_::MODIFIER_PRIVATE
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable(name: 'logger'),
+                                        type: new Node\Identifier('\Psr\Log\LoggerInterface'),
+                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE
                                     )
                                 ],
                                 'stmts' => array_map(
@@ -206,30 +267,35 @@ final class Loader implements StepBuilderInterface
                                         cond: new Node\Expr\Assign(
                                             var: new Node\Expr\Variable('input'),
                                             expr: new Node\Expr\Yield_(
-                                                value: new Node\Expr\New_(
-                                                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
-                                                    args: [
-                                                        new Node\Arg(
-                                                            new Node\Expr\Variable('input'),
-                                                        ),
-                                                    ],
-                                                ),
+                                                value: new Node\Expr\Variable('bucket'),
                                             ),
                                         ),
                                         stmts: [
+                                            new Node\Stmt\Expression(
+                                                new Node\Expr\Assign(
+                                                    var: new Node\Expr\Variable('bucket'),
+                                                    expr: new Node\Expr\New_(
+                                                        class: new Node\Name\FullyQualified('Kiboko\Component\Bucket\ComplexResultBucket')
+                                                    )
+                                                )
+                                            ),
                                             ...$this->compilePutStatements(),
+                                            new Node\Stmt\Expression(
+                                                new Node\Expr\MethodCall(
+                                                    var: new Node\Expr\Variable('bucket'),
+                                                    name: new Node\Name('accept'),
+                                                    args: [
+                                                        new Node\Arg(
+                                                            new Node\Expr\Variable('input'),
+                                                        )
+                                                    ]
+                                                )
+                                            ),
                                         ],
                                     ),
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Yield_(
-                                            value: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
-                                                args: [
-                                                    new Node\Arg(
-                                                        new Node\Expr\Variable('input'),
-                                                    ),
-                                                ],
-                                            ),
+                                            value: new Node\Expr\Variable('bucket')
                                         ),
                                     ),
                                 ],

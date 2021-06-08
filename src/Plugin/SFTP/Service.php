@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
-use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
+    public function __construct(?ExpressionLanguage $interpreter = null)
     {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -54,13 +56,22 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
+        if (array_key_exists('expression_language', $config)
+            && is_array($config['expression_language'])
+            && count($config['expression_language'])
+        ) {
+            foreach ($config['expression_language'] as $provider) {
+                $this->interpreter->registerProvider(new $provider);
+            }
+        }
+
         if (array_key_exists('loader', $config)) {
             $loader = new Builder\Loader($this->interpreter);
             if (array_key_exists('servers', $config['loader'])
                 && is_array($config['loader']['servers'])
             ) {
                 foreach ($config['loader']['servers'] as $server) {
-                    $serverBuilder = new Builder\Server($server['host']);
+                    $serverBuilder = new Builder\Server($server['host'], $this->interpreter);
                     if (array_key_exists('port', $server)) {
                         $serverBuilder->withPort($server['port']);
                     }

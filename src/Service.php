@@ -108,10 +108,7 @@ final class Service implements Configurator\FactoryInterface
         $pipeline = new Satellite\Builder\Pipeline();
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage(null, [
-            new ArrayExpressionLanguageProvider(),
-            new AkeneoFilterProvider()
-        ]);
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $repository->addPackages(
             'php-etl/pipeline:^0.3.0',
