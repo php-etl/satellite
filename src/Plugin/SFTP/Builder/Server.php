@@ -2,30 +2,23 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
-use Kiboko\Component\SatelliteToolbox\Builder\IsolatedServerBuilder;
+use Kiboko\Component\SatelliteToolbox\Builder\IsolatedCodeBuilder;
 use PhpParser\Builder;
 use PhpParser\Node;
-use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Server implements Builder
 {
-    private string|Expression $host;
-    private null|int|Expression $port;
-    private null|string|Expression $username;
-    private null|string|Expression $password;
-    private null|string|Expression $publicKey;
-    private null|string|Expression $privateKey;
-    private null|string|Expression $privateKeyPassphrase;
-    private null|string|Expression $basePath;
+    private ?Node\Expr $username;
+    private ?Node\Expr $password;
+    private ?Node\Expr $publicKey;
+    private ?Node\Expr $privateKey;
+    private ?Node\Expr $privateKeyPassphrase;
+    private ?Node\Expr $basePath;
 
     public function __construct(
-        string $host,
-        private ExpressionLanguage $interpreter
+        private Node\Expr $host,
+        private ?Node\Expr $port = null
     ) {
-        $this->host = $host;
-        $this->port = null;
         $this->username = null;
         $this->password = null;
         $this->publicKey = null;
@@ -34,31 +27,31 @@ final class Server implements Builder
         $this->basePath = null;
     }
 
-    public function getHost(): string
+    public function getHost(): Node\Expr
     {
         return $this->host;
     }
 
-    public function getBasePath(): string
+    public function getBasePath(): Node\Expr
     {
         return $this->basePath;
     }
 
-    public function withPort(int $port): self
+    public function withPort(Node\Expr $port): self
     {
         $this->port = $port;
 
         return $this;
     }
 
-    public function withBasePath(string $basePath): self
+    public function withBasePath(Node\Expr $basePath): self
     {
         $this->basePath = $basePath;
 
         return $this;
     }
 
-    public function withPasswordAuthentication(string $username, string $password): self
+    public function withPasswordAuthentication(Node\Expr $username, Node\Expr $password): self
     {
         $this->username = $username;
         $this->password = $password;
@@ -67,7 +60,7 @@ final class Server implements Builder
     }
 
 
-    public function withPrivateKeyAuthentication(string|Expression $username, string|Expression $publicKey, string|Expression $privateKey, null|string|Expression $privateKeyPassphrase = null): self
+    public function withPrivateKeyAuthentication(Node\Expr $username, Node\Expr $publicKey, Node\Expr $privateKey, ?Node\Expr $privateKeyPassphrase = null): self
     {
         $this->username = $username;
         $this->publicKey = $publicKey;
@@ -88,10 +81,10 @@ final class Server implements Builder
                             new Node\Expr\Variable('connection'),
                         ),
                         new Node\Arg(
-                            compileValueWhenExpression($this->interpreter, $this->username),
+                            $this->username,
                         ),
                         new Node\Arg(
-                            compileValueWhenExpression($this->interpreter, $this->password),
+                            $this->password,
                         )
                     ],
                 ),
@@ -105,17 +98,17 @@ final class Server implements Builder
                             new Node\Expr\Variable('connection'),
                         ),
                         new Node\Arg(
-                            compileValueWhenExpression($this->interpreter, $this->username),
+                            $this->username,
                         ),
                         new Node\Arg(
-                            compileValueWhenExpression($this->interpreter, $this->publicKey),
+                            $this->publicKey,
                         ),
                         new Node\Arg(
-                            compileValueWhenExpression($this->interpreter, $this->privateKey),
+                            $this->privateKey,
                         ),
                         new Node\Arg(
-                            null !== $this->privateKeyPassphrase ? compileValueWhenExpression($this->interpreter, $this->privateKeyPassphrase) : new Node\Expr\ConstFetch(new Node\Name('null')),
-                        )
+                            $this->privateKeyPassphrase ?? new Node\Expr\ConstFetch(new Node\Name('null')),
+                        ),
                     ],
                 ),
             );
@@ -124,7 +117,7 @@ final class Server implements Builder
 
     public function getNode(): Node
     {
-        return (new IsolatedServerBuilder(
+        return (new IsolatedCodeBuilder(
             [
                 new Node\Stmt\Expression(
                     new Node\Expr\Assign(
@@ -133,10 +126,10 @@ final class Server implements Builder
                             name: new Node\Name('ssh2_connect'),
                             args: [
                                 new Node\Arg(
-                                    compileValueWhenExpression($this->interpreter, $this->host),
+                                    $this->host,
                                 ),
                                 new Node\Arg(
-                                    compileValueWhenExpression($this->interpreter, $this->port),
+                                    $this->port,
                                 )
                             ],
                         ),

@@ -9,6 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Service implements Configurator\FactoryInterface
 {
@@ -71,23 +72,37 @@ final class Service implements Configurator\FactoryInterface
                 && is_array($config['loader']['servers'])
             ) {
                 foreach ($config['loader']['servers'] as $server) {
-                    $serverBuilder = new Builder\Server($server['host'], $this->interpreter);
                     if (array_key_exists('port', $server)) {
-                        $serverBuilder->withPort($server['port']);
+                        $serverBuilder = new Builder\Server(
+                            compileValueWhenExpression($this->interpreter, $server['host']),
+                            compileValueWhenExpression($this->interpreter, $server['port']),
+                        );
+                    } else {
+                        $serverBuilder = new Builder\Server(
+                            compileValueWhenExpression($this->interpreter, $server['host']),
+                        );
                     }
                     if (array_key_exists('base_path', $server)) {
-                        $serverBuilder->withBasePath($server['base_path']);
+                        $serverBuilder->withBasePath(compileValueWhenExpression($this->interpreter, $server['base_path']));
                     }
                     if (array_key_exists('username', $server)
                         && array_key_exists('password', $server)
                     ) {
-                        $serverBuilder->withPasswordAuthentication($server['username'], $server['password']);
+                        $serverBuilder->withPasswordAuthentication(
+                            compileValueWhenExpression($this->interpreter, $server['username']),
+                            compileValueWhenExpression($this->interpreter, $server['password'])
+                        );
                     }
                     if (array_key_exists('username', $server)
                         && array_key_exists('public_key', $server)
                         && array_key_exists('private_key', $server)
                     ) {
-                        $serverBuilder->withPrivateKeyAuthentication($server['username'], $server['public_key'], $server['private_key'], $server['private_key_passphrase'] ?? null );
+                        $serverBuilder->withPrivateKeyAuthentication(
+                            compileValueWhenExpression($this->interpreter, $server['username']),
+                            compileValueWhenExpression($this->interpreter, $server['public_key']),
+                            compileValueWhenExpression($this->interpreter, $server['private_key']),
+                            array_key_exists('private_key_passphrase', $server) ? compileValueWhenExpression($this->interpreter, $server['private_key_passphrase']) : null,
+                        );
                     }
                     $loader->withServer($server, $serverBuilder->getNode());
                 }
