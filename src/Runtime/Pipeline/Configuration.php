@@ -26,6 +26,9 @@ final class Configuration implements Satellite\NamedConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
                 ->arrayNode('steps')
                     ->requiresAtLeastOneElement()
                     ->cannotBeEmpty()
