@@ -89,6 +89,24 @@ final class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
+                        new Node\Stmt\Property(
+                            flags: 4,
+                            props: [
+                                new Node\Stmt\PropertyProperty(
+                                    name: new Node\Name('servers')
+                                )
+                            ],
+                            type: new Node\Identifier('array')
+                        ),
+                        new Node\Stmt\Property(
+                            flags: 4,
+                            props: [
+                                new Node\Stmt\PropertyProperty(
+                                    name: new Node\Name('logger')
+                                )
+                            ],
+                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
+                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
