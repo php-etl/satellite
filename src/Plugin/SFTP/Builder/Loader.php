@@ -2,7 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
-
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -188,9 +187,9 @@ final class Loader implements StepBuilderInterface
                                                     new Node\Arg(
                                                         new Node\Expr\ArrayDimFetch(
                                                             var: new Node\Expr\PropertyFetch(
-                                                            var: new Node\Expr\Variable('this'),
-                                                            name: new Node\Identifier('servers'),
-                                                        ),
+                                                                var: new Node\Expr\Variable('this'),
+                                                                name: new Node\Identifier('servers'),
+                                                            ),
                                                             dim: new Node\Scalar\LNumber($index)
                                                         ),
                                                     ),

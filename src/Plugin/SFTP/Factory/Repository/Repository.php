@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\SFTP;
+namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository;
 
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
+use Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
 final class Repository implements Configurator\StepRepositoryInterface
 {

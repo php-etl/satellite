@@ -3,7 +3,7 @@
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory;
 
 use Kiboko\Component\Satellite\Plugin\SFTP\Configuration;
-use Kiboko\Component\Satellite\Plugin\SFTP\Repository;
+use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
