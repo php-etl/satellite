@@ -68,12 +68,12 @@ final class Loader implements StepBuilderInterface
                         cond: $condition,
                         subNodes: [
                             'stmts' => [
-                                ...$this->getPutNode($index, $server, $path, $content)
+                                ...$this->getPutNode($index, $server, $path, $content, $mode)
                             ],
                         ]
                     );
                 } else {
-                    yield from $this->getPutNode($index, $server, $path, $content);
+                    yield from $this->getPutNode($index, $server, $path, $content, $mode);
                 }
             }
         }
@@ -167,7 +167,7 @@ final class Loader implements StepBuilderInterface
         );
     }
 
-    private function getPutNode($index, $server, $path, $content): array
+    private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
             new Node\Stmt\Expression(
@@ -204,7 +204,7 @@ final class Loader implements StepBuilderInterface
                                     $path,
                                 ),
                             ),
-                            new Node\Arg(new Node\Scalar\String_('w')),
+                            !is_null($mode) ? new Node\Arg($mode) : new Node\Arg(new Node\Expr\ConstFetch(new Node\Name('null'))),
                         ],
                     ),
                 ),
