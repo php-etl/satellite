@@ -102,6 +102,7 @@ final class Fork implements StepBuilderInterface
                                                 expr: $this->foreach,
                                                 valueVar: new Node\Expr\Variable('item'),
                                                 subNodes: [
+                                                    'keyVar' => new Node\Expr\Variable('key'),
                                                     'stmts' => [
                                                         new Node\Stmt\Expression(
                                                             new Node\Expr\Assign(

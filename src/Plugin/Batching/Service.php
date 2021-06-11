@@ -76,9 +76,9 @@ final class Service implements Configurator\FactoryInterface
         } else if (array_key_exists('fork', $config)) {
             $builder = new Fork(
                 $config['fork']['foreach'] instanceof Expression ?
-                    compileExpression($this->interpreter, $config['fork']['foreach'], 'item') :
+                    compileExpression($this->interpreter, $config['fork']['foreach'], 'item', 'key') :
                     (new PropertyPathBuilder(new PropertyPath($config['fork']['foreach']), new Variable('input')))->getNode(),
-                compileExpression($this->interpreter, $config['fork']['do'], 'item'),
+                compileExpression($this->interpreter, $config['fork']['do'], 'item', 'key'),
             );
 
             return new Repository($builder);

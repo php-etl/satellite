@@ -13,6 +13,7 @@ final class Provider implements ExpressionFunctionProviderInterface
             new EnvAsFile('envAsFile'),
             new File('file'),
             new Base64Decode('base64Decode'),
+            new TemporaryFile('temporaryFile')
         ];
     }
 }

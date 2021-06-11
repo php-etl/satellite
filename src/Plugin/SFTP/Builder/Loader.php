@@ -5,6 +5,7 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Webmozart\Assert\Tests\StaticAnalysis\string;
 
 final class Loader implements StepBuilderInterface
 {
@@ -89,24 +90,6 @@ final class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
-                        new Node\Stmt\Property(
-                            flags: 4,
-                            props: [
-                                new Node\Stmt\PropertyProperty(
-                                    name: new Node\Name('servers')
-                                )
-                            ],
-                            type: new Node\Identifier('array')
-                        ),
-                        new Node\Stmt\Property(
-                            flags: 4,
-                            props: [
-                                new Node\Stmt\PropertyProperty(
-                                    name: new Node\Name('logger')
-                                )
-                            ],
-                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
-                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
@@ -189,6 +172,51 @@ final class Loader implements StepBuilderInterface
     {
         return [
             new Node\Stmt\Expression(
+                new Node\Expr\FuncCall(
+                    name: new Node\Name('ssh2_sftp_mkdir'),
+                    args: [
+                        new Node\Arg(
+                            new Node\Expr\ArrayDimFetch(
+                                var: new Node\Expr\PropertyFetch(
+                                    var: new Node\Expr\Variable('this'),
+                                    name: new Node\Identifier('servers'),
+                                ),
+                                dim: new Node\Scalar\LNumber($index)
+                            ),
+                        ),
+                        new Node\Arg(
+                            new Node\Expr\FuncCall(
+                                name: new Node\Name('dirname'),
+                                args: [
+                                    new Node\Arg(
+                                        value: new Node\Expr\BinaryOp\Concat(
+                                            new Node\Scalar\Encapsed([
+                                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                                new Node\Scalar\EncapsedStringPart('/'),
+                                            ]),
+                                            $path,
+                                        )
+                                    )
+                                ]
+                            ),
+                        ),
+                        new Node\Arg(
+                            new Node\Expr\FuncCall(
+                                name: new Node\Name('octdec'),
+                                args: [
+                                    $mode,
+                                ],
+                            ),
+                        ),
+                        new Node\Arg(
+                            new Node\Expr\ConstFetch(
+                                name: new Node\Name('true')
+                            ),
+                        ),
+                    ]
+                )
+            ),
+            new Node\Stmt\Expression(
                 new Node\Expr\Assign(
                     var: new Node\Expr\Variable('stream'),
                     expr: new Node\Expr\FuncCall(
@@ -222,19 +250,22 @@ final class Loader implements StepBuilderInterface
                                     $path,
                                 ),
                             ),
-                            !is_null($mode) ? new Node\Arg($mode) : new Node\Arg(new Node\Expr\ConstFetch(new Node\Name('null'))),
+                            new Node\Arg(new Node\Scalar\String_('w')),
                         ],
                     ),
                 ),
             ),
             new Node\Stmt\If_(
-                cond: new Node\Expr\BooleanNot(
-                    expr: new Node\Expr\FuncCall(
-                        name: new Node\Name('fwrite'),
+                cond: new Node\Expr\BinaryOp\Identical(
+                    left: new Node\Expr\FuncCall(
+                        name: new Node\Name('stream_copy_to_stream'),
                         args: [
-                            new Node\Arg(new Node\Expr\Variable('stream')),
                             new Node\Arg($content),
+                            new Node\Arg(new Node\Expr\Variable('stream')),
                         ],
+                    ),
+                    right: new Node\Expr\ConstFetch(
+                        name: new Node\Name('false')
                     ),
                 ),
                 subNodes: [
@@ -256,7 +287,7 @@ final class Loader implements StepBuilderInterface
                                                 ),
                                                 new Node\Arg(
                                                     new Node\Expr\Array_(
-                                                        array_merge(
+                                                        items: array_merge(
                                                             [
                                                                 new Node\Expr\ArrayItem(
                                                                     value:  new Node\Scalar\String_($server["base_path"]),
@@ -269,7 +300,10 @@ final class Loader implements StepBuilderInterface
                                                                     key:  new Node\Scalar\String_('%server%'),
                                                                 )
                                                             ]
-                                                        )
+                                                        ),
+                                                        attributes: [
+                                                            'kind' => Node\Expr\Array_::KIND_SHORT,
+                                                        ]
                                                     )
                                                 )
                                             ]
@@ -285,7 +319,7 @@ final class Loader implements StepBuilderInterface
                                 args: [
                                     new Node\Arg(
                                         new Node\Expr\Array_(
-                                            array_merge(
+                                            items: array_merge(
                                                 [
                                                     new Node\Expr\ArrayItem(
                                                         value:  new Node\Scalar\String_($server["base_path"]),
@@ -298,7 +332,10 @@ final class Loader implements StepBuilderInterface
                                                         key:  new Node\Scalar\String_('%server%'),
                                                     )
                                                 ]
-                                            )
+                                            ),
+                                            attributes: [
+                                                'kind' => Node\Expr\Array_::KIND_SHORT,
+                                            ]
                                         )
                                     )
                                 ]
@@ -306,7 +343,23 @@ final class Loader implements StepBuilderInterface
                         )
                     ],
                 ],
-            )
+            ),
+            new Node\Stmt\Expression(
+                expr: new Node\Expr\FuncCall(
+                    name: new Node\Name('fclose'),
+                    args: [
+                        new Node\Arg($content),
+                    ]
+                )
+            ),
+            new Node\Stmt\Expression(
+                expr: new Node\Expr\FuncCall(
+                    name: new Node\Name('fclose'),
+                    args: [
+                        new Node\Arg(new Node\Expr\Variable('stream')),
+                    ]
+                )
+            ),
         ];
     }
 }
