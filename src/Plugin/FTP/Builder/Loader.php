@@ -4,8 +4,8 @@
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
 use Kiboko\Contract\Configurator\StepBuilderInterface;
-use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 
 class Loader implements StepBuilderInterface
 {
@@ -81,169 +81,38 @@ class Loader implements StepBuilderInterface
     {
         return [
             new Node\Stmt\Expression(
-                new Node\Expr\FuncCall(
-                    name: new Node\Name('ftp_mkdir'),
+                expr: new Node\Expr\MethodCall(
+                    var: new Node\Expr\Variable('this'),
+                    name: new Node\Name('createDirectories'),
                     args: [
                         new Node\Arg(
-                            new Node\Expr\ArrayDimFetch(
-                                var: new Node\Expr\PropertyFetch(
-                                var: new Node\Expr\Variable('this'),
-                                name: new Node\Identifier('servers'),
-                            ),
-                                dim: new Node\Scalar\LNumber($index)
+                            value: new Node\Expr\ArrayDimFetch(
+                                new Node\Expr\PropertyFetch(
+                                    new Node\Expr\Variable('this'),
+                                    new Node\Identifier('servers')
+                                ),
+                                new Node\Scalar\LNumber($index),
                             ),
                         ),
                         new Node\Arg(
-                            new Node\Expr\FuncCall(
-                                name: new Node\Name('dirname'),
-                                args: [
-                                    new Node\Arg(
-                                        value: new Node\Expr\BinaryOp\Concat(
-                                            new Node\Scalar\Encapsed([
-                                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                                new Node\Scalar\EncapsedStringPart('/'),
-                                            ]),
-                                            $path,
-                                        )
-                                    )
-                                ]
-                            ),
-                        )
-                    ]
-                )
+                            value:  new Node\Scalar\Encapsed([
+                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                new Node\Scalar\EncapsedStringPart('/'),
+                            ]),
+                        ),
+                        new Node\Arg(
+                            $path,
+                        ),
+                        new Node\Arg(
+                             $mode,
+                        ),
+                    ],
+                ),
             ),
-//            new Node\Stmt\Expression(
-//                new Node\Expr\Assign(
-//                    var: new Node\Expr\Variable('stream'),
-//                    expr: new Node\Expr\FuncCall(
-//                        name: new Node\Name('fopen'),
-//                        args: [
-//                            new Node\Arg(
-//                                value: new Node\Expr\BinaryOp\Concat(
-//                                    new Node\Expr\BinaryOp\Concat(
-//                                        new Node\Expr\BinaryOp\Concat(
-//                                            new Node\Scalar\String_('ftp://'),
-//                                            new Node\Expr\FuncCall(
-//                                                name: new Node\Name('intval'),
-//                                                args: [
-//                                                    new Node\Arg(
-//                                                        new Node\Expr\ArrayDimFetch(
-//                                                            var: new Node\Expr\PropertyFetch(
-//                                                            var: new Node\Expr\Variable('this'),
-//                                                            name: new Node\Identifier('servers'),
-//                                                        ),
-//                                                            dim: new Node\Scalar\LNumber($index)
-//                                                        ),
-//                                                    ),
-//                                                ]
-//                                            )
-//                                        ),
-//                                        new Node\Scalar\Encapsed([
-//                                            new Node\Scalar\EncapsedStringPart($server["base_path"]),
-//                                            new Node\Scalar\EncapsedStringPart('/'),
-//                                        ])
-//                                    ),
-//                                    $path,
-//                                ),
-//                            ),
-//                            new Node\Arg(new Node\Scalar\String_('w')),
-//                        ],
-//                    ),
-//                ),
-//            ),
-//            new Node\Stmt\If_(
-//                cond: new Node\Expr\BinaryOp\Identical(
-//                    left: new Node\Expr\FuncCall(
-//                        name: new Node\Name('stream_copy_to_stream'),
-//                        args: [
-//                            new Node\Arg($content),
-//                            new Node\Arg(new Node\Expr\Variable('stream')),
-//                        ],
-//                    ),
-//                    right: new Node\Expr\ConstFetch(
-//                        name: new Node\Name('false')
-//                    ),
-//                ),
-//                subNodes: [
-//                    'stmts' => [
-//                        new Node\Stmt\Expression(
-//                            new Node\Expr\MethodCall(
-//                                var: new Node\Expr\PropertyFetch(
-//                                    var: new Node\Expr\Variable('this'),
-//                                    name: new Node\Name('logger'),
-//                                ),
-//                                name: new Node\Name('alert'),
-//                                args: [
-//                                    new Node\Arg(
-//                                        new Node\Expr\FuncCall(
-//                                            name: new Node\Name('strtr'),
-//                                            args: [
-//                                                new Node\Arg(
-//                                                    new Node\Scalar\String_('Error while uploading file "%path%" to "%server%" server')
-//                                                ),
-//                                                new Node\Arg(
-//                                                    new Node\Expr\Array_(
-//                                                        items: array_merge(
-//                                                            [
-//                                                                new Node\Expr\ArrayItem(
-//                                                                    value:  new Node\Scalar\String_('/'),
-//                                                                    key: new Node\Scalar\String_('%path%'),
-//                                                                )
-//                                                            ],
-//                                                            [
-//                                                                new Node\Expr\ArrayItem(
-//                                                                    value: new Node\Scalar\String_($server["host"]),
-//                                                                    key:  new Node\Scalar\String_('%server%'),
-//                                                                )
-//                                                            ]
-//                                                        ),
-//                                                        attributes: [
-//                                                            'kind' => Node\Expr\Array_::KIND_SHORT,
-//                                                        ]
-//                                                    )
-//                                                )
-//                                            ]
-//                                        )
-//                                    )
-//                                ]
-//                            )
-//                        ),
-//                        new Node\Stmt\Expression(
-//                            new Node\Expr\MethodCall(
-//                                var: new Node\Expr\Variable('bucket'),
-//                                name: new Node\Name('reject'),
-//                                args: [
-//                                    new Node\Arg(
-//                                        new Node\Expr\Array_(
-//                                            items: array_merge(
-//                                            [
-//                                                new Node\Expr\ArrayItem(
-//                                                    value:  new Node\Scalar\String_('/'),
-//                                                    key: new Node\Scalar\String_('%path%'),
-//                                                )
-//                                            ],
-//                                            [
-//                                                new Node\Expr\ArrayItem(
-//                                                    value: new Node\Scalar\String_($server["host"]),
-//                                                    key:  new Node\Scalar\String_('%server%'),
-//                                                )
-//                                            ]
-//                                        ),
-//                                            attributes: [
-//                                                'kind' => Node\Expr\Array_::KIND_SHORT,
-//                                            ]
-//                                        )
-//                                    )
-//                                ]
-//                            )
-//                        )
-//                    ],
-//                ],
-//            ),
              new Node\Stmt\If_(
                 cond: new Node\Expr\BinaryOp\Identical(
                     left: new Node\Expr\FuncCall(
-                        name: new Node\Name('ftp_put'),
+                        name: new Node\Name('ftp_fput'),
                         args: [
                             new Node\Arg(
                                 new Node\Expr\ArrayDimFetch(
@@ -263,8 +132,7 @@ class Loader implements StepBuilderInterface
                                     $path,
                                 )
                             ),
-                            new Node\Arg($content),
-                            new Node\Arg($mode),
+                            new Node\Arg($content)
                         ],
                     ),
                     right: new Node\Expr\ConstFetch(
@@ -347,35 +215,19 @@ class Loader implements StepBuilderInterface
                     ],
                 ],
             ),
-            new Node\Stmt\Expression(
-                new Node\Expr\FuncCall(
-                    name: new Node\Name('ftp_close'),
-                    args: [
-                        new Node\Arg(
-                            value:  new Node\Expr\ArrayDimFetch(
-                                new Node\Expr\PropertyFetch(
-                                    new Node\Expr\Variable('this'),
-                                    new Node\Identifier('servers')
-                                ),
-                                new Node\Scalar\LNumber($index),
-                            ),
-                        )
-                    ]
-                )
-            ),
 //            new Node\Stmt\Expression(
-//                expr: new Node\Expr\FuncCall(
-//                    name: new Node\Name('fclose'),
+//                new Node\Expr\FuncCall(
+//                    name: new Node\Name('ftp_close'),
 //                    args: [
-//                        new Node\Arg($content),
-//                    ]
-//                )
-//            ),
-//            new Node\Stmt\Expression(
-//                expr: new Node\Expr\FuncCall(
-//                    name: new Node\Name('fclose'),
-//                    args: [
-//                        new Node\Arg(new Node\Expr\Variable('stream')),
+//                        new Node\Arg(
+//                            value:  new Node\Expr\ArrayDimFetch(
+//                                new Node\Expr\PropertyFetch(
+//                                    new Node\Expr\Variable('this'),
+//                                    new Node\Identifier('servers')
+//                                ),
+//                                new Node\Scalar\LNumber($index),
+//                            ),
+//                        )
 //                    ]
 //                )
 //            ),
@@ -392,26 +244,48 @@ class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
+                        new Node\Stmt\Property(
+                            flags: 4,
+                            props: [
+                                new Node\Stmt\PropertyProperty(
+                                    new Node\Name('logger')
+                                )
+                            ],
+                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
+                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'stmts' => array_map(
-                                    fn ($server, $index) => new Node\Stmt\Expression(
-                                        new Node\Expr\Assign(
-                                            new Node\Expr\ArrayDimFetch(
-                                                new Node\Expr\PropertyFetch(
-                                                    new Node\Expr\Variable('this'),
-                                                    new Node\Identifier('servers')
-                                                ),
-                                                new Node\Scalar\LNumber($index),
+                                'stmts' => [
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\PropertyFetch(
+                                                var: new Node\Expr\Variable('this'),
+                                                name: new Identifier('logger')
                                             ),
-                                            $server[0]
+                                            expr: new Node\Expr\New_(
+                                                class: new Node\Name\FullyQualified('Psr\Log\NullLogger')
+                                            )
                                         )
                                     ),
-                                    $this->servers,
-                                    array_keys($this->servers),
-                                ),
+                                    ...array_map(
+                                        fn ($server, $index) => new Node\Stmt\Expression(
+                                            new Node\Expr\Assign(
+                                                new Node\Expr\ArrayDimFetch(
+                                                    new Node\Expr\PropertyFetch(
+                                                        new Node\Expr\Variable('this'),
+                                                        new Node\Identifier('servers')
+                                                    ),
+                                                    new Node\Scalar\LNumber($index),
+                                                ),
+                                                $server[0]
+                                            )
+                                        ),
+                                        $this->servers,
+                                        array_keys($this->servers),
+                                    )
+                                ],
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
@@ -462,6 +336,200 @@ class Loader implements StepBuilderInterface
                                     ),
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
+                            ],
+                        ),
+                        new Node\Stmt\ClassMethod(
+                            name: new Node\Identifier('createDirectories'),
+                            subNodes: [
+                                'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
+                                'returnType' => new Node\Expr\ConstFetch(new Node\Name('bool')),
+                                'params' => [
+                                    new Node\Param(
+                                        var: New Node\Expr\Variable('ftpcon')
+                                    ),
+                                    new Node\Param(
+                                        var: New Node\Expr\Variable('baseDir'),
+                                        type: new Identifier('string')
+                                    ),
+                                    new Node\Param(
+                                        var: New Node\Expr\Variable('path'),
+                                        type: new Identifier('string')
+                                    ),
+                                    new Node\Param(
+                                        var: New Node\Expr\Variable('mode'),
+                                        default: new Node\Scalar\String_('0775'),
+                                        type: new Identifier('string')
+                                    )
+                                ],
+                                'stmts' => [
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\Variable('path'),
+                                            expr: new Node\Expr\FuncCall(
+                                                name: new Node\Name('dirname'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        new Node\Expr\Variable('path')
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\FuncCall(
+                                            name: new Node\Name('ftp_chdir'),
+                                            args: [
+                                                new Node\Arg(
+                                                    new Node\Expr\Variable('ftpcon')
+                                                ),
+                                                new Node\Arg(
+                                                    new Node\Expr\Variable('baseDir')
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\Variable('directories'),
+                                            expr: new Node\Expr\FuncCall(
+                                                name: new Node\Name('explode'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        value: new Node\Expr\ConstFetch(
+                                                            name: new Node\Name('DIRECTORY_SEPARATOR')
+                                                        )
+                                                    ),
+                                                    new Node\Arg(
+                                                        value: new Node\Expr\Variable('path')
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        new Node\Expr\Assign(
+                                            var: new Node\Expr\Variable('created'),
+                                            expr: new Node\Expr\Array_(
+                                                attributes: [
+                                                    'kind' => Node\Expr\Array_::KIND_SHORT
+                                                ]
+                                            )
+                                        ),
+                                    ),
+                                    new Node\Stmt\Foreach_(
+                                        expr: new Node\Expr\Variable('directories'),
+                                        valueVar: new Node\Expr\Variable('directory'),
+                                        subNodes: [
+                                            'stmts' => [
+                                                new Node\Stmt\If_(
+                                                    cond: new Node\Expr\FuncCall(
+                                                        name: new Node\Name('!ftp_chdir'),
+                                                        args: [
+                                                            new Node\Arg(
+                                                                new Node\Expr\Variable('ftpcon')
+                                                            ),
+                                                            new Node\Arg(
+                                                                new Node\Expr\Variable('directory')
+                                                            )
+                                                        ]
+                                                    ),
+                                                    subNodes: [
+                                                        'stmts' => [
+                                                            new Node\Stmt\Expression(
+                                                                expr: new Node\Expr\Assign(
+                                                                    var: new Node\Expr\Variable('createdDir'),
+                                                                    expr: new Node\Expr\FuncCall(
+                                                                        name: new Node\Name('ftp_mkdir'),
+                                                                        args: [
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Variable('ftpcon')
+                                                                            ),
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Variable('directory')
+                                                                            ),
+                                                                        ],
+                                                                    ),
+                                                                ),
+                                                            ),
+                                                            new Node\Stmt\If_(
+                                                                cond: new Node\Expr\BinaryOp\NotIdentical(
+                                                                    left: new Node\Expr\Variable('createdDir'),
+                                                                    right: new Node\Expr\ConstFetch(
+                                                                        new Node\Name('false')
+                                                                    )
+                                                                ),
+                                                                subNodes: [
+                                                                    'stmts' => [
+                                                                        new Node\Stmt\Expression(
+                                                                            expr: new Node\Expr\FuncCall(
+                                                                                name: new Node\Name('ftp_chmod'),
+                                                                                args: [
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('ftpcon')
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\FuncCall(
+                                                                                            name: new Node\Name('octdec'),
+                                                                                            args: [
+                                                                                                new Node\Arg(
+                                                                                                    new Node\Expr\Variable('mode')
+                                                                                                ),
+                                                                                            ],
+                                                                                        ),
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('createdDir')
+                                                                                    ),
+                                                                                ],
+                                                                            ),
+
+                                                                        )
+                                                                    ],
+                                                                ],
+                                                            ),
+                                                            new Node\Stmt\Expression(
+                                                                expr: new Node\Expr\Assign(
+                                                                    var: new Node\Expr\ArrayDimFetch(
+                                                                        var: new Node\Expr\Variable('created')
+                                                                    ),
+                                                                    expr: new Node\Expr\Variable('createdDir')
+                                                                ),
+                                                            ),
+                                                            new Node\Stmt\Expression(
+                                                                expr: new Node\Expr\FuncCall(
+                                                                    name: new Node\Name('ftp_chdir'),
+                                                                    args: [
+                                                                        new Node\Arg(
+                                                                            new Node\Expr\Variable('ftpcon')
+                                                                        ),
+                                                                        new Node\Arg(
+                                                                            new Node\Expr\Variable('directory')
+                                                                        ),
+                                                                    ],
+                                                                ),
+                                                            ),
+                                                        ],
+                                                    ],
+                                                ),
+                                            ],
+                                        ],
+                                    ),
+                                    new Node\Stmt\Return_(
+                                        expr: new Node\Expr\FuncCall(
+                                            name: new Node\Name('!in_array'),
+                                            args: [
+                                                new Node\Arg(
+                                                    new Node\Expr\ConstFetch(
+                                                        name: new Node\Name('false')
+                                                    ),
+                                                ),
+                                                new Node\Arg(
+                                                    new Node\Expr\Variable('created')
+                                                )
+                                            ],
+                                        ),
+                                    ),
+                                ],
                             ],
                         ),
                     ],

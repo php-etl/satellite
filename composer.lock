@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e786f442f095b861d69da6c2a74572b",
+    "content-hash": "02c8799a59749b30e8d14e71041a4bfe",
     "packages": [
         {
             "name": "box/spout",
@@ -828,16 +828,16 @@
         },
         {
             "name": "php-etl/akeneo-plugin",
-            "version": "dev-master",
+            "version": "dev-feature/update-for-sftp-plugin",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "63130c08d6b11e8e8f7f094f4bebd82ed7800f44"
+                "reference": "7849653d3edef591640183a34574c6e16a674ac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/63130c08d6b11e8e8f7f094f4bebd82ed7800f44",
-                "reference": "63130c08d6b11e8e8f7f094f4bebd82ed7800f44",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/7849653d3edef591640183a34574c6e16a674ac3",
+                "reference": "7849653d3edef591640183a34574c6e16a674ac3",
                 "shasum": ""
             },
             "require": {
@@ -868,7 +868,6 @@
                 "phpunit/phpunit": "^9.0",
                 "symfony/yaml": "^5.2"
             },
-            "default-branch": true,
             "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
@@ -896,9 +895,9 @@
             "description": "Adapters for the Akeneo API client",
             "support": {
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
-                "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
+                "source": "https://github.com/php-etl/akeneo-plugin/tree/feature/update-for-sftp-plugin"
             },
-            "time": "2021-06-08T12:41:05+00:00"
+            "time": "2021-06-21T08:48:43+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
@@ -1114,12 +1113,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "2ecf06751fc9b6bc7894da98369f3a111804cbf0"
+                "reference": "5f83139c6fd3cebef9564652f9a6963dd31ad0d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/2ecf06751fc9b6bc7894da98369f3a111804cbf0",
-                "reference": "2ecf06751fc9b6bc7894da98369f3a111804cbf0",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/5f83139c6fd3cebef9564652f9a6963dd31ad0d1",
+                "reference": "5f83139c6fd3cebef9564652f9a6963dd31ad0d1",
                 "shasum": ""
             },
             "require": {
@@ -1170,7 +1169,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/master"
             },
-            "time": "2021-06-07T08:27:58+00:00"
+            "time": "2021-06-14T07:14:07+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -1996,6 +1995,56 @@
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/master"
             },
             "time": "2021-06-08T11:43:47+00:00"
+        },
+        {
+            "name": "php-etl/string-expression-language",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/string-expression-language.git",
+                "reference": "28ce550be9fd39fec913d3576074df299431e3af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/28ce550be9fd39fec913d3576074df299431e3af",
+                "reference": "28ce550be9fd39fec913d3576074df299431e3af",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "symfony/expression-language": "^5.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\StringExpressionLanguage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements functions for manipulating string data in ExpressionLanguage",
+            "support": {
+                "issues": "https://github.com/php-etl/string-expression-language/issues",
+                "source": "https://github.com/php-etl/string-expression-language/tree/master"
+            },
+            "time": "2021-06-17T15:11:41+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -8700,9 +8749,17 @@
             "time": "2021-05-26T17:43:10+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "php-etl/akeneo-plugin",
+            "version": "dev-feature/update-for-sftp-plugin",
+            "alias": "0.3.0",
+            "alias_normalized": "0.3.0.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "php-etl/akeneo-plugin": 20,
         "composer/composer": 20
     },
     "prefer-stable": true,

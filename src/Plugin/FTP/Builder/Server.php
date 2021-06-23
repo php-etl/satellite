@@ -5,7 +5,6 @@ namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 use Kiboko\Component\SatelliteToolbox\Builder\IsolatedCodeBuilder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
-use Symfony\Component\ExpressionLanguage\Expression;
 
 final class Server implements StepBuilderInterface
 {
@@ -145,9 +144,9 @@ final class Server implements StepBuilderInterface
                             new Node\Arg(
                                 value: new Node\Expr\Variable('connection')
                             ),
-                            !is_null($this->passifMode) ? new Node\Arg(
+                            new Node\Arg(
                                 $this->passifMode,
-                            ) : new Node\Expr\ConstFetch(new Node\Name('false'))
+                            )
                         ]
                     )
                 ),
