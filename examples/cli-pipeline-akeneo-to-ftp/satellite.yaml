@@ -62,7 +62,7 @@ satellite:
               port: 21
               username: username
               password: password
-              base_path: /home/sebastien
+              base_path: /my/path
           put:
             - path: '@=input["image"]'
               content: '@=input["image_file"]'
