@@ -104,13 +104,13 @@ class Loader implements StepBuilderInterface
                             $path,
                         ),
                         new Node\Arg(
-                             $mode,
+                            $mode,
                         ),
                     ],
                 ),
             ),
              new Node\Stmt\If_(
-                cond: new Node\Expr\BinaryOp\Identical(
+                 cond: new Node\Expr\BinaryOp\Identical(
                     left: new Node\Expr\FuncCall(
                         name: new Node\Name('ftp_fput'),
                         args: [
@@ -139,7 +139,7 @@ class Loader implements StepBuilderInterface
                         name: new Node\Name('false')
                     ),
                 ),
-                subNodes: [
+                 subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
@@ -191,19 +191,19 @@ class Loader implements StepBuilderInterface
                                     new Node\Arg(
                                         new Node\Expr\Array_(
                                             items: array_merge(
-                                            [
+                                                [
                                                 new Node\Expr\ArrayItem(
                                                     value:  new Node\Scalar\String_($server["base_path"]),
                                                     key: new Node\Scalar\String_('%path%'),
                                                 )
                                             ],
-                                            [
+                                                [
                                                 new Node\Expr\ArrayItem(
                                                     value: new Node\Scalar\String_($server["host"]),
                                                     key:  new Node\Scalar\String_('%server%'),
                                                 )
                                             ]
-                                        ),
+                                            ),
                                             attributes: [
                                                 'kind' => Node\Expr\Array_::KIND_SHORT,
                                             ]
@@ -214,29 +214,13 @@ class Loader implements StepBuilderInterface
                         ),
                     ],
                 ],
-            ),
-//            new Node\Stmt\Expression(
-//                new Node\Expr\FuncCall(
-//                    name: new Node\Name('ftp_close'),
-//                    args: [
-//                        new Node\Arg(
-//                            value:  new Node\Expr\ArrayDimFetch(
-//                                new Node\Expr\PropertyFetch(
-//                                    new Node\Expr\Variable('this'),
-//                                    new Node\Identifier('servers')
-//                                ),
-//                                new Node\Scalar\LNumber($index),
-//                            ),
-//                        )
-//                    ]
-//                )
-//            ),
+             ),
         ];
     }
 
     public function getNode(): Node
     {
-         return new Node\Expr\New_(
+        return new Node\Expr\New_(
             class: new Node\Stmt\Class_(
                 name: null,
                 subNodes: [
@@ -345,18 +329,18 @@ class Loader implements StepBuilderInterface
                                 'returnType' => new Node\Expr\ConstFetch(new Node\Name('bool')),
                                 'params' => [
                                     new Node\Param(
-                                        var: New Node\Expr\Variable('ftpcon')
+                                        var: new Node\Expr\Variable('ftpcon')
                                     ),
                                     new Node\Param(
-                                        var: New Node\Expr\Variable('baseDir'),
+                                        var: new Node\Expr\Variable('baseDir'),
                                         type: new Identifier('string')
                                     ),
                                     new Node\Param(
-                                        var: New Node\Expr\Variable('path'),
+                                        var: new Node\Expr\Variable('path'),
                                         type: new Identifier('string')
                                     ),
                                     new Node\Param(
-                                        var: New Node\Expr\Variable('mode'),
+                                        var: new Node\Expr\Variable('mode'),
                                         default: new Node\Scalar\String_('0775'),
                                         type: new Identifier('string')
                                     )
@@ -422,16 +406,18 @@ class Loader implements StepBuilderInterface
                                         subNodes: [
                                             'stmts' => [
                                                 new Node\Stmt\If_(
-                                                    cond: new Node\Expr\FuncCall(
-                                                        name: new Node\Name('!ftp_chdir'),
-                                                        args: [
-                                                            new Node\Arg(
-                                                                new Node\Expr\Variable('ftpcon')
-                                                            ),
-                                                            new Node\Arg(
-                                                                new Node\Expr\Variable('directory')
-                                                            )
-                                                        ]
+                                                    cond: new Node\Expr\BooleanNot(
+                                                        new Node\Expr\FuncCall(
+                                                            name: new Node\Name('ftp_chdir'),
+                                                            args: [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('ftpcon')
+                                                                ),
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('directory')
+                                                                )
+                                                            ]
+                                                        )
                                                     ),
                                                     subNodes: [
                                                         'stmts' => [
@@ -482,7 +468,6 @@ class Loader implements StepBuilderInterface
                                                                                     ),
                                                                                 ],
                                                                             ),
-
                                                                         )
                                                                     ],
                                                                 ],
@@ -515,18 +500,20 @@ class Loader implements StepBuilderInterface
                                         ],
                                     ),
                                     new Node\Stmt\Return_(
-                                        expr: new Node\Expr\FuncCall(
-                                            name: new Node\Name('!in_array'),
-                                            args: [
-                                                new Node\Arg(
-                                                    new Node\Expr\ConstFetch(
-                                                        name: new Node\Name('false')
+                                        expr: new Node\Expr\BooleanNot(
+                                            new Node\Expr\FuncCall(
+                                                name: new Node\Name('in_array'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        new Node\Expr\ConstFetch(
+                                                            name: new Node\Name('false')
+                                                        ),
                                                     ),
-                                                ),
-                                                new Node\Arg(
-                                                    new Node\Expr\Variable('created')
-                                                )
-                                            ],
+                                                    new Node\Arg(
+                                                        new Node\Expr\Variable('created')
+                                                    )
+                                                ],
+                                            )
                                         ),
                                     ),
                                 ],

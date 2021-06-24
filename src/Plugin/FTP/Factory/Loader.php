@@ -2,7 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
-
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Kiboko\Contract\Configurator\RepositoryInterface;
