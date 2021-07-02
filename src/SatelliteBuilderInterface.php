@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
+use Kiboko\Contract\Packaging;
+
 interface SatelliteBuilderInterface
 {
     public function withComposerFile(
-        Filesystem\FileInterface|Filesystem\AssetInterface $composerJsonFile,
-        null|Filesystem\FileInterface|Filesystem\AssetInterface $composerLockFile = null
+        Packaging\FileInterface|Packaging\AssetInterface $composerJsonFile,
+        null|Packaging\FileInterface|Packaging\AssetInterface $composerLockFile = null
     ): SatelliteBuilderInterface;
 
     public function withFile(
-        Filesystem\FileInterface|Filesystem\AssetInterface $source,
+        Packaging\FileInterface|Packaging\AssetInterface $source,
         ?string $destinationPath = null
     ): SatelliteBuilderInterface;
 
     public function withDirectory(
-        Filesystem\DirectoryInterface $source,
+        Packaging\DirectoryInterface $source,
         ?string $destinationPath = null
     ): SatelliteBuilderInterface;
 

@@ -2,30 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Filesystem\Asset;
+use Kiboko\Component\Packaging;
 
-use Kiboko\Component\Satellite\Filesystem\AssetInterface;
+trigger_deprecation('php-etl/satellite', '0.1', 'The "%s" class is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\Filesystem\\Asset\\InMemory', Packaging\Asset\InMemory::class);
 
-final class InMemory implements AssetInterface
-{
-    /** @var resource */
-    private $stream;
-
-    public function __construct(string $content)
-    {
-        $this->stream = fopen('php://temp', 'rb+');
-        fwrite($this->stream, $content);
-        fseek($this->stream, 0, SEEK_SET);
-    }
-
-    /** @return resource */
-    public function asResource()
-    {
-        $resource = fopen('php://temp', 'rb+');
-        fseek($this->stream, 0, SEEK_SET);
-        stream_copy_to_stream($this->stream, $resource);
-        fseek($resource, 0, SEEK_SET);
-        fseek($this->stream, 0, SEEK_END);
-        return $resource;
-    }
-}
+/**
+ * @deprecated since Satellite 0.1, use Kiboko\Component\Packaging\Asset\InMemory instead.
+ */
+class_alias(Packaging\Asset\InMemory::class, 'Kiboko\\Component\\Satellite\\Filesystem\\Asset\\InMemory');

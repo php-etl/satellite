@@ -3,7 +3,7 @@ satellite:
 #    from: php:8.0-cli-alpine
 #    workdir: /var/www/html
 #    tags:
-#      - kiboko/satellite:akeneo-to-sylius
+#      - kiboko/satellite:akeneo-to-json-stream-stdout
   filesystem:
     path: build/
   composer:

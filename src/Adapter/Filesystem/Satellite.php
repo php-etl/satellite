@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
-use Kiboko\Component\Satellite\Filesystem\DirectoryInterface;
-use Kiboko\Component\Satellite\Filesystem\FileInterface;
+use Kiboko\Contract\Packaging;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use Psr\Log\LoggerInterface;
 
 final class Satellite implements SatelliteInterface
 {
     private string $workdir;
-    /** @var iterable<DirectoryInterface|FileInterface> */
+    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
     private iterable $dependencies;
 
     public function __construct(
         string $workdir,
-        FileInterface|DirectoryInterface ...$files
+        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
         $this->workdir = $workdir;
         $this->files = $files;
         $this->dependencies = [];
     }
 
-    public function withFile(DirectoryInterface|FileInterface ...$files): self
+    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
@@ -42,7 +41,7 @@ final class Satellite implements SatelliteInterface
     public function build(LoggerInterface $logger): void
     {
         foreach ($this->files as $file) {
-            if ($file instanceof DirectoryInterface) {
+            if ($file instanceof Packaging\DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
                     $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
                     stream_copy_to_stream($current->asResource(), $stream);

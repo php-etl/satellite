@@ -2,22 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Filesystem\Asset;
+use Kiboko\Component\Packaging;
 
-use Kiboko\Component\Satellite\Filesystem\AssetInterface;
+trigger_deprecation('php-etl/satellite', '0.1', 'The "%s" class is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\Filesystem\\Asset\\LocalFile', Packaging\Asset\LocalFile::class);
 
-final class LocalFile implements AssetInterface
-{
-    private string $path;
-
-    public function __construct(string $path)
-    {
-        $this->path = $path;
-    }
-
-    /** @return resource */
-    public function asResource()
-    {
-        return fopen($this->path, 'rb');
-    }
-}
+/**
+ * @deprecated since Satellite 0.1, use Kiboko\Component\Packaging\Asset\LocalFile instead.
+ */
+class_alias(Packaging\Asset\LocalFile::class, 'Kiboko\\Component\\Satellite\\Filesystem\\Asset\\LocalFile');

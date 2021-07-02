@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Packaging;
+use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 {
@@ -18,11 +20,11 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private iterable $command;
     /** @var iterable<string> */
     private iterable $tags;
-    private null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerJsonFile;
-    private null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerLockFile;
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var \AppendIterator<string,Satellite\Filesystem\FileInterface> */
+    /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
 
     public function __construct(string $fromImage)
@@ -54,8 +56,8 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     }
 
     public function withComposerFile(
-        Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerJsonFile,
-        null|Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $composerLockFile = null
+        PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile,
+        null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -64,23 +66,23 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     }
 
     public function withFile(
-        Satellite\Filesystem\FileInterface|Satellite\Filesystem\AssetInterface $source,
+        PackagingContract\FileInterface|PackagingContract\AssetInterface $source,
         ?string $destinationPath = null
     ): self {
-        if (!$source instanceof Satellite\Filesystem\FileInterface) {
-            $source = new Satellite\Filesystem\VirtualFile($source);
+        if (!$source instanceof PackagingContract\FileInterface) {
+            $source = new Packaging\VirtualFile($source);
         }
 
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
         $this->files->append(new \ArrayIterator([
-            new Satellite\Filesystem\File($destinationPath, $source),
+            new Packaging\File($destinationPath, $source),
         ]));
 
         return $this;
     }
 
-    public function withDirectory(Satellite\Filesystem\DirectoryInterface $source, ?string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
@@ -124,13 +126,13 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         if ($this->composerJsonFile !== null) {
             $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.json'));
             $this->files->append(new \ArrayIterator([
-                new Satellite\Filesystem\File('composer.json', $this->composerJsonFile),
+                new Packaging\File('composer.json', $this->composerJsonFile),
             ]));
 
             if ($this->composerLockFile !== null) {
                 $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.lock'));
                 $this->files->append(new \ArrayIterator([
-                    new Satellite\Filesystem\File('composer.lock', $this->composerLockFile),
+                    new Packaging\File('composer.lock', $this->composerLockFile),
                 ]));
             }
 

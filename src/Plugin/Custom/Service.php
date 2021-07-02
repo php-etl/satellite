@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
-use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Plugin\Custom\Factory\Loader;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -14,6 +14,12 @@ final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+
+    public function __construct()
+    {
+        $this->processor = new Processor();
+        $this->configuration = new Configuration();
+    }
 
     public function configuration(): ConfigurationInterface
     {
@@ -48,28 +54,17 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('extractor', $config) && array_key_exists('class', $config['extractor'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['extractor']['class'],
-                )
-            );
-        }
-        if (array_key_exists('transformer', $config) && array_key_exists('class', $config['transformer'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['transformer']['class'],
-                )
-            );
-        }
-        if (array_key_exists('loader', $config) && array_key_exists('class', $config['loader'])) {
-            return new Repository(
-                new CustomBuilder(
-                    $config['loader']['class'],
-                )
-            );
+        if (array_key_exists('extractor', $config)) {
+            $extractorFactory = new Loader();
+            return $extractorFactory->compile($config['extractor']);
+        } else if (array_key_exists('transformer', $config)) {
+            $transformerFactory = new Loader();
+            return $transformerFactory->compile($config['transformer']);
+        } else if (array_key_exists('loader', $config)) {
+            $loaderFactory = new Loader();
+            return $loaderFactory->compile($config['loader']);
         }
 
-        throw new \RuntimeException('No possible pipeline step, expecing "extractor", "transformer" or "loader"');
+        throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');
     }
 }

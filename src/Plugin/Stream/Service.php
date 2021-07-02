@@ -14,6 +14,12 @@ final class Service implements Configurator\FactoryInterface
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
+    public function __construct()
+    {
+        $this->processor = new Processor();
+        $this->configuration = new Configuration();
+    }
+
     public function configuration(): ConfigurationInterface
     {
         return $this->configuration;
@@ -54,6 +60,20 @@ final class Service implements Configurator\FactoryInterface
                 return new Repository(new Builder\StderrLoader());
             } elseif ($config['loader']['destination'] === 'stdout') {
                 return new Repository(new Builder\StdoutLoader());
+            } else if (array_key_exists('format', $config['loader'])
+                && $config['loader']['format'] === 'json'
+            ) {
+                return new Repository(
+                    new Builder\JSONStreamLoader(
+                        $config['loader']['destination']
+                    )
+                );
+            } else {
+                return new Repository(
+                    new Builder\DebugLoader(
+                        $config['loader']['destination']
+                    )
+                );
             }
         }
 

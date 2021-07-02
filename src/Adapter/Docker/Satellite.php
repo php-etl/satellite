@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite\Adapter\Docker;
-use Kiboko\Component\Satellite\Filesystem\DirectoryInterface;
-use Kiboko\Component\Satellite\Filesystem\FileInterface;
 use Kiboko\Component\Satellite\SatelliteInterface;
-use Kiboko\Component\Satellite\Filesystem\TarArchive;
+use Kiboko\Component\Packaging\TarArchive;
+use Kiboko\Contract\Packaging\DirectoryInterface;
+use Kiboko\Contract\Packaging\FileInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 

@@ -3,22 +3,23 @@
 namespace Kiboko\Component\Satellite\Feature\Rejection;
 
 use Kiboko\Contract\Configurator;
+use Kiboko\Contract\Packaging;
 
 trait RepositoryTrait
 {
-    /** @var Configurator\FileInterface[] */
+    /** @var Packaging\FileInterface[] */
     private array $files;
     /** @var string[] */
     private array $packages;
 
-    public function addFiles(Configurator\FileInterface ...$files): self
+    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
         return $this;
     }
 
-    /** @return iterable<Configurator\FileInterface> */
+    /** @return iterable<Packaging\FileInterface> */
     public function getFiles(): iterable
     {
         return $this->files;
