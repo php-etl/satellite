@@ -1,0 +1,70 @@
+satellite:
+#  docker:
+#    from: php:8.0-cli-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:foo
+#      - kiboko/satellite:bar
+  filesystem:
+    path: build
+  composer:
+#    from_local: true
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\AkeneoToSylius\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.3.0"
+      - "php-etl/fast-map:^0.2.0"
+      - "akeneo/api-php-client-ee"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    expression_language:
+      - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+    steps:
+    - akeneo:
+        enterprise: true
+        extractor:
+          type: product
+          method: all
+        client:
+          api_url: 'http://demo.akeneo.com/'
+          client_id: 5_40tp8kg20iww4g4o8c04kww4g48gg04o0co844c8gg044kwcoo
+          secret: 66csny0qiygwk08g8cowsgos40wg4c80kckwkwc8w0w0gg8s84
+          username: kiboko_8970
+          password: 0b98df436
+    - fastmap:
+        map:
+          - field: '[image]'
+            expression: 'attribute(input["values"]["image"])'
+    - akeneo:
+        lookup:
+          type: productMediaFile
+          method: download
+          code: '@=input["image"]'
+          merge:
+            map:
+              - field: "[image_file]"
+                expression: 'temporaryFile(lookup)'
+        client:
+          api_url: 'http://demo.akeneo.com/'
+          client_id: 5_40tp8kg20iww4g4o8c04kww4g48gg04o0co844c8gg044kwcoo
+          secret: 66csny0qiygwk08g8cowsgos40wg4c80kckwkwc8w0w0gg8s84
+          username: kiboko_8970
+          password: 0b98df436
+    - ftp:
+        expression_language:
+          - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+        loader:
+          servers:
+            - host: localhost
+              port: 21
+              username: username
+              password: password
+              base_path: /my/path
+          put:
+            - path: '@=input["image"]'
+              content: '@=input["image_file"]'
+              mode: '0755'
+              if: '@=input["image"] !== null'

@@ -188,6 +188,14 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             }
+            elseif (array_key_exists('ftp', $step)) {
+                (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $interpreter)))
+                    ->withPackages(
+                        'ext-ssh2',
+                    )
+                    ->withLoader()
+                    ->appendTo($step, $repository);
+            }
         }
 
         return $repository;

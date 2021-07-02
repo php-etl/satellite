@@ -32,11 +32,12 @@
         "php-etl/csv-plugin": "^0.3.0",
         "php-etl/akeneo-plugin": "^0.3.0",
         "php-etl/sylius-plugin": "^0.3.0",
-        "php-etl/akeneo-expression-language": "^0.2.0",
+        "php-etl/akeneo-expression-language": "0.2.x-dev",
         "php-etl/spreadsheet-plugin": "^0.3.0",
         "php-etl/packaging": "^0.1.0",
         "php-etl/satellite-toolbox": "^0.1.0",
-        "php-etl/array-expression-language": "^0.1.0"
+        "php-etl/array-expression-language": "^0.1.0",
+        "php-etl/string-expression-language": "^0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
