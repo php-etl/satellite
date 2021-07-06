@@ -228,31 +228,18 @@ class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
-                        new Node\Stmt\Property(
-                            flags: 4,
-                            props: [
-                                new Node\Stmt\PropertyProperty(
-                                    new Node\Name('logger')
-                                )
-                            ],
-                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
-                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'stmts' => [
-                                    new Node\Stmt\Expression(
-                                        expr: new Node\Expr\Assign(
-                                            var: new Node\Expr\PropertyFetch(
-                                                var: new Node\Expr\Variable('this'),
-                                                name: new Identifier('logger')
-                                            ),
-                                            expr: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified('Psr\Log\NullLogger')
-                                            )
-                                        )
+                                'params' => [
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('logger'),
+                                        type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
+                                        flags: Node\Stmt\Class_::MODIFIER_PUBLIC,
                                     ),
+                                ],
+                                'stmts' => [
                                     ...array_map(
                                         fn ($server, $index) => new Node\Stmt\Expression(
                                             new Node\Expr\Assign(
@@ -313,11 +300,7 @@ class Loader implements StepBuilderInterface
                                             ),
                                         ],
                                     ),
-                                    new Node\Stmt\Expression(
-                                        new Node\Expr\Yield_(
-                                            value: new Node\Expr\Variable('bucket')
-                                        ),
-                                    ),
+                                    ...$this->compileCloseServers()
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
                             ],
@@ -522,6 +505,35 @@ class Loader implements StepBuilderInterface
                     ],
                 ],
             ),
+            args: [
+                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified('Psr\\Log\\NullLogger'))),
+            ]
         );
+    }
+
+    public function compileCloseServers(): array
+    {
+        $output = [];
+
+        foreach ($this->servers as $key => $server) {
+            $output[] = new Node\Stmt\Expression(
+                expr: new Node\Expr\FuncCall(
+                    name: new Node\Name('ftp_close'),
+                    args: [
+                        new Node\Arg(
+                            new Node\Expr\ArrayDimFetch(
+                                var: new Node\Expr\PropertyFetch(
+                                    var: new Node\Expr\Variable('this'),
+                                    name: new Node\Identifier('servers')
+                                ),
+                                dim: new Node\Scalar\LNumber($key),
+                            ),
+                        )
+                    ]
+                )
+            );
+        }
+
+        return $output;
     }
 }
