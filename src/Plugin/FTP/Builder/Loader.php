@@ -80,35 +80,6 @@ class Loader implements StepBuilderInterface
     private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
-            new Node\Stmt\Expression(
-                expr: new Node\Expr\MethodCall(
-                    var: new Node\Expr\Variable('this'),
-                    name: new Node\Name('createDirectories'),
-                    args: [
-                        new Node\Arg(
-                            value: new Node\Expr\ArrayDimFetch(
-                                new Node\Expr\PropertyFetch(
-                                    new Node\Expr\Variable('this'),
-                                    new Node\Identifier('servers')
-                                ),
-                                new Node\Scalar\LNumber($index),
-                            ),
-                        ),
-                        new Node\Arg(
-                            value:  new Node\Scalar\Encapsed([
-                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                new Node\Scalar\EncapsedStringPart('/'),
-                            ]),
-                        ),
-                        new Node\Arg(
-                            $path,
-                        ),
-                        new Node\Arg(
-                            $mode,
-                        ),
-                    ],
-                ),
-            ),
              new Node\Stmt\If_(
                  cond: new Node\Expr\BinaryOp\Identical(
                     left: new Node\Expr\FuncCall(
