@@ -11,11 +11,28 @@ class Loader implements StepBuilderInterface
 {
     private iterable $servers;
     private iterable $putStatements;
-
+    private array $serversMapping;
     public function __construct()
     {
         $this->servers = [];
+        $this->serversMapping = [];
         $this->putStatements = [];
+    }
+
+    public function addServerBasePath(string $host, Node\Expr $base_path)
+    {
+        $this->serversMapping[$host] = $base_path;
+    }
+
+    private function compileServersMapping(): array
+    {
+        $output = [];
+        foreach ($this->serversMapping as $basePath) {
+            $output[] = new Node\Expr\ArrayItem(
+                value: $basePath,
+            );
+        }
+        return $output;
     }
 
     public function withLogger(Node\Expr $logger): StepBuilderInterface
@@ -97,7 +114,15 @@ class Loader implements StepBuilderInterface
                             new Node\Arg(
                                 value: new Node\Expr\BinaryOp\Concat(
                                     new Node\Scalar\Encapsed([
-                                        new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                            new Node\Expr\ArrayDimFetch(
+                                                new Node\Expr\PropertyFetch(
+                                                new Node\Expr\Variable('this'),
+                                                new Node\Identifier('serversMapping')
+                                                ),
+                                                dim:
+                                                    new Node\Scalar\LNumber($index),
+                                            ),
+
                                         new Node\Scalar\EncapsedStringPart('/'),
                                     ]),
                                     new Node\Expr\FuncCall(
@@ -226,6 +251,22 @@ class Loader implements StepBuilderInterface
                                             ),
                                             expr: new Node\Expr\New_(
                                                 class: new Node\Name\FullyQualified('Psr\Log\NullLogger')
+                                            )
+                                        )
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\PropertyFetch(
+                                                var: new Node\Expr\Variable('this'),
+                                                name: new Identifier('serversMapping')
+                                            ),
+                                            expr: new Node\Expr\Array_(
+                                                items: [
+                                                    ...$this->compileServersMapping()
+                                                ],
+                                                attributes: [
+                                                    'kind' => Node\Expr\Array_::KIND_SHORT
+                                                ]
                                             )
                                         )
                                     ),
