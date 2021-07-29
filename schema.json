@@ -1,4 +1,8 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema.json",
+  "title": "Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
   "$defs": {
     "docker": {
       "type": "object",
