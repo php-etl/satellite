@@ -15,6 +15,7 @@ use Kiboko\Plugin\SQL;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
 
 final class Service implements Configurator\FactoryInterface
 {
@@ -87,6 +88,17 @@ final class Service implements Configurator\FactoryInterface
     {
         $workflow = new Satellite\Builder\Workflow();
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
+
+        if (array_key_exists('imports', $config["workflow"])) {
+            foreach ($config['workflow']['imports'] as $imports) {
+               foreach ($imports as $import) {
+                   $pipeline = $this->compilePipeline($import(new Satellite\Console\Config\YamlFileLoader(new FileLocator())));
+
+                   $repository->merge($pipeline);
+                   $workflow->addJob($pipeline->getBuilder());
+               }
+            }
+        }
 
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
