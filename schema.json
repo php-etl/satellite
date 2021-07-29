@@ -338,7 +338,7 @@
                   "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
                   "required": ["field", "operator"]
                 }
-              },
+              }
             },
             "merge": {
               "oneOf": [
@@ -346,7 +346,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "map": { "$ref": "#/$defs/fastmap-items" },
+                    "map": { "$ref": "#/$defs/fastmap-items" }
                   }
                 },
                 {
