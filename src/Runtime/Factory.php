@@ -12,20 +12,21 @@ final class Factory implements FactoryInterface
     public function __construct(
         private Satellite\Adapter\FactoryInterface $adapterFactory,
         private LoggerInterface $logger,
-    ) {
+    )
+    {
     }
 
     public function __invoke(array $configuration): RuntimeInterface
     {
         $satellite = ($this->adapterFactory)($configuration)->build();
 
-        if (array_key_exists('http_api', $configuration)) {
+        if (array_key_exists('http_api', $configuration["satellite"])) {
             $factory = new Satellite\Runtime\Api\Factory();
-        } elseif (array_key_exists('http_hook', $configuration)) {
+        } elseif (array_key_exists('http_hook', $configuration["satellite"])) {
             $factory = new Satellite\Runtime\HttpHook\Factory();
-        } elseif (array_key_exists('pipeline', $configuration)) {
+        } elseif (array_key_exists('pipeline', $configuration["satellite"])) {
             $factory = new Satellite\Runtime\Pipeline\Factory();
-        } elseif (array_key_exists('workflow', $configuration)) {
+        } elseif (array_key_exists('workflow', $configuration["satellite"])) {
             $factory = new Satellite\Runtime\Workflow\Factory();
         } else {
             throw new \RuntimeException('No compatible runtime was found for your satellite configuration.');

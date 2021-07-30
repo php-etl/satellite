@@ -16,16 +16,24 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Kiboko\Component\SatelliteToolbox;
 
-final class Service implements Configurator\FactoryInterface
+final class Service
 {
     private Processor $processor;
-    private ConfigurationInterface $configuration;
+    /**
+     * @var array<ConfigurationInterface>
+     */
+    private array $configurations;
 
     public function __construct()
     {
         $this->processor = new Processor();
-        $this->configuration = (new Configuration())
+        $this->configurations = [
+            new SatelliteToolbox\Configuration\ImportConfiguration(),
+            (new Configuration())
             ->addAdapters(
                 new Adapter\Docker\Configuration(),
                 new Adapter\Filesystem\Configuration(),
@@ -35,33 +43,49 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\HttpHook\Configuration(),
                 new Runtime\Pipeline\Configuration(),
                 new Runtime\Workflow\Configuration(),
-            );
-    }
-
-    public function configuration(): ConfigurationInterface
-    {
-        return $this->configuration;
+            ),
+        ];
     }
 
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function normalize(array $config): array
+    public function normalize(array $configs): array
     {
         try {
-            return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+            $configImports = ['imports' => $configs['imports']];
+            $configSatellite = ['satellite' => $configs['satellite']];
+
+           foreach ($this->configurations as $configuration) {
+               if ($configuration instanceof SatelliteToolbox\Configuration\ImportConfiguration && $configs['imports']) {
+                   $config["imports"] = $this->processor->processConfiguration($configuration, $configImports);
+               } elseif ($configuration instanceof Configuration && $configs['satellite']) {
+                   $config["satellite"] = $this->processor->processConfiguration($configuration, $configSatellite);
+               }
+           }
+
+           return $config;
+        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
 
-    public function validate(array $config): bool
+    public function validate(array $configs): bool
     {
         try {
-            $this->processor->processConfiguration($this->configuration, $config);
+            $configImports = ['imports' => $configs['imports']];
+            $configSatellite = ['satellite' => $configs['satellite']];
+
+            foreach ($this->configurations as $configuration) {
+                if ($configuration instanceof SatelliteToolbox\Configuration\ImportConfiguration) {
+                    $this->processor->processConfiguration($configuration, $configImports);
+                } else {
+                    $this->processor->processConfiguration($configuration, $configSatellite);
+                }
+            }
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             return false;
         }
     }
@@ -71,14 +95,20 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('workflow', $config)) {
-            return $this->compileWorkflow($config);
-        } elseif (array_key_exists('pipeline', $config)) {
-            return $this->compilePipeline($config);
-        } elseif (array_key_exists('http_hook', $config)) {
-            return $this->compileHook($config);
-        } elseif (array_key_exists('http_api', $config)) {
-            return $this->compileApi($config);
+        if (array_key_exists('imports', $config)) {
+            return $this->compileImports($config);
+        } elseif (array_key_exists('satellite', $config)) {
+            if (array_key_exists('imports', $config["satellite"])) {
+                return $this->compileImports($config);
+            } elseif (array_key_exists('workflow', $config["satellite"])) {
+                return $this->compileWorkflow($config);
+            } elseif (array_key_exists('pipeline', $config["satellite"])) {
+                return $this->compilePipeline($config);
+            } elseif (array_key_exists('http_hook', $config["satellite"])) {
+                return $this->compileHook($config);
+            } elseif (array_key_exists('http_api', $config["satellite"])) {
+                return $this->compileApi($config);
+            }
         }
 
         throw new \LogicException('Not implemented');
@@ -91,12 +121,17 @@ final class Service implements Configurator\FactoryInterface
 
         if (array_key_exists('imports', $config["workflow"])) {
             foreach ($config['workflow']['imports'] as $imports) {
-               foreach ($imports as $import) {
-                   $pipeline = $this->compilePipeline($import(new Satellite\Console\Config\YamlFileLoader(new FileLocator())));
+                foreach ($imports as $import) {
+                    $fileLocator = new FileLocator();
+                    $loaderResolver = new LoaderResolver([
+                        new Satellite\Console\Config\YamlFileLoader($fileLocator),
+                        new Satellite\Console\Config\JsonFileLoader($fileLocator)
+                    ]);
+                    $pipeline = $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
 
-                   $repository->merge($pipeline);
-                   $workflow->addJob($pipeline->getBuilder());
-               }
+                    $repository->merge($pipeline);
+                    $workflow->addJob($pipeline->getBuilder());
+                }
             }
         }
 
@@ -127,16 +162,16 @@ final class Service implements Configurator\FactoryInterface
             'symfony/dependency-injection:^5.2',
         );
 
-        if (array_key_exists('expression_language', $config['pipeline'])
-            && is_array($config['pipeline']['expression_language'])
-            && count($config['pipeline']['expression_language'])
+        if (array_key_exists('expression_language', $config['satellite']['pipeline'])
+            && is_array($config['satellite']['pipeline']['expression_language'])
+            && count($config['satellite']['pipeline']['expression_language'])
         ) {
             foreach ($config['pipeline']['expression_language'] as $provider) {
                 $interpreter->registerProvider(new $provider);
             }
         }
 
-        foreach ($config['pipeline']['steps'] as $step) {
+        foreach ($config['satellite']['pipeline']['steps'] as $step) {
             if (array_key_exists('akeneo', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service(clone $interpreter)))
                     ->withPackages(
@@ -200,8 +235,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                     ->withLoader()
                     ->appendTo($step, $repository);
-            }
-            elseif (array_key_exists('ftp', $step)) {
+            } elseif (array_key_exists('ftp', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $interpreter)))
                     ->withPackages(
                         'ext-ssh2',
@@ -233,4 +267,40 @@ final class Service implements Configurator\FactoryInterface
 
         return new Satellite\Builder\Repository\Hook($pipeline);
     }
+
+    private function compileImports(array $config): Builder\Repository\Pipeline|Builder\Repository\Workflow
+    {
+        if (count($config['imports']) > 0) {
+            foreach ($config['imports'] as $imports) {
+                foreach ($imports as $import) {
+                    $fileLocator = new FileLocator();
+                    $loaderResolver = new LoaderResolver([
+                        new Satellite\Console\Config\YamlFileLoader($fileLocator),
+                        new Satellite\Console\Config\JsonFileLoader($fileLocator)
+                    ]);
+
+                    $fileConfig = $import(new DelegatingLoader($loaderResolver));
+
+                    if (array_key_exists('satellite', $fileConfig)) {
+                        if (array_key_exists('pipeline', $fileConfig['satellite'])) {
+                            return $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
+                        } elseif (array_key_exists('workflow', $fileConfig['satellite'])) {
+                            return $this->compileWorkflow($import(new DelegatingLoader($loaderResolver)));
+                        } else {
+                            throw new Symfony\InvalidConfigurationException('Please, check your imported configuration files.');
+                        }
+                    }
+//
+//                    if (array_key_exists('pipeline', $fileConfig)) {
+//                        return $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
+//                    } elseif (array_key_exists('workflow', $fileConfig)) {
+//                        return $this->compileWorkflow($import(new DelegatingLoader($loaderResolver)));
+//                    } else {
+//                        throw new Symfony\InvalidConfigurationException('Please, check your imported configuration files.');
+//                    }
+                }
+            }
+        }
+    }
+
 }
