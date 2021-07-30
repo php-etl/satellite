@@ -2,835 +2,109 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema.json",
   "title": "Middleware Satellite",
-  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "description": "Satellites are micro-services aimed at managing data pipelines and data processing",
   "$defs": {
-    "docker": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "from": { "type": "string" },
-        "workdir": { "type": "string" },
-        "tags": { "type": "array", "items": { "type":  "string" } }
-      },
-      "required": [ "from", "workdir" ]
-    },
-    "filesystem": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "path": { "type": "string" }
-      },
-      "required": [ "path" ]
-    },
-    "composer": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "from_local": { "type": "boolean" },
-        "autoload": {
-          "type": "object",
-          "properties": {
-            "psr4": {
-              "oneOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "namespace": { "type": "string" },
-                      "paths": { "type": "array", "items": "string" }
-                    },
-                    "additionalProperties": false
-                  }
-                },
-                {
-                  "type": "object"
-                }
-              ]
-            }
-          }
-        },
-        "require": { "type": "array", "items": "string" }
-      }
-    },
-    "pipeline": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "steps": {
-          "type": "array",
-          "items": {
-            "allOf": [
-              {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "custom": {
-                        "$ref": "#/$defs/custom"
-                      }
-                    },
-                    "required": ["custom"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "akeneo": {
-                        "$ref": "#/$defs/akeneo"
-                      }
-                    },
-                    "required": ["akeneo"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "sylius": {
-                        "$ref": "#/$defs/sylius"
-                      }
-                    },
-                    "required": ["sylius"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "csv": {
-                        "$ref": "#/$defs/csv"
-                      }
-                    },
-                    "required": ["csv"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "spreadsheet": {
-                        "$ref": "#/$defs/spreadsheet"
-                      }
-                    },
-                    "required": ["spreadsheet"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "fastmap": {
-                        "$ref": "#/$defs/fastmap"
-                      }
-                    },
-                    "required": ["fastmap"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "stream": {
-                        "$ref": "#/$defs/stream"
-                      }
-                    },
-                    "required": ["stream"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "batch": {
-                        "$ref": "#/$defs/batch"
-                      }
-                    },
-                    "required": ["batch"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "ftp": {
-                        "$ref": "#/$defs/ftp"
-                      }
-                    },
-                    "required": ["ftp"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "http": {
-                        "$ref": "#/$defs/http"
-                      }
-                    },
-                    "required": ["http"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "sftp": {
-                        "$ref": "#/$defs/sftp"
-                      }
-                    },
-                    "required": ["sftp"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "sql": {
-                        "$ref": "#/$defs/sql"
-                      }
-                    },
-                    "required": ["sql"]
-                  },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "json": {
-                        "$ref": "#/$defs/json"
-                      }
-                    },
-                    "required": ["json"]
-                  }
-                ]
-              },
-              {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "logger": {
-                    "$ref": "#/$defs/logger"
-                  },
-                  "rejection": {
-                    "$ref": "#/$defs/rejection"
-                  },
-                  "state": {
-                    "$ref": "#/$defs/state"
-                  }
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    "workflow": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "name": { "type": "string" },
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "jobs": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "pipeline": { "$ref": "#/$defs/pipeline" }
-                },
-                "required": [ "name", "pipeline" ]
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "action": { "$ref": "#/$defs/action" }
-                },
-                "required": [ "name", "action" ]
-              }
-            ]
-          }
-        }
-      },
-      "required": [ "name", "jobs" ]
-    },
-    "action": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "name": { "type": "string" },
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      },
-      "required": [ "name", "jobs" ]
-    },
-    "logger": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "channel": { "type": "string"},
-        "destinations": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "elasticsearch": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "level": { "type": "string", "enum": [ "debug", "notice", "info", "warning", "error", "alert", "critical" ] },
-                      "hosts": { "type": "array", "items": { "type": "string" } }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    "rejection": {
-      "type": "object",
-      "additionalProperties": false
-    },
-    "state": {
-      "type": "object",
-      "additionalProperties": false
-    },
-    "expression_language": { "type": "array", "items": { "type":  "string" } },
-    "custom": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "akeneo": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "enterprise": { "type": "boolean" },
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "extractor": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "type": { "type": "string", "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] },
-            "method": { "type": "string" },
-            "code": { "type": "string" },
-            "search": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "field": { "type":  "string" },
-                  "operator": { "type":  "string" },
-                  "value": {
-                    "oneOf": [
-                      {"type": "string" },
-                      {"type": "number" },
-                      {"type": "boolean" },
-                      {"type": "null" }
-                    ]
-                  },
-                  "scope": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "required": ["field", "operator"]
-                }
-              }
-            }
-          },
-          "required": [ "type", "method" ],
-          "if": {
-            "properties": {
-              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "asset", "assetCategory", "assetTag" ] }
-            }
-          },
-          "then": {
-            "properties": {
-              "method": { "enum": [ "all", "listPerPage", "get" ] }
-            },
-            "if": {
-              "properties": {
-                "method": { "const": "get" }
-              }
-            },
-            "then": {
-              "required": [ "type", "method", "code" ]
-            }
-          },
-          "else": {
-            "if": {
-              "properties": {
-                "type": { "enum": [ "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
-              }
-            },
-            "then": {
-              "properties": {
-                "method": { "enum": [ "all", "get" ] }
-              },
-              "if": {
-                "properties": {
-                  "method": { "const": "get" }
-                }
-              },
-              "then": {
-                "required": [ "type", "method", "code" ]
-              }
-            },
-            "else": {
-              "if": {
-                "properties": {
-                  "type": { "enum": [ "productModelDraft", "productDraft" ] }
-                }
-              },
-              "then": {
-                "properties": {
-                  "method": { "enum": [ "all" ] }
-                }
-              }
-            }
-          }
-        },
-        "lookup": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "type": { "type": "string" },
-            "method": { "type": "string" },
-            "code": { "type": "string" },
-            "search": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "field": { "type":  "string" },
-                  "operator": { "type":  "string" },
-                  "value": {
-                    "oneOf": [
-                      { "type": "string" },
-                      { "type": "number" },
-                      { "type": "boolean" },
-                      { "type": "null" }
-                    ]
-                  },
-                  "scope": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "required": ["field", "operator"]
-                }
-              }
-            },
-            "merge": {
-              "oneOf": [
-                {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "map": { "$ref": "#/$defs/fastmap-items" }
-                  }
-                },
-                {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "object": { "$ref": "#/$defs/fastmap-items" },
-                    "class": { "type": "string" }
-                  }
-                }
-              ]
-            },
-            "required": ["type", "method"]
-          }
-        },
-        "loader": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "type": { "type": "string" },
-            "method": { "type": "string" },
-            "code": { "type": "string" },
-            "search": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "field": { "type":  "string" },
-                  "operator": { "type":  "string" },
-                  "value": {
-                    "oneOf": [
-                      {"type": "string" },
-                      {"type": "number" },
-                      {"type": "boolean" },
-                      {"type": "null" }
-                    ]
-                  },
-                  "scope": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
-                  "required": ["field", "operator"]
-                }
-              }
-            },
-            "required": ["type", "method"]
-          }
-        },
-        "client": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "api_url": { "type":  "string" },
-            "client_id": { "type":  "string" },
-            "secret": { "type":  "string" },
-            "username": { "type":  "string" },
-            "password": { "type":  "string" }
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "enterprise": { "const": true }
-        }
-      },
-      "then": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "extractor": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
-                }
-              }
-            },
-            "required": [ "extractor" ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "lookup": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
-                }
-              }
-            },
-            "required": [ "lookup" ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "loader": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
-                }
-              }
-            },
-            "required": [ "loader" ]
-          }
-        ]
-      },
-      "else": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "extractor": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
-                }
-              }
-            },
-            "required": [ "extractor" ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "lookup": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
-                }
-              }
-            },
-            "required": [ "lookup" ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "loader": {
-                "properties": {
-                  "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
-                }
-              }
-            },
-            "required": [ "loader" ]
-          }
-        ]
-      }
-    },
-    "sylius": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "csv": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "spreadsheet": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "fastmap-items": {
-      "type": "array",
-      "additionalProperties": false,
-      "items": {
-        "oneOf": [
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "copy": { "type": "string" },
-              "field": { "type": "string" }
-            },
-            "required": [ "copy", "field" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "expression": { "type": "string" },
-              "field": { "type": "string" }
-            },
-            "required": [ "expression", "field" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "constant": { "type": "string" },
-              "field": { "type": "string" }
-            },
-            "required": [ "constant", "field" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "expression": { "type": "string" },
-              "field": { "type": "string" },
-              "object": { "$ref": "#/$defs/fastmap-items" },
-              "class": { "type": "string" }
-            },
-            "required": [ "expression", "field", "object", "class" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "expression": { "type": "string" },
-              "field": { "type": "string" },
-              "collection": { "$ref": "#/$defs/fastmap-items" },
-              "class": { "type": "string" }
-            },
-            "required": [ "expression", "field", "collection", "class" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "expression": { "type": "string" },
-              "field": { "type": "string" },
-              "map": { "$ref": "#/$defs/fastmap-items" }
-            },
-            "required": [ "expression", "field", "map" ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "expression": { "type": "string" },
-              "field": { "type": "string" },
-              "list": { "$ref": "#/$defs/fastmap-items" }
-            },
-            "required": [ "expression", "field", "list" ]
-          }
-        ]
-      }
-    },
-    "fastmap": {
+    "adapters": {
       "oneOf": [
         {
           "type": "object",
-          "additionalProperties": false,
           "properties": {
-            "expression_language": { "$ref": "#/$defs/expression_language" },
-            "map": { "$ref": "#/$defs/fastmap-items" }
-          }
+            "docker": { "$ref": "schema/definitions.json#/$defs/docker" }
+          },
+          "required": [ "docker" ]
         },
         {
           "type": "object",
-          "additionalProperties": false,
           "properties": {
-            "expression_language": { "$ref": "#/$defs/expression_language" },
-            "object": { "$ref": "#/$defs/fastmap-items" },
-            "class": { "type": "string" }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "expression_language": { "$ref": "#/$defs/expression_language" },
-            "conditional": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "condition": { "type": "string" },
-                  "map": { "$ref": "#/$defs/fastmap-items" }
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "expression_language": { "$ref": "#/$defs/expression_language" },
-            "conditional": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "object": { "$ref": "#/$defs/fastmap-items" },
-                  "class": { "type": "string" }
-                }
-              }
-            }
-          }
+            "filesystem": { "$ref": "schema/definitions.json#/$defs/filesystem" }
+          },
+          "required": [ "filesystem" ]
         }
       ]
     },
-    "stream": {
+    "satellites": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "pipeline": { "$ref": "schema/definitions.json#/$defs/pipeline" }
+          },
+          "required": [ "pipeline" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow": { "$ref": "schema/definitions.json#/$defs/workflow" }
+          },
+          "required": [ "workflow" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": { "$ref": "schema/definitions.json#/$defs/action" }
+          },
+          "required": [ "action" ]
+        }
+      ]
+    },
+    "version-0.1": {
+      "type": "object",
+      "properties": {
+        "satellite": {
+          "allOf": [
+            { "$ref": "#/$defs/adapters" },
+            { "$ref": "#/$defs/satellites" },
+            {
+              "type": "object",
+              "properties": {
+                "composer": { "$ref": "schema/definitions.json#/$defs/composer" }
+              }
+            }
+          ]
+        }
+      },
+      "required": [ "satellite" ]
+    },
+    "version-0.2": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "loader": {
+        "version": { "type": "string", "const": "0.2" },
+        "satellites": {
           "type": "object",
           "additionalProperties": false,
-          "properties": {
-            "destination": { "type": "string", "enum": [ "stdout", "stderr" ]},
-            "format": { "type": "string", "enum": [ "json", "debug" ]}
-          }
-        }
-      }
-    },
-    "batch": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "merge": {
-          "type": "object",
-          "properties": {
-            "size": { "type": "integer" }
-          }
-        }
-      }
-    },
-    "ftp": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" },
-        "loader": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "servers": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "host": { "type": "string" },
-                  "port": { "type": "integer" },
-                  "username": { "type": "string" },
-                  "password": { "type": "string" },
-                  "base_path": { "type": "string" }
-                },
-                "required": [ "host", "base_path" ]
-              }
-            },
-            "put": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "path": { "type": "string" },
-                  "content": { "type": "string" },
-                  "mode": { "type": "string" },
-                  "if": { "type": "string" }
-                },
-                "required": [ "path", "content" ]
-              }
+          "patternProperties": {
+            "^[a-z_]+[a-z0-9_]+$": {
+              "allOf": [
+                { "$ref": "#/$defs/adapters" },
+                { "$ref": "#/$defs/satellites" },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "composer": { "type": "object" }
+                  }
+                }
+              ]
             }
           }
         }
-      }
-    },
-    "http": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "sftp": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "sql": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
-    },
-    "json": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "expression_language": { "$ref": "#/$defs/expression_language" }
-      }
+      },
+      "required": [ "version", "satellites" ]
     }
   },
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "satellite": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "docker": { "$ref": "#/$defs/docker" },
-        "filesystem": { "$ref": "#/$defs/filesystem" },
-        "composer": { "$ref": "#/$defs/composer" },
-        "pipeline": { "$ref": "#/$defs/pipeline" },
-        "workflow": { "$ref": "#/$defs/workflow" }
-      }
+  "if": {
+    "not": {
+      "required": [ "version" ]
     }
+  },
+  "then": { "$ref": "#/$defs/version-0.1"},
+  "else": {
+    "if": {
+      "properties": {
+        "version": { "type": "string", "const": "0.2" }
+      }
+    },
+    "then": { "$ref": "#/$defs/version-0.2"}
   }
 }
