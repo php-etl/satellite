@@ -8,7 +8,11 @@ use Kiboko\Component\Satellite;
 use Psr\Log;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Console;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml;
 
 final class BuildCommand extends Console\Command\Command
@@ -67,18 +71,63 @@ final class BuildCommand extends Console\Command\Command
 
         \chdir(\dirname($filename));
 
-        $factory = new Satellite\Runtime\Factory(
-            new Satellite\Adapter\Factory(),
-            new class() extends Log\AbstractLogger {
-                public function log($level, $message, array $context = array())
-                {
-                    $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                    fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
-                }
-            },
-        );
+        if (array_key_exists('satellite', $configuration)) {
+            $output->writeln([
+                '',
+                '',
+                '<info>Building Pipeline<info>',
+                '============',
+            ]);
 
-        $factory($configuration);
+            $factory = new Satellite\Runtime\Factory(
+                new Satellite\Adapter\Factory(),
+                new class() extends Log\AbstractLogger {
+                    public function log($level, $message, array $context = array())
+                    {
+                        $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
+                        fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                    }
+                },
+            );
+
+            $factory($configuration['satellite']);
+        }
+
+        if (array_key_exists('imports', $configuration)) {
+            foreach ($configuration['imports'] as $imports) {
+                foreach ($imports as $import) {
+                    $output->writeln([
+                        '',
+                        '',
+                        '<info>Building Pipeline<info>',
+                        '============',
+                    ]);
+
+                    $fileLocator = new FileLocator();
+                    $loaderResolver = new LoaderResolver([
+                        new Satellite\Console\Config\YamlFileLoader($fileLocator),
+                        new Satellite\Console\Config\JsonFileLoader($fileLocator)
+                    ]);
+
+                    $fileConfig = $import(new DelegatingLoader($loaderResolver));
+
+                    if (array_key_exists('satellite', $configuration)) {
+                        $factory = new Satellite\Runtime\Factory(
+                            new Satellite\Adapter\Factory(),
+                            new class() extends Log\AbstractLogger {
+                                public function log($level, $message, array $context = array())
+                                {
+                                    $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
+                                    fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                                }
+                            },
+                        );
+
+                        $factory($fileConfig['satellite']);
+                    }
+                }
+            }
+        }
 
         return 0;
     }

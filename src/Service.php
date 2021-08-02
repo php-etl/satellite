@@ -20,20 +20,17 @@ use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Kiboko\Component\SatelliteToolbox;
 
-final class Service
+final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
-    /**
-     * @var array<ConfigurationInterface>
-     */
-    private array $configurations;
+    private ConfigurationInterface $backwardCompatibilityConfiguration;
+    private ConfigurationInterface $configuration;
 
     public function __construct()
     {
         $this->processor = new Processor();
-        $this->configurations = [
-            new SatelliteToolbox\Configuration\ImportConfiguration(),
-            (new Configuration())
+
+        $this->backwardCompatibilityConfiguration = (new BackwardCompatibilityConfiguration())
             ->addAdapters(
                 new Adapter\Docker\Configuration(),
                 new Adapter\Filesystem\Configuration(),
@@ -43,8 +40,29 @@ final class Service
                 new Runtime\HttpHook\Configuration(),
                 new Runtime\Pipeline\Configuration(),
                 new Runtime\Workflow\Configuration(),
-            ),
-        ];
+            );
+
+        $this->configuration = (new Satellite\Configuration())
+            ->addAdapters(
+                new Adapter\Docker\Configuration(),
+                new Adapter\Filesystem\Configuration(),
+            )
+            ->addRuntimes(
+                new Runtime\Api\Configuration(),
+                new Runtime\HttpHook\Configuration(),
+                new Runtime\Pipeline\Configuration(),
+                new Runtime\Workflow\Configuration(),
+            );
+    }
+
+    public function configuration(): ConfigurationInterface
+    {
+        return $this->configuration;
+    }
+
+    public function backwardCompatibilityConfiguration(): ConfigurationInterface
+    {
+        return $this->backwardCompatibilityConfiguration;
     }
 
     /**
@@ -53,18 +71,19 @@ final class Service
     public function normalize(array $configs): array
     {
         try {
-            $configImports = ['imports' => $configs['imports']];
-            $configSatellite = ['satellite' => $configs['satellite']];
+            try {
+                $this->processor->processConfiguration(new Configuration\VersionConfiguration(), ['version' => $configs["version"]]);
+            } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
+                return $this->processor->processConfiguration($this->backwardCompatibilityConfiguration, $configs);
+            }
 
-           foreach ($this->configurations as $configuration) {
-               if ($configuration instanceof SatelliteToolbox\Configuration\ImportConfiguration && $configs['imports']) {
-                   $config["imports"] = $this->processor->processConfiguration($configuration, $configImports);
-               } elseif ($configuration instanceof Configuration && $configs['satellite']) {
-                   $config["satellite"] = $this->processor->processConfiguration($configuration, $configSatellite);
-               }
-           }
+            try {
+                $imports = $this->processor->processConfiguration(new SatelliteToolbox\Configuration\ImportConfiguration(), ['imports' => $configs["imports"]]);
 
-           return $config;
+                $configs = $this->processImports($imports, $configs);
+            } finally {
+                return $this->processor->processConfiguration($this->configuration, ['satellites' => $configs["satellites"]]);
+            }
         } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
@@ -77,9 +96,9 @@ final class Service
             $configSatellite = ['satellite' => $configs['satellite']];
 
             foreach ($this->configurations as $configuration) {
-                if ($configuration instanceof SatelliteToolbox\Configuration\ImportConfiguration) {
+                if ($configuration instanceof SatelliteToolbox\Configuration\ImportConfiguration && $configs['imports']) {
                     $this->processor->processConfiguration($configuration, $configImports);
-                } else {
+                } elseif ($configuration instanceof BackwardCompatibilityConfiguration && $configs['satellite']) {
                     $this->processor->processConfiguration($configuration, $configSatellite);
                 }
             }
@@ -97,18 +116,14 @@ final class Service
     {
         if (array_key_exists('imports', $config)) {
             return $this->compileImports($config);
-        } elseif (array_key_exists('satellite', $config)) {
-            if (array_key_exists('imports', $config["satellite"])) {
-                return $this->compileImports($config);
-            } elseif (array_key_exists('workflow', $config["satellite"])) {
-                return $this->compileWorkflow($config);
-            } elseif (array_key_exists('pipeline', $config["satellite"])) {
-                return $this->compilePipeline($config);
-            } elseif (array_key_exists('http_hook', $config["satellite"])) {
-                return $this->compileHook($config);
-            } elseif (array_key_exists('http_api', $config["satellite"])) {
-                return $this->compileApi($config);
-            }
+        } elseif (array_key_exists('workflow', $config)) {
+            return $this->compileWorkflow($config);
+        } elseif (array_key_exists('pipeline', $config)) {
+            return $this->compilePipeline($config);
+        } elseif (array_key_exists('http_hook', $config)) {
+            return $this->compileHook($config);
+        } elseif (array_key_exists('http_api', $config)) {
+            return $this->compileApi($config);
         }
 
         throw new \LogicException('Not implemented');
@@ -162,16 +177,16 @@ final class Service
             'symfony/dependency-injection:^5.2',
         );
 
-        if (array_key_exists('expression_language', $config['satellite']['pipeline'])
-            && is_array($config['satellite']['pipeline']['expression_language'])
-            && count($config['satellite']['pipeline']['expression_language'])
+        if (array_key_exists('expression_language', $config['pipeline'])
+            && is_array($config['pipeline']['expression_language'])
+            && count($config['pipeline']['expression_language'])
         ) {
             foreach ($config['pipeline']['expression_language'] as $provider) {
                 $interpreter->registerProvider(new $provider);
             }
         }
 
-        foreach ($config['satellite']['pipeline']['steps'] as $step) {
+        foreach ($config['pipeline']['steps'] as $step) {
             if (array_key_exists('akeneo', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service(clone $interpreter)))
                     ->withPackages(
@@ -270,37 +285,45 @@ final class Service
 
     private function compileImports(array $config): Builder\Repository\Pipeline|Builder\Repository\Workflow
     {
-        if (count($config['imports']) > 0) {
-            foreach ($config['imports'] as $imports) {
-                foreach ($imports as $import) {
-                    $fileLocator = new FileLocator();
-                    $loaderResolver = new LoaderResolver([
-                        new Satellite\Console\Config\YamlFileLoader($fileLocator),
-                        new Satellite\Console\Config\JsonFileLoader($fileLocator)
-                    ]);
+        foreach ($config['imports'] as $imports) {
+            foreach ($imports as $import) {
+                $fileLocator = new FileLocator();
+                $loaderResolver = new LoaderResolver([
+                    new Satellite\Console\Config\YamlFileLoader($fileLocator),
+                    new Satellite\Console\Config\JsonFileLoader($fileLocator)
+                ]);
 
-                    $fileConfig = $import(new DelegatingLoader($loaderResolver));
+                $fileConfig = $import(new DelegatingLoader($loaderResolver));
 
-                    if (array_key_exists('satellite', $fileConfig)) {
-                        if (array_key_exists('pipeline', $fileConfig['satellite'])) {
-                            return $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
-                        } elseif (array_key_exists('workflow', $fileConfig['satellite'])) {
-                            return $this->compileWorkflow($import(new DelegatingLoader($loaderResolver)));
-                        } else {
-                            throw new Symfony\InvalidConfigurationException('Please, check your imported configuration files.');
-                        }
-                    }
-//
-//                    if (array_key_exists('pipeline', $fileConfig)) {
-//                        return $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
-//                    } elseif (array_key_exists('workflow', $fileConfig)) {
-//                        return $this->compileWorkflow($import(new DelegatingLoader($loaderResolver)));
-//                    } else {
-//                        throw new Symfony\InvalidConfigurationException('Please, check your imported configuration files.');
-//                    }
+                if (array_key_exists('pipeline', $fileConfig)) {
+                    return $this->compilePipeline($import(new DelegatingLoader($loaderResolver)));
+                } elseif (array_key_exists('workflow', $fileConfig)) {
+                    return $this->compileWorkflow($import(new DelegatingLoader($loaderResolver)));
+                } else {
+                    throw new Symfony\InvalidConfigurationException('Please, check your imported configuration files.');
                 }
             }
         }
     }
 
+    private function processImports(array $imports, array $configs): array
+    {
+        $output = [];
+
+        foreach ($imports as $import) {
+            foreach ($import as $item) {
+                $fileLocator = new FileLocator();
+                $loaderResolver = new LoaderResolver([
+                    new Satellite\Console\Config\YamlFileLoader($fileLocator),
+                    new Satellite\Console\Config\JsonFileLoader($fileLocator)
+                ]);
+
+                $fileConfig = $item(new DelegatingLoader($loaderResolver));
+
+                $output = array_push($configs, $fileConfig);
+            }
+        }
+
+        return $output;
+    }
 }

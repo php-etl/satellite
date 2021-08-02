@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\Satellite\Feature;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Kiboko\Component\SatelliteToolbox;
 
-final class Configuration implements ConfigurationInterface
+final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
     /** @var iterable<NamedConfigurationInterface> */
     private iterable $adapters;
@@ -39,7 +37,52 @@ final class Configuration implements ConfigurationInterface
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('satellites');
+        $builder = new TreeBuilder('satellite');
+
+        /** @phpstan-ignore-next-line */
+        $builder->getRootNode()
+            ->fixXmlConfig('satellite', 'satellites')
+            ->children()
+                ->enumNode('version')->values(['0.3'])->end()
+            ->end()
+            ->beforeNormalization()
+                ->always($this->mutuallyExclusiveFields('satellite', 'satellites'))
+            ->end()
+            ->beforeNormalization()
+                ->always($this->mutuallyDependentFields('satellites', 'version'))
+            ->end()
+            ->children()
+                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->end()
+            ->scalarPrototype()->end();
+
+        $root = $builder->getRootNode();
+
+        if (!$root instanceof ArrayNodeDefinition) {
+            throw new \RuntimeException(strtr(
+                'Expected an instance of %expected%, but got %actual%.',
+                [
+                    '%expected%' => ArrayNodeDefinition::class,
+                    '%actual%' => get_debug_type($root),
+                ]
+            ));
+        }
+        $children = $root->children();
+
+        foreach ($this->adapters as $config) {
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        }
+
+        foreach ($this->runtimes as $config) {
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        }
+
+        return $builder;
+    }
+
+    private function getSatelliteTreeBuilder(): TreeBuilder
+    {
+        $builder = new TreeBuilder('satellite');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -55,21 +98,8 @@ final class Configuration implements ConfigurationInterface
                     $this->runtimes
                 )))
             ->end()
-            ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('imports', $data) && is_array($data['imports']) && count($data['imports']) <= 0)
-                ->then(function ($data) {
-                    unset($data['imports']);
-                    return $data;
-                })
-            ->end()
-            ->arrayPrototype()
-                ->children()
-                    ->scalarNode('label')
-                        ->isRequired()
-                    ->end()
-                    ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())->end()
-                    ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
-                ->end()
+            ->children()
+                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
         $root = $builder->getRootNode();
