@@ -47,7 +47,7 @@
         }
       ]
     },
-    "version-0.1": {
+    "version-0.2": {
       "type": "object",
       "properties": {
         "satellite": {
@@ -65,11 +65,11 @@
       },
       "required": [ "satellite" ]
     },
-    "version-0.2": {
+    "version-0.3": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "version": { "type": "string", "const": "0.2" },
+        "version": { "type": "string", "const": "0.3" },
         "satellites": {
           "type": "object",
           "additionalProperties": false,
@@ -98,13 +98,13 @@
       "required": [ "version" ]
     }
   },
-  "then": { "$ref": "#/$defs/version-0.1"},
+  "then": { "$ref": "#/$defs/version-0.2"},
   "else": {
     "if": {
       "properties": {
-        "version": { "type": "string", "const": "0.2" }
+        "version": { "type": "string", "const": "0.3" }
       }
     },
-    "then": { "$ref": "#/$defs/version-0.2"}
+    "then": { "$ref": "#/$defs/version-0.3"}
   }
 }
