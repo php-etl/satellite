@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
+use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
+use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
 use Kiboko\Component\Satellite\Feature;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Kiboko\Component\SatelliteToolbox;
 
 final class Configuration implements ConfigurationInterface
@@ -16,16 +18,19 @@ final class Configuration implements ConfigurationInterface
     private iterable $adapters;
     /** @var iterable<NamedConfigurationInterface> */
     private iterable $runtimes;
+    private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
     {
         $this->adapters = [];
         $this->runtimes = [];
+        $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
     public function addAdapters(NamedConfigurationInterface ...$adapters): self
     {
         array_push($this->adapters, ...$adapters);
+        $this->backwardCompatibilityConfiguration->addAdapters(...$adapters);
 
         return $this;
     }
@@ -33,16 +38,63 @@ final class Configuration implements ConfigurationInterface
     public function addRuntimes(NamedConfigurationInterface ...$runtimes): self
     {
         array_push($this->runtimes, ...$runtimes);
+        $this->backwardCompatibilityConfiguration->addRuntimes(...$runtimes);
 
         return $this;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('satellites');
+        $builder = new TreeBuilder('etl');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
+            ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
+            ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
+            ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
+            ->beforeNormalization()
+                ->always($this->mutuallyDependentFields('satellites', 'version'))
+            ->end()
+            ->beforeNormalization()
+                ->always($this->mutuallyExclusiveFields('satellite', 'version'))
+            ->end()
+            ->children()
+                ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
+                ->arrayNode('satellites')->end()
+            ->end();
+
+        $root = $builder->getRootNode();
+
+        if (!$root instanceof ArrayNodeDefinition) {
+            throw new \RuntimeException(strtr(
+                'Expected an instance of %expected%, but got %actual%.',
+                [
+                    '%expected%' => ArrayNodeDefinition::class,
+                    '%actual%' => get_debug_type($root),
+                ]
+            ));
+        }
+
+        $children = $root->find('satellites');
+
+        if (!$children instanceof ArrayNodeDefinition) {
+            throw new \RuntimeException(strtr(
+                'Expected an instance of %expected%, but got %actual%.',
+                [
+                    '%expected%' => ArrayNodeDefinition::class,
+                    '%actual%' => get_debug_type($root),
+                ]
+            ));
+        }
+
+        $this->buildSatelliteTree($children->arrayPrototype());
+
+        return $builder;
+    }
+
+    private function buildSatelliteTree(ArrayNodeDefinition $node): void
+    {
+        $node
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_map(
                     fn (NamedConfigurationInterface $config) => $config->getName(),
@@ -62,38 +114,21 @@ final class Configuration implements ConfigurationInterface
                     return $data;
                 })
             ->end()
-            ->arrayPrototype()
-                ->children()
-                    ->scalarNode('label')
-                        ->isRequired()
-                    ->end()
-                    ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())->end()
-                    ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->children()
+                ->scalarNode('label')
+                    ->isRequired()
                 ->end()
+                ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())->end()
+                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
-        $root = $builder->getRootNode();
-
-        if (!$root instanceof ArrayNodeDefinition) {
-            throw new \RuntimeException(strtr(
-                'Expected an instance of %expected%, but got %actual%.',
-                [
-                    '%expected%' => ArrayNodeDefinition::class,
-                    '%actual%' => get_debug_type($root),
-                ]
-            ));
-        }
-        $children = $root->children();
-
         foreach ($this->adapters as $config) {
-            $children->append($config->getConfigTreeBuilder()->getRootNode());
+            $node->append($config->getConfigTreeBuilder()->getRootNode());
         }
 
         foreach ($this->runtimes as $config) {
-            $children->append($config->getConfigTreeBuilder()->getRootNode());
+            $node->append($config->getConfigTreeBuilder()->getRootNode());
         }
-
-        return $builder;
     }
 
     private function mutuallyExclusiveFields(string ...$exclusions): \Closure

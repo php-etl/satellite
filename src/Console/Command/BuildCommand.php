@@ -91,41 +91,27 @@ final class BuildCommand extends Console\Command\Command
             );
 
             $factory($configuration['satellite']);
-        }
-
-        if (array_key_exists('imports', $configuration)) {
-            foreach ($configuration['imports'] as $imports) {
-                foreach ($imports as $import) {
-                    $output->writeln([
-                        '',
-                        '',
-                        '<info>Building Pipeline<info>',
-                        '============',
-                    ]);
-
-                    $fileLocator = new FileLocator();
-                    $loaderResolver = new LoaderResolver([
-                        new Satellite\Console\Config\YamlFileLoader($fileLocator),
-                        new Satellite\Console\Config\JsonFileLoader($fileLocator)
-                    ]);
-
-                    $fileConfig = $import(new DelegatingLoader($loaderResolver));
-
-                    if (array_key_exists('satellite', $configuration)) {
-                        $factory = new Satellite\Runtime\Factory(
-                            new Satellite\Adapter\Factory(),
-                            new class() extends Log\AbstractLogger {
-                                public function log($level, $message, array $context = array())
-                                {
-                                    $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                                    fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
-                                }
-                            },
-                        );
-
-                        $factory($fileConfig['satellite']);
+        } elseif (array_key_exists('satellites', $configuration)) {
+            $factory = new Satellite\Runtime\Factory(
+                new Satellite\Adapter\Factory(),
+                new class() extends Log\AbstractLogger {
+                    public function log($level, $message, array $context = array())
+                    {
+                        $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
+                        fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
                     }
-                }
+                },
+            );
+
+            foreach ($configuration["satellites"] as $satellite) {
+                $output->writeln([
+                    '',
+                    '',
+                    '<info>Building Pipeline<info>',
+                    '============',
+                ]);
+
+                $factory($satellite);
             }
         }
 

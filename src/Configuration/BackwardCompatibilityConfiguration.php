@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Configuration;
 
+use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var iterable<NamedConfigurationInterface> */
+    /** @var iterable<Satellite\NamedConfigurationInterface> */
     private iterable $adapters;
-    /** @var iterable<NamedConfigurationInterface> */
+    /** @var iterable<Satellite\NamedConfigurationInterface> */
     private iterable $runtimes;
 
     public function __construct()
@@ -21,14 +22,14 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         $this->runtimes = [];
     }
 
-    public function addAdapters(NamedConfigurationInterface ...$adapters): self
+    public function addAdapters(Satellite\NamedConfigurationInterface ...$adapters): self
     {
         array_push($this->adapters, ...$adapters);
 
         return $this;
     }
 
-    public function addRuntimes(NamedConfigurationInterface ...$runtimes): self
+    public function addRuntimes(Satellite\NamedConfigurationInterface ...$runtimes): self
     {
         array_push($this->runtimes, ...$runtimes);
 
@@ -41,20 +42,9 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
-            ->fixXmlConfig('satellite', 'satellites')
             ->children()
-                ->enumNode('version')->values(['0.3'])->end()
-            ->end()
-            ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields('satellite', 'satellites'))
-            ->end()
-            ->beforeNormalization()
-                ->always($this->mutuallyDependentFields('satellites', 'version'))
-            ->end()
-            ->children()
-                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
-            ->end()
-            ->scalarPrototype()->end();
+                ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->end();
 
         $root = $builder->getRootNode();
 
@@ -88,18 +78,18 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         $builder->getRootNode()
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
+                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
                     $this->adapters
                 )))
             ->end()
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
+                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
                     $this->runtimes
                 )))
             ->end()
             ->children()
-                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+                ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
         $root = $builder->getRootNode();
