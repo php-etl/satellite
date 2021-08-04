@@ -59,8 +59,9 @@ final class Configuration implements ConfigurationInterface
                 ->always($this->mutuallyExclusiveFields('satellite', 'version'))
             ->end()
             ->children()
-                ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
-                ->arrayNode('satellites')->end()
+                ->arrayNode('satellites')
+                    ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
+                ->end()
             ->end();
 
         $root = $builder->getRootNode();

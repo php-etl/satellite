@@ -15,9 +15,6 @@ use Kiboko\Plugin\SQL;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Loader\DelegatingLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
 use Kiboko\Component\SatelliteToolbox;
 
 final class Service implements Configurator\FactoryInterface
@@ -52,11 +49,8 @@ final class Service implements Configurator\FactoryInterface
      */
     public function normalize(array $config): array
     {
-        $imports = $this->processImportsConfig($config);
-        $configurations = array_merge([$config], $imports);
-
         try {
-            return $this->processor->processConfiguration($this->configuration, $configurations);
+            return $this->processor->processConfiguration($this->configuration, $config);
         } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
@@ -227,45 +221,5 @@ final class Service implements Configurator\FactoryInterface
         $pipeline = new Satellite\Builder\Hook();
 
         return new Satellite\Builder\Repository\Hook($pipeline);
-    }
-
-    private function processImportsConfig(array $config): array
-    {
-        $imports = [];
-
-        switch ($config) {
-            case array_key_exists('imports', $config):
-                $imports = $this->processImports($this->processor->processConfiguration(new SatelliteToolbox\Configuration\ImportConfiguration(), ['imports' => $config['imports']]));
-
-                break;
-            case array_key_exists('imports', $config['satellites']):
-                $imports = $this->processor->processConfiguration(new SatelliteToolbox\Configuration\ImportConfiguration(), ['imports' => $config['satellites']['imports']]);
-        }
-
-        return $imports;
-    }
-
-    private function processImports(array $imports): array
-    {
-        $output = [];
-
-        foreach ($imports as $import) {
-            foreach ($import as $item) {
-                $fileLocator = new FileLocator([getcwd()]);
-                $loaderResolver = new LoaderResolver([
-                    new Satellite\Console\Config\YamlFileLoader($fileLocator),
-                    new Satellite\Console\Config\JsonFileLoader($fileLocator)
-                ]);
-
-                $fileConfig = $item(new DelegatingLoader($loaderResolver));
-                if (array_key_exists('imports', $fileConfig)) {
-                    $output = $this->processImports($this->processor->processConfiguration(new SatelliteToolbox\Configuration\ImportConfiguration(), ['imports' => $fileConfig['imports']]));
-                }
-
-                $output[] = $fileConfig;
-            }
-        }
-
-        return $output;
     }
 }
