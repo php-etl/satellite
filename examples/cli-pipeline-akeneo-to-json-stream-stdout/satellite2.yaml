@@ -1,0 +1,31 @@
+satellite:
+#  docker:
+#    from: php:8.0-cli-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:akeneo-to-json-stream-stdout
+  filesystem:
+    path: build/
+  composer:
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "akeneo/api-php-client-ee"
+      - "diglin/sylius-api-php-client"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: false
+          extractor:
+            type: product
+            method:
+
+
+
