@@ -43,6 +43,7 @@ satellite:
     - fastmap:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+
         conditional:
           - condition: 'input["family"] === "clothing"'
             map:
@@ -67,44 +68,44 @@ satellite:
                     expression: 'attribute(input["values"]["care_instructions"], locale(null), scope(null))'
                   - field: '[material]'
                     expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
-          - condition: 'input["family"] === "led_tvs"'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-              - field: '[translations][en_US]'
-                expression: 'input'
-                map:
-                  - field: '[name]'
-                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[slug]'
-                    expression: 'input["identifier"]'
-                  - field: '[description]'
-                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
-          - condition: 'input["family"] === "accessories"'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-              - field: '[translations][en_US]'
-                expression: 'input'
-                map:
-                  - field: '[name]'
-                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[slug]'
-                    expression: 'input["identifier"]'
-                  - field: '[composition]'
-                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
-                  - field: '[material]'
-                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
-          - condition: 'true'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
+#          - condition: 'input["family"] === "led_tvs"'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#              - field: '[translations][en_US]'
+#                expression: 'input'
+#                map:
+#                  - field: '[name]'
+#                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[slug]'
+#                    expression: 'input["identifier"]'
+#                  - field: '[description]'
+#                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+#          - condition: 'input["family"] === "accessories"'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#              - field: '[translations][en_US]'
+#                expression: 'input'
+#                map:
+#                  - field: '[name]'
+#                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[slug]'
+#                    expression: 'input["identifier"]'
+#                  - field: '[composition]'
+#                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
+#                  - field: '[material]'
+#                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
+#          - condition: 'true'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
       logger:
         channel: pipeline
         destinations:
