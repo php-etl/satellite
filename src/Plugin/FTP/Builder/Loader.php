@@ -11,11 +11,29 @@ class Loader implements StepBuilderInterface
 {
     private iterable $servers;
     private iterable $putStatements;
+    private array $serversMapping;
 
     public function __construct()
     {
         $this->servers = [];
+        $this->serversMapping = [];
         $this->putStatements = [];
+    }
+
+    public function addServerBasePath(string $host, Node\Expr $base_path)
+    {
+        $this->serversMapping[$host] = $base_path;
+    }
+
+    private function compileServersMapping(): array
+    {
+        $output = [];
+        foreach ($this->serversMapping as $basePath) {
+            $output[] = new Node\Expr\ArrayItem(
+                value: $basePath,
+            );
+        }
+        return $output;
     }
 
     public function withLogger(Node\Expr $logger): StepBuilderInterface
@@ -80,9 +98,9 @@ class Loader implements StepBuilderInterface
     private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
-            new Node\Stmt\If_(
-                cond: new Node\Expr\BinaryOp\Identical(
-                    left: new Node\Expr\FuncCall(
+             new Node\Stmt\If_(
+                 cond: new Node\Expr\BinaryOp\Identical(
+                     left: new Node\Expr\FuncCall(
                         name: new Node\Name('ftp_fput'),
                         args: [
                             new Node\Arg(
@@ -97,7 +115,15 @@ class Loader implements StepBuilderInterface
                             new Node\Arg(
                                 value: new Node\Expr\BinaryOp\Concat(
                                     new Node\Scalar\Encapsed([
-                                        new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                            new Node\Expr\ArrayDimFetch(
+                                                new Node\Expr\PropertyFetch(
+                                                new Node\Expr\Variable('this'),
+                                                new Node\Identifier('serversMapping')
+                                                ),
+                                                dim:
+                                                    new Node\Scalar\LNumber($index),
+                                            ),
+
                                         new Node\Scalar\EncapsedStringPart('/'),
                                     ]),
                                     new Node\Expr\FuncCall(
@@ -212,10 +238,26 @@ class Loader implements StepBuilderInterface
                                     new Node\Param(
                                         var: new Node\Expr\Variable('logger'),
                                         type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
-                                        flags: Node\Stmt\Class_::MODIFIER_PUBLIC,
+                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE,
                                     ),
                                 ],
                                 'stmts' => [
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\PropertyFetch(
+                                                var: new Node\Expr\Variable('this'),
+                                                name: new Identifier('serversMapping')
+                                            ),
+                                            expr: new Node\Expr\Array_(
+                                                items: [
+                                                    ...$this->compileServersMapping()
+                                                ],
+                                                attributes: [
+                                                    'kind' => Node\Expr\Array_::KIND_SHORT
+                                                ]
+                                            )
+                                        )
+                                    ),
                                     ...array_map(
                                         fn ($server, $index) => new Node\Stmt\Expression(
                                             new Node\Expr\Assign(
