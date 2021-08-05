@@ -59,7 +59,7 @@ final class Service implements Configurator\FactoryInterface
     public function validate(array $config): bool
     {
         try {
-            $this->processor->processConfiguration($this->configuration, [$config]);
+            $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
         } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
