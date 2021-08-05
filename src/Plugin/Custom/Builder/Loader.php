@@ -121,8 +121,8 @@ final class Loader implements StepBuilderInterface
 //            ];
         return new Node\Expr\New_(
             class: new Node\Stmt\Class_(
-                    name: null,
-                    subNodes: [
+                name: null,
+                subNodes: [
                     'stmts' => [
                         new Node\Stmt\Property(
                             flags: Node\Stmt\Class_::MODIFIER_PRIVATE,
@@ -169,7 +169,7 @@ final class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                 ],
-                ),
+            ),
         );
     }
 }
