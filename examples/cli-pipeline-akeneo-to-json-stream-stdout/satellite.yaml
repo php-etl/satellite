@@ -35,13 +35,13 @@ satellite:
           secret: 5pkxk7lhsycc404cs0kgg4gossww84sow0gk4kksckss4ggswo
           username: 'sylius_7380'
           password: 56e94b109
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
     - fastmap:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
@@ -57,13 +57,13 @@ satellite:
                 expression: 'input["identifier"]'
               - field: '[description]'
                 expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
-      logger:
-        channel: pipeline
-        destinations:
-        - elasticsearch:
-            level: warning
-            hosts:
-              - elasticsearch.example.com:9200
+        logger:
+          channel: pipeline
+          destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200
     - stream:
         loader:
           destination: stdout

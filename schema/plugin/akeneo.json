@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/akeneo.json",
+  "title": "Akeneo plugin for Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "$defs": {
+    "akeneo-search": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": { "type":  "string" },
+          "operator": { "type":  "string" },
+          "value": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "type": "null" },
+              { "$ref": "../expressions.json#/$defs/bundled-expression" }
+            ]
+          },
+          "scope": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
+          "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
+          "required": ["field", "operator"]
+        }
+      }
+    },
+    "akeneo-client": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "api_url": { "type":  "string" },
+        "client_id": { "type":  "string" },
+        "secret": { "type":  "string" },
+        "username": { "type":  "string" },
+        "password": { "type":  "string" }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "enterprise": { "type": "boolean" },
+    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] },
+        "method": { "type": "string" },
+        "code": { "type": "string" },
+        "search": { "$ref": "#/$defs/akeneo-search" }
+      },
+      "required": [ "type", "method" ],
+      "if": {
+        "properties": {
+          "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "asset", "assetCategory", "assetTag" ] }
+        }
+      },
+      "then": {
+        "properties": {
+          "method": { "enum": [ "all", "listPerPage", "get" ] }
+        },
+        "if": {
+          "properties": {
+            "method": { "const": "get" }
+          }
+        },
+        "then": {
+          "required": [ "type", "method", "code" ]
+        }
+      },
+      "else": {
+        "if": {
+          "properties": {
+            "type": { "enum": [ "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
+          }
+        },
+        "then": {
+          "properties": {
+            "method": { "enum": [ "all", "get" ] }
+          },
+          "if": {
+            "properties": {
+              "method": { "const": "get" }
+            }
+          },
+          "then": {
+            "required": [ "type", "method", "code" ]
+          }
+        },
+        "else": {
+          "if": {
+            "properties": {
+              "type": { "enum": [ "productModelDraft", "productDraft" ] }
+            }
+          },
+          "then": {
+            "properties": {
+              "method": { "enum": [ "all" ] }
+            }
+          }
+        }
+      }
+    },
+    "lookup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "method": { "type": "string" },
+        "code": { "type": "string" },
+        "search": { "$ref": "#/$defs/akeneo-search" },
+        "merge": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "map": { "$ref": "fastmap.json#/$defs/fastmap-items" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "object": { "$ref": "fastmap.json#/$defs/fastmap-items" },
+                "class": { "type": "string" }
+              }
+            }
+          ]
+        }
+      },
+      "required": [ "type", "method" ]
+    },
+    "loader": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "method": { "type": "string" },
+        "code": { "type": "string" },
+        "search": { "$ref": "#/$defs/akeneo-search" }
+      },
+      "required": [ "type", "method" ]
+    },
+    "client": { "$ref": "#/$defs/akeneo-client" }
+  },
+  "if": {
+    "properties": {
+      "enterprise": { "const": true }
+    }
+  },
+  "then": {
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "extractor": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
+            }
+          }
+        },
+        "required": [ "extractor" ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "lookup": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
+            }
+          }
+        },
+        "required": [ "lookup" ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "loader": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel", "publishedProduct", "productModelDraft", "productDraft", "asset", "assetCategory", "assetTag", "referenceEntityRecord", "referenceEntityAttribute", "referenceEntityAttributeOption", "referenceEntity" ] }
+            }
+          }
+        },
+        "required": [ "loader" ]
+      }
+    ]
+  },
+  "else": {
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "extractor": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
+            }
+          }
+        },
+        "required": [ "extractor" ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "lookup": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
+            }
+          }
+        },
+        "required": [ "lookup" ]
+      },
+      {
+        "type": "object",
+        "properties": {
+          "loader": {
+            "properties": {
+              "type": { "enum": [ "product", "category", "attribute", "attributeOption", "attributeGroup", "family", "productMediaFile", "locale", "channel", "currency", "measureFamily", "associationType", "familyVariant", "productModel" ] }
+            }
+          }
+        },
+        "required": [ "loader" ]
+      }
+    ]
+  }
+}

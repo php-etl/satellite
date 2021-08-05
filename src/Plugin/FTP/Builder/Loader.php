@@ -14,6 +14,7 @@ class Loader implements StepBuilderInterface
     private ?Node\Expr $state;
     private iterable $servers;
     private iterable $putStatements;
+    private array $serversMapping;
 
     public function __construct()
     {
@@ -21,7 +22,24 @@ class Loader implements StepBuilderInterface
         $this->rejection = null;
         $this->state = null;
         $this->servers = [];
+        $this->serversMapping = [];
         $this->putStatements = [];
+    }
+
+    public function addServerBasePath(string $host, Node\Expr $base_path)
+    {
+        $this->serversMapping[$host] = $base_path;
+    }
+
+    private function compileServersMapping(): array
+    {
+        $output = [];
+        foreach ($this->serversMapping as $basePath) {
+            $output[] = new Node\Expr\ArrayItem(
+                value: $basePath,
+            );
+        }
+        return $output;
     }
 
     public function withLogger(Node\Expr $logger): StepBuilderInterface
@@ -86,35 +104,6 @@ class Loader implements StepBuilderInterface
     private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
-            new Node\Stmt\Expression(
-                expr: new Node\Expr\MethodCall(
-                    var: new Node\Expr\Variable('this'),
-                    name: new Node\Name('createDirectories'),
-                    args: [
-                        new Node\Arg(
-                            value: new Node\Expr\ArrayDimFetch(
-                                new Node\Expr\PropertyFetch(
-                                    new Node\Expr\Variable('this'),
-                                    new Node\Identifier('servers')
-                                ),
-                                new Node\Scalar\LNumber($index),
-                            ),
-                        ),
-                        new Node\Arg(
-                            value:  new Node\Scalar\Encapsed([
-                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                new Node\Scalar\EncapsedStringPart('/'),
-                            ]),
-                        ),
-                        new Node\Arg(
-                            $path,
-                        ),
-                        new Node\Arg(
-                            $mode,
-                        ),
-                    ],
-                ),
-            ),
              new Node\Stmt\If_(
                  cond: new Node\Expr\BinaryOp\Identical(
                      left: new Node\Expr\FuncCall(
@@ -132,10 +121,23 @@ class Loader implements StepBuilderInterface
                             new Node\Arg(
                                 value: new Node\Expr\BinaryOp\Concat(
                                     new Node\Scalar\Encapsed([
-                                        new Node\Scalar\EncapsedStringPart($server["base_path"]),
+                                            new Node\Expr\ArrayDimFetch(
+                                                new Node\Expr\PropertyFetch(
+                                                new Node\Expr\Variable('this'),
+                                                new Node\Identifier('serversMapping')
+                                                ),
+                                                dim:
+                                                    new Node\Scalar\LNumber($index),
+                                            ),
+
                                         new Node\Scalar\EncapsedStringPart('/'),
                                     ]),
-                                    $path,
+                                    new Node\Expr\FuncCall(
+                                        new Node\Name('basename'),
+                                        [
+                                            new Node\Arg($path)
+                                        ]
+                                    ),
                                 )
                             ),
                             new Node\Arg($content)
@@ -144,8 +146,8 @@ class Loader implements StepBuilderInterface
                      right: new Node\Expr\ConstFetch(
                         name: new Node\Name('false')
                     ),
-                 ),
-                 subNodes: [
+                ),
+                subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
@@ -234,28 +236,31 @@ class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
-                        new Node\Stmt\Property(
-                            flags: 4,
-                            props: [
-                                new Node\Stmt\PropertyProperty(
-                                    new Node\Name('logger')
-                                )
-                            ],
-                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
-                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
+                                'params' => [
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('logger'),
+                                        type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
+                                        flags: Node\Stmt\Class_::MODIFIER_PRIVATE,
+                                    ),
+                                ],
                                 'stmts' => [
                                     new Node\Stmt\Expression(
                                         expr: new Node\Expr\Assign(
                                             var: new Node\Expr\PropertyFetch(
                                                 var: new Node\Expr\Variable('this'),
-                                                name: new Identifier('logger')
+                                                name: new Identifier('serversMapping')
                                             ),
-                                            expr: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified('Psr\Log\NullLogger')
+                                            expr: new Node\Expr\Array_(
+                                                items: [
+                                                    ...$this->compileServersMapping()
+                                                ],
+                                                attributes: [
+                                                    'kind' => Node\Expr\Array_::KIND_SHORT
+                                                ]
                                             )
                                         )
                                     ),
@@ -319,11 +324,7 @@ class Loader implements StepBuilderInterface
                                             ),
                                         ],
                                     ),
-                                    new Node\Stmt\Expression(
-                                        new Node\Expr\Yield_(
-                                            value: new Node\Expr\Variable('bucket')
-                                        ),
-                                    ),
+                                    ...$this->compileCloseServers()
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
                             ],
@@ -332,7 +333,7 @@ class Loader implements StepBuilderInterface
                             name: new Node\Identifier('createDirectories'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'returnType' => new Node\Expr\ConstFetch(new Node\Name('bool')),
+                                'returnType' => new Node\Expr\ConstFetch(new Node\Name('void')),
                                 'params' => [
                                     new Node\Param(
                                         var: new Node\Expr\Variable('ftpcon')
@@ -347,24 +348,11 @@ class Loader implements StepBuilderInterface
                                     ),
                                     new Node\Param(
                                         var: new Node\Expr\Variable('mode'),
-                                        default: new Node\Scalar\String_('0775'),
+                                        default: new Node\Expr\ConstFetch(new Node\Name('null')),
                                         type: new Identifier('string')
-                                    )
+                                    ),
                                 ],
                                 'stmts' => [
-                                    new Node\Stmt\Expression(
-                                        expr: new Node\Expr\Assign(
-                                            var: new Node\Expr\Variable('path'),
-                                            expr: new Node\Expr\FuncCall(
-                                                name: new Node\Name('dirname'),
-                                                args: [
-                                                    new Node\Arg(
-                                                        new Node\Expr\Variable('path')
-                                                    ),
-                                                ],
-                                            ),
-                                        ),
-                                    ),
                                     new Node\Stmt\Expression(
                                         expr: new Node\Expr\FuncCall(
                                             name: new Node\Name('ftp_chdir'),
@@ -390,7 +378,14 @@ class Loader implements StepBuilderInterface
                                                         )
                                                     ),
                                                     new Node\Arg(
-                                                        value: new Node\Expr\Variable('path')
+                                                        value: new Node\Expr\FuncCall(
+                                                            name: new Node\Name('dirname'),
+                                                            args: [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('path')
+                                                                ),
+                                                            ],
+                                                        ),
                                                     ),
                                                 ],
                                             ),
@@ -398,12 +393,10 @@ class Loader implements StepBuilderInterface
                                     ),
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
-                                            var: new Node\Expr\Variable('created'),
-                                            expr: new Node\Expr\Array_(
-                                                attributes: [
-                                                    'kind' => Node\Expr\Array_::KIND_SHORT
-                                                ]
-                                            )
+                                            var: new Node\Expr\Variable('actualDirectory'),
+                                            expr: new Node\Expr\ConstFetch(
+                                                name: new Node\Name('DIRECTORY_SEPARATOR')
+                                            ),
                                         ),
                                     ),
                                     new Node\Stmt\Foreach_(
@@ -411,27 +404,40 @@ class Loader implements StepBuilderInterface
                                         valueVar: new Node\Expr\Variable('directory'),
                                         subNodes: [
                                             'stmts' => [
+                                                new Node\Stmt\Expression(
+                                                    expr: new Node\Expr\Assign(
+                                                        var: new Node\Expr\Variable('actualDirectory'),
+                                                        expr: new Node\Expr\BinaryOp\Concat(
+                                                            left: new Node\Expr\Variable('actualDirectory'),
+                                                            right: new Node\Expr\BinaryOp\Concat(
+                                                                left: new Node\Expr\Variable('directory'),
+                                                                right: new Node\Expr\ConstFetch(
+                                                                    name: new Node\Name('DIRECTORY_SEPARATOR')
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                ),
                                                 new Node\Stmt\If_(
                                                     cond: new Node\Expr\BooleanNot(
-                                                        new Node\Expr\FuncCall(
-                                                            name: new Node\Name('ftp_chdir'),
+                                                        expr: new Node\Expr\FuncCall(
+                                                            name: new Node\Name('ftp_nlist'),
                                                             args: [
                                                                 new Node\Arg(
                                                                     new Node\Expr\Variable('ftpcon')
                                                                 ),
                                                                 new Node\Arg(
-                                                                    new Node\Expr\Variable('directory')
-                                                                )
-                                                            ]
-                                                        )
+                                                                    new Node\Expr\Variable('actualDirectory')
+                                                                ),
+                                                            ],
+                                                        ),
                                                     ),
                                                     subNodes: [
                                                         'stmts' => [
-                                                            new Node\Stmt\Expression(
-                                                                expr: new Node\Expr\Assign(
-                                                                    var: new Node\Expr\Variable('createdDir'),
+                                                            new Node\Stmt\If_(
+                                                                cond: new Node\Expr\BooleanNot(
                                                                     expr: new Node\Expr\FuncCall(
-                                                                        name: new Node\Name('ftp_mkdir'),
+                                                                        name: new Node\Name('ftp_nlist'),
                                                                         args: [
                                                                             new Node\Arg(
                                                                                 new Node\Expr\Variable('ftpcon')
@@ -442,18 +448,33 @@ class Loader implements StepBuilderInterface
                                                                         ],
                                                                     ),
                                                                 ),
+                                                                subNodes: [
+                                                                    'stmts' => [
+                                                                        new Node\Stmt\Expression(
+                                                                            new Node\Expr\FuncCall(
+                                                                                name: new Node\Name('ftp_mkdir'),
+                                                                                args: [
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('ftpcon')
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('directory')
+                                                                                    ),
+                                                                                ],
+                                                                            ),
+                                                                        ),
+                                                                    ],
+                                                                ],
                                                             ),
                                                             new Node\Stmt\If_(
                                                                 cond: new Node\Expr\BinaryOp\NotIdentical(
-                                                                    left: new Node\Expr\Variable('createdDir'),
-                                                                    right: new Node\Expr\ConstFetch(
-                                                                        new Node\Name('false')
-                                                                    )
+                                                                    left: new Node\Expr\Variable('mode'),
+                                                                    right: new Node\Expr\ConstFetch(new Node\Name('null'))
                                                                 ),
                                                                 subNodes: [
                                                                     'stmts' => [
                                                                         new Node\Stmt\Expression(
-                                                                            expr: new Node\Expr\FuncCall(
+                                                                            new Node\Expr\FuncCall(
                                                                                 name: new Node\Name('ftp_chmod'),
                                                                                 args: [
                                                                                     new Node\Arg(
@@ -465,26 +486,18 @@ class Loader implements StepBuilderInterface
                                                                                             args: [
                                                                                                 new Node\Arg(
                                                                                                     new Node\Expr\Variable('mode')
-                                                                                                ),
-                                                                                            ],
-                                                                                        ),
+                                                                                                )
+                                                                                            ]
+                                                                                        )
                                                                                     ),
                                                                                     new Node\Arg(
-                                                                                        new Node\Expr\Variable('createdDir')
+                                                                                        new Node\Expr\Variable('directory')
                                                                                     ),
                                                                                 ],
                                                                             ),
-                                                                        )
+                                                                        ),
                                                                     ],
                                                                 ],
-                                                            ),
-                                                            new Node\Stmt\Expression(
-                                                                expr: new Node\Expr\Assign(
-                                                                    var: new Node\Expr\ArrayDimFetch(
-                                                                        var: new Node\Expr\Variable('created')
-                                                                    ),
-                                                                    expr: new Node\Expr\Variable('createdDir')
-                                                                ),
                                                             ),
                                                             new Node\Stmt\Expression(
                                                                 expr: new Node\Expr\FuncCall(
@@ -505,29 +518,41 @@ class Loader implements StepBuilderInterface
                                             ],
                                         ],
                                     ),
-                                    new Node\Stmt\Return_(
-                                        expr: new Node\Expr\BooleanNot(
-                                            new Node\Expr\FuncCall(
-                                                name: new Node\Name('in_array'),
-                                                args: [
-                                                    new Node\Arg(
-                                                        new Node\Expr\ConstFetch(
-                                                            name: new Node\Name('false')
-                                                        ),
-                                                    ),
-                                                    new Node\Arg(
-                                                        new Node\Expr\Variable('created')
-                                                    )
-                                                ],
-                                            )
-                                        ),
-                                    ),
                                 ],
                             ],
                         ),
                     ],
                 ],
             ),
+            args: [
+                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified('Psr\\Log\\NullLogger'))),
+            ]
         );
+    }
+
+    public function compileCloseServers(): array
+    {
+        $output = [];
+
+        foreach ($this->servers as $key => $server) {
+            $output[] = new Node\Stmt\Expression(
+                expr: new Node\Expr\FuncCall(
+                    name: new Node\Name('ftp_close'),
+                    args: [
+                        new Node\Arg(
+                            new Node\Expr\ArrayDimFetch(
+                                var: new Node\Expr\PropertyFetch(
+                                    var: new Node\Expr\Variable('this'),
+                                    name: new Node\Identifier('servers')
+                                ),
+                                dim: new Node\Scalar\LNumber($key),
+                            ),
+                        )
+                    ]
+                )
+            );
+        }
+
+        return $output;
     }
 }

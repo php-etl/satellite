@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/sylius.json",
+  "title": "Sylius plugin for Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "method": { "type": "string" }
+      }
+    },
+    "lookup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "method": { "type": "string" }
+      }
+    },
+    "loader": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "method": { "type": "string" }
+      }
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "api_url": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "client_id": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "secret": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "username": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "password": { "$ref": "../expressions.json#/$defs/expression-or-string" }
+      }
+    }
+  }
+}

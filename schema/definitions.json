@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json",
+  "title": "Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "$defs": {
+    "serverless": {
+      "type": "object",
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "provider": {
+          "oneOf": [
+            {
+              "$comment": "Configuration for KNative",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "knative" },
+                "stage": { "type": "string", "enum": ["prod", "dev"] }
+              }
+            },
+            {
+              "$comment": "Configuration for Fn",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "fn" }
+              }
+            },
+            {
+              "$comment": "Configuration for Kubeless",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "kubeless" }
+              }
+            },
+            {
+              "$comment": "Configuration for OpenWhisk",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "openwhisk" },
+                "runtime": { "type": "string" },
+                "memory": { "type": "number" },
+                "timeout": { "type": "number" },
+                "namespace": { "type": "string" }
+              }
+            },
+            {
+              "$comment": "Configuration for AWS",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "aws" },
+                "runtime": { "type": "string" },
+                "stage": { "type": "string", "emum": [ "dev", "beta" ] },
+                "region": { "type": "string" },
+                "stackName": { "type": "string" },
+                "profile": { "type": "string" },
+                "memorySize": { "type": "string" },
+                "timeout": { "type": "string" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "docker": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": { "type": "string" },
+        "workdir": { "type": "string" },
+        "tags": { "type": "array", "items": { "type":  "string" } }
+      },
+      "required": [ "from", "workdir" ]
+    },
+    "filesystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" }
+      },
+      "required": [ "path" ]
+    },
+    "composer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from_local": { "type": "boolean" },
+        "autoload": {
+          "type": "object",
+          "properties": {
+            "psr4": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "namespace": { "type": "string" },
+                      "paths": { "type": "array", "items": { "type": "string" } }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          }
+        },
+        "require": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "pipeline-plugins": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "custom": {
+              "$ref": "plugin/custom.json"
+            }
+          },
+          "required": ["custom"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "akeneo": {
+              "$ref": "plugin/akeneo.json"
+            }
+          },
+          "required": ["akeneo"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sylius": {
+              "$ref": "plugin/sylius.json"
+            }
+          },
+          "required": ["sylius"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "csv": {
+              "$ref": "plugin/csv.json"
+            }
+          },
+          "required": ["csv"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "spreadsheet": {
+              "$ref": "plugin/spreadsheet.json"
+            }
+          },
+          "required": ["spreadsheet"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fastmap": {
+              "$ref": "plugin/fastmap.json"
+            }
+          },
+          "required": ["fastmap"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stream": {
+              "$ref": "plugin/stream.json"
+            }
+          },
+          "required": ["stream"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "batch": {
+              "$ref": "plugin/batch.json"
+            }
+          },
+          "required": ["batch"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ftp": {
+              "$ref": "plugin/ftp.json"
+            }
+          },
+          "required": ["ftp"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "http": {
+              "$ref": "plugin/http.json"
+            }
+          },
+          "required": ["http"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sftp": {
+              "$ref": "plugin/sftp.json"
+            }
+          },
+          "required": ["sftp"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sql": {
+              "$ref": "plugin/sql.json"
+            }
+          },
+          "required": ["sql"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "json": {
+              "$ref": "plugin/json.json"
+            }
+          },
+          "required": ["json"]
+        }
+      ]
+    },
+    "steps-list": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/pipeline-plugins"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "logger": {
+                "$ref": "#/$defs/logger"
+              },
+              "rejection": {
+                "$ref": "#/$defs/rejection"
+              },
+              "state": {
+                "$ref": "#/$defs/state"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "steps-named": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z_]+[a-z0-9_]+$": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/pipeline-plugins"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "logger": {
+                  "$ref": "#/$defs/logger"
+                },
+                "rejection": {
+                  "$ref": "#/$defs/rejection"
+                },
+                "state": {
+                  "$ref": "#/$defs/state"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "#/$defs/expression_language" },
+        "steps": {
+          "oneOf": [
+            { "$ref": "#/$defs/steps-list" },
+            { "$ref": "#/$defs/steps-named" }
+          ]
+        }
+      },
+      "required": [ "steps" ]
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "expression_language": { "$ref": "#/$defs/expression_language" },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "pipeline": { "$ref": "#/$defs/pipeline" }
+                },
+                "required": [ "name", "pipeline" ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "action": { "$ref": "#/$defs/action" }
+                },
+                "required": [ "name", "action" ]
+              }
+            ]
+          }
+        }
+      },
+      "required": [ "name", "jobs" ]
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "expression_language": { "$ref": "#/$defs/expression_language" }
+      },
+      "required": [ "name", "jobs" ]
+    },
+    "logger": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": { "type": "string"},
+        "destinations": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "elasticsearch": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "level": { "type": "string", "enum": [ "debug", "notice", "info", "warning", "error", "alert", "critical" ] },
+                      "hosts": { "type": "array", "items": { "type": "string" } }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "rejection": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "expression_language": { "type": "array", "items": { "type":  "string" } }
+  }
+}

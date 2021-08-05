@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json",
+  "title": "FastMap plugin for Middleware Satellite",
+  "description": "FastMap is a compiler for fast data transformation in PHP",
+  "$defs": {
+    "fastmap-items": {
+      "type": "array",
+      "additionalProperties": false,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "copy": { "$ref": "../expressions.json#/$defs/property-path" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+            },
+            "required": [ "copy", "field" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "expression": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+            },
+            "required": [ "expression", "field" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "constant": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+            },
+            "required": [ "constant", "field" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "expression": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "object": { "$ref": "#/$defs/fastmap-items" },
+              "class": { "type": "string" }
+            },
+            "required": [ "expression", "field", "object", "class" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "expression": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "collection": { "$ref": "#/$defs/fastmap-items" },
+              "class": { "type": "string" }
+            },
+            "required": [ "expression", "field", "collection", "class" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "expression": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "map": { "$ref": "#/$defs/fastmap-items" }
+            },
+            "required": [ "expression", "field", "map" ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "expression": { "type": "string" },
+              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "list": { "$ref": "#/$defs/fastmap-items" }
+            },
+            "required": [ "expression", "field", "list" ]
+          }
+        ]
+      }
+    },
+    "fastmap-map": {
+      "$comment": "Map mapper",
+      "type": "object",
+      "properties": {
+        "map": { "$ref": "#/$defs/fastmap-items" }
+      },
+      "required": [ "map" ]
+    },
+    "fastmap-object": {
+      "$comment": "Class mapper",
+      "type": "object",
+      "properties": {
+        "object": { "$ref": "#/$defs/fastmap-items" },
+        "class": { "type": "string" }
+      },
+      "required": [ "object", "class" ]
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        { "$ref": "#/$defs/fastmap-map"},
+        { "$ref": "#/$defs/fastmap-object"},
+        {
+          "$comment": "Conditional mapper",
+          "type": "object",
+          "properties": {
+            "conditional": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "oneOf": [
+                      { "$ref": "#/$defs/fastmap-map" },
+                      { "$ref": "#/$defs/fastmap-object" }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "condition": { "type": "string" }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": [ "conditional" ]
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" }
+      }
+    }
+  ]
+}
