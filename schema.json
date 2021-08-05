@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema.json",
+  "title": "Middleware Satellite",
+  "description": "Satellites are micro-services aimed at managing data pipelines and data processing",
+  "$defs": {
+    "adapters": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "docker": { "$ref": "schema/definitions.json#/$defs/docker" }
+          },
+          "required": [ "docker" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "filesystem": { "$ref": "schema/definitions.json#/$defs/filesystem" }
+          },
+          "required": [ "filesystem" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "serverless": { "$ref": "schema/definitions.json#/$defs/serverless" }
+          },
+          "required": [ "serverless" ]
+        }
+      ]
+    },
+    "satellites": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "pipeline": { "$ref": "schema/definitions.json#/$defs/pipeline" }
+          },
+          "required": [ "pipeline" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "workflow": { "$ref": "schema/definitions.json#/$defs/workflow" }
+          },
+          "required": [ "workflow" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": { "$ref": "schema/definitions.json#/$defs/action" }
+          },
+          "required": [ "action" ]
+        }
+      ]
+    },
+    "version-0.2": {
+      "type": "object",
+      "properties": {
+        "satellite": {
+          "allOf": [
+            { "$ref": "#/$defs/adapters" },
+            { "$ref": "#/$defs/satellites" },
+            {
+              "type": "object",
+              "properties": {
+                "composer": { "$ref": "schema/definitions.json#/$defs/composer" }
+              }
+            }
+          ]
+        }
+      },
+      "required": [ "satellite" ]
+    },
+    "version-0.3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string", "const": "0.3" },
+        "satellites": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[a-z_]+[a-z0-9_]+$": {
+              "allOf": [
+                { "$ref": "#/$defs/adapters" },
+                { "$ref": "#/$defs/satellites" },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "composer": { "type": "object" }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "required": [ "version", "satellites" ]
+    }
+  },
+  "if": {
+    "not": {
+      "required": [ "version" ]
+    }
+  },
+  "then": { "$ref": "#/$defs/version-0.2"},
+  "else": {
+    "if": {
+      "properties": {
+        "version": { "type": "string", "const": "0.3" }
+      }
+    },
+    "then": { "$ref": "#/$defs/version-0.3"}
+  }
+}

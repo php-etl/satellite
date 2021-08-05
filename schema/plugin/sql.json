@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/sql.json",
+  "title": "SQL plugin for Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" }
+  }
+}

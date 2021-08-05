@@ -80,8 +80,8 @@ class Loader implements StepBuilderInterface
     private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
-             new Node\Stmt\If_(
-                 cond: new Node\Expr\BinaryOp\Identical(
+            new Node\Stmt\If_(
+                cond: new Node\Expr\BinaryOp\Identical(
                     left: new Node\Expr\FuncCall(
                         name: new Node\Name('ftp_fput'),
                         args: [
@@ -115,7 +115,7 @@ class Loader implements StepBuilderInterface
                         name: new Node\Name('false')
                     ),
                 ),
-                 subNodes: [
+                subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
@@ -204,31 +204,18 @@ class Loader implements StepBuilderInterface
                         new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
-                        new Node\Stmt\Property(
-                            flags: 4,
-                            props: [
-                                new Node\Stmt\PropertyProperty(
-                                    new Node\Name('logger')
-                                )
-                            ],
-                            type: new Node\Name\FullyQualified('Psr\Log\LoggerInterface')
-                        ),
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'stmts' => [
-                                    new Node\Stmt\Expression(
-                                        expr: new Node\Expr\Assign(
-                                            var: new Node\Expr\PropertyFetch(
-                                                var: new Node\Expr\Variable('this'),
-                                                name: new Identifier('logger')
-                                            ),
-                                            expr: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified('Psr\Log\NullLogger')
-                                            )
-                                        )
+                                'params' => [
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('logger'),
+                                        type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
+                                        flags: Node\Stmt\Class_::MODIFIER_PUBLIC,
                                     ),
+                                ],
+                                'stmts' => [
                                     ...array_map(
                                         fn ($server, $index) => new Node\Stmt\Expression(
                                             new Node\Expr\Assign(
@@ -289,18 +276,235 @@ class Loader implements StepBuilderInterface
                                             ),
                                         ],
                                     ),
-                                    new Node\Stmt\Expression(
-                                        new Node\Expr\Yield_(
-                                            value: new Node\Expr\Variable('bucket')
-                                        ),
-                                    ),
+                                    ...$this->compileCloseServers()
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
+                            ],
+                        ),
+                        new Node\Stmt\ClassMethod(
+                            name: new Node\Identifier('createDirectories'),
+                            subNodes: [
+                                'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
+                                'returnType' => new Node\Expr\ConstFetch(new Node\Name('void')),
+                                'params' => [
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('ftpcon')
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('baseDir'),
+                                        type: new Identifier('string')
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('path'),
+                                        type: new Identifier('string')
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable('mode'),
+                                        default: new Node\Expr\ConstFetch(new Node\Name('null')),
+                                        type: new Identifier('string')
+                                    ),
+                                ],
+                                'stmts' => [
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\FuncCall(
+                                            name: new Node\Name('ftp_chdir'),
+                                            args: [
+                                                new Node\Arg(
+                                                    new Node\Expr\Variable('ftpcon')
+                                                ),
+                                                new Node\Arg(
+                                                    new Node\Expr\Variable('baseDir')
+                                                ),
+                                            ],
+                                        ),
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        expr: new Node\Expr\Assign(
+                                            var: new Node\Expr\Variable('directories'),
+                                            expr: new Node\Expr\FuncCall(
+                                                name: new Node\Name('explode'),
+                                                args: [
+                                                    new Node\Arg(
+                                                        value: new Node\Expr\ConstFetch(
+                                                            name: new Node\Name('DIRECTORY_SEPARATOR')
+                                                        )
+                                                    ),
+                                                    new Node\Arg(
+                                                        value: new Node\Expr\FuncCall(
+                                                            name: new Node\Name('dirname'),
+                                                            args: [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('path')
+                                                                ),
+                                                            ],
+                                                        ),
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ),
+                                    new Node\Stmt\Expression(
+                                        new Node\Expr\Assign(
+                                            var: new Node\Expr\Variable('actualDirectory'),
+                                            expr: new Node\Expr\ConstFetch(
+                                                name: new Node\Name('DIRECTORY_SEPARATOR')
+                                            ),
+                                        ),
+                                    ),
+                                    new Node\Stmt\Foreach_(
+                                        expr: new Node\Expr\Variable('directories'),
+                                        valueVar: new Node\Expr\Variable('directory'),
+                                        subNodes: [
+                                            'stmts' => [
+                                                new Node\Stmt\Expression(
+                                                    expr: new Node\Expr\Assign(
+                                                        var: new Node\Expr\Variable('actualDirectory'),
+                                                        expr: new Node\Expr\BinaryOp\Concat(
+                                                            left: new Node\Expr\Variable('actualDirectory'),
+                                                            right: new Node\Expr\BinaryOp\Concat(
+                                                                left: new Node\Expr\Variable('directory'),
+                                                                right: new Node\Expr\ConstFetch(
+                                                                    name: new Node\Name('DIRECTORY_SEPARATOR')
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                ),
+                                                new Node\Stmt\If_(
+                                                    cond: new Node\Expr\BooleanNot(
+                                                        expr: new Node\Expr\FuncCall(
+                                                            name: new Node\Name('ftp_nlist'),
+                                                            args: [
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('ftpcon')
+                                                                ),
+                                                                new Node\Arg(
+                                                                    new Node\Expr\Variable('actualDirectory')
+                                                                ),
+                                                            ],
+                                                        ),
+                                                    ),
+                                                    subNodes: [
+                                                        'stmts' => [
+                                                            new Node\Stmt\If_(
+                                                                cond: new Node\Expr\BooleanNot(
+                                                                    expr: new Node\Expr\FuncCall(
+                                                                        name: new Node\Name('ftp_nlist'),
+                                                                        args: [
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Variable('ftpcon')
+                                                                            ),
+                                                                            new Node\Arg(
+                                                                                new Node\Expr\Variable('directory')
+                                                                            ),
+                                                                        ],
+                                                                    ),
+                                                                ),
+                                                                subNodes: [
+                                                                    'stmts' => [
+                                                                        new Node\Stmt\Expression(
+                                                                            new Node\Expr\FuncCall(
+                                                                                name: new Node\Name('ftp_mkdir'),
+                                                                                args: [
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('ftpcon')
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('directory')
+                                                                                    ),
+                                                                                ],
+                                                                            ),
+                                                                        ),
+                                                                    ],
+                                                                ],
+                                                            ),
+                                                            new Node\Stmt\If_(
+                                                                cond: new Node\Expr\BinaryOp\NotIdentical(
+                                                                    left: new Node\Expr\Variable('mode'),
+                                                                    right: new Node\Expr\ConstFetch(new Node\Name('null'))
+                                                                ),
+                                                                subNodes: [
+                                                                    'stmts' => [
+                                                                        new Node\Stmt\Expression(
+                                                                            new Node\Expr\FuncCall(
+                                                                                name: new Node\Name('ftp_chmod'),
+                                                                                args: [
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('ftpcon')
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\FuncCall(
+                                                                                            name: new Node\Name('octdec'),
+                                                                                            args: [
+                                                                                                new Node\Arg(
+                                                                                                    new Node\Expr\Variable('mode')
+                                                                                                )
+                                                                                            ]
+                                                                                        )
+                                                                                    ),
+                                                                                    new Node\Arg(
+                                                                                        new Node\Expr\Variable('directory')
+                                                                                    ),
+                                                                                ],
+                                                                            ),
+                                                                        ),
+                                                                    ],
+                                                                ],
+                                                            ),
+                                                            new Node\Stmt\Expression(
+                                                                expr: new Node\Expr\FuncCall(
+                                                                    name: new Node\Name('ftp_chdir'),
+                                                                    args: [
+                                                                        new Node\Arg(
+                                                                            new Node\Expr\Variable('ftpcon')
+                                                                        ),
+                                                                        new Node\Arg(
+                                                                            new Node\Expr\Variable('directory')
+                                                                        ),
+                                                                    ],
+                                                                ),
+                                                            ),
+                                                        ],
+                                                    ],
+                                                ),
+                                            ],
+                                        ],
+                                    ),
+                                ],
                             ],
                         ),
                     ],
                 ],
             ),
+            args: [
+                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified('Psr\\Log\\NullLogger'))),
+            ]
         );
+    }
+
+    public function compileCloseServers(): array
+    {
+        $output = [];
+
+        foreach ($this->servers as $key => $server) {
+            $output[] = new Node\Stmt\Expression(
+                expr: new Node\Expr\FuncCall(
+                    name: new Node\Name('ftp_close'),
+                    args: [
+                        new Node\Arg(
+                            new Node\Expr\ArrayDimFetch(
+                                var: new Node\Expr\PropertyFetch(
+                                    var: new Node\Expr\Variable('this'),
+                                    name: new Node\Identifier('servers')
+                                ),
+                                dim: new Node\Scalar\LNumber($key),
+                            ),
+                        )
+                    ]
+                )
+            );
+        }
+
+        return $output;
     }
 }

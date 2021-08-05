@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/csv.json",
+  "title": "CSV plugin for Middleware Satellite",
+  "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
+  "$defs": {
+    "csv-properties": {
+      "type": "object",
+      "properties": {
+        "file_path": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "max_lines": { "$ref": "../expressions.json#/$defs/expression-or-number" },
+        "delimiter": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "enclosure": { "$ref": "../expressions.json#/$defs/expression-or-string" },
+        "escape": { "$ref": "../expressions.json#/$defs/expression-or-string" }
+      },
+      "required": [ "file_path" ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+        "extractor": { "$ref": "#/$defs/csv-properties" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+        "loader": {
+          "allOf": [
+            { "$ref": "#/$defs/csv-properties" },
+            {
+              "type": "object",
+              "properties": {
+                "columns": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
