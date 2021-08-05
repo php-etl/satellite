@@ -1,0 +1,100 @@
+attribute:
+  label: 'Attribute'
+  filesystem:
+    path: attribute
+  composer:
+    autoload:
+      psr4:
+      - namespace: "Pipeline\\AkeneoToSylius\\"
+        paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "akeneo/api-php-client-ee"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: true
+          extractor:
+            type: attribute
+            method: all
+          client:
+            api_url: 'https://demo.akeneo.com'
+            client_id: '1234567890'
+            secret: qwertyuiop
+            username: '%env(USERNAME)%'
+            password: lkjhgfdsa
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+      - csv:
+          loader:
+            file_path: attributes.csv
+            delimiter: ','
+            enclosure: '"'
+            escape: '\'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+
+
+category:
+  label: 'Category'
+  filesystem:
+    path: category
+  composer:
+    autoload:
+      psr4:
+        - namespace: "Pipeline\\AkeneoToSylius\\"
+          paths: [ "" ]
+    require:
+      - "php-etl/pipeline:^0.2"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.1"
+      - "akeneo/api-php-client-ee"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: true
+          extractor:
+            type: category
+            method: all
+          client:
+            api_url: 'https://demo.akeneo.com'
+            client_id: '1234567890'
+            secret: qwertyuiop
+            username: '%env(USERNAME)%'
+            password: lkjhgfdsa
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+      - csv:
+          loader:
+            file_path: categories.csv
+            delimiter: ','
+            enclosure: '"'
+            escape: '\'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200

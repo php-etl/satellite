@@ -31,13 +31,13 @@ final class BuildCommand extends Console\Command\Command
 
         $filename = $input->getArgument('config');
         if ($filename !== null) {
-            $configuration = (new Satellite\ConfigLoader())->loadFile($filename);
+            $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
 
             foreach ($possibleFiles as $filename) {
                 try {
-                    $configuration = (new Satellite\ConfigLoader())->loadFile($filename);
+                    $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
                     break;
                 } catch (LoaderLoadException) {
                 }
@@ -56,6 +56,7 @@ final class BuildCommand extends Console\Command\Command
         }
 
         \chdir(\dirname($filename));
+
 
         if (array_key_exists('satellite', $configuration)) {
             $output->writeln([
@@ -78,24 +79,24 @@ final class BuildCommand extends Console\Command\Command
 
             $factory($configuration['satellite']);
         } elseif (array_key_exists('satellites', $configuration)) {
-            $factory = new Satellite\Runtime\Factory(
-                new Satellite\Adapter\Factory(),
-                new class() extends Log\AbstractLogger {
-                    public function log($level, $message, array $context = array())
-                    {
-                        $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                        fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
-                    }
-                },
-            );
-
-            foreach ($configuration["satellites"] as $satellite) {
+            foreach ($configuration['satellites'] as $satellite) {
                 $output->writeln([
                     '',
                     '',
-                    '<info>Building Pipeline<info>',
+                    '<info>Building Pipeline <info>'. $satellite['label'],
                     '============',
                 ]);
+
+                $factory = new Satellite\Runtime\Factory(
+                    new Satellite\Adapter\Factory(),
+                    new class() extends Log\AbstractLogger {
+                        public function log($level, $message, array $context = array())
+                        {
+                            $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
+                            fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                        }
+                    },
+                );
 
                 $factory($satellite);
             }

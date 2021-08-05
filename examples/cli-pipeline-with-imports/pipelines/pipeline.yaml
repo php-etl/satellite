@@ -1,0 +1,32 @@
+steps:
+  - akeneo:
+      enterprise: true
+      extractor:
+        type: product
+        method: all
+      client:
+        api_url: 'https://demo.akeneo.com'
+        client_id: '1234567890'
+        secret: qwertyuiop
+        username: '%env(USERNAME)%'
+        password: lkjhgfdsa
+    logger:
+      channel: pipeline
+      destinations:
+        - elasticsearch:
+            level: warning
+            hosts:
+              - elasticsearch.example.com:9200
+  - csv:
+      loader:
+        file_path: products.csv
+        delimiter: ','
+        enclosure: '"'
+        escape: '\'
+    logger:
+      channel: pipeline
+      destinations:
+        - elasticsearch:
+            level: warning
+            hosts:
+              - elasticsearch.example.com:9200

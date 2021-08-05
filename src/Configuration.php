@@ -50,7 +50,6 @@ final class Configuration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
-            ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
             ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
             ->beforeNormalization()
                 ->always($this->mutuallyDependentFields('satellites', 'version'))
@@ -58,10 +57,22 @@ final class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields('satellite', 'version'))
             ->end()
+            ->validate()
+                ->ifTrue(fn ($data) => array_key_exists('satellites', $data) && is_array($data['satellites']) && count($data['satellites']) <= 0)
+                ->then(function ($data) {
+                    unset($data['satellites']);
+                    return $data;
+                })
+            ->end()
+            ->validate()
+                ->ifTrue(fn ($data) => array_key_exists('version', $data) && is_array($data['version']) && count($data['version']) <= 0)
+                ->then(function ($data) {
+                    unset($data['version']);
+                    return $data;
+                })
+            ->end()
             ->children()
-                ->arrayNode('satellites')
-                    ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
-                ->end()
+                ->arrayNode('satellites')->end()
             ->end();
 
         $root = $builder->getRootNode();
@@ -108,18 +119,10 @@ final class Configuration implements ConfigurationInterface
                     $this->runtimes
                 )))
             ->end()
-            ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('imports', $data) && is_array($data['imports']) && count($data['imports']) <= 0)
-                ->then(function ($data) {
-                    unset($data['imports']);
-                    return $data;
-                })
-            ->end()
             ->children()
                 ->scalarNode('label')
                     ->isRequired()
                 ->end()
-                ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())->end()
                 ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
