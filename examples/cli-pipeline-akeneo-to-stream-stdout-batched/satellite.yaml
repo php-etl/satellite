@@ -32,13 +32,13 @@ satellite:
           secret: '2pjdo95m1i0w8sw0wowowgcs4wgk8g0g4co4gw0wc88w8osk8'
           username: 'sylius_3225'
           password: 'ad6893ba0'
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
     - fastmap:
         expression_language:
           - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
