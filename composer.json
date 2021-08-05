@@ -53,7 +53,8 @@
         "fakerphp/faker": "^1.9",
         "php-etl/phpunit-extension": "*",
         "composer/composer": "2.1.x-dev",
-        "justinrainbow/json-schema": "^5.2"
+        "justinrainbow/json-schema": "^5.2",
+        "adlawson/vfs": "^0.12.1"
     },
     "autoload": {
         "psr-4": {

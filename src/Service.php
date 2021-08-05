@@ -162,13 +162,13 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('custom', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service(clone $interpreter)))
+                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service()))
                     ->withExtractor()
                     ->withTransformer()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('stream', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service(clone $interpreter)))
+                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('batch', $step)) {

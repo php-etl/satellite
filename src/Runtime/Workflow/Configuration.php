@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Kiboko\Component\SatelliteToolbox;
 
 final class Configuration implements Satellite\NamedConfigurationInterface
 {
@@ -22,7 +21,6 @@ final class Configuration implements Satellite\NamedConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->append((new SatelliteToolbox\Configuration\ImportConfiguration())->getConfigTreeBuilder()->getRootNode())
                 ->arrayNode('jobs')
                     ->arrayPrototype()
                         ->children()

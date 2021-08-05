@@ -32,7 +32,6 @@ final class PluginInstaller extends LibraryInstaller
             return false;
         }
 
-        $this->accumulator->idle($package);
         return true;
     }
 
@@ -40,7 +39,7 @@ final class PluginInstaller extends LibraryInstaller
     {
         return parent::install($repo, $package)
             ->then(
-                function () use ($repo, $package) {
+                function () use ($package) {
                     if (isset($package->getExtra()['satellite']['class'])) {
                         $this->serviceClasses[] = $class = $package->getExtra()['satellite']['class'];
                     } else {
@@ -64,7 +63,7 @@ final class PluginInstaller extends LibraryInstaller
     {
         return parent::update($repo, $initial, $target)
             ->then(
-                function () use ($repo, $target) {
+                function () use ($target) {
                     if (!isset($target->getExtra()['satellite']['class'])) {
                         $this->io->error(strtr(
                             'There is no service class defined for the package %package%, please set the extra.satellite.class parameter in your composer.json file.',
@@ -75,8 +74,6 @@ final class PluginInstaller extends LibraryInstaller
                         return \React\Promise\reject();
                     }
 
-                    $this->accumulator->update($target);
-
                     return \React\Promise\resolve();
                 }
             );
@@ -86,7 +83,7 @@ final class PluginInstaller extends LibraryInstaller
     {
         return parent::uninstall($repo, $package)
             ->then(
-                function () use ($repo, $package) {
+                function () use ($package) {
                     if (isset($package->getExtra()['satellite']['class'])) {
                         $this->serviceClasses[] = $class = $package->getExtra()['satellite']['class'];
                     } else {
@@ -98,8 +95,6 @@ final class PluginInstaller extends LibraryInstaller
                         ));
                         return \React\Promise\reject();
                     }
-
-                    $this->accumulator->uninstall($package);
 
                     return \React\Promise\resolve();
                 }

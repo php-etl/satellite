@@ -107,8 +107,8 @@ class Loader implements StepBuilderInterface
              new Node\Stmt\If_(
                  cond: new Node\Expr\BinaryOp\Identical(
                      left: new Node\Expr\FuncCall(
-                        name: new Node\Name('ftp_fput'),
-                        args: [
+                         name: new Node\Name('ftp_fput'),
+                         args: [
                             new Node\Arg(
                                 new Node\Expr\ArrayDimFetch(
                                     new Node\Expr\PropertyFetch(
@@ -123,8 +123,8 @@ class Loader implements StepBuilderInterface
                                     new Node\Scalar\Encapsed([
                                             new Node\Expr\ArrayDimFetch(
                                                 new Node\Expr\PropertyFetch(
-                                                new Node\Expr\Variable('this'),
-                                                new Node\Identifier('serversMapping')
+                                                    new Node\Expr\Variable('this'),
+                                                    new Node\Identifier('serversMapping')
                                                 ),
                                                 dim:
                                                     new Node\Scalar\LNumber($index),
@@ -142,12 +142,12 @@ class Loader implements StepBuilderInterface
                             ),
                             new Node\Arg($content)
                         ],
-                    ),
+                     ),
                      right: new Node\Expr\ConstFetch(
-                        name: new Node\Name('false')
-                    ),
-                ),
-                subNodes: [
+                         name: new Node\Name('false')
+                     ),
+                 ),
+                 subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
