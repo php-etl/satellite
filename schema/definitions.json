@@ -4,6 +4,66 @@
   "title": "Middleware Satellite",
   "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
   "$defs": {
+    "serverless": {
+      "type": "object",
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "provider": {
+          "oneOf": [
+            {
+              "$comment": "Configuration for KNative",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "knative" },
+                "stage": { "type": "string", "enum": ["prod", "dev"] }
+              }
+            },
+            {
+              "$comment": "Configuration for Fn",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "fn" }
+              }
+            },
+            {
+              "$comment": "Configuration for Kubeless",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "kubeless" }
+              }
+            },
+            {
+              "$comment": "Configuration for OpenWhisk",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "openwhisk" },
+                "runtime": { "type": "string" },
+                "memory": { "type": "number" },
+                "timeout": { "type": "number" },
+                "namespace": { "type": "string" }
+              }
+            },
+            {
+              "$comment": "Configuration for AWS",
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "const": "aws" },
+                "runtime": { "type": "string" },
+                "stage": { "type": "string", "emum": [ "dev", "beta" ] },
+                "region": { "type": "string" },
+                "stackName": { "type": "string" },
+                "profile": { "type": "string" },
+                "memorySize": { "type": "string" },
+                "timeout": { "type": "string" }
+              }
+            }
+          ]
+        }
+      }
+    },
     "docker": {
       "type": "object",
       "additionalProperties": false,

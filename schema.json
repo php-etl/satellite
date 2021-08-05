@@ -19,6 +19,13 @@
             "filesystem": { "$ref": "schema/definitions.json#/$defs/filesystem" }
           },
           "required": [ "filesystem" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "serverless": { "$ref": "schema/definitions.json#/$defs/serverless" }
+          },
+          "required": [ "serverless" ]
         }
       ]
     },
