@@ -9,11 +9,17 @@ use PhpParser\Node\Identifier;
 
 class Loader implements StepBuilderInterface
 {
+    private ?Node\Expr $logger;
+    private ?Node\Expr $rejection;
+    private ?Node\Expr $state;
     private iterable $servers;
     private iterable $putStatements;
 
     public function __construct()
     {
+        $this->logger = null;
+        $this->rejection = null;
+        $this->state = null;
         $this->servers = [];
         $this->putStatements = [];
     }
@@ -111,7 +117,7 @@ class Loader implements StepBuilderInterface
             ),
              new Node\Stmt\If_(
                  cond: new Node\Expr\BinaryOp\Identical(
-                    left: new Node\Expr\FuncCall(
+                     left: new Node\Expr\FuncCall(
                         name: new Node\Name('ftp_fput'),
                         args: [
                             new Node\Arg(
@@ -135,10 +141,10 @@ class Loader implements StepBuilderInterface
                             new Node\Arg($content)
                         ],
                     ),
-                    right: new Node\Expr\ConstFetch(
+                     right: new Node\Expr\ConstFetch(
                         name: new Node\Name('false')
                     ),
-                ),
+                 ),
                  subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(

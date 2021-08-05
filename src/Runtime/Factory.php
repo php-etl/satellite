@@ -12,8 +12,7 @@ final class Factory implements FactoryInterface
     public function __construct(
         private Satellite\Adapter\FactoryInterface $adapterFactory,
         private LoggerInterface $logger,
-    )
-    {
+    ) {
     }
 
     public function __invoke(array $configuration): RuntimeInterface

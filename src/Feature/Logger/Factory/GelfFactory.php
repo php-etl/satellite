@@ -61,7 +61,7 @@ final class GelfFactory implements Configurator\FactoryInterface
                 $config['tcp']['host'] ?? null,
                 $config['tcp']['port'] ?? null,
             );
-        } else if (array_key_exists('amqp', $config)) {
+        } elseif (array_key_exists('amqp', $config)) {
             $builder->withAMQPTransport(
                 $config['amqp']['queue'] ?? null,
                 $config['amqp']['channel'] ?? null,

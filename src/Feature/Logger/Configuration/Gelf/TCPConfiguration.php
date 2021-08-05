@@ -11,6 +11,7 @@ final class TCPConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('tcp');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('host')

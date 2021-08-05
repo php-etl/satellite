@@ -13,7 +13,8 @@ final class Merge implements StepBuilderInterface
     private ?Node\Expr $state;
 
     public function __construct(private int $size)
-    {}
+    {
+    }
 
     public function withLogger(Node\Expr $logger): Merge
     {

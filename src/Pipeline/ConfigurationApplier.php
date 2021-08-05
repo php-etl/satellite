@@ -11,7 +11,8 @@ final class ConfigurationApplier
     private array $packages = [];
 
     public function __construct(private string $plugin, private FactoryInterface $service)
-    {}
+    {
+    }
 
     public function withExtractor(?string $key = 'extractor'): self
     {

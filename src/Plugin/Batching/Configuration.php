@@ -14,6 +14,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('batch');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->variableNode('expression_language')->end()

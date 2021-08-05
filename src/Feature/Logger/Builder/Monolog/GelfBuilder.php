@@ -13,7 +13,7 @@ final class GelfBuilder implements MonologBuilderInterface
     private ?string $vhost;
     private ?string $host;
     private ?int $port;
-    private ?int $timeout;
+    private ?float $timeout;
     private ?string $queue;
     private ?string $channel;
     private iterable $formatters;

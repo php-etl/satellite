@@ -13,6 +13,7 @@ final class LogstashConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('logstash');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('application_name')->isRequired()->end()

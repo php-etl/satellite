@@ -73,7 +73,7 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('merge', $config)) {
             $builder = new Merge($config['merge']['size']);
             return new Repository($builder);
-        } else if (array_key_exists('fork', $config)) {
+        } elseif (array_key_exists('fork', $config)) {
             $builder = new Fork(
                 $config['fork']['foreach'] instanceof Expression ?
                     compileExpression($this->interpreter, $config['fork']['foreach'], 'item', 'key') :

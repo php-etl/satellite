@@ -106,6 +106,7 @@ final class Configuration implements ConfigurationInterface
 
     private function buildSatelliteTree(ArrayNodeDefinition $node): void
     {
+        /** @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_map(

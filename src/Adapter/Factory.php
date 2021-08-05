@@ -25,5 +25,3 @@ final class Factory implements FactoryInterface
         return $factory($configuration);
     }
 }
-
-

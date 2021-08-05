@@ -15,8 +15,7 @@ class ConfigLoader implements ConfigLoaderInterface
     private function load(
         Config\Loader\LoaderInterface $loader,
         string $path,
-    ): \Generator
-    {
+    ): \Generator {
         $config = $loader->load($path);
 
         if (array_key_exists('imports', $config)) {

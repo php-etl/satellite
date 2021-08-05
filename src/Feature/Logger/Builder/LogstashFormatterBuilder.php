@@ -10,7 +10,8 @@ use PhpParser\Node;
 final class LogstashFormatterBuilder implements Builder
 {
     public function __construct(private string $applicationName)
-    {}
+    {
+    }
 
     public function getNode(): \PhpParser\Node\Expr
     {

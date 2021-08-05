@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Feature\Logger;
 
+use Kiboko\Component\Satellite\Feature\Logger\Builder\LogstashFormatterBuilder;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -57,14 +58,14 @@ final class Service implements Configurator\FactoryInterface
                 $builder->withLogger((new Builder\InheritBuilder())->getNode());
 
                 return $repository;
-            } else if (array_key_exists('stderr', $config)
+            } elseif (array_key_exists('stderr', $config)
                 || (array_key_exists('type', $config) && $config['type'] === 'stderr')
             ) {
                 $builder->withLogger((new Builder\StderrLogger())->getNode());
                 $repository->addPackages('psr/log');
 
                 return $repository;
-            } else if (array_key_exists('blackhole', $config)
+            } elseif (array_key_exists('blackhole', $config)
                 || (array_key_exists('type', $config) && $config['type'] === 'null')
             ) {
                 $builder->withLogger((new Builder\NullLogger())->getNode());
@@ -133,17 +134,6 @@ final class Service implements Configurator\FactoryInterface
                     $factory = new Factory\ElasticSearchFactory();
 
                     $gelfRepository = $factory->compile($destination['elasticsearch']);
-
-                    $repository->merge($gelfRepository);
-                    $monologBuilder->withHandlers($gelfRepository->getBuilder()->getNode());
-
-                    $repository->addPackages('elasticsearch/elasticsearch:~7.0');
-                }
-
-                if (array_key_exists('test', $destination)) {
-                    $factory = new Factory\TestFactory();
-
-                    $gelfRepository = $factory->compile($destination['test']);
 
                     $repository->merge($gelfRepository);
                     $monologBuilder->withHandlers($gelfRepository->getBuilder()->getNode());

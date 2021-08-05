@@ -12,7 +12,8 @@ use PhpParser\Node;
 final class Transformer implements StepInterface
 {
     public function __construct(private ?string $plugin, private ?string $key)
-    {}
+    {
+    }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {

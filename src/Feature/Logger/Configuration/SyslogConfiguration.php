@@ -12,6 +12,7 @@ final class SyslogConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('syslog');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('ident')->end()
