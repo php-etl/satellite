@@ -52,7 +52,8 @@
         "friends-of-phpspec/phpspec-code-coverage": "*",
         "fakerphp/faker": "^1.9",
         "php-etl/phpunit-extension": "*",
-        "composer/composer": "2.1.x-dev"
+        "composer/composer": "2.1.x-dev",
+        "justinrainbow/json-schema": "^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -65,7 +66,7 @@
             "unit\\Kiboko\\Component\\Satellite\\": "tests/unit/",
             "functional\\Kiboko\\Component\\Satellite\\": "tests/functional/",
             "integration\\Kiboko\\Component\\Satellite\\": "tests/integration/",
-            "performance\\Kiboko\\Component\\Satellite\\": "tests/performance/"
+            "schema\\Kiboko\\Component\\Satellite\\": "tests/schema/"
         }
     },
     "config": {
