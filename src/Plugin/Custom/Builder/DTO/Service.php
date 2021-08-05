@@ -10,5 +10,6 @@ final class Service
         public string $identifier,
         public iterable $arguments = [],
         public iterable $calls = [],
-    ){}
+    ) {
+    }
 }

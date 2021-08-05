@@ -13,6 +13,7 @@ final class GelfConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('gelf');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->enumNode('level')

@@ -5,7 +5,6 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Webmozart\Assert\Tests\StaticAnalysis\string;
 
 final class Loader implements StepBuilderInterface
 {
@@ -17,6 +16,9 @@ final class Loader implements StepBuilderInterface
 
     public function __construct(private ExpressionLanguage $interpreter)
     {
+        $this->logger = null;
+        $this->rejection = null;
+        $this->state = null;
         $this->servers = [];
         $this->putStatements = [];
     }

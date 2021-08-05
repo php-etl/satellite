@@ -12,6 +12,7 @@ final class ElasticSearchConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('elasticsearch');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->enumNode('level')

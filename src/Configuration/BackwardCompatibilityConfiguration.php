@@ -2,76 +2,48 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+namespace Kiboko\Component\Satellite\Configuration;
 
-use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
-use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
-use Kiboko\Component\Satellite\Feature;
+use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var iterable<NamedConfigurationInterface> */
+    /** @var iterable<Satellite\NamedConfigurationInterface> */
     private iterable $adapters;
-    /** @var iterable<NamedConfigurationInterface> */
+    /** @var iterable<Satellite\NamedConfigurationInterface> */
     private iterable $runtimes;
-    private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
     {
         $this->adapters = [];
         $this->runtimes = [];
-        $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
-    public function addAdapters(NamedConfigurationInterface ...$adapters): self
+    public function addAdapters(Satellite\NamedConfigurationInterface ...$adapters): self
     {
         array_push($this->adapters, ...$adapters);
-        $this->backwardCompatibilityConfiguration->addAdapters(...$adapters);
 
         return $this;
     }
 
-    public function addRuntimes(NamedConfigurationInterface ...$runtimes): self
+    public function addRuntimes(Satellite\NamedConfigurationInterface ...$runtimes): self
     {
         array_push($this->runtimes, ...$runtimes);
-        $this->backwardCompatibilityConfiguration->addRuntimes(...$runtimes);
 
         return $this;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('etl');
+        $builder = new TreeBuilder('satellite');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
-            ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
-            ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
-            ->beforeNormalization()
-                ->always($this->mutuallyDependentFields('satellites', 'version'))
-            ->end()
-            ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields('satellite', 'version'))
-            ->end()
-            ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('satellites', $data) && is_array($data['satellites']) && count($data['satellites']) <= 0)
-                ->then(function ($data) {
-                    unset($data['satellites']);
-                    return $data;
-                })
-            ->end()
-            ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('version', $data) && is_array($data['version']) && count($data['version']) <= 0)
-                ->then(function ($data) {
-                    unset($data['version']);
-                    return $data;
-                })
-            ->end()
             ->children()
-                ->arrayNode('satellites')->end()
+                ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
         $root = $builder->getRootNode();
@@ -85,10 +57,44 @@ final class Configuration implements ConfigurationInterface
                 ]
             ));
         }
+        $children = $root->children();
 
-        $children = $root->find('satellites');
+        foreach ($this->adapters as $config) {
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        }
 
-        if (!$children instanceof ArrayNodeDefinition) {
+        foreach ($this->runtimes as $config) {
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        }
+
+        return $builder;
+    }
+
+    private function getSatelliteTreeBuilder(): TreeBuilder
+    {
+        $builder = new TreeBuilder('satellite');
+
+        /** @phpstan-ignore-next-line */
+        $builder->getRootNode()
+            ->beforeNormalization()
+                ->always($this->mutuallyExclusiveFields(...array_map(
+                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
+                    $this->adapters
+                )))
+            ->end()
+            ->beforeNormalization()
+                ->always($this->mutuallyExclusiveFields(...array_map(
+                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
+                    $this->runtimes
+                )))
+            ->end()
+            ->children()
+                ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->end();
+
+        $root = $builder->getRootNode();
+
+        if (!$root instanceof ArrayNodeDefinition) {
             throw new \RuntimeException(strtr(
                 'Expected an instance of %expected%, but got %actual%.',
                 [
@@ -97,42 +103,17 @@ final class Configuration implements ConfigurationInterface
                 ]
             ));
         }
-
-        $this->buildSatelliteTree($children->arrayPrototype());
-
-        return $builder;
-    }
-
-    private function buildSatelliteTree(ArrayNodeDefinition $node): void
-    {
-        /** @phpstan-ignore-next-line */
-        $node
-            ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->adapters
-                )))
-            ->end()
-            ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->runtimes
-                )))
-            ->end()
-            ->children()
-                ->scalarNode('label')
-                    ->isRequired()
-                ->end()
-                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
-            ->end();
+        $children = $root->children();
 
         foreach ($this->adapters as $config) {
-            $node->append($config->getConfigTreeBuilder()->getRootNode());
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
         }
 
         foreach ($this->runtimes as $config) {
-            $node->append($config->getConfigTreeBuilder()->getRootNode());
+            $children->append($config->getConfigTreeBuilder()->getRootNode());
         }
+
+        return $builder;
     }
 
     private function mutuallyExclusiveFields(string ...$exclusions): \Closure

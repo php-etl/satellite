@@ -15,6 +15,7 @@ use Kiboko\Plugin\SQL;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
+use Kiboko\Component\SatelliteToolbox;
 
 final class Service implements Configurator\FactoryInterface
 {
@@ -24,7 +25,8 @@ final class Service implements Configurator\FactoryInterface
     public function __construct()
     {
         $this->processor = new Processor();
-        $this->configuration = (new Configuration())
+
+        $this->configuration = (new Satellite\Configuration())
             ->addAdapters(
                 new Adapter\Docker\Configuration(),
                 new Adapter\Filesystem\Configuration(),
@@ -49,7 +51,7 @@ final class Service implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -60,7 +62,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
             return false;
         }
     }
@@ -160,13 +162,13 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('custom', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service(clone $interpreter)))
+                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service()))
                     ->withExtractor()
                     ->withTransformer()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('stream', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service(clone $interpreter)))
+                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('batch', $step)) {
@@ -188,8 +190,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                     ->withLoader()
                     ->appendTo($step, $repository);
-            }
-            elseif (array_key_exists('ftp', $step)) {
+            } elseif (array_key_exists('ftp', $step)) {
                 (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $interpreter)))
                     ->withPackages(
                         'ext-ssh2',

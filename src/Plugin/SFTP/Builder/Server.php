@@ -8,6 +8,9 @@ use PhpParser\Node;
 
 final class Server implements StepBuilderInterface
 {
+    private ?Node\Expr $logger;
+    private ?Node\Expr $rejection;
+    private ?Node\Expr $state;
     private ?Node\Expr $username;
     private ?Node\Expr $password;
     private ?Node\Expr $publicKey;
@@ -19,6 +22,9 @@ final class Server implements StepBuilderInterface
         private Node\Expr $host,
         private ?Node\Expr $port = null
     ) {
+        $this->logger = null;
+        $this->rejection = null;
+        $this->state = null;
         $this->username = null;
         $this->password = null;
         $this->publicKey = null;

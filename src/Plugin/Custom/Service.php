@@ -57,10 +57,10 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('extractor', $config)) {
             $extractorFactory = new Loader();
             return $extractorFactory->compile($config['extractor']);
-        } else if (array_key_exists('transformer', $config)) {
+        } elseif (array_key_exists('transformer', $config)) {
             $transformerFactory = new Loader();
             return $transformerFactory->compile($config['transformer']);
-        } else if (array_key_exists('loader', $config)) {
+        } elseif (array_key_exists('loader', $config)) {
             $loaderFactory = new Loader();
             return $loaderFactory->compile($config['loader']);
         }

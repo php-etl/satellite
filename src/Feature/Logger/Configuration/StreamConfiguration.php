@@ -12,6 +12,7 @@ final class StreamConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('stream');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('path')->end()

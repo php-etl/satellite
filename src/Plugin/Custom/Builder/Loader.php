@@ -36,8 +36,6 @@ final class Loader implements StepBuilderInterface
 
     public function getNode(): Node
     {
-
-
         $loadStmts = [];
 
 //        foreach ($this->parameters as $key => $parameter){
@@ -121,8 +119,8 @@ final class Loader implements StepBuilderInterface
 //                    new Node\Scalar\String_($this->use)
 //                )
 //            ];
-            return new Node\Expr\New_(
-                class: new Node\Stmt\Class_(
+        return new Node\Expr\New_(
+            class: new Node\Stmt\Class_(
                 name: null,
                 subNodes: [
                     'stmts' => [

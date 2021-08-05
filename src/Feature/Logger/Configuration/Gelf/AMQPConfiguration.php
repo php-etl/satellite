@@ -11,6 +11,7 @@ final class AMQPConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('amqp');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('queue')->end()

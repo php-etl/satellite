@@ -11,6 +11,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('http');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('extractor')

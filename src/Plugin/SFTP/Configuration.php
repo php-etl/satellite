@@ -15,6 +15,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('sftp');
 
+        /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('expression_language')
