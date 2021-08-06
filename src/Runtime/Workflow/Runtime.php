@@ -48,12 +48,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    var: $builder->getNode(),
-                    name: 'run'
-                ),
-            )
+            $builder->getNode()
         ];
     }
 }

@@ -13,43 +13,29 @@ final class Workflow implements Builder
 
     public function addJob(Node\Expr|Builder $job): self
     {
-        array_push($this->jobs, function (Node\Expr $workflow) use ($job) {
-            return new Node\Expr\MethodCall(
-                var: $workflow,
-                name: new Node\Identifier('extract'),
-                args: [
-                    new Node\Arg($job instanceof Builder ? $job->getNode() : $job)
-                ]
-            );
-        });
+        array_push($this->jobs, $job);
 
         return $this;
     }
 
-    public function getNode(): Node\Expr
+    public function getNode(): Node
     {
-        $workflow = new Node\Expr\New_(
-            new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
-            [
-                new Node\Arg(
-                    new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
-                        args: [
-                            new Node\Arg(
-                                value: new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
-                                )
-                            )
-                        ],
-                    ),
-                ),
-            ],
-        );
+        $workflow = [];
 
         foreach ($this->jobs as $job) {
-            $workflow = $job($workflow);
+            $workflow[] = new Node\Arg(
+                $job->getNode()
+            );
         }
 
-        return $workflow;
+        return new Node\Stmt\Expression(
+            new Node\Expr\MethodCall(
+                var: new Node\Expr\New_(
+                    class: new Node\Name\FullyQualified('Kiboko\Component\Workflow\Workflow'),
+                    args: $workflow
+                ),
+                name: new Node\Name('run')
+            )
+        );
     }
 }

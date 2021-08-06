@@ -24,6 +24,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                 ->arrayNode('jobs')
                     ->arrayPrototype()
                         ->children()
+                            ->scalarNode('name')->end()
                             ->append((new Satellite\Runtime\Pipeline\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->end()
                     ->end()
