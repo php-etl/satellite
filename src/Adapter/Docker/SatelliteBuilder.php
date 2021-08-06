@@ -82,8 +82,10 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
-    {
+    public function withDirectory(
+        PackagingContract\DirectoryInterface $source,
+        ?string $destinationPath = null
+    ): self {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
         $this->files->append(new \RecursiveIteratorIterator($source, \RecursiveIteratorIterator::SELF_FIRST));
