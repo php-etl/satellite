@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\SatelliteToolbox;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\SatelliteToolbox;
 
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
-    public function __construct(array $adapters = [], array $runtimes = [], private array $plugins = [])
+    public function __construct(private array $adapters = [], private array $runtimes = [], private array $plugins = [])
     {
         $this->processor = new Processor();
-        $adapters = array_merge(
+        $this->adapters = array_merge(
             // Core Adapters
             [
                 new Adapter\Docker\Configuration(),
@@ -28,7 +28,7 @@ final class Service implements Configurator\FactoryInterface
             $adapters
         );
 
-        $runtimes = array_merge(
+        $this->runtimes = array_merge(
             // Core Runtimes
             [
                 new Runtime\Api\Configuration(),
@@ -37,9 +37,9 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\Workflow\Configuration(),
             ],
             $runtimes
-            );
+        );
 
-        $plugins = array_merge(
+        $this->plugins = array_merge(
             // Core Plugins
             [
                 new Plugin\Batching\Service(),
@@ -52,9 +52,9 @@ final class Service implements Configurator\FactoryInterface
         );
 
         $this->configuration = (new Satellite\Configuration())
-            ->addAdapters(...$adapters)
-            ->addRuntimes(...$runtimes)
-            ->addPlugins(...$plugins);
+            ->addAdapters(...$this->adapters)
+            ->addRuntimes(...$this->runtimes)
+            ->addPlugins(...$this->plugins);
     }
 
     public function configuration(): ConfigurationInterface
