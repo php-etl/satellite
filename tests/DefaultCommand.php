@@ -14,7 +14,7 @@ class DefaultCommand extends Console\Command\Command
     protected static $defaultName = 'test';
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $factory = new Satellite\Service();
+        $factory = new Satellite\Service([],[],(new Satellite\Plugins())->getPlugins());
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,
