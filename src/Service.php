@@ -6,12 +6,6 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\Akeneo;
-use Kiboko\Plugin\Sylius;
-use Kiboko\Plugin\FastMap;
-use Kiboko\Plugin\Spreadsheet;
-use Kiboko\Plugin\SQL;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -22,21 +16,45 @@ final class Service implements Configurator\FactoryInterface
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
-    public function __construct()
+    public function __construct(array $adapters = [], array $runtimes = [], private array $plugins = [])
     {
         $this->processor = new Processor();
-
-        $this->configuration = (new Satellite\Configuration())
-            ->addAdapters(
+        $adapters = array_merge(
+            // Core Adapters
+            [
                 new Adapter\Docker\Configuration(),
                 new Adapter\Filesystem\Configuration(),
-            )
-            ->addRuntimes(
+            ],
+            $adapters
+        );
+
+        $runtimes = array_merge(
+            // Core Runtimes
+            [
                 new Runtime\Api\Configuration(),
                 new Runtime\HttpHook\Configuration(),
                 new Runtime\Pipeline\Configuration(),
                 new Runtime\Workflow\Configuration(),
+            ],
+            $runtimes
             );
+
+        $plugins = array_merge(
+            // Core Plugins
+            [
+                new Plugin\Batching\Service(),
+                new Plugin\Custom\Service(),
+                new Plugin\FTP\Service(),
+                new Plugin\SFTP\Service(),
+                new Plugin\Stream\Service(),
+            ],
+            $plugins
+        );
+
+        $this->configuration = (new Satellite\Configuration())
+            ->addAdapters(...$adapters)
+            ->addRuntimes(...$runtimes)
+            ->addPlugins(...$plugins);
     }
 
     public function configuration(): ConfigurationInterface
@@ -127,82 +145,41 @@ final class Service implements Configurator\FactoryInterface
         }
 
         foreach ($config['pipeline']['steps'] as $step) {
-            if (array_key_exists('akeneo', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service(clone $interpreter)))
-                    ->withPackages(
-                        'akeneo/api-php-client-ee',
-                        'laminas/laminas-diactoros',
-                        'php-http/guzzle7-adapter',
-                    )
-                    ->withExtractor()
-                    ->withTransformer('lookup')
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sylius', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $interpreter)))
-                    ->withPackages(
-                        'diglin/sylius-api-php-client',
-                        'laminas/laminas-diactoros',
-                        'php-http/guzzle7-adapter',
-                    )
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('csv', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $interpreter)))
-                    ->withPackages(
-                        'php-etl/csv-flow:^0.2.0',
-                    )
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('spreadsheet', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $interpreter)))
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('custom', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service()))
-                    ->withExtractor()
-                    ->withTransformer()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('stream', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('batch', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service(clone $interpreter)))
-                    ->withTransformer('merge')
-                    ->withTransformer('fork')
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('fastmap', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $interpreter)))
-                    ->withPackages(
-                        'php-etl/fast-map:^0.2.0',
-                    )
-                    ->withTransformer(null)
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sftp', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sftp', new Satellite\Plugin\SFTP\Service(clone $interpreter)))
-                    ->withPackages(
-                        'ext-ssh2',
-                    )
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('ftp', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $interpreter)))
-                    ->withPackages(
-                        'ext-ssh2',
-                    )
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sql', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $interpreter)))
-                    ->withExtractor()
-                    ->withTransformer('lookup')
-                    ->withLoader()
-                    ->appendTo($step, $repository);
+
+            /** @var  $plugin \Kiboko\Contract\Configurator\FactoryInterface */
+            foreach ($this->plugins as $plugin) {
+                if (array_key_exists($plugin->configuration()->getName(), $step) && $plugin instanceof Configurator\FactoryInterface) {
+                    // TODO - TBD, instead of creating a new instance of the plugin, see how to add the interpreter via a setter for example but it goes against SOLID
+                    $configurationApplier = (new Satellite\Pipeline\ConfigurationApplier($plugin->configuration()->getName(), new (get_class($plugin))(clone $interpreter)));
+
+                    if ($plugin instanceof Configurator\ConfiguratorExtractorInterface) {
+                        $configurationApplier->withExtractor($plugin->getExtractorKey());
+                    }
+
+                    if ($plugin instanceof Configurator\ConfiguratorTransformerInterface) {
+                        if (is_null($plugin->getTransformerKeys())) {
+                            $configurationApplier->withTransformer(null);
+                        } else {
+                            foreach ($plugin->getTransformerKeys() as $key) {
+                                $configurationApplier->withTransformer($key);
+                            }
+                        }
+                    }
+
+                    if ($plugin instanceof Configurator\ConfiguratorLoaderInterface) {
+                        foreach ($plugin->getLoaderKeys() as $key) {
+                            $configurationApplier->withLoader($key);
+                        }
+                    }
+
+                    if ($plugin instanceof Configurator\ConfiguratorPackagesInterface) {
+                        $configurationApplier->withPackages(...$plugin->getPackages());
+                    }
+
+                    $configurationApplier->appendTo($step, $repository);
+
+                    break;
+                }
             }
         }
 

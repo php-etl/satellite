@@ -7,22 +7,27 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
 use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
 use Kiboko\Component\Satellite\Feature;
+use Kiboko\Component\Satellite\Runtime\ConfigTreePluginInterface;
+use Kiboko\Contract\Configurator\FactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface, NamedConfigurationInterface
 {
     /** @var iterable<NamedConfigurationInterface> */
     private iterable $adapters;
     /** @var iterable<NamedConfigurationInterface> */
     private iterable $runtimes;
+    /** @var iterable<FactoryInterface> */
+    private iterable $plugins;
     private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
     {
         $this->adapters = [];
         $this->runtimes = [];
+        $this->plugins = [];
         $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
@@ -42,9 +47,17 @@ final class Configuration implements ConfigurationInterface
         return $this;
     }
 
+    public function addPlugins(FactoryInterface ...$plugins): self
+    {
+        array_push($this->plugins, ...$plugins);
+        $this->backwardCompatibilityConfiguration->addPlugins(...$plugins);
+
+        return $this;
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('etl');
+        $builder = new TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -126,12 +139,15 @@ final class Configuration implements ConfigurationInterface
                 ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end();
 
-        foreach ($this->adapters as $config) {
-            $node->append($config->getConfigTreeBuilder()->getRootNode());
+        foreach ($this->adapters as $adapter) {
+            $node->append($adapter->getConfigTreeBuilder()->getRootNode());
         }
 
-        foreach ($this->runtimes as $config) {
-            $node->append($config->getConfigTreeBuilder()->getRootNode());
+        foreach ($this->runtimes as $runtime) {
+            if ($runtime instanceof ConfigTreePluginInterface) {
+                $runtime->addPlugins(...$this->plugins);
+            }
+            $node->append($runtime->getConfigTreeBuilder()->getRootNode());
         }
     }
 
@@ -177,5 +193,10 @@ final class Configuration implements ConfigurationInterface
 
             return $value;
         };
+    }
+
+    public function getName(): string
+    {
+        return 'etl';
     }
 }

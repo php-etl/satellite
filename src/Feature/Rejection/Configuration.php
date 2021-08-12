@@ -2,13 +2,14 @@
 
 namespace Kiboko\Component\Satellite\Feature\Rejection;
 
+use Kiboko\Component\Satellite\NamedConfigurationInterface;
 use Symfony\Component\Config;
 
-final class Configuration implements Config\Definition\ConfigurationInterface
+final class Configuration implements Config\Definition\ConfigurationInterface, NamedConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new Config\Definition\Builder\TreeBuilder('rejection');
+        $builder = new Config\Definition\Builder\TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -28,5 +29,10 @@ final class Configuration implements Config\Definition\ConfigurationInterface
             ->end();
 
         return $builder;
+    }
+
+    public function getName(): string
+    {
+        return 'rejection';
     }
 }

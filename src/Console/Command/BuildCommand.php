@@ -22,7 +22,11 @@ final class BuildCommand extends Console\Command\Command
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $service = new Satellite\Service();
+        $service = new Satellite\Service(
+            [],
+            [],
+            (new Satellite\Plugins())->getPlugins()
+        );
 
         $style = new Console\Style\SymfonyStyle(
             $input,

@@ -2,14 +2,15 @@
 
 namespace Kiboko\Component\Satellite\Plugin\HTTP;
 
+use Kiboko\Component\Satellite\NamedConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface, NamedConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('http');
+        $builder = new TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -42,5 +43,10 @@ final class Configuration implements ConfigurationInterface
             ->end();
 
         return $builder;
+    }
+
+    public function getName(): string
+    {
+        return 'http';
     }
 }

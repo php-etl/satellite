@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP;
 
+use Kiboko\Component\Satellite\NamedConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface, NamedConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('ftp');
+        $builder = new TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -121,5 +122,10 @@ final class Configuration implements ConfigurationInterface
             ->end();
 
         return $builder;
+    }
+
+    public function getName(): string
+    {
+        return 'ftp';
     }
 }

@@ -24,7 +24,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
     public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
-        $service = new Satellite\Service();
+        $service = new Satellite\Service([],[],(new Satellite\Plugins())->getPlugins());
         $repository = $service->compile($this->config);
 
         $satellite->withFile(

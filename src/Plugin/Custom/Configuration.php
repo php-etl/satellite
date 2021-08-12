@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
+use Kiboko\Component\Satellite\NamedConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface, NamedConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
@@ -15,7 +16,7 @@ final class Configuration implements ConfigurationInterface
         $transformer = new Configuration\Transformer();
         $loader = new Configuration\Loader();
 
-        $builder = new TreeBuilder('custom');
+        $builder = new TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -45,5 +46,10 @@ final class Configuration implements ConfigurationInterface
         ;
 
         return $builder;
+    }
+
+    public function getName(): string
+    {
+        return 'custom';
     }
 }

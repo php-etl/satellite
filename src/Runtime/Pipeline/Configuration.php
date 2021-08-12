@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
-use Kiboko\Plugin\Akeneo;
-use Kiboko\Plugin\Sylius;
-use Kiboko\Plugin\FastMap;
-use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\SQL;
-use Kiboko\Plugin\Spreadsheet;
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator\FactoryInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements Satellite\NamedConfigurationInterface
+final class Configuration implements Satellite\NamedConfigurationInterface, Satellite\Runtime\ConfigTreePluginInterface
 {
+    /** @var array<FactoryInterface> $plugins */
+    private array $plugins = [];
+
     public function getName(): string
     {
         return 'pipeline';
@@ -37,44 +35,61 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                     ->fixXmlConfig('step')
                     ->validate()
                         ->ifTrue(function ($value) {
-                            return 1 <= count(array_filter([
-                                array_key_exists('akeneo', $value),
-                                array_key_exists('sylius', $value),
-                                array_key_exists('csv', $value),
-                                array_key_exists('spreadsheet', $value),
-                                array_key_exists('fastmap', $value),
-                                array_key_exists('api', $value),
-                                array_key_exists('custom', $value),
-                                array_key_exists('stream', $value),
-                                array_key_exists('sftp', $value),
-                                array_key_exists('ftp', $value),
-                                array_key_exists('batch', $value),
-                                array_key_exists('sql', $value),
-                            ]));
+                            $keys = [];
+                            foreach ($value as $item) {
+                                $keys = array_merge($keys, array_intersect($this->getPluginsKeys(), array_keys($item)));
+                            }
+
+                            return 1 <= count(
+                                    array_filter(array_count_values($keys), function ($value) {
+                                        return $value > 1;
+                                    })
+                                );
                         })
-                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp", "ftp", "sql" and "batch".')
-                    ->end()
-                    ->arrayPrototype()
-                        // Plugins
-                        ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new SQL\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Spreadsheet\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\SFTP\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\FTP\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Batching\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        // Flow features
-                        ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Feature\State\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Feature\Rejection\Configuration())->getConfigTreeBuilder()->getRootNode())
+                        ->thenInvalid(sprintf('You should only specify one plugin between "%s".', implode('","', $this->getPluginsKeys())))
                     ->end()
                 ->end()
             ->end();
 
+        $stepsPrototype = $builder->getRootNode()->find('steps')->arrayPrototype();
+        foreach ($this->getPluginsConfiguration() as $pluginConfig) {
+            $stepsPrototype->append($pluginConfig->getConfigTreeBuilder()->getRootNode());
+        }
+
+        // Flow features
+        $stepsPrototype
+            ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->append((new Satellite\Feature\State\Configuration())->getConfigTreeBuilder()->getRootNode())
+            ->append((new Satellite\Feature\Rejection\Configuration())->getConfigTreeBuilder()->getRootNode())
+        ->end();
+
         return $builder;
+    }
+
+    public function addPlugins(FactoryInterface ...$plugins): self
+    {
+        array_push($this->plugins, ...$plugins);
+
+        return $this;
+    }
+
+    private function getPluginsConfiguration(): array
+    {
+        $plugins = array_filter($this->plugins, function ($plugin) {
+            return $plugin instanceof FactoryInterface
+                && $plugin->configuration() instanceof Satellite\NamedConfigurationInterface;
+        });
+
+        /** @var FactoryInterface $plugin */
+        foreach ($plugins as $plugin) {
+            $result[$plugin->configuration()->getName()] = $plugin->configuration();
+        }
+
+        return $result ?? [];
+    }
+
+    private function getPluginsKeys(): array
+    {
+        return array_keys($this->getPluginsConfiguration());
     }
 }

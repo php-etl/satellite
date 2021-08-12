@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 
-final class Service implements Configurator\FactoryInterface
+final class Service implements Configurator\FactoryInterface, Configurator\ConfiguratorLoaderInterface, Configurator\ConfiguratorPackagesInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
@@ -76,5 +76,17 @@ final class Service implements Configurator\FactoryInterface
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');
+    }
+
+    public function getLoaderKeys(): array
+    {
+        return ['loader'];
+    }
+
+    public function getPackages(): array
+    {
+        return [
+            'ext-ssh2'
+        ];
     }
 }

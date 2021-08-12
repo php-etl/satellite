@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 
-final class Service implements Configurator\FactoryInterface
+final class Service implements Configurator\FactoryInterface, Configurator\ConfiguratorExtractorInterface, Configurator\ConfiguratorTransformerInterface, Configurator\ConfiguratorLoaderInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
@@ -66,5 +66,20 @@ final class Service implements Configurator\FactoryInterface
         }
 
         throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');
+    }
+
+    public function getExtractorKey(): string
+    {
+        return 'extractor';
+    }
+
+    public function getLoaderKeys(): array
+    {
+        return ['loader'];
+    }
+
+    public function getTransformerKeys(): ?array
+    {
+        return ['transformer'];
     }
 }

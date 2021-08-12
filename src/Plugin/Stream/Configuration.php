@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Stream;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Kiboko\Component\Satellite\NamedConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface, NamedConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('stream');
+        $builder = new TreeBuilder($this->getName());
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -46,5 +46,10 @@ final class Configuration implements ConfigurationInterface
         ;
 
         return $builder;
+    }
+
+    public function getName(): string
+    {
+        return 'stream';
     }
 }

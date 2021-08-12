@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Configuration;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator\FactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -15,11 +16,14 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
     private iterable $adapters;
     /** @var iterable<Satellite\NamedConfigurationInterface> */
     private iterable $runtimes;
+    /** @var iterable<FactoryInterface> */
+    private iterable $plugins;
 
     public function __construct()
     {
         $this->adapters = [];
         $this->runtimes = [];
+        $this->plugins = [];
     }
 
     public function addAdapters(Satellite\NamedConfigurationInterface ...$adapters): self
@@ -32,6 +36,13 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
     public function addRuntimes(Satellite\NamedConfigurationInterface ...$runtimes): self
     {
         array_push($this->runtimes, ...$runtimes);
+
+        return $this;
+    }
+
+    public function addPlugins(FactoryInterface ...$plugins): self
+    {
+        array_push($this->plugins, ...$plugins);
 
         return $this;
     }
@@ -59,12 +70,15 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         }
         $children = $root->children();
 
-        foreach ($this->adapters as $config) {
-            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        foreach ($this->adapters as $adapter) {
+            $children->append($adapter->getConfigTreeBuilder()->getRootNode());
         }
 
-        foreach ($this->runtimes as $config) {
-            $children->append($config->getConfigTreeBuilder()->getRootNode());
+        foreach ($this->runtimes as $runtime) {
+            if ($runtime instanceof Satellite\Runtime\ConfigTreePluginInterface) {
+                $runtime->addPlugins(...$this->plugins);
+            }
+            $children->append($runtime->getConfigTreeBuilder()->getRootNode());
         }
 
         return $builder;

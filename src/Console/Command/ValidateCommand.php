@@ -23,31 +23,26 @@ final class ValidateCommand extends Console\Command\Command
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $service = new Satellite\Service();
+        $service = new Satellite\Service(
+            [],
+            [],
+            (new Satellite\Plugins())->getPlugins()
+        );
 
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,
         );
 
-        $locator = new Config\FileLocator([getcwd()]);
-
-        $loaderResolver = new Config\Loader\LoaderResolver([
-            new Satellite\Console\Config\YamlFileLoader($locator),
-            new Satellite\Console\Config\JsonFileLoader($locator),
-        ]);
-
-        $delegatingLoader = new Config\Loader\DelegatingLoader($loaderResolver);
-
         $filename = $input->getArgument('config');
         if ($filename !== null) {
-            $configuration = $delegatingLoader->load($filename);
+            $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
 
             foreach ($possibleFiles as $filename) {
                 try {
-                    $configuration = $delegatingLoader->load($filename);
+                    $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
                     break;
                 } catch (LoaderLoadException) {
                 }
