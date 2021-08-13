@@ -136,6 +136,7 @@ final class Service implements Configurator\FactoryInterface
                 $pipeline = $this->compilePipeline($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
+                $repository->merge($pipeline);
                 $repository->addFiles(
                     new Packaging\File(
                         $pipelineFilename,

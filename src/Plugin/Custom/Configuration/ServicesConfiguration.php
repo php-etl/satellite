@@ -16,8 +16,12 @@ final class ServicesConfiguration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always(function ($data) {
                     foreach ($data as $identifier => &$service) {
-                        if (!array_key_exists('class', $service)) {
+                        if (is_null($service)) {
                             $service['class'] = $identifier;
+                        } else {
+                            if (!array_key_exists('class', $service)) {
+                                $service['class'] = $identifier;
+                            }
                         }
                     }
                     return $data;
