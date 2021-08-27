@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use PhpParser\Node;
 use Monolog\Handler\ElasticsearchHandler;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
@@ -16,13 +18,15 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
     private ?string $index;
     private iterable $hosts;
     private iterable $formatters;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct()
+    public function __construct(ExpressionLanguage $interpreter)
     {
         $this->level = null;
         $this->index = null;
         $this->hosts = [];
         $this->formatters = [];
+        $this->interpreter = $interpreter;
     }
 
     public function withLevel(string $level): self
@@ -137,7 +141,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
         if (is_string($value)) {
             if(isExpression()($value)) {
-                return new Node\Expr\FuncCall(asExpression()($value));
+                return compileExpression($this->interpreter,asExpression()($value));
             }
             return new Node\Scalar\String_($value);
         }
