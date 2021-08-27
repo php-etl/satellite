@@ -2,12 +2,12 @@
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Kiboko\Contract\Configurator\RepositoryInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Component\Satellite\Plugin\FTP;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
@@ -52,7 +52,7 @@ class Loader implements Configurator\FactoryInterface
 
     public function compile(array $config): RepositoryInterface
     {
-        $builder = new FTP\Builder\Loader();
+        $builder = new FTP\Builder\Loader($this->interpreter);
 
         if (array_key_exists('servers', $config['loader'])
             && is_array($config['loader']['servers'])

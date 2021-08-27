@@ -3,9 +3,11 @@
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Loader implements StepBuilderInterface
 {
@@ -15,8 +17,9 @@ class Loader implements StepBuilderInterface
     private iterable $servers;
     private iterable $putStatements;
     private array $serversMapping;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct()
+    public function __construct(ExpressionLanguage $interpreter)
     {
         $this->logger = null;
         $this->rejection = null;
@@ -24,6 +27,7 @@ class Loader implements StepBuilderInterface
         $this->servers = [];
         $this->serversMapping = [];
         $this->putStatements = [];
+        $this->interpreter = $interpreter;
     }
 
     public function addServerBasePath(string $host, Node\Expr $base_path)
@@ -83,6 +87,7 @@ class Loader implements StepBuilderInterface
 
     private function compilePutStatements(): iterable
     {
+
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
             foreach ($this->servers as $index => $server) {
                 if ($condition != null) {
@@ -201,13 +206,13 @@ class Loader implements StepBuilderInterface
                                             items: array_merge(
                                                 [
                                                 new Node\Expr\ArrayItem(
-                                                    value:  new Node\Scalar\String_($server["base_path"]),
+                                                    value:  compileValueWhenExpression($this->interpreter,$server["base_path"]),
                                                     key: new Node\Scalar\String_('%path%'),
                                                 )
                                             ],
                                                 [
                                                 new Node\Expr\ArrayItem(
-                                                    value: new Node\Scalar\String_($server["host"]),
+                                                    value: compileValueWhenExpression($this->interpreter,$server["host"]),
                                                     key:  new Node\Scalar\String_('%server%'),
                                                 )
                                             ]
