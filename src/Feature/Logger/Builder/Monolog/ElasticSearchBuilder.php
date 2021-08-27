@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
 use PhpParser\Node;
+use Monolog\Handler\ElasticsearchHandler;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {
@@ -97,7 +101,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\ElasticSearchHandler'),
+            class: new Node\Name\FullyQualified(ElasticsearchHandler::class),
             args: $arguments,
         );
 
@@ -132,6 +136,9 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
             );
         }
         if (is_string($value)) {
+            if(isExpression()($value)) {
+                return new Node\Expr\FuncCall(asExpression()($value));
+            }
             return new Node\Scalar\String_($value);
         }
         if (is_int($value)) {
