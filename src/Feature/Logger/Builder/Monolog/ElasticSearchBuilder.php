@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
 use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use PhpParser\Node;
-use Monolog\Handler\ElasticsearchHandler;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
@@ -105,7 +104,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified(ElasticsearchHandler::class),
+            class: new Node\Name\FullyQualified('Monolog\\Handler\\ElasticsearchHandler'),
             args: $arguments,
         );
 
