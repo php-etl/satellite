@@ -7,9 +7,9 @@ namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use PhpParser\Node;
 
-use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
-use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
+use Symfony\Component\ExpressionLanguage\Expression;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {
@@ -42,7 +42,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function withHosts(string|array ...$hosts): self
+    public function withHosts(string|array|Expression ...$hosts): self
     {
         array_push($this->hosts, ...$hosts);
 
@@ -69,7 +69,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
                         name: new Node\Identifier('setHosts'),
                         args: [
                             new Node\Arg(
-                                value: $this->toAST($this->hosts),
+                                value: compileValueWhenExpression($this->interpreter,$this->hosts),
                             ),
                         ],
                     ),
@@ -119,41 +119,5 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         return $instance;
-    }
-
-    private function toAST($value): Node\Expr
-    {
-        if (is_array($value)) {
-            return new Node\Expr\Array_(
-                items: array_map(
-                    fn ($item, $key) => new Node\Expr\ArrayItem(
-                        value: $this->toAST($item),
-                        key: $this->toAST($key),
-                    ),
-                    $value,
-                    array_keys($value)
-                ),
-                attributes: [
-                    'kind' => Node\Expr\Array_::KIND_SHORT
-                ]
-            );
-        }
-        if (is_string($value)) {
-            if(isExpression()($value)) {
-                return compileExpression($this->interpreter,asExpression()($value));
-            }
-            return new Node\Scalar\String_($value);
-        }
-        if (is_int($value)) {
-            return new Node\Scalar\LNumber($value);
-        }
-        if (is_float($value)) {
-            return new Node\Scalar\DNumber($value);
-        }
-        if (is_null($value)) {
-            return new Node\Expr\ConstFetch(new Node\Name('null'));
-        }
-
-        throw new \InvalidArgumentException('Could not convert value into a valid AST');
     }
 }

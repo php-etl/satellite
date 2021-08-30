@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0016575d37fbeb9006af633ee38c8866",
+    "content-hash": "e3ca28eea755f42c3ff4cbfb57ae465d",
     "packages": [
         {
             "name": "brick/math",
@@ -1232,12 +1232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "504847218d94ef10b65b35e75f2ed9611f50f0d1"
+                "reference": "45d13eb732394bbd3300ac14fb0b6cb2fb85d75f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/504847218d94ef10b65b35e75f2ed9611f50f0d1",
-                "reference": "504847218d94ef10b65b35e75f2ed9611f50f0d1",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/45d13eb732394bbd3300ac14fb0b6cb2fb85d75f",
+                "reference": "45d13eb732394bbd3300ac14fb0b6cb2fb85d75f",
                 "shasum": ""
             },
             "require": {
@@ -1289,7 +1289,7 @@
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/master"
             },
-            "time": "2021-07-19T07:14:17+00:00"
+            "time": "2021-08-30T09:27:47+00:00"
         },
         {
             "name": "php-etl/spreadsheet-plugin",
@@ -8765,5 +8765,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
