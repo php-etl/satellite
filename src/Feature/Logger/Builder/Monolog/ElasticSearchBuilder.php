@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use PhpParser\Node;
+
+use Symfony\Component\ExpressionLanguage\Expression;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {
@@ -12,13 +17,15 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
     private ?string $index;
     private iterable $hosts;
     private iterable $formatters;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct()
+    public function __construct(ExpressionLanguage $interpreter)
     {
         $this->level = null;
         $this->index = null;
         $this->hosts = [];
         $this->formatters = [];
+        $this->interpreter = $interpreter;
     }
 
     public function withLevel(string $level): self
@@ -35,7 +42,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function withHosts(string|array ...$hosts): self
+    public function withHosts(string|array|Expression ...$hosts): self
     {
         array_push($this->hosts, ...$hosts);
 
@@ -62,7 +69,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
                         name: new Node\Identifier('setHosts'),
                         args: [
                             new Node\Arg(
-                                value: $this->toAST($this->hosts),
+                                value: compileValueWhenExpression($this->interpreter, $this->hosts),
                             ),
                         ],
                     ),
@@ -97,7 +104,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\ElasticSearchHandler'),
+            class: new Node\Name\FullyQualified('Monolog\\Handler\\ElasticsearchHandler'),
             args: $arguments,
         );
 
@@ -112,38 +119,5 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         return $instance;
-    }
-
-    private function toAST($value): Node\Expr
-    {
-        if (is_array($value)) {
-            return new Node\Expr\Array_(
-                items: array_map(
-                    fn ($item, $key) => new Node\Expr\ArrayItem(
-                        value: $this->toAST($item),
-                        key: $this->toAST($key),
-                    ),
-                    $value,
-                    array_keys($value)
-                ),
-                attributes: [
-                    'kind' => Node\Expr\Array_::KIND_SHORT
-                ]
-            );
-        }
-        if (is_string($value)) {
-            return new Node\Scalar\String_($value);
-        }
-        if (is_int($value)) {
-            return new Node\Scalar\LNumber($value);
-        }
-        if (is_float($value)) {
-            return new Node\Scalar\DNumber($value);
-        }
-        if (is_null($value)) {
-            return new Node\Expr\ConstFetch(new Node\Name('null'));
-        }
-
-        throw new \InvalidArgumentException('Could not convert value into a valid AST');
     }
 }

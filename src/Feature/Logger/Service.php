@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Feature\Logger;
 
+use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Component\Satellite\Feature\Logger\Builder\LogstashFormatterBuilder;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 final class Service implements Configurator\FactoryInterface
 {
+    private ExpressionLanguage $interpreter;
     private Processor $processor;
     private ConfigurationInterface $configuration;
 
@@ -17,6 +19,7 @@ final class Service implements Configurator\FactoryInterface
     {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
+        $this->interpreter = new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -131,7 +134,7 @@ final class Service implements Configurator\FactoryInterface
                 }
 
                 if (array_key_exists('elasticsearch', $destination)) {
-                    $factory = new Factory\ElasticSearchFactory();
+                    $factory = new Factory\ElasticSearchFactory($this->interpreter);
 
                     $gelfRepository = $factory->compile($destination['elasticsearch']);
 

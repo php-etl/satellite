@@ -6,6 +6,9 @@ use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
+
 final class ElasticSearchConfiguration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
@@ -29,7 +32,12 @@ final class ElasticSearchConfiguration implements ConfigurationInterface
                     ])
                 ->end()
                 ->arrayNode('hosts')
-                    ->scalarPrototype()->example('http://user:password@localhost:9200')->end()
+                    ->scalarPrototype()->example('http://user:password@localhost:9200')
+                        ->validate()
+                            ->ifTrue(isExpression())
+                            ->then(asExpression())
+                        ->end()
+                    ->end()
                 ->end()
                 ->scalarNode('elastic_cloud_id')->end()
                 ->scalarNode('api_id')->end()
