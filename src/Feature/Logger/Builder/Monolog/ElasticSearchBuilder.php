@@ -69,7 +69,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
                         name: new Node\Identifier('setHosts'),
                         args: [
                             new Node\Arg(
-                                value: compileValueWhenExpression($this->interpreter,$this->hosts),
+                                value: compileValueWhenExpression($this->interpreter, $this->hosts),
                             ),
                         ],
                     ),
