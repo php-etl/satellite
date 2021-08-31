@@ -1427,12 +1427,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/string-expression-language.git",
-                "reference": "7b0ba9057a86abfe13347d306c857a32fb7f303a"
+                "reference": "16b27a80238e5be94e0e03006388234a2c9386aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/7b0ba9057a86abfe13347d306c857a32fb7f303a",
-                "reference": "7b0ba9057a86abfe13347d306c857a32fb7f303a",
+                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/16b27a80238e5be94e0e03006388234a2c9386aa",
+                "reference": "16b27a80238e5be94e0e03006388234a2c9386aa",
                 "shasum": ""
             },
             "require": {
@@ -1469,7 +1469,7 @@
                 "issues": "https://github.com/php-etl/string-expression-language/issues",
                 "source": "https://github.com/php-etl/string-expression-language/tree/master"
             },
-            "time": "2021-08-05T10:17:39+00:00"
+            "time": "2021-08-31T15:16:06+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -4758,12 +4758,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "0761474599f2f813d805d171b16012052a7b2f7e"
+                "reference": "01d734125cc0d82eb754c536b5c06310bcb6bdc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/0761474599f2f813d805d171b16012052a7b2f7e",
-                "reference": "0761474599f2f813d805d171b16012052a7b2f7e",
+                "url": "https://api.github.com/repos/composer/composer/zipball/01d734125cc0d82eb754c536b5c06310bcb6bdc4",
+                "reference": "01d734125cc0d82eb754c536b5c06310bcb6bdc4",
                 "shasum": ""
             },
             "require": {
@@ -4849,7 +4849,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-30T12:46:49+00:00"
+            "time": "2021-08-30T15:45:35+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -7014,16 +7014,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.8",
+            "version": "9.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb"
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/191768ccd5c85513b4068bdbe99bb6390c7d54fb",
-                "reference": "191768ccd5c85513b4068bdbe99bb6390c7d54fb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
                 "shasum": ""
             },
             "require": {
@@ -7101,7 +7101,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.8"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
             },
             "funding": [
                 {
@@ -7113,7 +7113,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-31T15:17:34+00:00"
+            "time": "2021-08-31T06:47:40+00:00"
         },
         {
             "name": "psr/event-dispatcher",
