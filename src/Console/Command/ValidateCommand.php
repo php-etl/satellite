@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command;
 
 use Kiboko\Component\Satellite;
-use Psr\Log;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Console;
-use Symfony\Component\Yaml;
 
 final class ValidateCommand extends Console\Command\Command
 {
@@ -30,24 +28,15 @@ final class ValidateCommand extends Console\Command\Command
             $output,
         );
 
-        $locator = new Config\FileLocator([getcwd()]);
-
-        $loaderResolver = new Config\Loader\LoaderResolver([
-            new Satellite\Console\Config\YamlFileLoader($locator),
-            new Satellite\Console\Config\JsonFileLoader($locator),
-        ]);
-
-        $delegatingLoader = new Config\Loader\DelegatingLoader($loaderResolver);
-
         $filename = $input->getArgument('config');
         if ($filename !== null) {
-            $configuration = $delegatingLoader->load($filename);
+            $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
 
             foreach ($possibleFiles as $filename) {
                 try {
-                    $configuration = $delegatingLoader->load($filename);
+                    $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
                     break;
                 } catch (LoaderLoadException) {
                 }
