@@ -63,7 +63,7 @@ class Loader implements Configurator\FactoryInterface
      */
     public function compile(array $config): Repository\Loader
     {
-        $builder = new Custom\Builder\Loader();
+        $builder = new Custom\Builder\Loader(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $container = new ContainerBuilder();
 
@@ -127,7 +127,6 @@ class Loader implements Configurator\FactoryInterface
         }
 
         $container->getDefinition($config['use'])->setPublic(true);
-        $builder->withService(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $repository = new Repository\Loader($builder);
 

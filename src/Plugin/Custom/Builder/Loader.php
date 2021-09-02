@@ -14,6 +14,10 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
+    public function __construct(private Node\Expr $service)
+    {
+    }
+
     public function withService(Node\Expr $service): self
     {
         $this->service = $service;

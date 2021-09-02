@@ -52,7 +52,7 @@ class Transformer implements Configurator\FactoryInterface
 
     public function compile(array $config): Repository\Transformer
     {
-        $builder = new Custom\Builder\Transformer();
+        $builder = new Custom\Builder\Transformer(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $container = new ContainerBuilder();
 
@@ -95,19 +95,30 @@ class Transformer implements Configurator\FactoryInterface
                     }
                 }
 
-//                if (array_key_exists('calls', $service)
-//                    && is_array($service['calls'])
-//                    && count($service['calls']) > 0
-//                ) {
-//                    foreach ($service['calls'] as $key => [$method, $arguments]) {
-//                        $definition->addMethodCall($argument);
-//                    }
-//                }
+                if (array_key_exists('calls', $service)
+                    && is_array($service['calls'])
+                    && count($service['calls']) > 0
+                ) {
+                    foreach ($service['calls'] as $method => $items) {
+                        $arguments = [];
+
+                        foreach ($items as $argument) {
+                            if (substr($argument, 0, 1) === '@'
+                                && substr($argument, 1, 1) !== '@'
+                            ) {
+                                $argument = new Reference(substr($argument, 1));
+                            }
+
+                            $arguments[] = $argument;
+                        }
+
+                        $definition->addMethodCall($method, $arguments);
+                    }
+                }
             }
         }
 
         $container->getDefinition($config['use'])->setPublic(true);
-        $builder->withService(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $repository = new Repository\Transformer($builder);
 

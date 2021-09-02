@@ -12,7 +12,10 @@ final class Transformer implements StepBuilderInterface
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
-    private ?Node\Expr $service;
+
+    public function __construct(private Node\Expr $service)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -35,19 +38,12 @@ final class Transformer implements StepBuilderInterface
         return $this;
     }
 
-    public function withService(Node\Expr $service): self
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
     public function getNode(): Node
     {
         return new Node\Expr\MethodCall(
             var: new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('ProjectServiceContainer')
-        ),
+                class: new Node\Name\FullyQualified('ProjectServiceContainer')
+            ),
             name: new Node\Identifier('get'),
             args: [
                 new Node\Arg(

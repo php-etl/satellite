@@ -24,6 +24,18 @@ final class ServicesConfiguration implements ConfigurationInterface
                             }
                         }
                     }
+
+                    return $data;
+                })
+            ->end()
+            ->beforeNormalization()
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (array_key_exists('calls', $service)) {
+                            $service["calls"] = array_merge(...$service["calls"]);
+                        }
+                    }
+
                     return $data;
                 })
             ->end()
@@ -34,10 +46,9 @@ final class ServicesConfiguration implements ConfigurationInterface
                         ->useAttributeAsKey('key')
                         ->scalarPrototype()->end()
                     ->end()
-                        ->arrayNode('calls')
-                            ->arrayPrototype()
-                                ->variablePrototype()->end()
-                            ->end()
+                    ->arrayNode('calls')
+                        ->arrayPrototype()
+                            ->variablePrototype()->end()
                         ->end()
                     ->end()
                 ->end()
