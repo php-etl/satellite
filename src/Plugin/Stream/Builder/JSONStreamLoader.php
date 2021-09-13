@@ -47,7 +47,17 @@ final class JSONStreamLoader implements StepBuilderInterface
             class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\JSONStreamLoader'),
             args: [
                 new Node\Arg(
-                    value: new Node\Scalar\String_($this->stream),
+                    value: new Node\Expr\FuncCall(
+                        name: new Node\Name\FullyQualified('fopen'),
+                        args: [
+                            new Node\Arg(
+                                new Node\Scalar\String_($this->stream),
+                            ),
+                            new Node\Arg(
+                                new Node\Scalar\String_('wb'),
+                            ),
+                        ],
+                    ),
                 ),
             ],
         );

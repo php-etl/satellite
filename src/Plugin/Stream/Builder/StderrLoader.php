@@ -13,21 +13,28 @@ final class StderrLoader implements StepBuilderInterface
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
-    public function withLogger(Node\Expr $logger): StderrLoader
+    public function __construct(private string $stream)
+    {
+        $this->logger = null;
+        $this->rejection = null;
+        $this->state = null;
+    }
+
+    public function withLogger(Node\Expr $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): StderrLoader
+    public function withRejection(Node\Expr $rejection): self
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): StderrLoader
+    public function withState(Node\Expr $state): self
     {
         $this->state = $state;
 

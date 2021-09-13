@@ -19,21 +19,24 @@
               "properties": {
                 "name": { "type": "string", "const": "knative" },
                 "stage": { "type": "string", "enum": ["prod", "dev"] }
-              }
+              },
+              "required": ["name"]
             },
             {
               "$comment": "Configuration for Fn",
               "type": "object",
               "properties": {
                 "name": { "type": "string", "const": "fn" }
-              }
+              },
+              "required": ["name"]
             },
             {
               "$comment": "Configuration for Kubeless",
               "type": "object",
               "properties": {
                 "name": { "type": "string", "const": "kubeless" }
-              }
+              },
+              "required": ["name"]
             },
             {
               "$comment": "Configuration for OpenWhisk",
@@ -44,7 +47,8 @@
                 "memory": { "type": "number" },
                 "timeout": { "type": "number" },
                 "namespace": { "type": "string" }
-              }
+              },
+              "required": ["name"]
             },
             {
               "$comment": "Configuration for AWS",
@@ -58,7 +62,8 @@
                 "profile": { "type": "string" },
                 "memorySize": { "type": "string" },
                 "timeout": { "type": "string" }
-              }
+              },
+              "required": ["name"]
             }
           ]
         }
