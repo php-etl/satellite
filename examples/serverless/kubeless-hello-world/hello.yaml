@@ -1,0 +1,27 @@
+apiVersion: kubeless.io/v1beta1
+kind: Function
+metadata:
+  name: hello-world
+  namespace: default
+  label:
+    created-by: kubeless
+    function: hello-world
+spec:
+  runtime: php74
+  timeout: "180"
+  handler: pipeline.hello
+  deps: ""
+  checksum: sha256:d251999dcbfdeccec385606fd0aec385b214cfc74ede8b6c9e47af71728f6e9a
+  function-content-type: text
+  function: |
+    <?php
+
+    function hello($event, $context) {
+      ob_start();
+      \phpinfo();
+      $content = ob_get_contents();
+      ob_end_clean();
+
+      return $content;
+    }
+

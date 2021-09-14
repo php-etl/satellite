@@ -2,25 +2,26 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory;
 
-use Kiboko\Component\Satellite\Plugin\SFTP\Configuration;
-use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
+use Kiboko\Component\Satellite\Plugin\SFTP;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Config\Definition\Exception as Symfony;
-use Kiboko\Component\Satellite\Plugin\SFTP;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Server implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
-        $this->configuration = new Configuration();
+        $this->configuration = new SFTP\Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -51,13 +52,14 @@ class Server implements Configurator\FactoryInterface
         }
     }
 
-    public function compile(array $config): Repository
+    public function compile(array $config): SFTP\Factory\Repository\Repository
     {
         $builder = new SFTP\Builder\Server(compileValueWhenExpression($this->interpreter, $config["host"]), compileValueWhenExpression($this->interpreter, $config["port"]));
 
         if (array_key_exists('base_path', $config)) {
             $builder->withBasePath(compileValueWhenExpression($this->interpreter, $config['base_path']));
         }
+
         if (array_key_exists('username', $config)
             && array_key_exists('password', $config)
         ) {

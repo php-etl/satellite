@@ -4,7 +4,6 @@ namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
 use Kiboko\Component\Satellite\Plugin\FTP;
 use Kiboko\Contract\Configurator;
-use Kiboko\Contract\Configurator\RepositoryInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -15,11 +14,14 @@ class Server implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
         $this->configuration = new FTP\Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -50,7 +52,7 @@ class Server implements Configurator\FactoryInterface
         }
     }
 
-    public function compile(array $config): RepositoryInterface
+    public function compile(array $config): FTP\Factory\Repository\Repository
     {
         $builder = new FTP\Builder\Server(compileValueWhenExpression($this->interpreter, $config["host"]), compileValueWhenExpression($this->interpreter, $config["port"]), compileValueWhenExpression($this->interpreter, $config["timeout"]));
 

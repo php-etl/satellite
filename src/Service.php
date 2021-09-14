@@ -30,6 +30,7 @@ final class Service implements Configurator\FactoryInterface
             ->addAdapters(
                 new Adapter\Docker\Configuration(),
                 new Adapter\Filesystem\Configuration(),
+//                new Adapter\Serverless\Configuration(),
             )
             ->addRuntimes(
                 new Runtime\Api\Configuration(),
@@ -128,7 +129,8 @@ final class Service implements Configurator\FactoryInterface
 
         foreach ($config['pipeline']['steps'] as $step) {
             if (array_key_exists('akeneo', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service($clone), $clone))
                     ->withPackages(
                         'akeneo/api-php-client-ee',
                         'laminas/laminas-diactoros',
@@ -139,7 +141,8 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('sylius', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $clone), $clone))
                     ->withPackages(
                         'diglin/sylius-api-php-client',
                         'laminas/laminas-diactoros',
@@ -149,7 +152,8 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('csv', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
                     ->withPackages(
                         'php-etl/csv-flow:^0.2.0',
                     )
@@ -157,48 +161,56 @@ final class Service implements Configurator\FactoryInterface
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('spreadsheet', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $clone), $clone))
                     ->withExtractor()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('custom', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service()))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service(), $clone))
                     ->withExtractor()
                     ->withTransformer()
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('stream', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service()))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service(), $clone))
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('batch', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service(clone $clone), $clone))
                     ->withTransformer('merge')
                     ->withTransformer('fork')
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('fastmap', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
                     ->withPackages(
                         'php-etl/fast-map:^0.2.0',
                     )
                     ->withTransformer(null)
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('sftp', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sftp', new Satellite\Plugin\SFTP\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('sftp', new Satellite\Plugin\SFTP\Service(clone $clone), $clone))
                     ->withPackages(
                         'ext-ssh2',
                     )
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('ftp', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $clone), $clone))
                     ->withPackages(
                         'ext-ssh2',
                     )
                     ->withLoader()
                     ->appendTo($step, $repository);
             } elseif (array_key_exists('sql', $step)) {
-                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $interpreter)))
+                $clone = clone $interpreter;
+                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $clone), $clone))
                     ->withExtractor()
                     ->withTransformer('lookup')
                     ->withLoader()

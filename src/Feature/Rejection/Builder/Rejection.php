@@ -7,12 +7,24 @@ use PhpParser\Node;
 
 final class Rejection implements Builder
 {
-    public function __construct(private ?Node\Expr $rejection = null)
+    public function __construct(
+        private ?Node\Expr $rejection = null
+    ) {}
+
+    public function withRejection(Node\Expr $rejection)
     {
+        $this->rejection = $rejection;
     }
 
-    public function getNode(): Node\Stmt
+    private static function nullRejection(): Node\Expr
     {
-        return new Node\Stmt\Nop();
+        return new Node\Expr\New_(
+            new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullRejection')
+        );
+    }
+
+    public function getNode(): Node\Expr
+    {
+        return $this->rejection === null ? self::nullRejection() : $this->rejection;
     }
 }

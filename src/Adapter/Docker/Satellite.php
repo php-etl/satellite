@@ -6,9 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Satellite\SatelliteInterface;
-use Kiboko\Component\Packaging\TarArchive;
-use Kiboko\Contract\Packaging\DirectoryInterface;
-use Kiboko\Contract\Packaging\FileInterface;
+use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
@@ -16,20 +14,16 @@ final class Satellite implements SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags;
-    private string $workdir;
-    private Dockerfile $dockerfile;
-    /** @var iterable<DirectoryInterface|FileInterface> */
+    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
     private iterable $dependencies;
 
     public function __construct(
-        Dockerfile $dockerfile,
-        string $workdir,
-        FileInterface|DirectoryInterface ...$files
+        private Dockerfile $dockerfile,
+        private string $workdir,
+        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
         $this->imageTags = [];
-        $this->workdir = $workdir;
-        $this->dockerfile = $dockerfile;
         $this->files = $files;
         $this->dependencies = [];
     }
@@ -41,7 +35,7 @@ final class Satellite implements SatelliteInterface
         return $this;
     }
 
-    public function withFile(DirectoryInterface|FileInterface ...$files): self
+    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
@@ -61,7 +55,7 @@ final class Satellite implements SatelliteInterface
 
     public function build(LoggerInterface $logger): void
     {
-        $archive = new TarArchive($this->dockerfile, ...$this->files);
+        $archive = new Packaging\TarArchive($this->dockerfile, ...$this->files);
 
         $iterator = function (iterable $tags) {
             foreach ($tags as $tag) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
 use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
-use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
 use Kiboko\Contract\Configurator;
@@ -14,6 +13,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
@@ -21,11 +21,14 @@ final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

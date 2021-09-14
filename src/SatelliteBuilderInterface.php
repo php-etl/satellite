@@ -8,6 +8,10 @@ use Kiboko\Contract\Packaging;
 
 interface SatelliteBuilderInterface
 {
+    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface;
+
+    public function withComposerRequire(string ...$package): SatelliteBuilderInterface;
+
     public function withComposerFile(
         Packaging\FileInterface|Packaging\AssetInterface $composerJsonFile,
         null|Packaging\FileInterface|Packaging\AssetInterface $composerLockFile = null

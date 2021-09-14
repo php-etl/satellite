@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Filesystem;
+namespace Kiboko\Component\Satellite\Adapter;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;

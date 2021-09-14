@@ -4,33 +4,36 @@ namespace Kiboko\Component\Satellite\Pipeline;
 
 use Kiboko\Component\Satellite\Builder\Repository\Pipeline;
 use Kiboko\Contract\Configurator\FactoryInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ConfigurationApplier
 {
     private array $steps = [];
     private array $packages = [];
 
-    public function __construct(private string $plugin, private FactoryInterface $service)
-    {
-    }
+    public function __construct(
+        private string $plugin,
+        private FactoryInterface $service,
+        private ExpressionLanguage $interpreter,
+    ) {}
 
     public function withExtractor(?string $key = 'extractor'): self
     {
-        $this->steps[] = new Extractor($this->plugin, $key);
+        $this->steps[] = new Extractor($this->plugin, $key, $this->interpreter);
 
         return $this;
     }
 
     public function withTransformer(?string $key = 'transformer'): self
     {
-        $this->steps[] = new Transformer($this->plugin, $key);
+        $this->steps[] = new Transformer($this->plugin, $key, $this->interpreter);
 
         return $this;
     }
 
     public function withLoader(?string $key = 'loader'): self
     {
-        $this->steps[] = new Loader($this->plugin, $key);
+        $this->steps[] = new Loader($this->plugin, $key, $this->interpreter);
 
         return $this;
     }
