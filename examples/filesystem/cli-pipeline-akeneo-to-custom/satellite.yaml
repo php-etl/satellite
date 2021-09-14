@@ -1,16 +1,12 @@
 satellite:
-#  docker:
-#    from: php:8.0-cli-alpine
-#    workdir: /var/www/html
-#    tags:
-#      - kiboko/satellite:akeneo-to-custom
   filesystem:
-    path: build
+    path: build/
   composer:
     require:
       - "php-etl/pipeline:^0.3"
       - "php-etl/fast-map:^0.2"
       - "php-etl/csv-flow:^0.2"
+      - "php-etl/rabbitmq-flow:^0.1"
       - "akeneo/api-php-client-ee"
       - "laminas/laminas-diactoros"
       - "php-http/guzzle7-adapter"
@@ -29,13 +25,13 @@ satellite:
             - { field: completeness, operator: '>', value: 70, scope: ecommerce }
             - { field: completeness, operator: '<', value: 85, scope: ecommerce }
             - { field: categories, operator: IN, value: winter_collection }
-            - { field: family, operator: IN, value: [camcorders, digital_cameras] }
+            - { field: family, operator: IN, value: [ camcorders, digital_cameras ] }
         client:
-          api_url: 'https://unlock-hippopotamus.demo.cloud.akeneo.com'
-          client_id: '5_2hogwrsqgj40owc8c8sw0swwwos80ccgkck84kok8kwkwswowk'
-          secret: '2pjdo95m1i0w8sw0wowowgcs4wgk8g0g4co4gw0wc88w8osk8'
-          username: 'sylius_3225'
-          password: 'ad6893ba0'
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
       logger:
         channel: pipeline
         destinations:
@@ -43,99 +39,105 @@ satellite:
               level: warning
               hosts:
                 - elasticsearch.example.com:9200
-    - fastmap:
-        expression_language:
-          - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
-        conditional:
-          - condition: 'input["family"] === "clothing"'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-              - field: '[translations][en_US]'
-                expression: 'input'
-                map:
-                  - field: '[name]'
-                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[slug]'
-                    expression: 'input["identifier"]'
-                  - field: '[description]'
-                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[composition]'
-                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
-                  - field: '[wash_temperature]'
-                    expression: 'attribute(input["values"]["wash_temperature"], locale(null), scope(null))'
-                  - field: '[care_instructions]'
-                    expression: 'attribute(input["values"]["care_instructions"], locale(null), scope(null))'
-                  - field: '[material]'
-                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
-          - condition: 'input["family"] === "led_tvs"'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-              - field: '[translations][en_US]'
-                expression: 'input'
-                map:
-                  - field: '[name]'
-                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[slug]'
-                    expression: 'input["identifier"]'
-                  - field: '[description]'
-                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
-          - condition: 'input["family"] === "accessories"'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-              - field: '[translations][en_US]'
-                expression: 'input'
-                map:
-                  - field: '[name]'
-                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
-                  - field: '[slug]'
-                    expression: 'input["identifier"]'
-                  - field: '[composition]'
-                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
-                  - field: '[material]'
-                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
-          - condition: 'true'
-            map:
-              - field: '[code]'
-                copy: '[identifier]'
-              - field: '[family]'
-                copy: '[family]'
-      logger:
-        channel: pipeline
+      rejection:
         destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
-    - custom:
-        loader:
-          use: 'Pipeline\Foo'
-          parameters:
-            baz: '%env(PATH)%'
-          services:
-            Pipeline\Foo:
-              arguments:
-                - 'foo'
-                - '@bar'
-#              calls:
-#                - setLogger: ['@logger']
-            bar:
-              class: Pipeline\Bar
-    - stream:
-        loader:
-          destination: 'stdout'
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
+#          - rabbitmq:
+#              host: rabbitmq.example.com
+#              port: 5432
+#              vhost: /
+#              exchange: default
+#              topic: foo.rejects
+#    - fastmap:
+#        expression_language:
+#          - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+#        conditional:
+#          - condition: 'input["family"] === "clothing"'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#              - field: '[translations][en_US]'
+#                expression: 'input'
+#                map:
+#                  - field: '[name]'
+#                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[slug]'
+#                    expression: 'input["identifier"]'
+#                  - field: '[description]'
+#                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[composition]'
+#                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
+#                  - field: '[wash_temperature]'
+#                    expression: 'attribute(input["values"]["wash_temperature"], locale(null), scope(null))'
+#                  - field: '[care_instructions]'
+#                    expression: 'attribute(input["values"]["care_instructions"], locale(null), scope(null))'
+#                  - field: '[material]'
+#                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
+#          - condition: 'input["family"] === "led_tvs"'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#              - field: '[translations][en_US]'
+#                expression: 'input'
+#                map:
+#                  - field: '[name]'
+#                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[slug]'
+#                    expression: 'input["identifier"]'
+#                  - field: '[description]'
+#                    expression: 'attribute(input["values"]["description"], locale("en_US"), scope("ecommerce"))'
+#          - condition: 'input["family"] === "accessories"'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#              - field: '[translations][en_US]'
+#                expression: 'input'
+#                map:
+#                  - field: '[name]'
+#                    expression: 'attribute(input["values"]["variation_name"], locale("en_US"), scope("ecommerce"))'
+#                  - field: '[slug]'
+#                    expression: 'input["identifier"]'
+#                  - field: '[composition]'
+#                    expression: 'attribute(input["values"]["composition"], locale(null), scope(null))'
+#                  - field: '[material]'
+#                    expression: 'attribute(input["values"]["material"], locale(null), scope(null))'
+#          - condition: 'true'
+#            map:
+#              - field: '[code]'
+#                copy: '[identifier]'
+#              - field: '[family]'
+#                copy: '[family]'
+#      logger:
+#        channel: pipeline
+#        destinations:
+#          - elasticsearch:
+#              level: warning
+#              hosts:
+#                - elasticsearch.example.com:9200
+#      rejection:
+#        destinations:
+#          - rabbitmq:
+#              host: rabbitmq.example.com
+#              port: 5432
+#              vhost: /
+#              exchange: default
+#              topic: foo.rejects
+#    - custom:
+#        loader:
+#          use: 'Pipeline\Foo'
+#          parameters:
+#            baz: '%env(PATH)%'
+#          services:
+#            Pipeline\Foo:
+#              arguments:
+#                - 'foo'
+#                - '@bar'
+##              calls:
+##                - setLogger: ['@logger']
+#            bar:
+#              class: Pipeline\Bar

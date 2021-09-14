@@ -24,11 +24,11 @@ satellite:
             - { field: categories, operator: IN, value: winter_collection }
             - { field: family, operator: IN, value: [ camcorders, digital_cameras ] }
         client:
-          api_url: 'https://demo.akeneo.com'
-          client_id: '1234567890'
-          secret: qwertyuiop
-          username: '%env(USERNAME)%'
-          password: lkjhgfdsa
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
       logger:
         channel: pipeline
         destinations:
@@ -36,6 +36,14 @@ satellite:
               level: warning
               hosts:
                 - elasticsearch.example.com:9200
+      rejection:
+        destinations:
+          - rabbitmq:
+              host: rabbitmq.example.com
+              port: 5432
+              vhost: /
+              exchange: default
+              topic: foo.rejects
     - fastmap:
         map:
           - field: '[sku]'
@@ -83,6 +91,14 @@ satellite:
               level: warning
               hosts:
                 - elasticsearch.example.com:9200
+      rejection:
+        destinations:
+          - rabbitmq:
+              host: rabbitmq.example.com
+              port: 5432
+              vhost: /
+              exchange: default
+              topic: foo.rejects
     - akeneo:
         expression_language:
           - 'Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider'
