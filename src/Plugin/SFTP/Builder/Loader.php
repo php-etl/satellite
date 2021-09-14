@@ -13,14 +13,17 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $state;
     private iterable $servers;
     private iterable $putStatements;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->logger = null;
         $this->rejection = null;
         $this->state = null;
         $this->servers = [];
         $this->putStatements = [];
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function withLogger(Node\Expr $logger): self

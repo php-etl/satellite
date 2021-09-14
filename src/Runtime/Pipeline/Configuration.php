@@ -30,6 +30,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                 ->arrayNode('expression_language')
                     ->scalarPrototype()->end()
                 ->end()
+                ->scalarNode('name')->end()
                 ->arrayNode('steps')
                     ->requiresAtLeastOneElement()
                     ->cannotBeEmpty()
@@ -52,7 +53,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                                 array_key_exists('sql', $value),
                             ]));
                         })
-                        ->thenInvalid('You should only specify one plugin beetween "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp", "ftp", "sql" and "batch".')
+                        ->thenInvalid('You should only specify one plugin between "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp", "ftp", "sql" and "batch".')
                     ->end()
                     ->arrayPrototype()
                         // Plugins

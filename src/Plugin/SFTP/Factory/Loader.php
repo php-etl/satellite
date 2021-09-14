@@ -7,6 +7,7 @@ use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
+use Kiboko\Component\Satellite\Plugin\SFTP;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Kiboko\Component\Satellite\Plugin\SFTP;
@@ -16,11 +17,14 @@ class Loader implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
-        $this->configuration = new Configuration();
+        $this->configuration = new SFTP\Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

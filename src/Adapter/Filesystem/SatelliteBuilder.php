@@ -6,13 +6,14 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 {
-    private string $workdir;
     /** @var iterable<string> */
     private iterable $composerRequire;
+    private array $composerAutoload;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
@@ -20,9 +21,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
 
-    public function __construct(string $workdir)
+    public function __construct(private string $workdir)
     {
-        $this->workdir = $workdir;
+        $this->composerAutoload = [];
         $this->composerRequire = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
@@ -33,6 +34,17 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     public function withWorkdir(string $path): self
     {
         $this->workdir = $path;
+
+        return $this;
+    }
+
+    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface
+    {
+        if (!array_key_exists('psr4', $this->composerAutoload)) {
+            $this->composerAutoload['psr4'] = [];
+        }
+
+        array_push($this->composerAutoload['psr4'], ...$autoloads);
 
         return $this;
     }
@@ -90,7 +102,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $this->workdir,
         );
 
-        $composer = new Composer($this->workdir);
+        $composer = new Satellite\Adapter\Composer($this->workdir);
         if ($this->composerJsonFile !== null) {
             $satellite->withFile($this->composerJsonFile);
             if ($this->composerLockFile !== null) {
@@ -100,6 +112,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         } elseif (count($this->composerRequire) > 0) {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
+//            $composer->autoload($this->autoload);
         }
 
         $composer->require(...$this->composerRequire);

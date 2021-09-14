@@ -8,11 +8,18 @@ use Kiboko\Component\Satellite\Feature\Rejection;
 use Kiboko\Component\Satellite\Feature\State;
 use Kiboko\Contract\Configurator\StepRepositoryInterface;
 use PhpParser\Node;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Loader implements StepInterface
 {
-    public function __construct(private ?string $plugin, private ?string $key)
-    {
+    private ExpressionLanguage $interpreter;
+
+    public function __construct(
+        private ?string $plugin,
+        private ?string $key,
+        ?ExpressionLanguage $interpreter = null,
+    ) {
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
@@ -24,7 +31,7 @@ final class Loader implements StepInterface
         }
 
         if (array_key_exists('logger', $config)) {
-            $service = new Logger\Service();
+            $service = new Logger\Service($this->interpreter);
 
             $compiled = $service->compile($config['logger']);
             $repository->merge($compiled);
@@ -36,7 +43,7 @@ final class Loader implements StepInterface
         }
 
         if (array_key_exists('rejection', $config)) {
-            $service = new Rejection\Service();
+            $service = new Rejection\Service($this->interpreter);
 
             $compiled = $service->compile($config['rejection']);
             $repository->merge($compiled);
@@ -48,7 +55,7 @@ final class Loader implements StepInterface
         }
 
         if (array_key_exists('state', $config)) {
-            $service = new State\Service();
+            $service = new State\Service($this->interpreter);
 
             $compiled = $service->compile($config['state']);
             $repository->merge($compiled);

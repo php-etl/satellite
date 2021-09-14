@@ -4,6 +4,16 @@
   "title": "Akeneo plugin for Middleware Satellite",
   "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
   "$defs": {
+    "akeneo-search-values": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        { "type": "array", "items": { "$ref": "#/$defs/akeneo-search-values" } },
+        { "$ref": "../expressions.json#/$defs/bundled-expression" }
+      ]
+    },
     "akeneo-search": {
       "type": "array",
       "items": {
@@ -12,15 +22,7 @@
         "properties": {
           "field": { "type":  "string" },
           "operator": { "type":  "string" },
-          "value": {
-            "oneOf": [
-              { "type": "string" },
-              { "type": "number" },
-              { "type": "boolean" },
-              { "type": "null" },
-              { "$ref": "../expressions.json#/$defs/bundled-expression" }
-            ]
-          },
+          "value": { "$ref": "#/$defs/akeneo-search-values" },
           "scope": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
           "locale": { "oneOf": [ {"type":  "string" }, { "type": "null" } ] },
           "required": ["field", "operator"]

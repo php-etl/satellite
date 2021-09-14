@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite\NamedConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements NamedConfigurationInterface

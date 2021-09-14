@@ -1,15 +1,14 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
-use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class Loader implements StepBuilderInterface
+final class Loader implements StepBuilderInterface
 {
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
@@ -19,15 +18,16 @@ class Loader implements StepBuilderInterface
     private array $serversMapping;
     private ExpressionLanguage $interpreter;
 
-    public function __construct(ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->logger = null;
         $this->rejection = null;
         $this->state = null;
         $this->servers = [];
         $this->serversMapping = [];
         $this->putStatements = [];
-        $this->interpreter = $interpreter;
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function addServerBasePath(string $host, Node\Expr $base_path)
@@ -87,7 +87,6 @@ class Loader implements StepBuilderInterface
 
     private function compilePutStatements(): iterable
     {
-
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
             foreach ($this->servers as $index => $server) {
                 if ($condition != null) {

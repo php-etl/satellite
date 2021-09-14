@@ -1,22 +1,12 @@
 satellite:
-#  docker:
-#    from: php:8.0-cli-alpine
-#    workdir: /var/www/html
-#    tags:
-#      - kiboko/satellite:foo
-#      - kiboko/satellite:bar
   filesystem:
-    path: foo
+    path: build/
   composer:
-#    from_local: true
-    autoload:
-      psr4:
-      - namespace: "Pipeline\\AkeneoToSylius\\"
-        paths: [ "" ]
     require:
-      - "php-etl/pipeline:^0.2"
+      - "php-etl/pipeline:^0.3"
       - "php-etl/fast-map:^0.2"
-      - "php-etl/csv-flow:^0.1"
+      - "php-etl/csv-flow:^0.2"
+      - "php-etl/rabbitmq-flow:^0.1"
       - "akeneo/api-php-client-ee"
       - "laminas/laminas-diactoros"
       - "php-http/guzzle7-adapter"
@@ -32,20 +22,13 @@ satellite:
             - { field: completeness, operator: '>', value: 70, scope: ecommerce }
             - { field: completeness, operator: '<', value: 85, scope: ecommerce }
             - { field: categories, operator: IN, value: winter_collection }
-            - { field: family, operator: IN, value: [camcorders, digital_cameras] }
+            - { field: family, operator: IN, value: [ camcorders, digital_cameras ] }
         client:
-          context:
-            http_client: Http\Mock\Client
-            http_request_factory: 'Foo\Mock\RequestFactory::bar'
-            http_stream_factory: 'Foo\Mock\StreamFactory::foo'
-            filesystem: Foo\Mock\Filesystem
           api_url: 'https://demo.akeneo.com'
           client_id: '1234567890'
           secret: qwertyuiop
           username: '%env(USERNAME)%'
           password: lkjhgfdsa
-#          token: foo
-#          refresh_token: bar
       logger:
         channel: pipeline
         destinations:
@@ -63,11 +46,11 @@ satellite:
             copy: '[name]'
           - field: '[staticValue]'
             constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
-#          - field: '[foo]'
-#            expression: 'input'
-#            map:
-#              - field: '[bar]'
-#                copy: '[bar]'
+          - field: '[foo]'
+            expression: 'input'
+            map:
+              - field: '[bar]'
+                copy: '[bar]'
           - field: '[foo]'
             expression: 'input'
             list:
@@ -121,12 +104,6 @@ satellite:
           secret: '9tw5v88wl1s8s4ws8wsgk08gwkoo484cwc4k00wwkwosgwow4'
           username: 'proximis_3328'
           password: '93b66a306'
-    - csv:
-        loader:
-          file_path: output.csv
-          delimiter: ','
-          enclosure: '"'
-          escape: '\'
       logger:
         channel: pipeline
         destinations:
@@ -134,3 +111,24 @@ satellite:
               level: warning
               hosts:
                 - elasticsearch.example.com:9200
+      rejection:
+        destinations:
+          - rabbitmq:
+              host: rabbitmq.example.com
+              port: 5432
+              vhost: /
+              exchange: default
+              topic: foo.rejects
+#    - csv:
+#        loader:
+#          file_path: output.csv
+#          delimiter: ','
+#          enclosure: '"'
+#          escape: '\'
+#      logger:
+#        channel: pipeline
+#        destinations:
+#          - elasticsearch:
+#              level: warning
+#              hosts:
+#                - elasticsearch.example.com:9200
