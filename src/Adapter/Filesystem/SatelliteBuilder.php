@@ -98,11 +98,12 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             mkdir($this->workdir, 0775, true);
         }
 
+        $composer = new Satellite\Adapter\Composer($this->workdir);
         $satellite = new Satellite\Adapter\Filesystem\Satellite(
             $this->workdir,
+            $composer,
         );
 
-        $composer = new Satellite\Adapter\Composer($this->workdir);
         if ($this->composerJsonFile !== null) {
             $satellite->withFile($this->composerJsonFile);
             if ($this->composerLockFile !== null) {
@@ -115,7 +116,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 //            $composer->autoload($this->autoload);
         }
 
-        $composer->require(...$this->composerRequire);
+        $satellite->dependsOn(...$this->composerRequire);
 
         return $satellite;
     }

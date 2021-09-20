@@ -118,7 +118,9 @@ final class Service implements Configurator\FactoryInterface
         $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $repository->addPackages(
-            'php-etl/pipeline:^0.3.0',
+            'php-etl/pipeline-contracts:~0.2.0@dev',
+            'php-etl/pipeline:~0.3.0@dev',
+            'psr/log:^1.1',
             'monolog/monolog',
             'symfony/console:^5.2',
             'symfony/dependency-injection:^5.2',
@@ -191,7 +193,10 @@ final class Service implements Configurator\FactoryInterface
                 $clone = clone $interpreter;
                 (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
                     ->withPackages(
-                        'php-etl/csv-flow:^0.2.0',
+                        'php-etl/pipeline-contracts:~0.2.0@dev',
+                        'php-etl/bucket-contracts:~0.1.0@dev',
+                        'php-etl/bucket:~0.2.0@dev',
+                        'php-etl/csv-flow:~0.2.0@dev',
                     )
                     ->withExtractor()
                     ->withLoader()
@@ -224,7 +229,10 @@ final class Service implements Configurator\FactoryInterface
                 $clone = clone $interpreter;
                 (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
                     ->withPackages(
-                        'php-etl/fast-map:^0.2.0',
+                        'php-etl/pipeline-contracts:~0.2.0@dev',
+                        'php-etl/bucket-contracts:~0.1.0@dev',
+                        'php-etl/bucket:~0.2.0@dev',
+                        'php-etl/fast-map:~0.2.0@dev',
                     )
                     ->withTransformer(null)
                     ->appendTo($step, $repository);

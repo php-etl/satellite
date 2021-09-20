@@ -48,7 +48,6 @@ final class Composer
             'require',
             '--with-dependencies',
             '--prefer-dist',
-            '--no-suggest',
             '--no-progress',
             '--prefer-stable',
             '--sort-packages',
