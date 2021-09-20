@@ -11,14 +11,18 @@ final class Pipeline implements Builder
 {
     private array $steps = [];
 
+    public function __construct(
+        private Node\Expr $runtime
+    ) {}
+
     public function addExtractor(
         Node\Expr|Builder $extractor,
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $pipeline) use ($extractor, $rejection, $state) {
+        array_push($this->steps, function (Node\Expr $runtime) use ($extractor, $rejection, $state) {
             return new Node\Expr\MethodCall(
-                var: $pipeline,
+                var: $runtime,
                 name: new Node\Identifier('extract'),
                 args: [
                     new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor),
@@ -36,9 +40,9 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $pipeline) use ($transformer, $rejection, $state) {
+        array_push($this->steps, function (Node\Expr $runtime) use ($transformer, $rejection, $state) {
             return new Node\Expr\MethodCall(
-                var: $pipeline,
+                var: $runtime,
                 name: new Node\Identifier('transform'),
                 args: [
                     new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer),
@@ -56,9 +60,9 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $pipeline) use ($loader, $rejection, $state) {
+        array_push($this->steps, function (Node\Expr $runtime) use ($loader, $rejection, $state) {
             return new Node\Expr\MethodCall(
-                var: $pipeline,
+                var: $runtime,
                 name: new Node\Identifier('load'),
                 args: [
                     new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader),
@@ -73,23 +77,7 @@ final class Pipeline implements Builder
 
     public function getNode(): Node\Expr
     {
-        $pipeline = new Node\Expr\New_(
-            new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
-            [
-                new Node\Arg(
-                    new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
-                        args: [
-                            new Node\Arg(
-                                value: new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
-                                )
-                            )
-                        ],
-                    ),
-                ),
-            ],
-        );
+        $pipeline = $this->runtime;
 
         foreach ($this->steps as $step) {
             $pipeline = $step($pipeline);
