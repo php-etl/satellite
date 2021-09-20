@@ -23,24 +23,171 @@ use Kiboko\Component\SatelliteToolbox;
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
-    private ConfigurationInterface $configuration;
+    private Satellite\Configuration $configuration;
+    /** @var array<string, Satellite\Adapter\FactoryInterface> */
+    private array $adapters = [];
+    /** @var array<string, Satellite\Runtime\FactoryInterface> */
+    private array $runtimes = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $features = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $extractors = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $transformers = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $loaders = [];
 
-    public function __construct()
-    {
+    public function __construct(
+        Configurator\FactoryInterface ...$factories
+    ) {
         $this->processor = new Processor();
+        $this->configuration = new Satellite\Configuration();
 
-        $this->configuration = (new Satellite\Configuration())
-            ->addAdapters(
-                new Adapter\Docker\Configuration(),
-                new Adapter\Filesystem\Configuration(),
-//                new Adapter\Serverless\Configuration(),
+        $this
+            ->registerAdapters(
+                new Adapter\Docker\Factory(),
+                new Adapter\Filesystem\Factory(),
             )
-            ->addRuntimes(
-                new Runtime\Api\Configuration(),
-                new Runtime\HttpHook\Configuration(),
-                new Runtime\Pipeline\Configuration(),
-                new Runtime\Workflow\Configuration(),
+            ->registerRuntimes(
+                new Runtime\Api\Factory(),
+                new Runtime\HttpHook\Factory(),
+                new Runtime\Pipeline\Factory(),
+                new Runtime\Workflow\Factory(),
+            )
+            ->registerFactories(
+                new Satellite\Feature\Logger\Service(),
+                new Satellite\Feature\State\Service(),
+                new Satellite\Feature\Rejection\Service(),
+                new Satellite\Plugin\Custom\Service(),
+                new Satellite\Plugin\Stream\Service(),
+                new Satellite\Plugin\SFTP\Service(),
+                new Satellite\Plugin\FTP\Service(),
+                new Satellite\Plugin\Batching\Service(),
+                ...$factories
             );
+    }
+
+    private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface $adapter): self
+    {
+        $this->adapters[$attribute->name] = $adapter;
+        $this->configuration->addAdapter($attribute->name, $adapter->configuration());
+
+        return $this;
+    }
+
+    private function addRuntime(Configurator\Runtime $attribute, Satellite\Runtime\FactoryInterface $runtime): self
+    {
+        $this->runtimes[$attribute->name] = $runtime;
+        $this->configuration->addRuntime($attribute->name, $runtime->configuration());
+
+        foreach ($this->features as $name => $feature) {
+            $runtime->addFeature($name, $feature);
+        }
+        foreach ($this->extractors as $name => $extractor) {
+            $runtime->addPlugin($name, $extractor);
+        }
+        foreach ($this->transformers as $name => $transformer) {
+            $runtime->addPlugin($name, $transformer);
+        }
+        foreach ($this->loaders as $name => $loader) {
+            $runtime->addPlugin($name, $loader);
+        }
+
+        return $this;
+    }
+
+    private function addFeature(Configurator\Feature $attribute, Configurator\FactoryInterface $feature): self
+    {
+        $this->features[$attribute->name] = $feature;
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addFeature($attribute->name, $feature);
+        }
+
+        return $this;
+    }
+
+    private function addExtractor(Configurator\PipelineStepExtractor $attribute, Configurator\FactoryInterface $extractor): self
+    {
+        $this->extractors[$attribute->name] = $extractor;
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addPlugin($attribute->name, $extractor);
+        }
+
+        return $this;
+    }
+
+    private function addTransformer(Configurator\PipelineStepTransformer $attribute, Configurator\FactoryInterface $transformer): self
+    {
+        $this->transformers[$attribute->name] = $transformer;
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addPlugin($attribute->name, $transformer);
+        }
+
+        return $this;
+    }
+
+    private function addLoader(Configurator\PipelineStepLoader $attribute, Configurator\FactoryInterface $loader): self
+    {
+        $this->loaders[$attribute->name] = $loader;
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addPlugin($attribute->name, $loader);
+        }
+
+        return $this;
+    }
+
+    public function registerAdapters(Satellite\Adapter\FactoryInterface ...$adapters): self
+    {
+        foreach ($adapters as $adapter) {
+            /** @var Configurator\Adapter $attribute */
+            foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
+                $this->addAdapter($attribute, $adapter);
+            }
+        }
+
+        return $this;
+    }
+
+    public function registerRuntimes(Satellite\Runtime\FactoryInterface ...$runtimes): self
+    {
+        foreach ($runtimes as $runtime) {
+            /** @var Configurator\Runtime $attribute */
+            foreach (expectAttributes($runtime, Configurator\Runtime::class) as $attribute) {
+                $this->addRuntime($attribute, $runtime);
+            }
+        }
+
+        return $this;
+    }
+
+    public function registerFactories(Configurator\FactoryInterface ...$factory): self
+    {
+        foreach ($factory as $feature) {
+            /** @var Configurator\Feature $attribute */
+            foreach (extractAttributes($feature, Configurator\Feature::class) as $attribute) {
+                $this->addFeature($attribute, $feature);
+            }
+        }
+        foreach ($factory as $pipelineExtractor) {
+            /** @var Configurator\PipelineStepExtractor $attribute */
+            foreach (extractAttributes($pipelineExtractor, Configurator\PipelineStepExtractor::class) as $attribute) {
+                $this->addExtractor($attribute, $pipelineExtractor);
+            }
+        }
+        foreach ($factory as $pipelineTransformer) {
+            /** @var Configurator\PipelineStepTransformer $attribute */
+            foreach (extractAttributes($pipelineTransformer, Configurator\PipelineStepTransformer::class) as $attribute) {
+                $this->addTransformer($attribute, $pipelineTransformer);
+            }
+        }
+        foreach ($factory as $pipelineLoader) {
+            /** @var Configurator\PipelineStepLoader $attribute */
+            foreach (extractAttributes($pipelineLoader, Configurator\PipelineStepLoader::class) as $attribute) {
+                $this->addLoader($attribute, $pipelineLoader);
+            }
+        }
+
+        return $this;
     }
 
     public function configuration(): ConfigurationInterface

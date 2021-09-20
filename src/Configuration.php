@@ -7,16 +7,18 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
 use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
 use Kiboko\Component\Satellite\Feature;
+use Kiboko\Contract\Configurator\Adapter;
+use Kiboko\Contract\Configurator\Runtime;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    /** @var iterable<NamedConfigurationInterface> */
-    private iterable $adapters;
-    /** @var iterable<NamedConfigurationInterface> */
-    private iterable $runtimes;
+    /** @var array<string, ConfigurationInterface> */
+    private array $adapters;
+    /** @var array<string, ConfigurationInterface> */
+    private array $runtimes;
     private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
@@ -26,18 +28,42 @@ final class Configuration implements ConfigurationInterface
         $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
-    public function addAdapters(NamedConfigurationInterface ...$adapters): self
+    public function addAdapter(string $name, ConfigurationInterface $adapter): self
     {
-        array_push($this->adapters, ...$adapters);
-        $this->backwardCompatibilityConfiguration->addAdapters(...$adapters);
+        $this->adapters[$name] = $adapter;
+        $this->backwardCompatibilityConfiguration->addAdapter($name, $adapter);
 
         return $this;
     }
 
-    public function addRuntimes(NamedConfigurationInterface ...$runtimes): self
+    public function addAdapters(ConfigurationInterface ...$adapters): self
     {
-        array_push($this->runtimes, ...$runtimes);
-        $this->backwardCompatibilityConfiguration->addRuntimes(...$runtimes);
+        foreach ($adapters as $adapter) {
+            /** @var Adapter $definition */
+            foreach (expectAttributes($adapter, Adapter::class) as $definition) {
+                $this->addAdapter($definition->name, $adapter);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addRuntime(string $name, ConfigurationInterface $runtime): self
+    {
+        $this->runtimes[$name] = $runtime;
+        $this->backwardCompatibilityConfiguration->addRuntime($name, $runtime);
+
+        return $this;
+    }
+
+    public function addRuntimes(ConfigurationInterface ...$runtimes): self
+    {
+        foreach ($runtimes as $runtime) {
+            /** @var Adapter $definition */
+            foreach (expectAttributes($runtime, Runtime::class) as $definition) {
+                $this->addRuntime($definition->name, $runtime);
+            }
+        }
 
         return $this;
     }
@@ -108,16 +134,10 @@ final class Configuration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->adapters
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->runtimes
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->scalarNode('label')

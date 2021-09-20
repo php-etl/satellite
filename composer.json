@@ -28,17 +28,17 @@
         "monolog/monolog": "^2.0",
         "ramsey/uuid": "^4.0",
         "nikic/php-parser": "^4.10",
-        "php-etl/fast-map-plugin": "^0.4.0",
-        "php-etl/csv-plugin": "^0.3.0",
-        "php-etl/akeneo-plugin": "^0.3.0",
-        "php-etl/sylius-plugin": "^0.3.0",
+        "php-etl/fast-map-plugin": "*",
+        "php-etl/csv-plugin": "*",
+        "php-etl/akeneo-plugin": "*",
+        "php-etl/sylius-plugin": "*",
         "php-etl/akeneo-expression-language": "0.2.x-dev",
-        "php-etl/spreadsheet-plugin": "^0.3.0",
+        "php-etl/spreadsheet-plugin": "*",
         "php-etl/packaging": "^0.1.0",
-        "php-etl/satellite-toolbox": "^0.1.0",
+        "php-etl/satellite-toolbox": "*",
         "php-etl/array-expression-language": "^0.1.0",
         "php-etl/string-expression-language": "^0.1.0",
-        "php-etl/sql-plugin": "0.1.x-dev",
+        "php-etl/sql-plugin": "*",
         "php-etl/workflow": "^0.1.0"
     },
     "require-dev": {
@@ -60,7 +60,10 @@
     "autoload": {
         "psr-4": {
             "Kiboko\\Component\\Satellite\\": "src/"
-        }
+        },
+        "files": [
+            "src/attributes.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

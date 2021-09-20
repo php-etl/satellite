@@ -17,6 +17,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
+#[Configurator\PipelineStepTransformer(name: "merge")]
+#[Configurator\PipelineStepTransformer(name: "fork")]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;

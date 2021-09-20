@@ -2,8 +2,10 @@
 
 namespace Kiboko\Component\Satellite\Feature\State;
 
+use Kiboko\Contract\Configurator\Feature;
 use Symfony\Component\Config;
 
+#[Feature(name: "state")]
 final class Configuration implements Config\Definition\ConfigurationInterface
 {
     public function getConfigTreeBuilder()

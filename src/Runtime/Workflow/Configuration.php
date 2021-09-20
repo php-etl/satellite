@@ -6,12 +6,27 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements Satellite\NamedConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
-    public function getName(): string
+    /** @var array<string, ConfigurationInterface> */
+    private iterable $plugins = [];
+    /** @var array<string, ConfigurationInterface> */
+    private iterable $features = [];
+
+    public function addPlugin(string $name, ConfigurationInterface $plugin): self
     {
-        return 'workflow';
+        $this->plugins[$name] = $plugin;
+
+        return $this;
+    }
+
+    public function addFeature(string $name, ConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
+
+        return $this;
     }
 
     public function getConfigTreeBuilder()

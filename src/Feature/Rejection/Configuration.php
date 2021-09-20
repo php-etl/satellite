@@ -2,8 +2,10 @@
 
 namespace Kiboko\Component\Satellite\Feature\Rejection;
 
+use Kiboko\Contract\Configurator\Feature;
 use Symfony\Component\Config;
 
+#[Feature(name: "rejection")]
 final class Configuration implements Config\Definition\ConfigurationInterface
 {
     public function getConfigTreeBuilder()

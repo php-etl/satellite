@@ -6,9 +6,17 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Contract\Configurator\Adapter;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+#[Adapter(name: "filesystem")]
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
+    public function configuration(): ConfigurationInterface
+    {
+        return new Configuration();
+    }
+
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);

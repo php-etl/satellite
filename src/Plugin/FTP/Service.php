@@ -11,6 +11,7 @@ use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+#[Configurator\PipelineStepLoader]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
@@ -70,10 +71,7 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('loader', $config)) {
             $loaderFactory = new Factory\Loader($this->interpreter);
 
-            $loaderCompilation = $loaderFactory->compile($config);
-            $loaderBuilder = $loaderCompilation->getBuilder();
-
-            return new Repository($loaderBuilder);
+            return $loaderFactory->compile($config);
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');

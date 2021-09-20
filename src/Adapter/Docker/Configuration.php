@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\Satellite\NamedConfigurationInterface;
+use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements NamedConfigurationInterface
+#[Adapter("docker")]
+final class Configuration implements ConfigurationInterface
 {
-    public function getName(): string
-    {
-        return 'docker';
-    }
-
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder($this->getName());
+        $builder = new TreeBuilder('docker');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()

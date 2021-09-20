@@ -37,6 +37,13 @@ final class Accumulator implements \IteratorAggregate, \Stringable
 
     public function __toString()
     {
-        return "<?php return [\n    " . implode(",\n    ", iterator_to_array($this->formatPluginInstance())) . "\n];";
+        return sprintf(<<<PHP
+            <?php declare(strict_types=1);
+            return (new \Kiboko\Component\Satellite\Service())
+                ->registerPlugins(
+                    %s
+                );
+            PHP, implode(",\n".str_pad('', 8), iterator_to_array($this->formatPluginInstance()))
+        );
     }
 }

@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\GoogleCloudFunction;
 
-use Kiboko\Component\Satellite\NamedConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements NamedConfigurationInterface
+#[Adapter(name: "google_cloud_function")]
+final class Configuration implements ConfigurationInterface
 {
-    public function getName(): string
-    {
-        return 'amazon_lambda';
-    }
-
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder($this->getName());
+        $builder = new TreeBuilder('google_cloud_function');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()

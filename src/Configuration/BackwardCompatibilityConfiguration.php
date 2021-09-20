@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Configuration;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator\Adapter;
+use Kiboko\Contract\Configurator\Runtime;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var iterable<Satellite\NamedConfigurationInterface> */
-    private iterable $adapters;
-    /** @var iterable<Satellite\NamedConfigurationInterface> */
-    private iterable $runtimes;
+    /** @var array<string, ConfigurationInterface> */
+    private array $adapters;
+    /** @var array<string, ConfigurationInterface> */
+    private array $runtimes;
 
     public function __construct()
     {
@@ -22,16 +24,40 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         $this->runtimes = [];
     }
 
-    public function addAdapters(Satellite\NamedConfigurationInterface ...$adapters): self
+    public function addAdapter(string $name, ConfigurationInterface $adapter): self
     {
-        array_push($this->adapters, ...$adapters);
+        $this->adapters[$name] = $adapter;
 
         return $this;
     }
 
-    public function addRuntimes(Satellite\NamedConfigurationInterface ...$runtimes): self
+    public function addAdapters(ConfigurationInterface ...$adapters): self
     {
-        array_push($this->runtimes, ...$runtimes);
+        foreach ($adapters as $adapter) {
+            /** @var Adapter $definition */
+            foreach (Satellite\expectAttributes($adapter, Adapter::class) as $definition) {
+                $this->addAdapter($definition->name, $adapter);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addRuntime(string $name, ConfigurationInterface $runtime): self
+    {
+        $this->runtimes[$name] = $runtime;
+
+        return $this;
+    }
+
+    public function addRuntimes(ConfigurationInterface ...$runtimes): self
+    {
+        foreach ($runtimes as $runtime) {
+            /** @var Adapter $definition */
+            foreach (Satellite\expectAttributes($runtime, Runtime::class) as $definition) {
+                $this->addRuntime($definition->name, $runtime);
+            }
+        }
 
         return $this;
     }
@@ -77,16 +103,10 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
-                    $this->adapters
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
-                    $this->runtimes
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())

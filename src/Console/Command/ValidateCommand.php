@@ -21,8 +21,6 @@ final class ValidateCommand extends Console\Command\Command
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $service = new Satellite\Service();
-
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,
@@ -45,6 +43,13 @@ final class ValidateCommand extends Console\Command\Command
             if (!isset($configuration)) {
                 throw new \RuntimeException('Could not find configuration file.');
             }
+        }
+
+        $directory = dirname($filename);
+        if (file_exists($directory . '/.gyro.php')) {
+            $service = require $directory . '/.gyro.php';
+        } else {
+            $service = new Satellite\Service();
         }
 
         try {
