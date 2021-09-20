@@ -16,7 +16,7 @@ final class BuildCommand extends Console\Command\Command
 
     protected function configure()
     {
-        $this->setDescription('Build the satellite docker image.');
+        $this->setDescription('Build the satellite.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -62,7 +62,7 @@ final class BuildCommand extends Console\Command\Command
             $output->writeln([
                 '',
                 '',
-                '<info>Building Pipeline<info>',
+                '<info>Building Satellite<info>',
                 '============',
             ]);
 
@@ -83,7 +83,7 @@ final class BuildCommand extends Console\Command\Command
                 $output->writeln([
                     '',
                     '',
-                    '<info>Building Pipeline <info>'. $satellite['label'],
+                    '<info>Building Satellite <info>'. $satellite['label'],
                     '============',
                 ]);
 
