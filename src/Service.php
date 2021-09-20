@@ -91,7 +91,38 @@ final class Service implements Configurator\FactoryInterface
     private function compileWorkflow(array $config): Satellite\Builder\Repository\Workflow
     {
         $workflow = new Satellite\Builder\Workflow();
+
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(<<<PHP
+                    <?php
+    
+                    use Kiboko\Component\Satellite\Console\RuntimeInterface;
+                    
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/../../../../vendor/autoload.php';
+                    
+                    /** @var RuntimeInterface \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+                    
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
+                    \$workflow = require __DIR__ . '/workflow.php';
+                    
+                    \$workflow(\$runtime)->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST((new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode())
+            )
+        );
 
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
@@ -137,13 +168,13 @@ final class Service implements Configurator\FactoryInterface
                     require __DIR__ . '/vendor/autoload.php';
                     require __DIR__ . '/../../../../vendor/autoload.php';
                     
-                    /** @var RuntimeInterface \$runtine */
-                    \$runtine = require __DIR__ . '/runtime.php';
+                    /** @var RuntimeInterface \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
                     
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
                     
-                    \$pipeline(\$runtine)->run();
+                    \$pipeline(\$runtime)->run();
                     PHP
                 )
             )

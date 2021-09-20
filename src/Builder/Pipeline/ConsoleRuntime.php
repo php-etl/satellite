@@ -9,36 +9,38 @@ use PhpParser\Node;
 
 final class ConsoleRuntime implements Builder
 {
-    public function getNode(): Node\Expr
+    public function getNode(): Node\Stmt
     {
-        return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\ConsoleRuntime'),
-            args: [
-                new Node\Arg(
-                    value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Symfony\\Component\\Console\\Output\\ConsoleOutput'),
-                    )
-                ),
-                new Node\Arg(
-                    value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
-                        args: [
-                            new Node\Arg(
-                                new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
-                                    args: [
-                                    new Node\Arg(
-                                        value: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
-                                        )
-                                    )
-                                ],
-                                ),
-                            ),
-                        ],
+        return new Node\Stmt\Expression(
+            new Node\Expr\New_(
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\ConsoleRuntime'),
+                args: [
+                    new Node\Arg(
+                        value: new Node\Expr\New_(
+                            class: new Node\Name\FullyQualified('Symfony\\Component\\Console\\Output\\ConsoleOutput'),
+                        )
                     ),
-                ),
-            ],
+                    new Node\Arg(
+                        value: new Node\Expr\New_(
+                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
+                            args: [
+                                new Node\Arg(
+                                    new Node\Expr\New_(
+                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
+                                        args: [
+                                            new Node\Arg(
+                                                value: new Node\Expr\New_(
+                                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                                                )
+                                            )
+                                        ],
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ),
+                ],
+            )
         );
     }
 }
