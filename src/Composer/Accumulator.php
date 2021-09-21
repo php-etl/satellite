@@ -31,7 +31,9 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     {
         /** @var Package $package */
         foreach ($this as $package) {
-            yield 'new ' . $package->getExtra()['satellite']['class'] . '()';
+            yield <<<PHP
+                fn (ExpressionLanguage \$interpreter) => new {$package->getExtra()['satellite']['class']}(\$interpreter)
+                PHP;
         }
     }
 
@@ -39,6 +41,7 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     {
         return sprintf(<<<PHP
             <?php declare(strict_types=1);
+            use \\Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage;
             return new \Kiboko\Component\Satellite\Service(
                 %s
             );

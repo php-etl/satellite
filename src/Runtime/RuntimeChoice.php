@@ -7,17 +7,17 @@ namespace Kiboko\Component\Satellite\Runtime;
 use Kiboko\Component\Satellite;
 use Psr\Log\LoggerInterface;
 
-final class Factory implements FactoryInterface
+final class RuntimeChoice
 {
     public function __construct(
-        private Satellite\Adapter\FactoryInterface $adapterFactory,
+        private Satellite\Adapter\AdapterChoice $adapterChoice,
         private LoggerInterface $logger,
     ) {
     }
 
     public function __invoke(array $configuration): RuntimeInterface
     {
-        $satellite = ($this->adapterFactory)($configuration)->build();
+        $satellite = ($this->adapterChoice)($configuration)->build();
 
         if (array_key_exists('http_api', $configuration)) {
             $factory = new Satellite\Runtime\Api\Factory();
