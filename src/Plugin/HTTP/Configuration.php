@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Plugin\HTTP;
 
-use Kiboko\Component\Satellite\Plugin\PluginConfigurationInterface;
+use Kiboko\Contract\Configurator\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements PluginConfigurationInterface

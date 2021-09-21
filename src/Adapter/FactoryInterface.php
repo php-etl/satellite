@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter;
 
 use Kiboko\Component\Satellite\SatelliteBuilderInterface;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 
 interface FactoryInterface
 {

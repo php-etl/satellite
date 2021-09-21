@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Composer;
 
-use Kiboko\Component\Satellite\Feature\FeatureConfigurationInterface;
+use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 

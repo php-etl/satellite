@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
-use Kiboko\Component\Satellite\Adapter\AdapterConfigurationInterface;
+use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 

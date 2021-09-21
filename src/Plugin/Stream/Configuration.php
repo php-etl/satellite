@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Stream;
 
-use Kiboko\Component\Satellite\Plugin\PluginConfigurationInterface;
+use Kiboko\Contract\Configurator\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\ExpressionLanguage\Expression;
 

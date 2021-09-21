@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator\Adapter;
+use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 
 #[Adapter(name: "filesystem")]
 final class Factory implements Satellite\Adapter\FactoryInterface
@@ -18,7 +19,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         $this->configuration = new Configuration();
     }
 
-    public function configuration(): Satellite\Adapter\AdapterConfigurationInterface
+    public function configuration(): AdapterConfigurationInterface
     {
         return $this->configuration;
     }

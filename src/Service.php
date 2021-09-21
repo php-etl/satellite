@@ -372,15 +372,6 @@ final class Service implements Configurator\FactoryInterface
 //                    ->withExtractor()
 //                    ->withLoader()
 //                    ->appendTo($step, $repository);
-//            } elseif (array_key_exists('csv', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
-//                    ->withPackages(
-//                        'php-etl/csv-flow:^0.2.0',
-//                    )
-//                    ->withExtractor()
-//                    ->withLoader()
-//                    ->appendTo($step, $repository);
 //            } elseif (array_key_exists('spreadsheet', $step)) {
 //                $clone = clone $interpreter;
 //                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $clone), $clone))

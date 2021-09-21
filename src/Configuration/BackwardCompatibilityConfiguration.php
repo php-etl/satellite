@@ -5,47 +5,46 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Configuration;
 
 use Kiboko\Component\Satellite;
-use Kiboko\Component\Satellite\Adapter;
-use Kiboko\Component\Satellite\Runtime;
 use Kiboko\Component\Satellite\Plugin;
 use Kiboko\Component\Satellite\Feature;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var array<string, Adapter\AdapterConfigurationInterface> */
+    /** @var array<string, Configurator\AdapterConfigurationInterface> */
     private array $adapters = [];
-    /** @var array<string, Runtime\RuntimeConfigurationInterface> */
+    /** @var array<string, Configurator\RuntimeConfigurationInterface> */
     private array $runtimes = [];
-    /** @var array<string, Plugin\PluginConfigurationInterface> */
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
     private array $plugins = [];
-    /** @var array<string, Feature\FeatureConfigurationInterface> */
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private array $features = [];
 
-    public function addAdapter(string $name, Satellite\Adapter\AdapterConfigurationInterface $adapter): self
+    public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
         $this->adapters[$name] = $adapter;
 
         return $this;
     }
 
-    public function addRuntime(string $name, Satellite\Runtime\RuntimeConfigurationInterface $runtime): self
+    public function addRuntime(string $name, Configurator\RuntimeConfigurationInterface $runtime): self
     {
         $this->runtimes[$name] = $runtime;
 
         return $this;
     }
 
-    public function addPlugin(string $name, Satellite\Plugin\PluginConfigurationInterface $plugin): self
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
         $this->plugins[$name] = $plugin;
 
         return $this;
     }
 
-    public function addFeature(string $name, Satellite\Feature\FeatureConfigurationInterface $feature): self
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
     {
         $this->features[$name] = $feature;
 

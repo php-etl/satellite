@@ -7,19 +7,20 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
 use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
 use Kiboko\Component\Satellite\Feature;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    /** @var array<string, Adapter\AdapterConfigurationInterface> */
+    /** @var array<string, Configurator\AdapterConfigurationInterface> */
     private array $adapters = [];
-    /** @var array<string, Runtime\RuntimeConfigurationInterface> */
+    /** @var array<string, Configurator\RuntimeConfigurationInterface> */
     private array $runtimes = [];
-    /** @var array<string, Plugin\PluginConfigurationInterface> */
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
     private array $plugins = [];
-    /** @var array<string, Feature\FeatureConfigurationInterface> */
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private array $features = [];
     private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
@@ -28,7 +29,7 @@ final class Configuration implements ConfigurationInterface
         $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
-    public function addAdapter(string $name, Adapter\AdapterConfigurationInterface $adapter): self
+    public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
         $this->adapters[$name] = $adapter;
         $this->backwardCompatibilityConfiguration->addAdapter($name, $adapter);
@@ -36,7 +37,7 @@ final class Configuration implements ConfigurationInterface
         return $this;
     }
 
-    public function addRuntime(string $name, Runtime\RuntimeConfigurationInterface $runtime): self
+    public function addRuntime(string $name, Configurator\RuntimeConfigurationInterface $runtime): self
     {
         $this->runtimes[$name] = $runtime;
         $this->backwardCompatibilityConfiguration->addRuntime($name, $runtime);
@@ -51,7 +52,7 @@ final class Configuration implements ConfigurationInterface
         return $this;
     }
 
-    public function addPlugin(string $name, Plugin\PluginConfigurationInterface $plugin): self
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
         $this->plugins[$name] = $plugin;
         $this->backwardCompatibilityConfiguration->addPlugin($name, $plugin);
@@ -63,13 +64,13 @@ final class Configuration implements ConfigurationInterface
         return $this;
     }
 
-    public function addFeature(string $name, Feature\FeatureConfigurationInterface $plugin): self
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
     {
-        $this->plugins[$name] = $plugin;
-        $this->backwardCompatibilityConfiguration->addPlugin($name, $plugin);
+        $this->features[$name] = $feature;
+        $this->backwardCompatibilityConfiguration->addFeature($name, $feature);
 
         foreach ($this->runtimes as $runtime) {
-            $runtime->addPlugin($name, $plugin);
+            $runtime->addFeature($name, $feature);
         }
 
         return $this;

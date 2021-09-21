@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Feature\State;
 
-use Kiboko\Component\Satellite\Feature\FeatureConfigurationInterface;
+use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
 use Symfony\Component\Config;
 
 final class Configuration implements FeatureConfigurationInterface

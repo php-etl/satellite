@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Api;
 
-use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements Satellite\Runtime\RuntimeConfigurationInterface
+final class Configuration implements Configurator\RuntimeConfigurationInterface
 {
-    /** @var array<string, Satellite\Plugin\PluginConfigurationInterface> */
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
     private iterable $plugins = [];
-    /** @var array<string, Satellite\Feature\FeatureConfigurationInterface> */
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private iterable $features = [];
 
-    public function addPlugin(string $name, Satellite\Plugin\PluginConfigurationInterface $plugin): self
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
         $this->plugins[$name] = $plugin;
 
         return $this;
     }
 
-    public function addFeature(string $name, Satellite\Feature\FeatureConfigurationInterface $feature): self
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
     {
         $this->features[$name] = $feature;
 
