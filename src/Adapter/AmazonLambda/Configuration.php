@@ -8,7 +8,6 @@ use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-#[Adapter(name: "amazon_lambda")]
 final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()

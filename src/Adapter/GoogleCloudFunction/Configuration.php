@@ -8,7 +8,6 @@ use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-#[Adapter(name: "google_cloud_function")]
 final class Configuration implements AdapterConfigurationInterface
 {
     public function getConfigTreeBuilder()
