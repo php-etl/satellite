@@ -6,24 +6,19 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
-use Kiboko\Component\Satellite\Builder\Workflow\PipelineBuilder;
 use Kiboko\Contract\Configurator;
-use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\Akeneo;
-use Kiboko\Plugin\Sylius;
-use Kiboko\Plugin\FastMap;
-use Kiboko\Plugin\Spreadsheet;
-use Kiboko\Plugin\SQL;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\SatelliteToolbox;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private Satellite\Configuration $configuration;
+    private ExpressionLanguage $interpreter;
     /** @var array<string, Satellite\Adapter\FactoryInterface> */
     private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
@@ -31,17 +26,17 @@ final class Service implements Configurator\FactoryInterface
     /** @var array<string, Configurator\FactoryInterface> */
     private array $features = [];
     /** @var array<string, Configurator\FactoryInterface> */
-    private array $extractors = [];
-    /** @var array<string, Configurator\FactoryInterface> */
-    private array $transformers = [];
-    /** @var array<string, Configurator\FactoryInterface> */
-    private array $loaders = [];
+    private array $pipelines = [];
+    /** @var array<string, Satellite\Pipeline\ConfigurationApplier> */
+    private array $plugins = [];
 
+    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
     public function __construct(
-        Configurator\FactoryInterface ...$factories
+        callable ...$factories
     ) {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
+        $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $this
             ->registerAdapters(
@@ -55,14 +50,14 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\Workflow\Factory(),
             )
             ->registerFactories(
-                new Satellite\Feature\Logger\Service(),
-                new Satellite\Feature\State\Service(),
-                new Satellite\Feature\Rejection\Service(),
-                new Satellite\Plugin\Custom\Service(),
-                new Satellite\Plugin\Stream\Service(),
-                new Satellite\Plugin\SFTP\Service(),
-                new Satellite\Plugin\FTP\Service(),
-                new Satellite\Plugin\Batching\Service(),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
                 ...$factories
             );
     }
@@ -83,14 +78,8 @@ final class Service implements Configurator\FactoryInterface
         foreach ($this->features as $name => $feature) {
             $runtime->addFeature($name, $feature);
         }
-        foreach ($this->extractors as $name => $extractor) {
-            $runtime->addPlugin($name, $extractor);
-        }
-        foreach ($this->transformers as $name => $transformer) {
-            $runtime->addPlugin($name, $transformer);
-        }
-        foreach ($this->loaders as $name => $loader) {
-            $runtime->addPlugin($name, $loader);
+        foreach ($this->pipelines as $name => $plugin) {
+            $runtime->addPlugin($name, $plugin);
         }
 
         return $this;
@@ -106,31 +95,28 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    private function addExtractor(Configurator\PipelineStepExtractor $attribute, Configurator\FactoryInterface $extractor): self
-    {
-        $this->extractors[$attribute->name] = $extractor;
-        foreach ($this->runtimes as $runtime) {
-            $runtime->addPlugin($attribute->name, $extractor);
-        }
+    /** @param Configurator\FactoryInterface $plugin */
+    private function addPipeline(
+        Configurator\Pipeline $attribute,
+        Configurator\FactoryInterface $plugin,
+        ExpressionLanguage $interpreter,
+    ): self {
+        $this->configuration->addPlugin($attribute->name, $plugin->configuration());
+        $this->pipelines[$attribute->name] = $plugin;
 
-        return $this;
-    }
+        $this->plugins[$attribute->name] = $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $interpreter);
+        $applier->withPackages(...$attribute->dependencies);
 
-    private function addTransformer(Configurator\PipelineStepTransformer $attribute, Configurator\FactoryInterface $transformer): self
-    {
-        $this->transformers[$attribute->name] = $transformer;
-        foreach ($this->runtimes as $runtime) {
-            $runtime->addPlugin($attribute->name, $transformer);
-        }
-
-        return $this;
-    }
-
-    private function addLoader(Configurator\PipelineStepLoader $attribute, Configurator\FactoryInterface $loader): self
-    {
-        $this->loaders[$attribute->name] = $loader;
-        foreach ($this->runtimes as $runtime) {
-            $runtime->addPlugin($attribute->name, $loader);
+        foreach ($attribute->steps as $step) {
+            if ($step instanceof Configurator\Pipeline\StepExtractor) {
+                $applier->withExtractor($step->name);
+            }
+            if ($step instanceof Configurator\Pipeline\StepTransformer) {
+                $applier->withTransformer($step->name);
+            }
+            if ($step instanceof Configurator\Pipeline\StepLoader) {
+                $applier->withLoader($step->name);
+            }
         }
 
         return $this;
@@ -160,30 +146,20 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    public function registerFactories(Configurator\FactoryInterface ...$factory): self
+    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
+    public function registerFactories(callable ...$factories): self
     {
-        foreach ($factory as $feature) {
+        foreach ($factories as $factory) {
+            $plugin = $factory($interpreter = clone $this->interpreter);
+
             /** @var Configurator\Feature $attribute */
-            foreach (extractAttributes($feature, Configurator\Feature::class) as $attribute) {
-                $this->addFeature($attribute, $feature);
+            foreach (extractAttributes($plugin, Configurator\Feature::class) as $attribute) {
+                $this->addFeature($attribute, $plugin);
             }
-        }
-        foreach ($factory as $pipelineExtractor) {
-            /** @var Configurator\PipelineStepExtractor $attribute */
-            foreach (extractAttributes($pipelineExtractor, Configurator\PipelineStepExtractor::class) as $attribute) {
-                $this->addExtractor($attribute, $pipelineExtractor);
-            }
-        }
-        foreach ($factory as $pipelineTransformer) {
-            /** @var Configurator\PipelineStepTransformer $attribute */
-            foreach (extractAttributes($pipelineTransformer, Configurator\PipelineStepTransformer::class) as $attribute) {
-                $this->addTransformer($attribute, $pipelineTransformer);
-            }
-        }
-        foreach ($factory as $pipelineLoader) {
-            /** @var Configurator\PipelineStepLoader $attribute */
-            foreach (extractAttributes($pipelineLoader, Configurator\PipelineStepLoader::class) as $attribute) {
-                $this->addLoader($attribute, $pipelineLoader);
+
+            /** @var Configurator\Pipeline $attribute */
+            foreach (extractAttributes($plugin, Configurator\Pipeline::class) as $attribute) {
+                $this->addPipeline($attribute, $plugin, $interpreter);
             }
         }
 
@@ -283,6 +259,7 @@ final class Service implements Configurator\FactoryInterface
                 $pipeline = $this->compilePipeline($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
+                $repository->merge($pipeline);
                 $repository->addFiles(
                     new Packaging\File(
                         $pipelineFilename,
@@ -366,100 +343,66 @@ final class Service implements Configurator\FactoryInterface
         }
 
         foreach ($config['pipeline']['steps'] as $step) {
-            if (array_key_exists('akeneo', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service($clone), $clone))
-                    ->withPackages(
-                        'akeneo/api-php-client-ee',
-                        'laminas/laminas-diactoros',
-                        'php-http/guzzle7-adapter',
-                    )
-                    ->withExtractor()
-                    ->withTransformer('lookup')
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sylius', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $clone), $clone))
-                    ->withPackages(
-                        'diglin/sylius-api-php-client',
-                        'laminas/laminas-diactoros',
-                        'php-http/guzzle7-adapter',
-                    )
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('csv', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
-                    ->withPackages(
-                        'php-etl/pipeline-contracts:~0.2.0@dev',
-                        'php-etl/bucket-contracts:~0.1.0@dev',
-                        'php-etl/bucket:~0.2.0@dev',
-                        'php-etl/csv-flow:~0.2.0@dev',
-                    )
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('spreadsheet', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $clone), $clone))
-                    ->withExtractor()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('custom', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('custom', new Satellite\Plugin\Custom\Service(), $clone))
-                    ->withExtractor()
-                    ->withTransformer()
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('stream', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('stream', new Satellite\Plugin\Stream\Service(), $clone))
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('batch', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('batch', new Satellite\Plugin\Batching\Service(clone $clone), $clone))
-                    ->withTransformer('merge')
-                    ->withTransformer('fork')
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('fastmap', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
-                    ->withPackages(
-                        'php-etl/pipeline-contracts:~0.2.0@dev',
-                        'php-etl/bucket-contracts:~0.1.0@dev',
-                        'php-etl/bucket:~0.2.0@dev',
-                        'php-etl/fast-map:~0.2.0@dev',
-                    )
-                    ->withTransformer(null)
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sftp', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('sftp', new Satellite\Plugin\SFTP\Service(clone $clone), $clone))
-                    ->withPackages(
-                        'ext-ssh2',
-                    )
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('ftp', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('ftp', new Satellite\Plugin\FTP\Service(clone $clone), $clone))
-                    ->withPackages(
-                        'ext-ssh2',
-                    )
-                    ->withLoader()
-                    ->appendTo($step, $repository);
-            } elseif (array_key_exists('sql', $step)) {
-                $clone = clone $interpreter;
-                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $clone), $clone))
-                    ->withExtractor()
-                    ->withTransformer('lookup')
-                    ->withLoader()
-                    ->appendTo($step, $repository);
+            $plugins = array_intersect_key($this->plugins, $step);
+            foreach ($plugins as $plugin) {
+                $plugin->appendTo($step, $repository);
             }
+            continue;
+
+//            if (array_key_exists('akeneo', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service($clone), $clone))
+//                    ->withPackages(
+//                        'akeneo/api-php-client-ee',
+//                        'laminas/laminas-diactoros',
+//                        'php-http/guzzle7-adapter',
+//                    )
+//                    ->withExtractor()
+//                    ->withTransformer('lookup')
+//                    ->withLoader()
+//                    ->appendTo($step, $repository);
+//            } elseif (array_key_exists('sylius', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $clone), $clone))
+//                    ->withPackages(
+//                        'diglin/sylius-api-php-client',
+//                        'laminas/laminas-diactoros',
+//                        'php-http/guzzle7-adapter',
+//                    )
+//                    ->withExtractor()
+//                    ->withLoader()
+//                    ->appendTo($step, $repository);
+//            } elseif (array_key_exists('csv', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
+//                    ->withPackages(
+//                        'php-etl/csv-flow:^0.2.0',
+//                    )
+//                    ->withExtractor()
+//                    ->withLoader()
+//                    ->appendTo($step, $repository);
+//            } elseif (array_key_exists('spreadsheet', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $clone), $clone))
+//                    ->withExtractor()
+//                    ->withLoader()
+//                    ->appendTo($step, $repository);
+//            } elseif (array_key_exists('fastmap', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
+//                    ->withPackages(
+//                        'php-etl/fast-map:^0.2.0',
+//                    )
+//                    ->withTransformer(null)
+//                    ->appendTo($step, $repository);
+//            } elseif (array_key_exists('sql', $step)) {
+//                $clone = clone $interpreter;
+//                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $clone), $clone))
+//                    ->withExtractor()
+//                    ->withTransformer('lookup')
+//                    ->withLoader()
+//                    ->appendTo($step, $repository);
+//            }
         }
 
         return $repository;

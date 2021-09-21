@@ -11,9 +11,14 @@ use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-#[Configurator\PipelineStepExtractor()]
-#[Configurator\PipelineStepTransformer()]
-#[Configurator\PipelineStepLoader()]
+#[Configurator\Pipeline(
+    name: "custom",
+    steps: [
+        "extractor" => "extractor",
+        "transformer" => "transformer",
+        "loader" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;

@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP;
 
-use Kiboko\Component\Satellite\Plugin\FTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-#[Configurator\PipelineStepLoader]
+#[Configurator\Pipeline(
+    name: "ftp",
+    dependencies: ["ext-ftp"],
+    steps: [
+        "loader" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;

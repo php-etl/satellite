@@ -5,59 +5,49 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Configuration;
 
 use Kiboko\Component\Satellite;
-use Kiboko\Contract\Configurator\Adapter;
-use Kiboko\Contract\Configurator\Runtime;
+use Kiboko\Component\Satellite\Adapter;
+use Kiboko\Component\Satellite\Runtime;
+use Kiboko\Component\Satellite\Plugin;
+use Kiboko\Component\Satellite\Feature;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var array<string, ConfigurationInterface> */
-    private array $adapters;
-    /** @var array<string, ConfigurationInterface> */
-    private array $runtimes;
+    /** @var array<string, Adapter\AdapterConfigurationInterface> */
+    private array $adapters = [];
+    /** @var array<string, Runtime\RuntimeConfigurationInterface> */
+    private array $runtimes = [];
+    /** @var array<string, Plugin\PluginConfigurationInterface> */
+    private array $plugins = [];
+    /** @var array<string, Feature\FeatureConfigurationInterface> */
+    private array $features = [];
 
-    public function __construct()
-    {
-        $this->adapters = [];
-        $this->runtimes = [];
-    }
-
-    public function addAdapter(string $name, ConfigurationInterface $adapter): self
+    public function addAdapter(string $name, Satellite\Adapter\AdapterConfigurationInterface $adapter): self
     {
         $this->adapters[$name] = $adapter;
 
         return $this;
     }
 
-    public function addAdapters(ConfigurationInterface ...$adapters): self
-    {
-        foreach ($adapters as $adapter) {
-            /** @var Adapter $definition */
-            foreach (Satellite\expectAttributes($adapter, Adapter::class) as $definition) {
-                $this->addAdapter($definition->name, $adapter);
-            }
-        }
-
-        return $this;
-    }
-
-    public function addRuntime(string $name, ConfigurationInterface $runtime): self
+    public function addRuntime(string $name, Satellite\Runtime\RuntimeConfigurationInterface $runtime): self
     {
         $this->runtimes[$name] = $runtime;
 
         return $this;
     }
 
-    public function addRuntimes(ConfigurationInterface ...$runtimes): self
+    public function addPlugin(string $name, Satellite\Plugin\PluginConfigurationInterface $plugin): self
     {
-        foreach ($runtimes as $runtime) {
-            /** @var Adapter $definition */
-            foreach (Satellite\expectAttributes($runtime, Runtime::class) as $definition) {
-                $this->addRuntime($definition->name, $runtime);
-            }
-        }
+        $this->plugins[$name] = $plugin;
+
+        return $this;
+    }
+
+    public function addFeature(string $name, Satellite\Feature\FeatureConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
 
         return $this;
     }

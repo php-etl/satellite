@@ -2,13 +2,12 @@
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
+use Kiboko\Component\Satellite\Plugin\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements PluginConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {

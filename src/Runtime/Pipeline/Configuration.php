@@ -4,29 +4,60 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
+use Kiboko\Component\Satellite;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements Satellite\Runtime\RuntimeConfigurationInterface
 {
-    /** @var array<string, ConfigurationInterface> */
+    /** @var array<string, Satellite\Plugin\PluginConfigurationInterface> */
     private iterable $plugins = [];
-    /** @var array<string, ConfigurationInterface> */
+    /** @var array<string, Satellite\Feature\FeatureConfigurationInterface> */
     private iterable $features = [];
 
-    public function addPlugin(string $name, ConfigurationInterface $plugin): self
+    public function addPlugin(string $name, Satellite\Plugin\PluginConfigurationInterface $plugin): self
     {
         $this->plugins[$name] = $plugin;
 
         return $this;
     }
 
-    public function addFeature(string $name, ConfigurationInterface $feature): self
+    public function addFeature(string $name, Satellite\Feature\FeatureConfigurationInterface $feature): self
     {
         $this->features[$name] = $feature;
 
         return $this;
+    }
+
+    public function getStepsTreeBuilder(): TreeBuilder
+    {
+        $builder = new TreeBuilder('steps');
+
+        /** @phpstan-ignore-next-line */
+        $builder->getRootNode()
+            ->requiresAtLeastOneElement()
+            ->cannotBeEmpty()
+            ->isRequired()
+            ->fixXmlConfig('step')
+            ->validate()
+                ->ifTrue(function ($value) {
+                    return 1 <= array_reduce(
+                        array_keys($this->plugins),
+                        fn (int $count, string $plugin)
+                            => array_key_exists($plugin, $value) ? $count + 1 : $count,
+                        0
+                    );
+                })
+                ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
+            ->end();
+
+        $node = $builder->getRootNode()->arrayPrototype();
+
+        $this
+            ->applyPlugins($node)
+            ->applyFeatures($node);
+
+        return $builder;
     }
 
     public function getConfigTreeBuilder()
@@ -40,30 +71,8 @@ final class Configuration implements ConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('name')->end()
-                ->arrayNode('steps')
-                    ->requiresAtLeastOneElement()
-                    ->cannotBeEmpty()
-                    ->isRequired()
-                    ->fixXmlConfig('step')
-                    ->validate()
-                        ->ifTrue(function ($value) {
-                            return 1 <= array_reduce(
-                                array_keys($this->plugins),
-                                fn (int $count, string $plugin)
-                                    => array_key_exists($plugin, $value) ? $count + 1 : $count,
-                                0
-                            );
-                        })
-                        ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
-                    ->end()
-                ->end()
+                ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end();
-
-        $node = $builder->getRootNode()->find('steps')->arrayPrototype();
-
-        $this
-            ->applyPlugins($node)
-            ->applyFeatures($node);
 
         return $builder;
     }

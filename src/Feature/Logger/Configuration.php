@@ -2,11 +2,10 @@
 
 namespace Kiboko\Component\Satellite\Feature\Logger;
 
-use Kiboko\Contract\Configurator\Feature;
+use Kiboko\Component\Satellite\Feature\FeatureConfigurationInterface;
 use Symfony\Component\Config;
 
-#[Feature(name: "logger")]
-final class Configuration implements Config\Definition\ConfigurationInterface
+final class Configuration implements FeatureConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {

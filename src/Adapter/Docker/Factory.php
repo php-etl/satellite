@@ -7,14 +7,20 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator\Adapter;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 #[Adapter(name: "docker")]
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
-    public function configuration(): ConfigurationInterface
+    private Configuration $configuration;
+
+    public function __construct()
     {
-        return new Configuration();
+        $this->configuration = new Configuration();
+    }
+
+    public function configuration(): Satellite\Adapter\AdapterConfigurationInterface
+    {
+        return $this->configuration;
     }
 
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface

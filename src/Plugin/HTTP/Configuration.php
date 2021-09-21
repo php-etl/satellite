@@ -2,10 +2,10 @@
 
 namespace Kiboko\Component\Satellite\Plugin\HTTP;
 
+use Kiboko\Component\Satellite\Plugin\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements PluginConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {

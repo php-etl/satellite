@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 interface FactoryInterface
 {
-    public function configuration(): ConfigurationInterface;
+    public function configuration(): AdapterConfigurationInterface;
 
     public function __invoke(array $configuration): SatelliteBuilderInterface;
 }
