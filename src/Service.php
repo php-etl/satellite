@@ -107,7 +107,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
                     
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/../../../../vendor/autoload.php';
                     
                     /** @var WorkflowConsoleRuntime \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
@@ -178,7 +177,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/../../../../vendor/autoload.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
