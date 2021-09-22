@@ -11,7 +11,7 @@ use Kiboko\Contract\Pipeline\StateInterface;
 use Kiboko\Component\Satellite\Console\StateOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-final class ConsoleRuntime implements RuntimeInterface
+final class PipelineConsoleRuntime implements PipelineRuntimeInterface
 {
     private StateOutput\Pipeline $state;
 

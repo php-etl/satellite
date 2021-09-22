@@ -13,7 +13,7 @@ final class ConsoleRuntime implements Builder
     {
         return new Node\Stmt\Expression(
             new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\ConsoleRuntime'),
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineConsoleRuntime'),
                 args: [
                     new Node\Arg(
                         value: new Node\Expr\New_(

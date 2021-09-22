@@ -6,6 +6,6 @@ use Kiboko\Contract\Pipeline\ExtractingInterface;
 use Kiboko\Contract\Pipeline\LoadingInterface;
 use Kiboko\Contract\Pipeline\TransformingInterface;
 
-interface RuntimeInterface extends ExtractingInterface, TransformingInterface, LoadingInterface
+interface PipelineRuntimeInterface extends ExtractingInterface, TransformingInterface, LoadingInterface
 {
 }

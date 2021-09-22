@@ -75,7 +75,7 @@ final class Pipeline implements Builder
         return $this;
     }
 
-    public function getNode(): Node\Expr
+    public function getNode(): Node\Stmt
     {
         $pipeline = $this->runtime;
 
@@ -83,6 +83,6 @@ final class Pipeline implements Builder
             $pipeline = $step($pipeline);
         }
 
-        return $pipeline;
+        return new Node\Stmt\Expression($pipeline);
     }
 }

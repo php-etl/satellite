@@ -47,6 +47,12 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 new Node\Expr\Closure(
                     subNodes: [
                         'static' => true,
+                        'params' => [
+                            new Node\Param(
+                                var: new Node\Expr\Variable('runtime'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\WorkflowConsoleRuntime'),
+                            )
+                        ],
                         'stmts' => [
                             $builder->getNode(),
                         ]

@@ -11,9 +11,9 @@ use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class RunCommand extends Console\Command\Command
+final class PipelineRunCommand extends Console\Command\Command
 {
-    protected static $defaultName = 'run';
+    protected static $defaultName = 'run:pipeline';
 
     /** @var list<Satellite\Console\StateOutput\PipelineStep> */
     private array $steps = [];
@@ -38,10 +38,14 @@ final class RunCommand extends Console\Command\Command
             $style->error('There is no compiled satellite at the provided path');
             return 1;
         }
-        $autoload = include $input->getArgument('path') . '/vendor/autoload.php';
+
+        $cwd = getcwd();
+        chdir($input->getArgument('path'));
+
+        $autoload = include 'vendor/autoload.php';
         $autoload->register();
 
-        $runtime = new Satellite\Console\ConsoleRuntime(
+        $runtime = new Satellite\Console\PipelineConsoleRuntime(
             $output,
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
@@ -51,15 +55,18 @@ final class RunCommand extends Console\Command\Command
         );
 
         /** @var callable(runtime: RuntimeInterface): \Runtime $pipeline */
-        $pipeline = include $input->getArgument('path') . '/pipeline.php';
+        $pipeline = include 'pipeline.php';
 
         $start = microtime(true);
-        $pipeline($runtime)->run();
+        $pipeline($runtime);
+        $runtime->run();
         $end = microtime(true);
 
         $autoload->unregister();
 
         $style->writeln(sprintf('time: %s', $this->formatTime($end - $start)));
+
+        chdir($cwd);
 
         return 0;
     }
