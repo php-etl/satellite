@@ -19,7 +19,7 @@ final class PipelineConsoleRuntime implements PipelineRuntimeInterface
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
     ) {
-        $this->state = new StateOutput\Pipeline($output, 'Pipeline');
+        $this->state = new StateOutput\Pipeline($output, 'A', 'Pipeline');
     }
 
     public function extract(

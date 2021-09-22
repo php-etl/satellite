@@ -8,6 +8,7 @@ final class Workflow
 {
     /** @var list<Pipeline> */
     private array $pipelines = [];
+    private string $index = 'A';
 
     public function __construct(
         private ConsoleOutput $output,
@@ -15,7 +16,7 @@ final class Workflow
 
     public function withPipeline(string $label): Pipeline
     {
-        return $this->pipelines[] = new Pipeline($this->output, $label);
+        return $this->pipelines[] = new Pipeline($this->output, $this->index++, $label);
     }
 
     public function update(): void

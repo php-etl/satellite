@@ -3,16 +3,22 @@
 namespace Kiboko\Component\Satellite\Console\StateOutput;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
 
 final class Pipeline
 {
     /** @var list<PipelineStep> */
     private array $steps = [];
+    private ConsoleSectionOutput $section;
 
     public function __construct(
         private ConsoleOutput $output,
-        private string $label,
+        string $index,
+        string $label,
     ) {
+        $this->section = $output->section();
+        $this->section->writeln('');
+        $this->section->writeln(sprintf('<fg=green> % 2s. %-50s</>', $index, $label));
     }
 
     public function withStep(string $label): PipelineStep

@@ -1144,12 +1144,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19"
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/7007a09687afc111d13f3570ca363d5eb551b99c",
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c",
                 "shasum": ""
             },
             "require": {
@@ -1187,7 +1187,7 @@
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
                 "source": "https://github.com/php-etl/pipeline-contracts/tree/master"
             },
-            "time": "2021-07-21T13:03:54+00:00"
+            "time": "2021-09-22T14:48:30+00:00"
         },
         {
             "name": "php-etl/satellite-toolbox",

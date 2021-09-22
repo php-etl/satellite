@@ -27,7 +27,7 @@ final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
         $pipeline = new \Kiboko\Component\Pipeline\Pipeline($this->pipelineRunner);
         $this->workflow->job($pipeline);
 
-        return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline($filename)));
+        return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline(basename($filename))));
     }
 
     public function job(RunnableInterface $job): self
@@ -40,10 +40,8 @@ final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
     public function run(int $interval = 1000): int
     {
         $count = 0;
-        $letter = 'A';
         foreach ($this->workflow->walk() as $job) {
-            $this->output->writeln(sprintf('%s. Pipeline', $letter++));
-//            $count = $job->run($interval);
+            $count = $job->run($interval);
         }
         return $count;
     }
