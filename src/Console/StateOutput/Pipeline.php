@@ -10,7 +10,8 @@ final class Pipeline
     private array $steps = [];
 
     public function __construct(
-        private ConsoleOutput $output
+        private ConsoleOutput $output,
+        private string $label,
     ) {
     }
 
@@ -18,6 +19,7 @@ final class Pipeline
     {
         return $this->steps[] = new PipelineStep($this->output, count($this->steps) + 1, $label);
     }
+
     public function update(): void
     {
         foreach ($this->steps as $step) {

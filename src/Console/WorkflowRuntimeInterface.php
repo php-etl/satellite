@@ -2,7 +2,9 @@
 
 namespace Kiboko\Component\Satellite\Console;
 
-interface WorkflowRuntimeInterface
+use Kiboko\Component\Workflow\SchedulingInterface;
+use Kiboko\Contract\Pipeline\RunnableInterface;
+
+interface WorkflowRuntimeInterface extends SchedulingInterface, RunnableInterface
 {
-    public function job(PipelineRuntimeInterface $job): self;
 }

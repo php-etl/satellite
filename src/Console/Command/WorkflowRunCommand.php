@@ -44,6 +44,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         $runtime = new Satellite\Console\WorkflowConsoleRuntime(
             $output,
             new \Kiboko\Component\Workflow\Workflow(),
+            new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger()),
         );
 
         /** @var callable(runtime: WorkflowRuntimeInterface): \Runtime $workflow */

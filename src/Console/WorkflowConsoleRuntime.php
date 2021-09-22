@@ -2,51 +2,49 @@
 
 namespace Kiboko\Component\Satellite\Console;
 
+use Kiboko\Component\Satellite\Console\StateOutput;
+use Kiboko\Component\Workflow\SchedulingInterface;
+use Kiboko\Contract\Pipeline\PipelineRunnerInterface;
+use Kiboko\Contract\Pipeline\RunnableInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
 {
-    private array $jobs = [];
+    private StateOutput\Workflow $state;
 
     public function __construct(
         private ConsoleOutput $output,
-        private \Kiboko\Component\Workflow\Workflow $workflow
-    )
-    {
+        private SchedulingInterface $workflow,
+        private PipelineRunnerInterface $pipelineRunner,
+    ) {
+        $this->state = new StateOutput\Workflow($output);
     }
 
-    public function job(PipelineRuntimeInterface $job): self
+    public function loadPipeline(string $filename): PipelineRuntimeInterface
     {
-        $this->jobs[] = $job;
+        $factory = require $filename;
+
+        $pipeline = new \Kiboko\Component\Pipeline\Pipeline($this->pipelineRunner);
+        $this->workflow->job($pipeline);
+
+        return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline($filename)));
+    }
+
+    public function job(RunnableInterface $job): self
+    {
+        $this->workflow->job($job);
 
         return $this;
     }
 
-    public function pipelineRuntime(): PipelineRuntimeInterface
+    public function run(int $interval = 1000): int
     {
-
-        $pipeline = new \Kiboko\Component\Pipeline\Pipeline(
-            new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger())
-        );
-
-        $this->workflow->job($pipeline);
-
-        $runtime = new PipelineConsoleRuntime(
-            $this->output,
-            $pipeline
-        );
-
-        $runtime->run();
-
-        return $runtime;
-    }
-
-    public function run(): void
-    {
-        $this->workflow->run();
-
-        foreach ($this->jobs as $job) {
-            $job->run();
+        $count = 0;
+        $letter = 'A';
+        foreach ($this->workflow->walk() as $job) {
+            $this->output->writeln(sprintf('%s. Pipeline', $letter++));
+//            $count = $job->run($interval);
         }
+        return $count;
     }
 }

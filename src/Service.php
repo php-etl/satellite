@@ -131,7 +131,7 @@ final class Service implements Configurator\FactoryInterface
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipeline($job);
-                $pipelineFilename = sprintf('pipeline%s.php', uniqid());
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
                 $repository->addFiles(
                     new Packaging\File(
