@@ -11,7 +11,8 @@ final class Pipeline
 
     public function __construct(
         private ConsoleOutput $output
-    ) {}
+    ) {
+    }
 
     public function withStep(string $label): PipelineStep
     {

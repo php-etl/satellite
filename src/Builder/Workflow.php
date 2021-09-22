@@ -14,7 +14,8 @@ final class Workflow implements Builder
 
     public function __construct(
         private Node\Expr $runtime
-    ) {}
+    ) {
+    }
 
     public function addPipeline(
         string $pipelineFilename

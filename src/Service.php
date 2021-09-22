@@ -100,7 +100,8 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
-                new Packaging\Asset\InMemory(<<<PHP
+                new Packaging\Asset\InMemory(
+                    <<<PHP
                     <?php
     
                     use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
@@ -170,7 +171,8 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
-                new Packaging\Asset\InMemory(<<<PHP
+                new Packaging\Asset\InMemory(
+                    <<<PHP
                     <?php
 
                     use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;

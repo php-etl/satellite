@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
-use Kiboko\Component\Pipeline\Pipeline;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,7 +53,7 @@ final class PipelineRunCommand extends Console\Command\Command
             ),
         );
 
-        /** @var callable(runtime: RuntimeInterface): \Runtime $pipeline */
+        /** @var callable(runtime: PipelineRuntimeInterface): \Runtime $pipeline */
         $pipeline = include 'pipeline.php';
 
         $start = microtime(true);
