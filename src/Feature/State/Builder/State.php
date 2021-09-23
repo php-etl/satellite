@@ -2,45 +2,29 @@
 
 namespace Kiboko\Component\Satellite\Feature\State\Builder;
 
-use Kiboko\Contract\Configurator\StepBuilderInterface;
+use PhpParser\Builder;
 use PhpParser\Node;
 
-final class State implements StepBuilderInterface
+final class State implements Builder
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
-
-    public function __construct()
+    public function __construct(private ?Node\Expr $state = null)
     {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
     }
 
-    public function getNode(): Node\Stmt
-    {
-        return new Node\Stmt\Nop();
-    }
-
-    public function withLogger(Node\Expr $logger): StepBuilderInterface
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    public function withRejection(Node\Expr $rejection): StepBuilderInterface
-    {
-        $this->rejection = $rejection;
-
-        return $this;
-    }
-
-    public function withState(Node\Expr $state): StepBuilderInterface
+    public function withState(Node\Expr $state)
     {
         $this->state = $state;
+    }
 
-        return $this;
+    private static function nullState(): Node\Expr
+    {
+        return new Node\Expr\New_(
+            new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullState')
+        );
+    }
+
+    public function getNode(): Node\Expr
+    {
+        return $this->state === null ? self::nullState() : $this->state;
     }
 }
