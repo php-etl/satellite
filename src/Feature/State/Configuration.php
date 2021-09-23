@@ -22,6 +22,7 @@ final class Configuration implements Config\Definition\ConfigurationInterface
                         ->children()
                             ->append((new Configuration\RedisConfiguration())->getConfigTreeBuilder()->getRootNode())
                             ->append((new Configuration\MemcachedConfiguration())->getConfigTreeBuilder()->getRootNode())
+                            ->append((new Configuration\RabbitMQConfiguration())->getConfigTreeBuilder()->getRootNode())
                         ->end()
                     ->end()
                 ->end()
