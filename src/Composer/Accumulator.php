@@ -27,7 +27,7 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         return new \ArrayIterator($this->packages);
     }
 
-    public function formatPluginInstance(): iterable
+    public function formatPluginInstance(): \Generator
     {
         /** @var Package $package */
         foreach ($this as $package) {

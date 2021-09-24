@@ -347,53 +347,6 @@ final class Service implements Configurator\FactoryInterface
             foreach ($plugins as $plugin) {
                 $plugin->appendTo($step, $repository);
             }
-            continue;
-
-//            if (array_key_exists('akeneo', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('akeneo', new Akeneo\Service($clone), $clone))
-//                    ->withPackages(
-//                        'akeneo/api-php-client-ee',
-//                        'laminas/laminas-diactoros',
-//                        'php-http/guzzle7-adapter',
-//                    )
-//                    ->withExtractor()
-//                    ->withTransformer('lookup')
-//                    ->withLoader()
-//                    ->appendTo($step, $repository);
-//            } elseif (array_key_exists('sylius', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('sylius', new Sylius\Service(clone $clone), $clone))
-//                    ->withPackages(
-//                        'diglin/sylius-api-php-client',
-//                        'laminas/laminas-diactoros',
-//                        'php-http/guzzle7-adapter',
-//                    )
-//                    ->withExtractor()
-//                    ->withLoader()
-//                    ->appendTo($step, $repository);
-//            } elseif (array_key_exists('spreadsheet', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('spreadsheet', new Spreadsheet\Service(clone $clone), $clone))
-//                    ->withExtractor()
-//                    ->withLoader()
-//                    ->appendTo($step, $repository);
-//            } elseif (array_key_exists('fastmap', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
-//                    ->withPackages(
-//                        'php-etl/fast-map:^0.2.0',
-//                    )
-//                    ->withTransformer(null)
-//                    ->appendTo($step, $repository);
-//            } elseif (array_key_exists('sql', $step)) {
-//                $clone = clone $interpreter;
-//                (new Satellite\Pipeline\ConfigurationApplier('sql', new SQL\Service(clone $clone), $clone))
-//                    ->withExtractor()
-//                    ->withTransformer('lookup')
-//                    ->withLoader()
-//                    ->appendTo($step, $repository);
-//            }
         }
 
         return $repository;
