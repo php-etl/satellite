@@ -107,7 +107,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
                     
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/../../../../vendor/autoload.php';
                     
                     /** @var WorkflowConsoleRuntime \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
@@ -131,7 +130,7 @@ final class Service implements Configurator\FactoryInterface
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipeline($job);
-                $pipelineFilename = sprintf('pipeline%s.php', uniqid());
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
                 $repository->addFiles(
                     new Packaging\File(
@@ -178,7 +177,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/../../../../vendor/autoload.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';

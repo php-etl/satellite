@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c7b823b633904cb86e97bf66ea85caf",
+    "content-hash": "9f9b5c2ee2864e72c9f1b31ba5845a8c",
     "packages": [
         {
             "name": "brick/math",
@@ -444,7 +444,7 @@
             "description": "Adapters for the Akeneo API client",
             "support": {
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
-                "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
+                "source": "https://github.com/php-etl/akeneo-plugin/tree/feature/plugins-loading"
             },
             "time": "2021-09-13T19:07:41+00:00"
         },
@@ -554,16 +554,16 @@
         },
         {
             "name": "php-etl/configurator-contracts",
-            "version": "dev-master",
+            "version": "v0.3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "b12f0723002e841d5a1da31711bcbe68f5cbbf53"
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/b12f0723002e841d5a1da31711bcbe68f5cbbf53",
-                "reference": "b12f0723002e841d5a1da31711bcbe68f5cbbf53",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
                 "shasum": ""
             },
             "require": {
@@ -572,7 +572,6 @@
                 "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -601,9 +600,9 @@
             "description": "This library describes contracts for defining configuration formats and building optimized code from it",
             "support": {
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
-                "source": "https://github.com/php-etl/configurator-contracts/tree/master"
+                "source": "https://github.com/php-etl/configurator-contracts/tree/v0.3"
             },
-            "time": "2021-05-31T08:41:48+00:00"
+            "time": "2021-05-07T11:22:52+00:00"
         },
         {
             "name": "php-etl/csv-plugin",
@@ -862,7 +861,7 @@
             "description": "Adapters for the Fast Map mapping library",
             "support": {
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
-                "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
+                "source": "https://github.com/php-etl/fast-map-plugin/tree/feature/plugins-loading"
             },
             "time": "2021-06-22T08:34:56+00:00"
         },
@@ -1145,12 +1144,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19"
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/7007a09687afc111d13f3570ca363d5eb551b99c",
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c",
                 "shasum": ""
             },
             "require": {
@@ -1188,11 +1187,11 @@
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
                 "source": "https://github.com/php-etl/pipeline-contracts/tree/master"
             },
-            "time": "2021-07-21T13:03:54+00:00"
+            "time": "2021-09-22T14:48:30+00:00"
         },
         {
             "name": "php-etl/satellite-toolbox",
-            "version": "dev-master",
+            "version": "v0.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
@@ -1218,7 +1217,6 @@
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1501,16 +1499,16 @@
         },
         {
             "name": "php-etl/workflow",
-            "version": "dev-feature/state",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/workflow.git",
-                "reference": "3ebdd5a59557dec01b272f5a3a25c76afdcc9e43"
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/workflow/zipball/3ebdd5a59557dec01b272f5a3a25c76afdcc9e43",
-                "reference": "3ebdd5a59557dec01b272f5a3a25c76afdcc9e43",
+                "url": "https://api.github.com/repos/php-etl/workflow/zipball/42e0fed72b944aa72cc42a6b40979d6aa16403f4",
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4",
                 "shasum": ""
             },
             "require": {
@@ -1522,6 +1520,7 @@
                 "phpstan/phpstan": "^0.12.94",
                 "phpunit/phpunit": "^9.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1550,9 +1549,9 @@
             "description": "This library implements multiple ETL pipelines",
             "support": {
                 "issues": "https://github.com/php-etl/workflow/issues",
-                "source": "https://github.com/php-etl/workflow/tree/feature/state"
+                "source": "https://github.com/php-etl/workflow/tree/master"
             },
-            "time": "2021-09-21T15:32:20+00:00"
+            "time": "2021-09-22T14:49:38+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -8091,7 +8090,6 @@
     "stability-flags": {
         "php-etl/akeneo-expression-language": 20,
         "php-etl/sql-plugin": 20,
-        "php-etl/workflow": 20,
         "composer/composer": 20
     },
     "prefer-stable": true,

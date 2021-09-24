@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Console;
+namespace Kiboko\Component\Satellite\Console\Workflow;
 
+use Kiboko\Component\Satellite\Console\MemoryState;
+use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
 use Kiboko\Contract\Pipeline\ExtractorInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 use Kiboko\Contract\Pipeline\LoaderInterface;
@@ -13,14 +15,11 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 final class PipelineConsoleRuntime implements PipelineRuntimeInterface
 {
-    private StateOutput\Pipeline $state;
-
     public function __construct(
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
-    ) {
-        $this->state = new StateOutput\Pipeline($output, 'A', 'Pipeline');
-    }
+        private StateOutput\Pipeline $state,
+    ) {}
 
     public function extract(
         ExtractorInterface $extractor,

@@ -18,7 +18,7 @@ final class Workflow implements Builder
     }
 
     public function addPipeline(
-        string $pipelineFilename
+        string $pipelineFilename,
     ): self {
         array_push($this->pipelines, function (Node\Expr $runtime) use ($pipelineFilename) {
             return new Node\Expr\MethodCall(
@@ -26,30 +26,25 @@ final class Workflow implements Builder
                 name: new Node\Identifier('job'),
                 args: [
                     new Node\Arg(
-                        new Node\Expr\FuncCall(
-                            name: new Node\Expr\Include_(
-                                expr: new Node\Expr\BinaryOp\Concat(
-                                    left: new Node\Scalar\MagicConst\Dir(),
-                                    right: new Node\Scalar\Encapsed(
-                                        parts: [
-                                            new Node\Scalar\EncapsedStringPart('/'),
-                                            new Node\Scalar\EncapsedStringPart($pipelineFilename)
-                                        ]
-                                    )
-                                ),
-                                type: Node\Expr\Include_::TYPE_REQUIRE
-                            ),
+                        new Node\Expr\MethodCall(
+                            var: new Node\Expr\Variable('runtime'),
+                            name: 'loadPipeline',
                             args: [
                                 new Node\Arg(
-                                    value: new Node\Expr\MethodCall(
-                                        var: new Node\Expr\Variable('runtime'),
-                                        name: new Node\Identifier('pipelineRuntime')
-                                    )
-                                )
-                            ]
-                        )
-                    )
-                ]
+                                    value: new Node\Expr\BinaryOp\Concat(
+                                        left: new Node\Scalar\MagicConst\Dir(),
+                                        right: new Node\Scalar\Encapsed(
+                                            parts: [
+                                                new Node\Scalar\EncapsedStringPart('/'),
+                                                new Node\Scalar\EncapsedStringPart($pipelineFilename)
+                                            ],
+                                        ),
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ),
+                ],
             );
         });
 

@@ -39,7 +39,7 @@
         "php-etl/array-expression-language": "^0.1.0",
         "php-etl/string-expression-language": "^0.1.0",
         "php-etl/sql-plugin": "0.1.x-dev",
-        "php-etl/workflow": "dev-feature/state"
+        "php-etl/workflow": "^0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
