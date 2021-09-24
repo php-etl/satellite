@@ -66,14 +66,14 @@ final class Service implements Configurator\FactoryInterface
                 || (array_key_exists('type', $config) && $config['type'] === 'stderr')
             ) {
                 $builder->withLogger((new Builder\StderrLogger())->getNode());
-                $repository->addPackages('psr/log');
+                $repository->addPackages('psr/log:^1.1');
 
                 return $repository;
             } elseif (array_key_exists('blackhole', $config)
                 || (array_key_exists('type', $config) && $config['type'] === 'null')
             ) {
                 $builder->withLogger((new Builder\NullLogger())->getNode());
-                $repository->addPackages('psr/log');
+                $repository->addPackages('psr/log:^1.1');
 
                 return $repository;
             }
@@ -87,7 +87,7 @@ final class Service implements Configurator\FactoryInterface
 
             $monologBuilder = new Builder\MonologLogger($config['channel']);
 
-            $repository->addPackages('psr/log', 'monolog/monolog');
+            $repository->addPackages('psr/log:^1.1', 'monolog/monolog');
 
             foreach ($config['destinations'] as $destination) {
                 if (array_key_exists('stream', $destination)) {

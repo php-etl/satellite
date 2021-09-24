@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
+use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Kiboko\Plugin\CSV;
@@ -12,6 +13,7 @@ use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
 use Kiboko\Plugin\Spreadsheet;
 use Kiboko\Plugin\SQL;
+use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -107,15 +109,51 @@ final class Service implements Configurator\FactoryInterface
 
     private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
     {
-        $pipeline = new Satellite\Builder\Pipeline();
+        $pipeline = new Satellite\Builder\Pipeline(
+            new Node\Expr\Variable('runtime'),
+        );
+
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $repository->addPackages(
-            'php-etl/pipeline:^0.3.0',
+            'php-etl/pipeline-contracts:~0.2.0@dev',
+            'php-etl/pipeline:~0.3.0@dev',
+            'psr/log:^1.1',
             'monolog/monolog',
+            'symfony/console:^5.2',
             'symfony/dependency-injection:^5.2',
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(<<<PHP
+                    <?php
+    
+                    use Kiboko\Component\Satellite\Console\RuntimeInterface;
+                    
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/../../../../vendor/autoload.php';
+                    
+                    /** @var RuntimeInterface \$runtine */
+                    \$runtine = require __DIR__ . '/runtime.php';
+                    
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
+                    \$pipeline = require __DIR__ . '/pipeline.php';
+                    
+                    \$pipeline(\$runtine)->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST((new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode())
+            )
         );
 
         if (array_key_exists('expression_language', $config['pipeline'])
@@ -155,7 +193,10 @@ final class Service implements Configurator\FactoryInterface
                 $clone = clone $interpreter;
                 (new Satellite\Pipeline\ConfigurationApplier('csv', new CSV\Service(clone $clone), $clone))
                     ->withPackages(
-                        'php-etl/csv-flow:^0.2.0',
+                        'php-etl/pipeline-contracts:~0.2.0@dev',
+                        'php-etl/bucket-contracts:~0.1.0@dev',
+                        'php-etl/bucket:~0.2.0@dev',
+                        'php-etl/csv-flow:~0.2.0@dev',
                     )
                     ->withExtractor()
                     ->withLoader()
@@ -188,7 +229,10 @@ final class Service implements Configurator\FactoryInterface
                 $clone = clone $interpreter;
                 (new Satellite\Pipeline\ConfigurationApplier('fastmap', new FastMap\Service(clone $clone), $clone))
                     ->withPackages(
-                        'php-etl/fast-map:^0.2.0',
+                        'php-etl/pipeline-contracts:~0.2.0@dev',
+                        'php-etl/bucket-contracts:~0.1.0@dev',
+                        'php-etl/bucket:~0.2.0@dev',
+                        'php-etl/fast-map:~0.2.0@dev',
                     )
                     ->withTransformer(null)
                     ->appendTo($step, $repository);

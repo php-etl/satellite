@@ -9,16 +9,20 @@ use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct()
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
+        $this->interpreter = $interpreter ?? new ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -54,14 +58,23 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
+        if (array_key_exists('expression_language', $config)
+            && is_array($config['expression_language'])
+            && count($config['expression_language'])
+        ) {
+            foreach ($config['expression_language'] as $provider) {
+                $this->interpreter->registerProvider(new $provider);
+            }
+        }
+
         if (array_key_exists('extractor', $config)) {
-            $extractorFactory = new Loader();
+            $extractorFactory = new Loader($this->interpreter);
             return $extractorFactory->compile($config['extractor']);
         } elseif (array_key_exists('transformer', $config)) {
-            $transformerFactory = new Loader();
+            $transformerFactory = new Loader($this->interpreter);
             return $transformerFactory->compile($config['transformer']);
         } elseif (array_key_exists('loader', $config)) {
-            $loaderFactory = new Loader();
+            $loaderFactory = new Loader($this->interpreter);
             return $loaderFactory->compile($config['loader']);
         }
 

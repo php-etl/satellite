@@ -13,9 +13,10 @@ use Psr\Log\LoggerInterface;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'function.php')
-    {
-    }
+    public function __construct(
+        private array $config,
+        private string $filename = 'pipeline.php'
+    ) {}
 
     public function getFilename(): string
     {
@@ -43,21 +44,22 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
     public function build(Builder $builder): array
     {
         return [
-            new Node\Stmt\Expression(
-                new Node\Expr\Include_(
-                    new Node\Expr\BinaryOp\Concat(
-                        new Node\Scalar\MagicConst\Dir(),
-                        new Node\Scalar\String_('/vendor/autoload.php')
-                    ),
-                    Node\Expr\Include_::TYPE_REQUIRE
+            new Node\Stmt\Return_(
+                new Node\Expr\Closure(
+                    subNodes: [
+                        'static' => true,
+                        'params' => [
+                            new Node\Param(
+                                var: new Node\Expr\Variable('runtime'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\RuntimeInterface'),
+                            )
+                        ],
+                        'stmts' => [
+                            $builder->getNode(),
+                        ]
+                    ]
                 ),
             ),
-            new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    var: $builder->getNode(),
-                    name: 'run'
-                ),
-            )
         ];
     }
 }
