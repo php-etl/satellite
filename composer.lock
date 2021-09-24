@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c7b823b633904cb86e97bf66ea85caf",
+    "content-hash": "9f9b5c2ee2864e72c9f1b31ba5845a8c",
     "packages": [
         {
             "name": "brick/math",
@@ -1499,16 +1499,16 @@
         },
         {
             "name": "php-etl/workflow",
-            "version": "dev-feature/state",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/workflow.git",
-                "reference": "3ebdd5a59557dec01b272f5a3a25c76afdcc9e43"
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/workflow/zipball/3ebdd5a59557dec01b272f5a3a25c76afdcc9e43",
-                "reference": "3ebdd5a59557dec01b272f5a3a25c76afdcc9e43",
+                "url": "https://api.github.com/repos/php-etl/workflow/zipball/42e0fed72b944aa72cc42a6b40979d6aa16403f4",
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4",
                 "shasum": ""
             },
             "require": {
@@ -1520,6 +1520,7 @@
                 "phpstan/phpstan": "^0.12.94",
                 "phpunit/phpunit": "^9.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1548,9 +1549,9 @@
             "description": "This library implements multiple ETL pipelines",
             "support": {
                 "issues": "https://github.com/php-etl/workflow/issues",
-                "source": "https://github.com/php-etl/workflow/tree/feature/state"
+                "source": "https://github.com/php-etl/workflow/tree/master"
             },
-            "time": "2021-09-21T15:32:20+00:00"
+            "time": "2021-09-22T14:49:38+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -8089,7 +8090,6 @@
     "stability-flags": {
         "php-etl/akeneo-expression-language": 20,
         "php-etl/sql-plugin": 20,
-        "php-etl/workflow": 20,
         "composer/composer": 20
     },
     "prefer-stable": true,
@@ -8099,5 +8099,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

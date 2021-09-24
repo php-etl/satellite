@@ -21,20 +21,18 @@ final class WorkflowRuntime implements Builder
                     new Node\Arg(
                         value: new Node\Expr\New_(
                             class: new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\Workflow'),
-//                            args: [
-//                                new Node\Arg(
-//                                    new Node\Expr\New_(
-//                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
-//                                        args: [
-//                                            new Node\Arg(
-//                                                value: new Node\Expr\New_(
-//                                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
-//                                                )
-//                                            )
-//                                        ],
-//                                    ),
-//                                ),
-//                            ],
+                        ),
+                    ),
+                    new Node\Arg(
+                        new Node\Expr\New_(
+                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
+                            args: [
+                                new Node\Arg(
+                                    value: new Node\Expr\New_(
+                                        class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                                    )
+                                )
+                            ],
                         ),
                     ),
                 ],

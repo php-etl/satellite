@@ -3,9 +3,9 @@
 namespace Kiboko\Component\Satellite\Console;
 
 use Kiboko\Component\Satellite\Console\StateOutput;
-use Kiboko\Component\Workflow\SchedulingInterface;
 use Kiboko\Contract\Pipeline\PipelineRunnerInterface;
 use Kiboko\Contract\Pipeline\RunnableInterface;
+use Kiboko\Contract\Pipeline\SchedulingInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
