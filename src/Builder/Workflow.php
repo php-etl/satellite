@@ -27,7 +27,7 @@ final class Workflow implements Builder
                 args: [
                     new Node\Arg(
                         new Node\Expr\MethodCall(
-                            var: $runtime,
+                            var: new Node\Expr\Variable('runtime'),
                             name: 'loadPipeline',
                             args: [
                                 new Node\Arg(

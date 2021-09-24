@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Console;
 
+use Kiboko\Component\Pipeline\Pipeline;
 use Kiboko\Component\Satellite\Console\StateOutput;
 use Kiboko\Contract\Pipeline\PipelineRunnerInterface;
 use Kiboko\Contract\Pipeline\RunnableInterface;
@@ -20,11 +21,11 @@ final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
         $this->state = new StateOutput\Workflow($output);
     }
 
-    public function loadPipeline(string $filename): PipelineRuntimeInterface
+    public function loadPipeline(string $filename): Workflow\PipelineConsoleRuntime
     {
         $factory = require $filename;
 
-        $pipeline = new \Kiboko\Component\Pipeline\Pipeline($this->pipelineRunner);
+        $pipeline = new Pipeline($this->pipelineRunner);
         $this->workflow->job($pipeline);
 
         return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline(basename($filename))));
