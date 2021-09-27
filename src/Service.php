@@ -123,7 +123,11 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'runtime.php',
-                new Packaging\Asset\AST((new Satellite\Builder\Workflow\WorkflowRuntime())->getNode())
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Expression(
+                        (new Satellite\Builder\Workflow\WorkflowRuntime())->getNode()
+                    )
+                )
             )
         );
 
@@ -135,7 +139,11 @@ final class Service implements Configurator\FactoryInterface
                 $repository->addFiles(
                     new Packaging\File(
                         $pipelineFilename,
-                        new Packaging\Asset\AST((new Satellite\Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode())
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            )
+                        )
                     )
                 );
 
@@ -193,7 +201,11 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'runtime.php',
-                new Packaging\Asset\AST((new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode())
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Expression(
+                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+                    )
+                )
             )
         );
 

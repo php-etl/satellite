@@ -56,7 +56,9 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                             )
                         ],
                         'stmts' => [
-                            $builder->getNode(),
+                            new Node\Stmt\Expression(
+                                $builder->getNode()
+                            ),
                         ]
                     ]
                 ),
