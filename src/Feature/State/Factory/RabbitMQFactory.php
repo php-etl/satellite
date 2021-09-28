@@ -58,17 +58,22 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
     {
         $builder = new State\Builder\RabbitMQBuilder(
             host: compileValueWhenExpression($this->interpreter, $config['host']),
-            user: compileValueWhenExpression($this->interpreter, $config['user']),
-            password: compileValueWhenExpression($this->interpreter, $config['password']),
-            topic: compileValueWhenExpression($this->interpreter, $config['topic']),
+            vhost: compileValueWhenExpression($this->interpreter, $config['vhost']),
+            pipelineId: compileValueWhenExpression($this->interpreter, $config['pipelineId']),
+            stepCode: compileValueWhenExpression($this->interpreter, $config['stepCode']),
+            stepLabel: compileValueWhenExpression($this->interpreter, $config['stepLabel']),
+            topic: compileValueWhenExpression($this->interpreter, $config['topic'])
         );
 
         if (array_key_exists('port', $config)) {
             $builder->withPort(compileValueWhenExpression($this->interpreter, $config['port']));
         }
 
-        if (array_key_exists('vhost', $config)) {
-            $builder->withVhost(compileValueWhenExpression($this->interpreter, $config['vhost']));
+        if (array_key_exists('user', $config) && array_key_exists('password', $config)) {
+            $builder->withAuthentication(
+                compileValueWhenExpression($this->interpreter, $config['user']),
+                compileValueWhenExpression($this->interpreter, $config['password']),
+            );
         }
 
         if (array_key_exists('exchange', $config)) {
