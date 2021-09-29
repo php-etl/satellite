@@ -13,14 +13,14 @@ final class MemoryState implements StateInterface
     ) {
     }
 
-    public function initialize(int $start = 0): void
+    public function initialize(): void
     {
         $this->metrics = [
             'accept' => 0,
             'reject' => 0,
         ];
 
-        $this->decorated->initialize($start);
+        $this->decorated->initialize();
     }
 
     public function accept(int $step = 1): void
@@ -35,6 +35,13 @@ final class MemoryState implements StateInterface
         $this->decorated->reject($step);
     }
 
+    public function error(int $step = 1): void
+    {
+        $this->metrics['error'] += $step;
+
+        $this->decorated->error($step);
+    }
+
     public function observeAccept(): callable
     {
         return fn () => $this->metrics['accept'];
@@ -43,5 +50,10 @@ final class MemoryState implements StateInterface
     public function observeReject(): callable
     {
         return fn () => $this->metrics['reject'];
+    }
+
+    public function teardown(): void
+    {
+        $this->decorated->teardown();
     }
 }
