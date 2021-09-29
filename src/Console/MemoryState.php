@@ -13,7 +13,7 @@ final class MemoryState implements StateInterface
     ) {
     }
 
-    public function initialize(int $start = 0): void
+    public function initialize(): void
     {
         $this->metrics = [
             'accept' => 0,
@@ -21,7 +21,7 @@ final class MemoryState implements StateInterface
             'error' => 0,
         ];
 
-        $this->decorated->initialize($start);
+        $this->decorated->initialize();
     }
 
     public function accept(int $step = 1): void
