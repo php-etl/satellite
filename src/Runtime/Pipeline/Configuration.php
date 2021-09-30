@@ -56,6 +56,10 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                         ->thenInvalid('You should only specify one plugin between "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp", "ftp", "sql" and "batch".')
                     ->end()
                     ->arrayPrototype()
+                        // Name of the step
+                        ->children()
+                            ->scalarNode('name')->end()
+                        ->end()
                         // Plugins
                         ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
                         ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())

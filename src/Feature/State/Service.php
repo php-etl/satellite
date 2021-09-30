@@ -17,6 +17,8 @@ final class Service implements Configurator\FactoryInterface
 
     public function __construct(
         ?ExpressionLanguage $interpreter = null,
+        private ?string $stepName = null,
+        private ?string $stepCode = null
     )
     {
         $this->processor = new Processor();
@@ -67,7 +69,7 @@ final class Service implements Configurator\FactoryInterface
 
             foreach ($config['destinations'] as $destination) {
                 if (array_key_exists('rabbitmq', $destination)) {
-                    $factory = new State\Factory\RabbitMQFactory($this->interpreter);
+                    $factory = new State\Factory\RabbitMQFactory($this->interpreter, $this->stepName, $this->stepCode);
 
                     $rabbitmqRepository = $factory->compile($destination['rabbitmq']);
 

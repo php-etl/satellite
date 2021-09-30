@@ -55,7 +55,11 @@ final class Extractor implements StepInterface
         }
 
         if (array_key_exists('state', $config)) {
-            $service = new State\Service($this->interpreter);
+           $service = new State\Service(
+               interpreter: $this->interpreter,
+               stepName: array_key_exists('name', $config) ? $config['name'] : null,
+               stepCode: $this->plugin.'.'.$this->key
+           );
 
             $compiled = $service->compile($config['state']);
             $repository->merge($compiled);
