@@ -19,6 +19,8 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
 
     public function __construct(
         ?ExpressionLanguage $interpreter = null,
+        private ?string $stepName = null,
+        private ?string $stepCode = null
     ) {
         $this->processor = new Processor();
         $this->configuration = new Rejection\Configuration\RabbitMQConfiguration();
@@ -57,28 +59,9 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
     public function compile(array $config): Repository\RabbitMQRepository
     {
         $builder = new State\Builder\RabbitMQBuilder(
-            host: compileValueWhenExpression($this->interpreter, $config['host']),
-            vhost: compileValueWhenExpression($this->interpreter, $config['vhost']),
-            pipelineId: compileValueWhenExpression($this->interpreter, $config['pipelineId']),
-            stepCode: compileValueWhenExpression($this->interpreter, $config['stepCode']),
-            stepLabel: compileValueWhenExpression($this->interpreter, $config['stepLabel']),
-            topic: compileValueWhenExpression($this->interpreter, $config['topic'])
+            stepCode: compileValueWhenExpression($this->interpreter, $this->stepCode),
+            stepLabel: compileValueWhenExpression($this->interpreter, $this->stepName)
         );
-
-        if (array_key_exists('port', $config)) {
-            $builder->withPort(compileValueWhenExpression($this->interpreter, $config['port']));
-        }
-
-        if (array_key_exists('user', $config) && array_key_exists('password', $config)) {
-            $builder->withAuthentication(
-                compileValueWhenExpression($this->interpreter, $config['user']),
-                compileValueWhenExpression($this->interpreter, $config['password']),
-            );
-        }
-
-        if (array_key_exists('exchange', $config)) {
-            $builder->withExchange(compileValueWhenExpression($this->interpreter, $config['exchange']));
-        }
 
         return new Repository\RabbitMQRepository($builder);
     }
