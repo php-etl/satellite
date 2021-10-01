@@ -19,7 +19,8 @@ final class PipelineConsoleRuntime implements PipelineRuntimeInterface
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
         private StateOutput\Pipeline $state,
-    ) {}
+    ) {
+    }
 
     public function extract(
         ExtractorInterface $extractor,

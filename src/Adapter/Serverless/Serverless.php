@@ -11,7 +11,8 @@ final class Serverless implements ServerlessResourceInterface, FileInterface
     public function __construct(
         private string $service,
         private ProviderInterface $provider
-    ) {}
+    ) {
+    }
 
     public function asArray(): array
     {

@@ -12,7 +12,8 @@ final class Workflow
 
     public function __construct(
         private ConsoleOutput $output,
-    ) {}
+    ) {
+    }
 
     public function withPipeline(string $label): Pipeline
     {
