@@ -16,7 +16,8 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
     public function __construct(
         private array $config,
         private string $filename = 'pipeline.php'
-    ) {}
+    ) {
+    }
 
     public function getFilename(): string
     {
@@ -51,11 +52,13 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\RuntimeInterface'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineRuntimeInterface'),
                             )
                         ],
                         'stmts' => [
-                            $builder->getNode(),
+                            new Node\Stmt\Expression(
+                                $builder->getNode()
+                            ),
                         ]
                     ]
                 ),

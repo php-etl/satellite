@@ -11,7 +11,7 @@ use Kiboko\Contract\Pipeline\StateInterface;
 use Kiboko\Component\Satellite\Console\StateOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-final class ConsoleRuntime implements RuntimeInterface
+final class PipelineConsoleRuntime implements PipelineRuntimeInterface
 {
     private StateOutput\Pipeline $state;
 
@@ -19,7 +19,7 @@ final class ConsoleRuntime implements RuntimeInterface
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
     ) {
-        $this->state = new StateOutput\Pipeline($output);
+        $this->state = new StateOutput\Pipeline($output, 'A', 'Pipeline');
     }
 
     public function extract(
@@ -67,7 +67,7 @@ final class ConsoleRuntime implements RuntimeInterface
         return $this;
     }
 
-    public function run(int $interval = 1000): void
+    public function run(int $interval = 1000): int
     {
         $line = 0;
         foreach ($this->pipeline->walk() as $item) {
@@ -76,5 +76,7 @@ final class ConsoleRuntime implements RuntimeInterface
             }
         };
         $this->state->update();
+
+        return $line;
     }
 }

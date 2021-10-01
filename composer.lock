@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3ca28eea755f42c3ff4cbfb57ae465d",
+    "content-hash": "9f9b5c2ee2864e72c9f1b31ba5845a8c",
     "packages": [
         {
             "name": "brick/math",
@@ -444,7 +444,7 @@
             "description": "Adapters for the Akeneo API client",
             "support": {
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
-                "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
+                "source": "https://github.com/php-etl/akeneo-plugin/tree/feature/plugins-loading"
             },
             "time": "2021-09-13T19:07:41+00:00"
         },
@@ -500,17 +500,70 @@
             "time": "2021-06-25T09:23:51+00:00"
         },
         {
-            "name": "php-etl/configurator-contracts",
+            "name": "php-etl/bucket-contracts",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "b12f0723002e841d5a1da31711bcbe68f5cbbf53"
+                "url": "https://github.com/php-etl/bucket-contracts.git",
+                "reference": "e538bcba3db35c2d0adb85ad8449444e0481f02e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/b12f0723002e841d5a1da31711bcbe68f5cbbf53",
-                "reference": "b12f0723002e841d5a1da31711bcbe68f5cbbf53",
+                "url": "https://api.github.com/repos/php-etl/bucket-contracts/zipball/e538bcba3db35c2d0adb85ad8449444e0481f02e",
+                "reference": "e538bcba3db35c2d0adb85ad8449444e0481f02e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "0.12.x-dev"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Contract\\Bucket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchatn rules",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library describes contracts for the data-interchange buckets.",
+            "support": {
+                "issues": "https://github.com/php-etl/bucket-contracts/issues",
+                "source": "https://github.com/php-etl/bucket-contracts/tree/master"
+            },
+            "time": "2021-06-28T21:40:35+00:00"
+        },
+        {
+            "name": "php-etl/configurator-contracts",
+            "version": "v0.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/configurator-contracts.git",
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
+                "reference": "4f840f4f7e7f8dd0bab45d4f26e616d28820c483",
                 "shasum": ""
             },
             "require": {
@@ -519,7 +572,6 @@
                 "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -548,9 +600,9 @@
             "description": "This library describes contracts for defining configuration formats and building optimized code from it",
             "support": {
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
-                "source": "https://github.com/php-etl/configurator-contracts/tree/master"
+                "source": "https://github.com/php-etl/configurator-contracts/tree/v0.3"
             },
-            "time": "2021-05-31T08:41:48+00:00"
+            "time": "2021-05-07T11:22:52+00:00"
         },
         {
             "name": "php-etl/csv-plugin",
@@ -809,7 +861,7 @@
             "description": "Adapters for the Fast Map mapping library",
             "support": {
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
-                "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
+                "source": "https://github.com/php-etl/fast-map-plugin/tree/feature/plugins-loading"
             },
             "time": "2021-06-22T08:34:56+00:00"
         },
@@ -1087,8 +1139,59 @@
             "time": "2021-05-28T15:26:06+00:00"
         },
         {
-            "name": "php-etl/satellite-toolbox",
+            "name": "php-etl/pipeline-contracts",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/pipeline-contracts.git",
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/7007a09687afc111d13f3570ca363d5eb551b99c",
+                "reference": "7007a09687afc111d13f3570ca363d5eb551b99c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "php-etl/bucket-contracts": "^0.1.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Contract\\Pipeline\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library describes contracts for the Extract-Transform-Load pattern.",
+            "support": {
+                "issues": "https://github.com/php-etl/pipeline-contracts/issues",
+                "source": "https://github.com/php-etl/pipeline-contracts/tree/master"
+            },
+            "time": "2021-09-22T14:48:30+00:00"
+        },
+        {
+            "name": "php-etl/satellite-toolbox",
+            "version": "v0.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
@@ -1114,7 +1217,6 @@
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1394,6 +1496,62 @@
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
             "time": "2021-06-07T08:14:10+00:00"
+        },
+        {
+            "name": "php-etl/workflow",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/workflow.git",
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/workflow/zipball/42e0fed72b944aa72cc42a6b40979d6aa16403f4",
+                "reference": "42e0fed72b944aa72cc42a6b40979d6aa16403f4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "php-etl/pipeline-contracts": "^0.2.0"
+            },
+            "require-dev": {
+                "friends-of-phpspec/phpspec-code-coverage": "*",
+                "phpstan/phpstan": "^0.12.94",
+                "phpunit/phpunit": "^9.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Workflow\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements multiple ETL pipelines",
+            "support": {
+                "issues": "https://github.com/php-etl/workflow/issues",
+                "source": "https://github.com/php-etl/workflow/tree/master"
+            },
+            "time": "2021-09-22T14:49:38+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -5255,59 +5413,6 @@
             "time": "2021-06-28T22:06:57+00:00"
         },
         {
-            "name": "php-etl/bucket-contracts",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-etl/bucket-contracts.git",
-                "reference": "e538bcba3db35c2d0adb85ad8449444e0481f02e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/bucket-contracts/zipball/e538bcba3db35c2d0adb85ad8449444e0481f02e",
-                "reference": "e538bcba3db35c2d0adb85ad8449444e0481f02e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "0.12.x-dev"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Kiboko\\Contract\\Bucket\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kiboko SAS",
-                    "homepage": "http://kiboko.fr"
-                },
-                {
-                    "name": "Grégory Planchatn rules",
-                    "email": "gregory@kiboko.fr"
-                }
-            ],
-            "description": "This library describes contracts for the data-interchange buckets.",
-            "support": {
-                "issues": "https://github.com/php-etl/bucket-contracts/issues",
-                "source": "https://github.com/php-etl/bucket-contracts/tree/master"
-            },
-            "time": "2021-06-28T21:40:35+00:00"
-        },
-        {
             "name": "php-etl/phpunit-extension",
             "version": "dev-master",
             "source": {
@@ -5421,57 +5526,6 @@
                 "source": "https://github.com/php-etl/pipeline/tree/master"
             },
             "time": "2021-09-13T20:30:39+00:00"
-        },
-        {
-            "name": "php-etl/pipeline-contracts",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
-                "reference": "f6d1ee546a8d4d54f29fd42b935a5643b31e4f19",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0",
-                "php-etl/bucket-contracts": "^0.1.0"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Kiboko\\Contract\\Pipeline\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kiboko SAS",
-                    "homepage": "http://kiboko.fr"
-                },
-                {
-                    "name": "Grégory Planchat",
-                    "email": "gregory@kiboko.fr"
-                }
-            ],
-            "description": "This library describes contracts for the Extract-Transform-Load pattern.",
-            "support": {
-                "issues": "https://github.com/php-etl/pipeline-contracts/issues",
-                "source": "https://github.com/php-etl/pipeline-contracts/tree/master"
-            },
-            "time": "2021-07-21T13:03:54+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -8045,5 +8099,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

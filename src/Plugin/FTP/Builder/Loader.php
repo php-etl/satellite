@@ -205,13 +205,13 @@ final class Loader implements StepBuilderInterface
                                             items: array_merge(
                                                 [
                                                 new Node\Expr\ArrayItem(
-                                                    value:  compileValueWhenExpression($this->interpreter,$server["base_path"]),
+                                                    value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
                                                     key: new Node\Scalar\String_('%path%'),
                                                 )
                                             ],
                                                 [
                                                 new Node\Expr\ArrayItem(
-                                                    value: compileValueWhenExpression($this->interpreter,$server["host"]),
+                                                    value: compileValueWhenExpression($this->interpreter, $server["host"]),
                                                     key:  new Node\Scalar\String_('%server%'),
                                                 )
                                             ]

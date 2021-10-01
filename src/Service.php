@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Builder\Workflow\PipelineBuilder;
 use Kiboko\Contract\Configurator;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
@@ -90,15 +91,63 @@ final class Service implements Configurator\FactoryInterface
 
     private function compileWorkflow(array $config): Satellite\Builder\Repository\Workflow
     {
-        $workflow = new Satellite\Builder\Workflow();
+        $workflow = new Satellite\Builder\Workflow(
+            new Node\Expr\Variable('runtime')
+        );
+
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                    <?php
+    
+                    use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
+                    
+                    require __DIR__ . '/vendor/autoload.php';
+                    
+                    /** @var WorkflowConsoleRuntime \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+                    
+                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
+                    \$workflow = require __DIR__ . '/workflow.php';
+                    
+                    \$workflow(\$runtime)->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Expression(
+                        (new Satellite\Builder\Workflow\WorkflowRuntime())->getNode()
+                    )
+                )
+            )
+        );
 
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipeline($job);
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
-                $repository->merge($pipeline);
-                $workflow->addJob($pipeline->getBuilder());
+                $repository->addFiles(
+                    new Packaging\File(
+                        $pipelineFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
+
+                $workflow->addPipeline($pipelineFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -129,21 +178,21 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
-                new Packaging\Asset\InMemory(<<<PHP
+                new Packaging\Asset\InMemory(
+                    <<<PHP
                     <?php
-    
-                    use Kiboko\Component\Satellite\Console\RuntimeInterface;
-                    
+
+                    use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
+
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/../../../../vendor/autoload.php';
-                    
-                    /** @var RuntimeInterface \$runtine */
-                    \$runtine = require __DIR__ . '/runtime.php';
-                    
+
+                    /** @var PipelineRuntimeInterface \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
-                    
-                    \$pipeline(\$runtine)->run();
+
+                    \$pipeline(\$runtime)->run();
                     PHP
                 )
             )
@@ -152,7 +201,11 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'runtime.php',
-                new Packaging\Asset\AST((new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode())
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Expression(
+                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+                    )
+                )
             )
         );
 

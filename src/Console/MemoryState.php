@@ -10,7 +10,8 @@ final class MemoryState implements StateInterface
 
     public function __construct(
         private StateInterface $decorated,
-    ) {}
+    ) {
+    }
 
     public function initialize(int $start = 0): void
     {

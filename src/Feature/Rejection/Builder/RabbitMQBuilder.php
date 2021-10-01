@@ -16,7 +16,8 @@ final class RabbitMQBuilder implements Builder
         public Node\Expr $port,
         public Node\Expr $vhost,
         public Node\Expr $topic,
-    ) {}
+    ) {
+    }
 
     public function withAuthentication(
         Node\Expr $user,

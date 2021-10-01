@@ -12,7 +12,7 @@ final class ConsoleRuntime implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\ConsoleRuntime'),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineConsoleRuntime'),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(
@@ -27,12 +27,12 @@ final class ConsoleRuntime implements Builder
                                 new Node\Expr\New_(
                                     class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
                                     args: [
-                                    new Node\Arg(
-                                        value: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                                        new Node\Arg(
+                                            value: new Node\Expr\New_(
+                                                class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                                            )
                                         )
-                                    )
-                                ],
+                                    ],
                                 ),
                             ),
                         ],

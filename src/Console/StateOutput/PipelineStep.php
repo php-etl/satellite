@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\ConsoleSectionOutput;
 final class PipelineStep
 {
     /** @var array<string, callable> */
-    private $metrics;
+    private array $metrics = [];
     private ConsoleSectionOutput $section;
 
     public function __construct(

@@ -13,7 +13,8 @@ final class Pipeline implements Builder
 
     public function __construct(
         private Node\Expr $runtime
-    ) {}
+    ) {
+    }
 
     public function addExtractor(
         Node\Expr|Builder $extractor,
