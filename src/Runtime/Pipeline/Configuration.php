@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
+use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use Kiboko\Plugin\Akeneo;
 use Kiboko\Plugin\Sylius;
 use Kiboko\Plugin\FastMap;
@@ -27,6 +28,7 @@ final class Configuration implements Satellite\NamedConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
+                ->append((new ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
                 ->arrayNode('expression_language')
                     ->scalarPrototype()->end()
                 ->end()

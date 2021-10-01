@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
+namespace Kiboko\Component\Satellite\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -16,10 +16,26 @@ final class ServicesConfiguration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always(function ($data) {
                     foreach ($data as $identifier => &$service) {
-                        if (!array_key_exists('class', $service)) {
+                        if (is_null($service)) {
                             $service['class'] = $identifier;
+                        } else {
+                            if (!array_key_exists('class', $service)) {
+                                $service['class'] = $identifier;
+                            }
                         }
                     }
+
+                    return $data;
+                })
+            ->end()
+            ->beforeNormalization()
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (array_key_exists('calls', $service)) {
+                            $service["calls"] = array_merge(...$service["calls"]);
+                        }
+                    }
+
                     return $data;
                 })
             ->end()
@@ -27,14 +43,17 @@ final class ServicesConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('class')->isRequired()->end()
                     ->arrayNode('arguments')
-                        ->useAttributeAsKey('key')
+//                        ->useAttributeAsKey('key')
                         ->scalarPrototype()->end()
+                        ->variablePrototype()->end()
                     ->end()
-                        ->arrayNode('calls')
-                            ->arrayPrototype()
-                                ->variablePrototype()->end()
-                            ->end()
+                    ->arrayNode('calls')
+                        ->arrayPrototype()
+                            ->variablePrototype()->end()
                         ->end()
+                    ->end()
+                    ->booleanNode('public')
+                        ->defaultFalse()
                     ->end()
                 ->end()
             ->end();

@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Contract\Configurator;
 use Kiboko\Plugin\CSV;
 use Kiboko\Plugin\Akeneo;
@@ -18,6 +19,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\SatelliteToolbox;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use PhpParser\PrettyPrinter;
 
 final class Service implements Configurator\FactoryInterface
 {
@@ -197,16 +200,54 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        $repository->addFiles(
-            new Packaging\File(
-                'runtime.php',
-                new Packaging\Asset\AST(
-                    new Node\Stmt\Expression(
-                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+        if (!array_key_exists('services', $config['pipeline'])) {
+            $repository->addFiles(
+                new Packaging\File(
+                    'runtime.php',
+                    new Packaging\Asset\AST(
+                        new Node\Stmt\Expression(
+                            (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+                        )
                     )
                 )
-            )
-        );
+            );
+        } else {
+            $repository->addFiles(
+                new Packaging\File(
+                    'runtime.php',
+                    new Packaging\Asset\InMemory(
+                        '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint([
+                            new Node\Stmt\Expression(
+                                new Node\Expr\Include_(
+                                    expr: new Node\Expr\BinaryOp\Concat(
+                                        left: new Node\Scalar\MagicConst\Dir(),
+                                        right: new Node\Scalar\String_('container.php')
+                                    ),
+                                    type: Node\Expr\Include_::TYPE_REQUIRE
+                                )
+                            ),
+                            new Node\Stmt\Expression(
+                                (new Satellite\Builder\Pipeline\ConsoleRuntimeDependencyInjection())->getNode()
+                            )
+                        ])
+                    )
+                )
+            );
+        }
+
+        if (array_key_exists('services', $config['pipeline'])) {
+            $container = new SatelliteDependencyInjection();
+
+            $dumper = new PhpDumper($container($config['pipeline']));
+            $repository->addFiles(
+                new Packaging\File(
+                    'container.php',
+                    new Packaging\Asset\InMemory(
+                        $dumper->dump()
+                    )
+                ),
+            );
+        }
 
         if (array_key_exists('expression_language', $config['pipeline'])
             && is_array($config['pipeline']['expression_language'])
