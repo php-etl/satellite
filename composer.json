@@ -29,6 +29,7 @@
         "ramsey/uuid": "^4.0",
         "nikic/php-parser": "^4.10",
         "php-etl/packaging": "^0.1.0",
+        "php-etl/satellite-toolbox": "*",
         "php-etl/configurator-contracts": "^0.4.0@dev"
     },
     "require-dev": {
@@ -54,8 +55,7 @@
         "php-etl/akeneo-expression-language": "^0.2.0",
         "php-etl/array-expression-language": "^0.1.0",
         "php-etl/string-expression-language": "^0.1.0",
-        "php-etl/sql-plugin": "*",
-        "php-etl/satellite-toolbox": "*"
+        "php-etl/sql-plugin": "*"
     },
     "autoload": {
         "psr-4": {
