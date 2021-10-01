@@ -63,6 +63,38 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                     ]
                 ),
             ),
+            new Node\Stmt\If_(
+                cond: new Node\Expr\FuncCall(
+                    name: new Node\Name('file_exists'),
+                    args: [
+                        new Node\Arg(
+                            new Node\Expr\BinaryOp\Concat(
+                                new Node\Scalar\MagicConst\Dir(),
+                                new Node\Scalar\String_('/container.php')
+                            ),
+                        )
+                    ]
+                ),
+                subNodes: [
+                    'stmts' => [
+                        new Node\Stmt\Expression(
+                            new Node\Expr\Include_(
+                                new Node\Expr\BinaryOp\Concat(
+                                    new Node\Scalar\MagicConst\Dir(),
+                                    new Node\Scalar\String_('/container.php')
+                                ),
+                                Node\Expr\Include_::TYPE_REQUIRE
+                            ),
+                        ),
+                    ]
+                ]
+            ),
+            new Node\Stmt\Expression(
+                new Node\Expr\MethodCall(
+                    var: $builder->getNode(),
+                    name: 'run'
+                ),
+            )
         ];
     }
 }
