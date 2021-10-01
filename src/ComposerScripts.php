@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
@@ -65,6 +67,6 @@ final class ComposerScripts
             $packages->append($package);
         }
 
-        file_put_contents('.etl_plugins.php', $packages);
+        file_put_contents('.gyro.php', $packages);
     }
 }

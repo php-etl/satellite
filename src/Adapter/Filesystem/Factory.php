@@ -6,9 +6,24 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Contract\Configurator\Adapter;
+use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 
+#[Adapter(name: "filesystem")]
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
+    private Configuration $configuration;
+
+    public function __construct()
+    {
+        $this->configuration = new Configuration();
+    }
+
+    public function configuration(): AdapterConfigurationInterface
+    {
+        return $this->configuration;
+    }
+
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);

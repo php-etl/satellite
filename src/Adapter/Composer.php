@@ -82,7 +82,6 @@ final class Composer
             'composer',
             'install',
             '--prefer-dist',
-            '--no-suggest',
             '--no-progress',
             '--prefer-stable',
             '--sort-packages',

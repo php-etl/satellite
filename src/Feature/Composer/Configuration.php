@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Composer;
 
+use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements FeatureConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {

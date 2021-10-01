@@ -27,16 +27,27 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         return new \ArrayIterator($this->packages);
     }
 
-    public function formatPluginInstance(): iterable
+    public function formatPluginInstance(): \Generator
     {
         /** @var Package $package */
         foreach ($this as $package) {
-            yield 'new ' . $package->getExtra()['satellite']['class'] . '()';
+            yield <<<PHP
+                fn (ExpressionLanguage \$interpreter) => new {$package->getExtra()['satellite']['class']}(\$interpreter)
+                PHP;
         }
     }
 
     public function __toString()
     {
-        return "<?php return [\n    " . implode(",\n    ", iterator_to_array($this->formatPluginInstance())) . "\n];";
+        return sprintf(
+            <<<PHP
+            <?php declare(strict_types=1);
+            use \\Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage;
+            return new \Kiboko\Component\Satellite\Service(
+                %s
+            );
+            PHP,
+            implode(",\n".str_pad('', 4), iterator_to_array($this->formatPluginInstance()))
+        );
     }
 }

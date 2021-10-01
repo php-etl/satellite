@@ -4,25 +4,65 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
-use Kiboko\Plugin\Akeneo;
-use Kiboko\Plugin\Sylius;
-use Kiboko\Plugin\FastMap;
-use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\SQL;
-use Kiboko\Plugin\Spreadsheet;
-use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements Satellite\NamedConfigurationInterface
+final class Configuration implements Configurator\RuntimeConfigurationInterface
 {
-    public function getName(): string
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
+    private iterable $plugins = [];
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
+    private iterable $features = [];
+
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
-        return 'pipeline';
+        $this->plugins[$name] = $plugin;
+
+        return $this;
+    }
+
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
+
+        return $this;
+    }
+
+    public function getStepsTreeBuilder(): TreeBuilder
+    {
+        $builder = new TreeBuilder('steps');
+
+        /** @phpstan-ignore-next-line */
+        $builder->getRootNode()
+            ->requiresAtLeastOneElement()
+            ->cannotBeEmpty()
+            ->isRequired()
+            ->fixXmlConfig('step')
+            ->validate()
+                ->ifTrue(function ($value) {
+                    return 1 <= array_reduce(
+                        array_keys($this->plugins),
+                        fn (int $count, string $plugin)
+                            => array_key_exists($plugin, $value) ? $count + 1 : $count,
+                        0
+                    );
+                })
+                ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
+            ->end();
+
+        $node = $builder->getRootNode()->arrayPrototype();
+
+        $this
+            ->applyPlugins($node)
+            ->applyFeatures($node);
+
+        return $builder;
     }
 
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder($this->getName());
+        $builder = new TreeBuilder('pipeline');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
@@ -31,51 +71,27 @@ final class Configuration implements Satellite\NamedConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('name')->end()
-                ->arrayNode('steps')
-                    ->requiresAtLeastOneElement()
-                    ->cannotBeEmpty()
-                    ->isRequired()
-                    ->fixXmlConfig('step')
-                    ->validate()
-                        ->ifTrue(function ($value) {
-                            return 1 <= count(array_filter([
-                                array_key_exists('akeneo', $value),
-                                array_key_exists('sylius', $value),
-                                array_key_exists('csv', $value),
-                                array_key_exists('spreadsheet', $value),
-                                array_key_exists('fastmap', $value),
-                                array_key_exists('api', $value),
-                                array_key_exists('custom', $value),
-                                array_key_exists('stream', $value),
-                                array_key_exists('sftp', $value),
-                                array_key_exists('ftp', $value),
-                                array_key_exists('batch', $value),
-                                array_key_exists('sql', $value),
-                            ]));
-                        })
-                        ->thenInvalid('You should only specify one plugin between "akeneo", "sylius", "csv", "spreadsheet", "fastmap", "api", "custom", "stream", "sftp", "ftp", "sql" and "batch".')
-                    ->end()
-                    ->arrayPrototype()
-                        // Plugins
-                        ->append((new Akeneo\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Sylius\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new CSV\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new SQL\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Spreadsheet\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new FastMap\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Custom\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Stream\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\SFTP\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\FTP\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Plugin\Batching\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        // Flow features
-                        ->append((new Satellite\Feature\Logger\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Feature\State\Configuration())->getConfigTreeBuilder()->getRootNode())
-                        ->append((new Satellite\Feature\Rejection\Configuration())->getConfigTreeBuilder()->getRootNode())
-                    ->end()
-                ->end()
+                ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end();
 
         return $builder;
+    }
+
+    private function applyPlugins(ArrayNodeDefinition $node): self
+    {
+        foreach ($this->plugins as $plugin) {
+            $node->append($plugin->getConfigTreeBuilder()->getRootNode());
+        }
+
+        return $this;
+    }
+
+    private function applyFeatures(ArrayNodeDefinition $node): self
+    {
+        foreach ($this->features as $feature) {
+            $node->append($feature->getConfigTreeBuilder()->getRootNode());
+        }
+
+        return $this;
     }
 }

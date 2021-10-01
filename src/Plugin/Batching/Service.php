@@ -17,6 +17,13 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
+#[Configurator\Pipeline(
+    name: "batch",
+    steps: [
+        "merge" => "loader",
+        "fork" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;

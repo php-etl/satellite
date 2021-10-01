@@ -23,8 +23,8 @@
          verbose="true">
   <coverage/>
   <testsuites>
-    <testsuite name="unit">
-      <directory>tests/unit/</directory>
+    <testsuite name="schema">
+      <directory>tests/schema/</directory>
       <exclude>vendor/</exclude>
     </testsuite>
     <testsuite name="functional">

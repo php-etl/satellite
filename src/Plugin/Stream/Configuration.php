@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Stream;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Kiboko\Contract\Configurator\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration implements PluginConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
