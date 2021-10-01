@@ -70,14 +70,21 @@ final class Service implements Configurator\FactoryInterface
             }
 
             foreach ($config['destinations'] as $destination) {
-                if (array_key_exists('rabbitmq', $destination)) {
-                    $factory = new State\Factory\RabbitMQFactory($this->interpreter, $this->stepName, $this->stepCode);
+                if (array_key_exists('service', $destination)) {
+                    $factory = new State\Factory\DependencyInjection($this->interpreter, $this->stepName, $this->stepCode);
+                    $dependencyInjectionRepository = $factory->compile($destination['service']);
 
-                    $rabbitmqRepository = $factory->compile($destination['rabbitmq']);
-
-                    $repository->merge($rabbitmqRepository);
-                    $builder->withState($rabbitmqRepository->getBuilder()->getNode());
+                    $builder->withState($dependencyInjectionRepository->getBuilder()->getNode());
                 }
+
+//                if (array_key_exists('rabbitmq', $destination)) {
+//                    $factory = new State\Factory\RabbitMQFactory($this->interpreter, $this->stepName, $this->stepCode);
+//
+//                    $rabbitmqRepository = $factory->compile($destination['rabbitmq']);
+//
+//                    $repository->merge($rabbitmqRepository);
+//                    $builder->withState($rabbitmqRepository->getBuilder()->getNode());
+//                }
             }
 
             return $repository;

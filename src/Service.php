@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

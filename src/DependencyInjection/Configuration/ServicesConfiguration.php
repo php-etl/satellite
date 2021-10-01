@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
+namespace Kiboko\Component\Satellite\DependencyInjection\Configuration;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -43,13 +43,17 @@ final class ServicesConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('class')->isRequired()->end()
                     ->arrayNode('arguments')
-                        ->useAttributeAsKey('key')
+//                        ->useAttributeAsKey('key')
                         ->scalarPrototype()->end()
+                        ->variablePrototype()->end()
                     ->end()
                     ->arrayNode('calls')
                         ->arrayPrototype()
                             ->variablePrototype()->end()
                         ->end()
+                    ->end()
+                    ->booleanNode('public')
+                        ->defaultFalse()
                     ->end()
                 ->end()
             ->end();

@@ -20,7 +20,18 @@ final class Configuration implements FeatureConfigurationInterface
                     ->cannotBeEmpty()
                     ->ignoreExtraKeys()
                     ->arrayPrototype()
+                        ->beforeNormalization()
+                            ->always(function ($data) {
+                                $config = [];
+                                if (is_string($data) && $data !== '' && str_starts_with($data, '@')) {
+                                    $config['service']['use'] = substr($data, 1);
+                                }
+
+                                return $config;
+                            })
+                        ->end()
                         ->children()
+                            ->append((new Configuration\ServiceConfiguration())->getConfigTreeBuilder()->getRootNode())
                             ->append((new Configuration\RedisConfiguration())->getConfigTreeBuilder()->getRootNode())
                             ->append((new Configuration\MemcachedConfiguration())->getConfigTreeBuilder()->getRootNode())
                             ->append((new Configuration\RabbitMQConfiguration())->getConfigTreeBuilder()->getRootNode())
