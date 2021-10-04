@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 
+use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -53,6 +54,11 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
 
         $node = $builder->getRootNode()->arrayPrototype();
 
+        $node
+            ->children()
+                ->scalarNode('name')->end()
+            ->end();
+
         $this
             ->applyPlugins($node)
             ->applyFeatures($node);
@@ -67,6 +73,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
+                ->append((new ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
                 ->arrayNode('expression_language')
                     ->scalarPrototype()->end()
                 ->end()

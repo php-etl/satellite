@@ -19,19 +19,8 @@ final class Transformer implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->append((new ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
                 ->scalarNode('use')
                     ->isRequired()
-                ->end()
-                ->arrayNode('parameters')
-                    ->useAttributeAsKey('keyparam')
-                    ->scalarPrototype()
-                        ->cannotBeEmpty()
-                        ->validate()
-                            ->ifTrue(isExpression())
-                            ->then(asExpression())
-                        ->end()
-                    ->end()
                 ->end()
             ->end();
 

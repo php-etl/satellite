@@ -54,6 +54,10 @@ final class SatelliteDependencyInjection
                            }
                        }
 
+                       if (is_int($argument)) {
+                           $definition->addArgument($argument);
+                       }
+
                        if (is_array($argument)) {
                            $definition->addArgument($argument);
                        }
@@ -64,8 +68,8 @@ final class SatelliteDependencyInjection
                    && is_array($service['calls'])
                    && count($service['calls']) > 0
                ) {
-                   foreach ($service['calls'] as $key => [$method, $arguments]) {
-                       $definition->addMethodCall($method, array_map(function ($argument) {
+                   foreach ($service['calls'] as $key => $arguments) {
+                       $definition->addMethodCall($key, array_map(function ($argument) {
                            if (preg_match('/^@[^@]/', $argument)) {
                                return new Reference(\substr($argument, 1));
                            }
@@ -81,8 +85,6 @@ final class SatelliteDependencyInjection
                $definition->setPublic($service['public']);
            }
        }
-
-//       $container->getDefinition($config['use'])->setPublic(true);
 
        $container->compile();
        
