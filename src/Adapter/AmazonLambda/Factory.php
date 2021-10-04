@@ -4,10 +4,15 @@ namespace Kiboko\Component\Satellite\Adapter\AmazonLambda;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
-use Kiboko\Contract\Packaging as PackagingContract;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
+    public function configuration(): ConfigurationInterface
+    {
+        return new Configuration();
+    }
+
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);

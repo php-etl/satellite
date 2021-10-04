@@ -6,7 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter;
 
 use Kiboko\Component\Satellite;
 
-final class Factory implements FactoryInterface
+final class AdapterChoice
 {
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {

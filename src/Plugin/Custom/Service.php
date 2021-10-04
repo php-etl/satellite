@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
-use Kiboko\Component\Satellite\Plugin\Custom\Factory\Loader;
+use Kiboko\Component\Satellite\Plugin\Custom;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+#[Configurator\Pipeline(
+    name: "custom",
+    steps: [
+        "extractor" => "extractor",
+        "transformer" => "transformer",
+        "loader" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
@@ -68,13 +76,13 @@ final class Service implements Configurator\FactoryInterface
         }
 
         if (array_key_exists('extractor', $config)) {
-            $extractorFactory = new Loader($this->interpreter);
+            $extractorFactory = new Custom\Factory\Extractor($this->interpreter);
             return $extractorFactory->compile($config['extractor']);
         } elseif (array_key_exists('transformer', $config)) {
-            $transformerFactory = new Loader($this->interpreter);
+            $transformerFactory = new Custom\Factory\Transformer($this->interpreter);
             return $transformerFactory->compile($config['transformer']);
         } elseif (array_key_exists('loader', $config)) {
-            $loaderFactory = new Loader($this->interpreter);
+            $loaderFactory = new Custom\Factory\Loader($this->interpreter);
             return $loaderFactory->compile($config['loader']);
         }
 

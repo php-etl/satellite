@@ -7,7 +7,8 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class Loader implements ConfigurationInterface
 {
@@ -19,14 +20,16 @@ final class Loader implements ConfigurationInterface
         $builder->getRootNode()
             ->children()
                 ->append((new ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
-                ->scalarNode('use')->end()
+                ->scalarNode('use')
+                    ->isRequired()
+                ->end()
                 ->arrayNode('parameters')
                     ->useAttributeAsKey('keyparam')
                     ->scalarPrototype()
                         ->cannotBeEmpty()
                         ->validate()
-                            ->ifTrue(fn ($data) => is_string($data) && $data !== '' && str_starts_with($data, '@='))
-                            ->then(fn ($data) => new Expression(substr($data, 2)))
+                            ->ifTrue(isExpression())
+                            ->then(asExpression())
                         ->end()
                     ->end()
                 ->end()

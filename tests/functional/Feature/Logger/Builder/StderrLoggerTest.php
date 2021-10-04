@@ -2,14 +2,14 @@
 
 namespace functional\Kiboko\Component\Satellite\Feature\Logger\Builder;
 
-use Kiboko\Component\PHPUnitExtension\BuilderAssertTrait;
+use Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
 use Kiboko\Component\Satellite\Feature\Logger\Builder;
 use PHPUnit\Framework\TestCase;
 use Vfs\FileSystem;
 
 final class StderrLoggerTest extends TestCase
 {
-    use BuilderAssertTrait;
+    use PipelineBuilderAssertTrait;
 
     private ?FileSystem $fs = null;
 

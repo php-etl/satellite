@@ -4,9 +4,7 @@
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Contract\Configurator;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
@@ -23,7 +21,6 @@ class Loader implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
         ?ExpressionLanguage $interpreter = null

@@ -9,6 +9,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 
+#[Configurator\Pipeline(
+    name: "stream",
+    steps: [
+        "loader" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;

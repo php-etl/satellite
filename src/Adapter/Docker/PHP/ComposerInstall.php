@@ -13,7 +13,7 @@ final class ComposerInstall implements Dockerfile\LayerInterface
         return (string) new Dockerfile\Run(
             <<<RUN
             set -ex \\
-                && composer install --prefer-dist --no-suggest --no-progress --prefer-stable --sort-packages --optimize-autoloader --no-dev
+                && composer install --prefer-dist --no-progress --prefer-stable --sort-packages --optimize-autoloader --no-dev
             RUN
         );
     }

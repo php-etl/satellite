@@ -7,37 +7,71 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
 use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
 use Kiboko\Component\Satellite\Feature;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    /** @var iterable<NamedConfigurationInterface> */
-    private iterable $adapters;
-    /** @var iterable<NamedConfigurationInterface> */
-    private iterable $runtimes;
+    /** @var array<string, Configurator\AdapterConfigurationInterface> */
+    private array $adapters = [];
+    /** @var array<string, Configurator\RuntimeConfigurationInterface> */
+    private array $runtimes = [];
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
+    private array $plugins = [];
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
+    private array $features = [];
     private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
     {
-        $this->adapters = [];
-        $this->runtimes = [];
         $this->backwardCompatibilityConfiguration = new BackwardCompatibilityConfiguration();
     }
 
-    public function addAdapters(NamedConfigurationInterface ...$adapters): self
+    public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
-        array_push($this->adapters, ...$adapters);
-        $this->backwardCompatibilityConfiguration->addAdapters(...$adapters);
+        $this->adapters[$name] = $adapter;
+        $this->backwardCompatibilityConfiguration->addAdapter($name, $adapter);
 
         return $this;
     }
 
-    public function addRuntimes(NamedConfigurationInterface ...$runtimes): self
+    public function addRuntime(string $name, Configurator\RuntimeConfigurationInterface $runtime): self
     {
-        array_push($this->runtimes, ...$runtimes);
-        $this->backwardCompatibilityConfiguration->addRuntimes(...$runtimes);
+        $this->runtimes[$name] = $runtime;
+        $this->backwardCompatibilityConfiguration->addRuntime($name, $runtime);
+
+        foreach ($this->features as $name => $feature) {
+            $runtime->addFeature($name, $feature);
+        }
+        foreach ($this->plugins as $name => $plugin) {
+            $runtime->addPlugin($name, $plugin);
+        }
+
+        return $this;
+    }
+
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    {
+        $this->plugins[$name] = $plugin;
+        $this->backwardCompatibilityConfiguration->addPlugin($name, $plugin);
+
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addPlugin($name, $plugin);
+        }
+
+        return $this;
+    }
+
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
+        $this->backwardCompatibilityConfiguration->addFeature($name, $feature);
+
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addFeature($name, $feature);
+        }
 
         return $this;
     }
@@ -108,16 +142,10 @@ final class Configuration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->adapters
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (NamedConfigurationInterface $config) => $config->getName(),
-                    $this->runtimes
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->scalarNode('label')

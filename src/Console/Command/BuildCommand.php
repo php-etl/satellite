@@ -22,8 +22,6 @@ final class BuildCommand extends Console\Command\Command
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $service = new Satellite\Service();
-
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,
@@ -48,6 +46,13 @@ final class BuildCommand extends Console\Command\Command
             }
         }
 
+        $directory = getcwd();
+        if (file_exists($directory . '/.gyro.php')) {
+            $service = require $directory . '/.gyro.php';
+        } else {
+            $service = new Satellite\Service();
+        }
+
         try {
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
@@ -66,8 +71,8 @@ final class BuildCommand extends Console\Command\Command
                 '============',
             ]);
 
-            $factory = new Satellite\Runtime\Factory(
-                new Satellite\Adapter\Factory(),
+            $factory = new Satellite\Runtime\RuntimeChoice(
+                new Satellite\Adapter\AdapterChoice(),
                 new class() extends Log\AbstractLogger {
                     public function log($level, $message, array $context = array())
                     {
@@ -87,8 +92,8 @@ final class BuildCommand extends Console\Command\Command
                     '============',
                 ]);
 
-                $factory = new Satellite\Runtime\Factory(
-                    new Satellite\Adapter\Factory(),
+                $factory = new Satellite\Runtime\RuntimeChoice(
+                    new Satellite\Adapter\AdapterChoice(),
                     new class() extends Log\AbstractLogger {
                         public function log($level, $message, array $context = array())
                         {

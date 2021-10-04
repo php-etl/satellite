@@ -5,33 +5,48 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Configuration;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Plugin;
+use Kiboko\Component\Satellite\Feature;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
-    /** @var iterable<Satellite\NamedConfigurationInterface> */
-    private iterable $adapters;
-    /** @var iterable<Satellite\NamedConfigurationInterface> */
-    private iterable $runtimes;
+    /** @var array<string, Configurator\AdapterConfigurationInterface> */
+    private array $adapters = [];
+    /** @var array<string, Configurator\RuntimeConfigurationInterface> */
+    private array $runtimes = [];
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
+    private array $plugins = [];
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
+    private array $features = [];
 
-    public function __construct()
+    public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
-        $this->adapters = [];
-        $this->runtimes = [];
-    }
-
-    public function addAdapters(Satellite\NamedConfigurationInterface ...$adapters): self
-    {
-        array_push($this->adapters, ...$adapters);
+        $this->adapters[$name] = $adapter;
 
         return $this;
     }
 
-    public function addRuntimes(Satellite\NamedConfigurationInterface ...$runtimes): self
+    public function addRuntime(string $name, Configurator\RuntimeConfigurationInterface $runtime): self
     {
-        array_push($this->runtimes, ...$runtimes);
+        $this->runtimes[$name] = $runtime;
+
+        return $this;
+    }
+
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    {
+        $this->plugins[$name] = $plugin;
+
+        return $this;
+    }
+
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
 
         return $this;
     }
@@ -77,16 +92,10 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
-                    $this->adapters
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_map(
-                    fn (Satellite\NamedConfigurationInterface $config) => $config->getName(),
-                    $this->runtimes
-                )))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())

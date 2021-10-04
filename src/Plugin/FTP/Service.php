@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP;
 
-use Kiboko\Component\Satellite\Plugin\FTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+#[Configurator\Pipeline(
+    name: "ftp",
+    dependencies: ["ext-ftp"],
+    steps: [
+        "loader" => "loader",
+    ],
+)]
 final class Service implements Configurator\FactoryInterface
 {
     private Processor $processor;
@@ -70,10 +76,7 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('loader', $config)) {
             $loaderFactory = new Factory\Loader($this->interpreter);
 
-            $loaderCompilation = $loaderFactory->compile($config);
-            $loaderBuilder = $loaderCompilation->getBuilder();
-
-            return new Repository($loaderBuilder);
+            return $loaderFactory->compile($config);
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');

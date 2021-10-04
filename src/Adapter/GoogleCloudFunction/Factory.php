@@ -4,9 +4,15 @@ namespace Kiboko\Component\Satellite\Adapter\GoogleCloudFunction;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
+    public function configuration(): ConfigurationInterface
+    {
+        return new Configuration();
+    }
+
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);
