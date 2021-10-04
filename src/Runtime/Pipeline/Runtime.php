@@ -10,6 +10,7 @@ use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
+use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
@@ -24,9 +25,8 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         return $this->filename;
     }
 
-    public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
+    public function prepare(Configurator\FactoryInterface $service, Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
-        $service = new Satellite\Service();
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
@@ -63,38 +63,6 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                     ]
                 ),
             ),
-            new Node\Stmt\If_(
-                cond: new Node\Expr\FuncCall(
-                    name: new Node\Name('file_exists'),
-                    args: [
-                        new Node\Arg(
-                            new Node\Expr\BinaryOp\Concat(
-                                new Node\Scalar\MagicConst\Dir(),
-                                new Node\Scalar\String_('/container.php')
-                            ),
-                        )
-                    ]
-                ),
-                subNodes: [
-                    'stmts' => [
-                        new Node\Stmt\Expression(
-                            new Node\Expr\Include_(
-                                new Node\Expr\BinaryOp\Concat(
-                                    new Node\Scalar\MagicConst\Dir(),
-                                    new Node\Scalar\String_('/container.php')
-                                ),
-                                Node\Expr\Include_::TYPE_REQUIRE
-                            ),
-                        ),
-                    ]
-                ]
-            ),
-            new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    var: $builder->getNode(),
-                    name: 'run'
-                ),
-            )
         ];
     }
 }

@@ -8,12 +8,6 @@ use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Contract\Configurator;
-use Kiboko\Plugin\CSV;
-use Kiboko\Plugin\Akeneo;
-use Kiboko\Plugin\Sylius;
-use Kiboko\Plugin\FastMap;
-use Kiboko\Plugin\Spreadsheet;
-use Kiboko\Plugin\SQL;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -42,7 +36,8 @@ final class Service implements Configurator\FactoryInterface
     /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
     public function __construct(
         callable ...$factories
-    ) {
+    )
+    {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
         $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
@@ -59,14 +54,14 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\Workflow\Factory(),
             )
             ->registerFactories(
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
                 ...$factories
             );
     }
@@ -106,10 +101,11 @@ final class Service implements Configurator\FactoryInterface
 
     /** @param Configurator\FactoryInterface $plugin */
     private function addPipeline(
-        Configurator\Pipeline $attribute,
+        Configurator\Pipeline         $attribute,
         Configurator\FactoryInterface $plugin,
-        ExpressionLanguage $interpreter,
-    ): self {
+        ExpressionLanguage            $interpreter,
+    ): self
+    {
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
@@ -325,46 +321,25 @@ final class Service implements Configurator\FactoryInterface
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
 
-                    \$pipeline(\$runtime)->run();
+                    \$pipeline(\$runtime);
+                    \$runtime->run();
                     PHP
                 )
             )
         );
 
-        if (!array_key_exists('services', $config['pipeline'])) {
-            $repository->addFiles(
-                new Packaging\File(
-                    'runtime.php',
-                    new Packaging\Asset\AST(
-                        new Node\Stmt\Expression(
-                            (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\InMemory(
+                    '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint(
+                        (new Runtime\Runtime\Runtime($config))->build(
+                            new Satellite\Builder\Pipeline\ConsoleRuntime()
                         )
                     )
                 )
-            );
-        } else {
-            $repository->addFiles(
-                new Packaging\File(
-                    'runtime.php',
-                    new Packaging\Asset\InMemory(
-                        '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint([
-                            new Node\Stmt\Expression(
-                                new Node\Expr\Include_(
-                                    expr: new Node\Expr\BinaryOp\Concat(
-                                        left: new Node\Scalar\MagicConst\Dir(),
-                                        right: new Node\Scalar\String_('container.php')
-                                    ),
-                                    type: Node\Expr\Include_::TYPE_REQUIRE
-                                )
-                            ),
-                            new Node\Stmt\Expression(
-                                (new Satellite\Builder\Pipeline\ConsoleRuntimeDependencyInjection())->getNode()
-                            )
-                        ])
-                    )
-                )
-            );
-        }
+            )
+        );
 
         if (array_key_exists('services', $config['pipeline'])) {
             $container = new SatelliteDependencyInjection();

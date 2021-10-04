@@ -14,10 +14,6 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
-    public function __construct(private Node\Expr $service)
-    {
-    }
-
     public function withService(Node\Expr $service): self
     {
         $this->service = $service;
@@ -49,13 +45,14 @@ final class Loader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\MethodCall(
-            var: new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('ProjectServiceContainer')
+            var: new Node\Expr\MethodCall(
+                var: new Node\Expr\Variable('runtime'),
+                name: new Node\Name('container')
             ),
-            name: new Node\Identifier('get'),
+            name: new Node\Name('get'),
             args: [
                 new Node\Arg(
-                    $this->service
+                    value: $this->service
                 )
             ]
         );

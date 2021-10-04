@@ -7,7 +7,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class ServicesConfiguration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('services');
 
@@ -44,10 +44,10 @@ final class ServicesConfiguration implements ConfigurationInterface
                     ->scalarNode('class')->isRequired()->end()
                     ->arrayNode('arguments')
 //                        ->useAttributeAsKey('key')
-                        ->scalarPrototype()->end()
                         ->variablePrototype()->end()
                     ->end()
                     ->arrayNode('calls')
+                        ->useAttributeAsKey('key')
                         ->arrayPrototype()
                             ->variablePrototype()->end()
                         ->end()

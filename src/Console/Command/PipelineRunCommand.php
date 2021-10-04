@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,21 +45,8 @@ final class PipelineRunCommand extends Console\Command\Command
         $autoload = include 'vendor/autoload.php';
         $autoload->register();
 
-        $runtime = new Satellite\Console\PipelineConsoleRuntime(
-            $output,
-            new \Kiboko\Component\Pipeline\Pipeline(
-                new \Kiboko\Component\Pipeline\PipelineRunner(
-                    new \Psr\Log\NullLogger()
-                )
-            ),
-        );
-
-        /** @var callable(runtime: PipelineRuntimeInterface): \Runtime $pipeline */
-        $pipeline = include 'pipeline.php';
-
         $start = microtime(true);
-        $pipeline($runtime);
-        $runtime->run();
+        include 'main.php';
         $end = microtime(true);
 
         $autoload->unregister();
