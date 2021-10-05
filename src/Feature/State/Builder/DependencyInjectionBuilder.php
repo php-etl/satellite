@@ -9,12 +9,19 @@ use function Kiboko\Component\SatelliteToolbox\AST\variable;
 
 class DependencyInjectionBuilder implements Builder
 {
+    private ?Node\Expr $stepCode = null;
+    private ?Node\Expr $stepName = null;
+
     public function __construct(
         private Node\Expr $service,
-        private Node\Expr $stepCode,
-        private Node\Expr $stepLabel,
-    )
+    ) {}
+
+    public function withStepInfo(Node\Expr $stepName, Node\Expr $stepCode): self
     {
+        $this->stepName = $stepName;
+        $this->stepCode = $stepCode;
+
+        return $this;
     }
 
     public function getNode(): Node\Expr
@@ -38,7 +45,7 @@ class DependencyInjectionBuilder implements Builder
                     value: $this->stepCode
                 ),
                 new Node\Arg(
-                    value: $this->stepLabel
+                    value: $this->stepName
                 )
             ]
         );

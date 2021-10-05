@@ -7,8 +7,9 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Builder;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
-final class Transformer implements StepBuilderInterface
+final class CustomBuilder implements StepBuilderInterface
 {
+    private ?Node\Expr $service;
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
@@ -44,13 +45,14 @@ final class Transformer implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\MethodCall(
-            var: new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('ProjectServiceContainer')
+            var: new Node\Expr\MethodCall(
+                var: new Node\Expr\Variable('runtime'),
+                name: new Node\Name('container')
             ),
-            name: new Node\Identifier('get'),
+            name: new Node\Name('get'),
             args: [
                 new Node\Arg(
-                    $this->service
+                    value: $this->service
                 )
             ]
         );

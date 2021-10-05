@@ -255,6 +255,20 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
+        if (array_key_exists('services', $config['workflow']) && count($config['workflow']['services']) > 0) {
+            $container = new SatelliteDependencyInjection();
+
+            $dumper = new PhpDumper($container($config['workflow']));
+            $repository->addFiles(
+                new Packaging\File(
+                    'container.php',
+                    new Packaging\Asset\InMemory(
+                        $dumper->dump()
+                    )
+                ),
+            );
+        }
+
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipeline($job);
@@ -333,6 +347,20 @@ final class Service implements Configurator\FactoryInterface
                 )
             )
         );
+
+        if (array_key_exists('services', $config['pipeline'])) {
+            $container = new SatelliteDependencyInjection();
+
+            $dumper = new PhpDumper($container($config['pipeline']));
+            $repository->addFiles(
+                new Packaging\File(
+                    'container.php',
+                    new Packaging\Asset\InMemory(
+                        $dumper->dump()
+                    )
+                ),
+            );
+        }
 
         if (array_key_exists('expression_language', $config['pipeline'])
             && is_array($config['pipeline']['expression_language'])
