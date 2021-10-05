@@ -6,10 +6,12 @@ namespace Kiboko\Component\Satellite\Runtime;
 
 use Kiboko\Component\Satellite;
 use Psr\Log\LoggerInterface;
+use Kiboko\Contract\Configurator\FactoryInterface;
 
 final class RuntimeChoice
 {
     public function __construct(
+        private FactoryInterface $service,
         private Satellite\Adapter\AdapterChoice $adapterChoice,
         private LoggerInterface $logger,
     ) {
@@ -33,7 +35,7 @@ final class RuntimeChoice
 
         $runtime = $factory($configuration);
 
-        $runtime->prepare($satellite, $this->logger);
+        $runtime->prepare($this->service, $satellite, $this->logger);
 
         $satellite->build($this->logger);
 

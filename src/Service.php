@@ -291,8 +291,8 @@ final class Service implements Configurator\FactoryInterface
         $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $repository->addPackages(
-            'php-etl/pipeline-contracts:~0.2.0@dev',
-            'php-etl/pipeline:~0.3.0@dev',
+            'php-etl/pipeline-contracts:~0.3.0@dev',
+            'php-etl/pipeline:~0.4.0@dev',
             'psr/log:^1.1',
             'monolog/monolog',
             'symfony/console:^5.2',
@@ -326,7 +326,7 @@ final class Service implements Configurator\FactoryInterface
             new Packaging\File(
                 'runtime.php',
                 new Packaging\Asset\AST(
-                    new Node\Stmt\Expression(
+                    new Node\Stmt\Return_(
                         (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
                     )
                 )

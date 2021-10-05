@@ -72,6 +72,7 @@ final class BuildCommand extends Console\Command\Command
             ]);
 
             $factory = new Satellite\Runtime\RuntimeChoice(
+                $service,
                 new Satellite\Adapter\AdapterChoice(),
                 new class() extends Log\AbstractLogger {
                     public function log($level, $message, array $context = array())
@@ -93,6 +94,7 @@ final class BuildCommand extends Console\Command\Command
                 ]);
 
                 $factory = new Satellite\Runtime\RuntimeChoice(
+                    $service,
                     new Satellite\Adapter\AdapterChoice(),
                     new class() extends Log\AbstractLogger {
                         public function log($level, $message, array $context = array())
