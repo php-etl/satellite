@@ -9,6 +9,7 @@ use Kiboko\Component\Packaging;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
+use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
@@ -21,9 +22,8 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         return $this->filename;
     }
 
-    public function prepare(Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
+    public function prepare(Configurator\FactoryInterface $service,Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
-        $service = new Satellite\Service();
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
