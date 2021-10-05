@@ -21,10 +21,7 @@ class DependencyInjection implements FactoryInterface
 
     public function __construct(
         ExpressionLanguage $interpreter = null,
-        private ?string $stepName = null,
-        private ?string $stepCode = null
-    )
-    {
+    ) {
         $this->processor = new Processor();
         $this->configuration = new Rejection\Configuration\RabbitMQConfiguration();
         $this->interpreter = $interpreter ?? new ExpressionLanguage();
@@ -56,12 +53,10 @@ class DependencyInjection implements FactoryInterface
         return false;
     }
 
-    public function compile(array $config): RepositoryInterface
+    public function compile(array $config): Repository\DependencyInjectionRepository
     {
         $builder = new State\Builder\DependencyInjectionBuilder(
             service: compileValueWhenExpression($this->interpreter, $config['use']),
-            stepCode: compileValueWhenExpression($this->interpreter, $this->stepCode),
-            stepLabel: compileValueWhenExpression($this->interpreter, $this->stepName)
         );
 
         return new Repository\DependencyInjectionRepository($builder);

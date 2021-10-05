@@ -259,6 +259,20 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
+        if (array_key_exists('services', $config['workflow']) && count($config['workflow']['services']) > 0) {
+            $container = new SatelliteDependencyInjection();
+
+            $dumper = new PhpDumper($container($config['workflow']));
+            $repository->addFiles(
+                new Packaging\File(
+                    'container.php',
+                    new Packaging\Asset\InMemory(
+                        $dumper->dump()
+                    )
+                ),
+            );
+        }
+
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipeline($job);
@@ -321,8 +335,7 @@ final class Service implements Configurator\FactoryInterface
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
 
-                    \$pipeline(\$runtime);
-                    \$runtime->run();
+                    \$pipeline(\$runtime)->run();
                     PHP
                 )
             )
@@ -341,7 +354,7 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        if (array_key_exists('services', $config['pipeline'])) {
+        if (array_key_exists('services', $config['pipeline']) && count($config['pipeline']['services']) > 0) {
             $container = new SatelliteDependencyInjection();
 
             $dumper = new PhpDumper($container($config['pipeline']));

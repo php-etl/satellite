@@ -76,13 +76,13 @@ final class Service implements Configurator\FactoryInterface
         }
 
         if (array_key_exists('extractor', $config)) {
-            $extractorFactory = new Custom\Factory\Extractor($this->interpreter);
+            $extractorFactory = new Custom\Factory\CustomFactory($this->interpreter);
             return $extractorFactory->compile($config['extractor']);
         } elseif (array_key_exists('transformer', $config)) {
-            $transformerFactory = new Custom\Factory\Transformer($this->interpreter);
+            $transformerFactory = new Custom\Factory\CustomFactory($this->interpreter);
             return $transformerFactory->compile($config['transformer']);
         } elseif (array_key_exists('loader', $config)) {
-            $loaderFactory = new Custom\Factory\Loader($this->interpreter);
+            $loaderFactory = new Custom\Factory\CustomFactory($this->interpreter);
             return $loaderFactory->compile($config['loader']);
         }
 

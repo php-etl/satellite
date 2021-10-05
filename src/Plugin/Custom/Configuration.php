@@ -9,12 +9,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements PluginConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $extractor = new Configuration\Extractor();
-        $transformer = new Configuration\Transformer();
-        $loader = new Configuration\Loader();
-
         $builder = new TreeBuilder('custom');
 
         /** @phpstan-ignore-next-line */
@@ -37,10 +33,15 @@ final class Configuration implements PluginConfigurationInterface
                 })
                 ->thenInvalid('Your configuration should either contain the "loader" or the "transformer" key, not both.')
             ->end()
+            ->beforeNormalization()
+                ->always(function ($data) {
+                    return $data;
+                })
+            ->end()
             ->children()
-                ->append(node: $extractor->getConfigTreeBuilder()->getRootNode())
-                ->append(node: $loader->getConfigTreeBuilder()->getRootNode())
-                ->append(node: $transformer->getConfigTreeBuilder()->getRootNode())
+                ->append(node: (new Configuration\CustomConfiguration('extractor'))->getConfigTreeBuilder()->getRootNode())
+                ->append(node: (new Configuration\CustomConfiguration('transformer'))->getConfigTreeBuilder()->getRootNode())
+                ->append(node: (new Configuration\CustomConfiguration('loader'))->getConfigTreeBuilder()->getRootNode())
             ->end()
         ;
 

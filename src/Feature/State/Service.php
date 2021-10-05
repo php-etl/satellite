@@ -9,6 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 #[Feature(name: "state")]
 final class Service implements Configurator\FactoryInterface
@@ -71,8 +72,13 @@ final class Service implements Configurator\FactoryInterface
 
             foreach ($config['destinations'] as $destination) {
                 if (array_key_exists('service', $destination)) {
-                    $factory = new State\Factory\DependencyInjection($this->interpreter, $this->stepName, $this->stepCode);
+                    $factory = new State\Factory\DependencyInjection($this->interpreter);
                     $dependencyInjectionRepository = $factory->compile($destination['service']);
+
+                    $dependencyInjectionRepository->withStepInfo(
+                        compileValueWhenExpression($this->interpreter, $this->stepName),
+                        compileValueWhenExpression($this->interpreter, $this->stepCode)
+                    );
 
                     $builder->withState($dependencyInjectionRepository->getBuilder()->getNode());
                 }

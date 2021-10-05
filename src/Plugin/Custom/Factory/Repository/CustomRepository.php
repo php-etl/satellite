@@ -7,17 +7,17 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository;
 use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Plugin\Custom;
 
-final class Loader implements Configurator\StepRepositoryInterface
+final class CustomRepository implements Configurator\StepRepositoryInterface
 {
     use RepositoryTrait;
 
-    public function __construct(private Custom\Builder\Loader $builder)
+    public function __construct(private Custom\Builder\CustomBuilder $builder)
     {
         $this->files = [];
         $this->packages = [];
     }
 
-    public function getBuilder(): Custom\Builder\Loader
+    public function getBuilder(): Custom\Builder\CustomBuilder
     {
         return $this->builder;
     }
