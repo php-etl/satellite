@@ -13,6 +13,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\SatelliteToolbox;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use PhpParser\PrettyPrinter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
@@ -34,7 +36,8 @@ final class Service implements Configurator\FactoryInterface
     /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
     public function __construct(
         callable ...$factories
-    ) {
+    )
+    {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
         $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
@@ -51,14 +54,14 @@ final class Service implements Configurator\FactoryInterface
                 new Runtime\Workflow\Factory(),
             )
             ->registerFactories(
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
+                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
                 ...$factories
             );
     }
@@ -98,10 +101,11 @@ final class Service implements Configurator\FactoryInterface
 
     /** @param Configurator\FactoryInterface $plugin */
     private function addPipeline(
-        Configurator\Pipeline $attribute,
+        Configurator\Pipeline         $attribute,
         Configurator\FactoryInterface $plugin,
-        ExpressionLanguage $interpreter,
-    ): self {
+        ExpressionLanguage            $interpreter,
+    ): self
+    {
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
@@ -340,13 +344,29 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'runtime.php',
-                new Packaging\Asset\AST(
-                    new Node\Stmt\Return_(
-                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+                new Packaging\Asset\InMemory(
+                    '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint(
+                        (new Runtime\Runtime\Runtime($config))->build(
+                            new Satellite\Builder\Pipeline\ConsoleRuntime()
+                        )
                     )
                 )
             )
         );
+
+        if (array_key_exists('services', $config['pipeline']) && count($config['pipeline']['services']) > 0) {
+            $container = new SatelliteDependencyInjection();
+
+            $dumper = new PhpDumper($container($config['pipeline']));
+            $repository->addFiles(
+                new Packaging\File(
+                    'container.php',
+                    new Packaging\Asset\InMemory(
+                        $dumper->dump()
+                    )
+                ),
+            );
+        }
 
         if (array_key_exists('services', $config['pipeline'])) {
             $container = new SatelliteDependencyInjection();
