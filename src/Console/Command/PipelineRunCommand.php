@@ -44,10 +44,8 @@ final class PipelineRunCommand extends Console\Command\Command
         $autoload = require 'vendor/autoload.php';
         $autoload->register();
 
-        $container = null;
-        if (file_exists('container.php')) {
-            $container = require 'container.php';
-        }
+        require 'container.php';
+        $container = new \ProjectServiceContainer();
 
         $runtime = new Satellite\Console\PipelineConsoleRuntime(
             $output,

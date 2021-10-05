@@ -235,7 +235,8 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
                     
                     require __DIR__ . '/vendor/autoload.php';
-                    
+                    require __DIR__ . '/container.php';
+                     
                     /** @var WorkflowConsoleRuntime \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
                     
@@ -252,30 +253,28 @@ final class Service implements Configurator\FactoryInterface
             new Packaging\File(
                 'runtime.php',
                 new Packaging\Asset\AST(
-                    new Node\Stmt\Expression(
+                    new Node\Stmt\Return_(
                         (new Satellite\Builder\Workflow\WorkflowRuntime())->getNode()
                     )
                 )
             )
         );
 
-        if (array_key_exists('services', $config['workflow']) && count($config['workflow']['services']) > 0) {
-            $container = new SatelliteDependencyInjection();
+        $container = new SatelliteDependencyInjection();
 
-            $dumper = new PhpDumper($container($config['workflow']));
-            $repository->addFiles(
-                new Packaging\File(
-                    'container.php',
-                    new Packaging\Asset\InMemory(
-                        $dumper->dump()
-                    )
-                ),
-            );
-        }
+        $dumper = new PhpDumper($container($config['workflow']));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
+        );
 
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
-                $pipeline = $this->compilePipeline($job);
+                $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
                 $repository->merge($pipeline);
@@ -299,7 +298,7 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
+    private function compilePipelineJob(array $config): Satellite\Builder\Repository\Pipeline
     {
         $pipeline = new Satellite\Builder\Pipeline(
             new Node\Expr\Variable('runtime'),
@@ -318,6 +317,29 @@ final class Service implements Configurator\FactoryInterface
             'symfony/dependency-injection:^5.2',
         );
 
+        if (array_key_exists('expression_language', $config['pipeline'])
+            && is_array($config['pipeline']['expression_language'])
+            && count($config['pipeline']['expression_language'])
+        ) {
+            foreach ($config['pipeline']['expression_language'] as $provider) {
+                $interpreter->registerProvider(new $provider);
+            }
+        }
+
+        foreach ($config['pipeline']['steps'] as $step) {
+            $plugins = array_intersect_key($this->plugins, $step);
+            foreach ($plugins as $plugin) {
+                $plugin->appendTo($step, $repository);
+            }
+        }
+
+        return $repository;
+    }
+
+    private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
+    {
+        $repository = $this->compilePipelineJob($config);
+
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
@@ -328,6 +350,7 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
@@ -344,59 +367,25 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'runtime.php',
-                new Packaging\Asset\InMemory(
-                    '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint(
-                        (new Runtime\Runtime\Runtime($config))->build(
-                            new Satellite\Builder\Pipeline\ConsoleRuntime()
-                        )
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
                     )
                 )
             )
         );
 
-        if (array_key_exists('services', $config['pipeline']) && count($config['pipeline']['services']) > 0) {
-            $container = new SatelliteDependencyInjection();
+        $container = new SatelliteDependencyInjection();
 
-            $dumper = new PhpDumper($container($config['pipeline']));
-            $repository->addFiles(
-                new Packaging\File(
-                    'container.php',
-                    new Packaging\Asset\InMemory(
-                        $dumper->dump()
-                    )
-                ),
-            );
-        }
-
-        if (array_key_exists('services', $config['pipeline'])) {
-            $container = new SatelliteDependencyInjection();
-
-            $dumper = new PhpDumper($container($config['pipeline']));
-            $repository->addFiles(
-                new Packaging\File(
-                    'container.php',
-                    new Packaging\Asset\InMemory(
-                        $dumper->dump()
-                    )
-                ),
-            );
-        }
-
-        if (array_key_exists('expression_language', $config['pipeline'])
-            && is_array($config['pipeline']['expression_language'])
-            && count($config['pipeline']['expression_language'])
-        ) {
-            foreach ($config['pipeline']['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider);
-            }
-        }
-
-        foreach ($config['pipeline']['steps'] as $step) {
-            $plugins = array_intersect_key($this->plugins, $step);
-            foreach ($plugins as $plugin) {
-                $plugin->appendTo($step, $repository);
-            }
-        }
+        $dumper = new PhpDumper($container($config['pipeline']));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
+        );
 
         return $repository;
     }

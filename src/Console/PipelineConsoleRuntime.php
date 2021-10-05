@@ -10,21 +10,18 @@ use Kiboko\Contract\Pipeline\RejectionInterface;
 use Kiboko\Contract\Pipeline\StateInterface;
 use Kiboko\Component\Satellite\Console\StateOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class PipelineConsoleRuntime implements PipelineRuntimeInterface
 {
     private StateOutput\Pipeline $state;
-    private Container $container;
 
     public function __construct(
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
-        ?ContainerInterface $container = null
+        private ContainerInterface $container
     ) {
         $this->state = new StateOutput\Pipeline($output, 'A', 'Pipeline');
-        $this->container = $container ?? new Container();
     }
 
     public function extract(

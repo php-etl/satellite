@@ -58,10 +58,7 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
 
     public function compile(array $config): Repository\RabbitMQRepository
     {
-        $builder = new State\Builder\RabbitMQBuilder(
-            stepCode: compileValueWhenExpression($this->interpreter, $this->stepCode),
-            stepLabel: compileValueWhenExpression($this->interpreter, $this->stepName)
-        );
+        $builder = new State\Builder\RabbitMQBuilder();
 
         return new Repository\RabbitMQRepository($builder);
     }

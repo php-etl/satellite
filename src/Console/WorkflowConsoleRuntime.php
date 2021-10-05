@@ -8,22 +8,19 @@ use Kiboko\Contract\Pipeline\PipelineRunnerInterface;
 use Kiboko\Contract\Pipeline\RunnableInterface;
 use Kiboko\Contract\Pipeline\SchedulingInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
 {
     private StateOutput\Workflow $state;
-    private Container $container;
 
     public function __construct(
         private ConsoleOutput $output,
         private SchedulingInterface $workflow,
         private PipelineRunnerInterface $pipelineRunner,
-        ?ContainerInterface $container = null
+        private ContainerInterface $container
     ) {
         $this->state = new StateOutput\Workflow($output);
-        $this->container = $container ?? new Container();
     }
 
     public function loadPipeline(string $filename): Workflow\PipelineConsoleRuntime

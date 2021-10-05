@@ -41,10 +41,14 @@ final class WorkflowRunCommand extends Console\Command\Command
         $autoload = include 'vendor/autoload.php';
         $autoload->register();
 
+        require 'container.php';
+        $container = new \ProjectServiceContainer();
+
         $runtime = new Satellite\Console\WorkflowConsoleRuntime(
             $output,
             new \Kiboko\Component\Workflow\Workflow(),
             new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger()),
+            $container
         );
 
         /** @var callable(runtime: WorkflowRuntimeInterface): \Runtime $workflow */

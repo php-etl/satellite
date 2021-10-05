@@ -56,7 +56,7 @@ class DependencyInjection implements FactoryInterface
     public function compile(array $config): Repository\DependencyInjectionRepository
     {
         $builder = new State\Builder\DependencyInjectionBuilder(
-            service: compileValueWhenExpression($this->interpreter, $config['use']),
+            service: compileValueWhenExpression($this->interpreter, $config['service']),
         );
 
         return new Repository\DependencyInjectionRepository($builder);

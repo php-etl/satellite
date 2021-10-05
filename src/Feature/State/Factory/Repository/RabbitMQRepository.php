@@ -4,6 +4,7 @@ namespace Kiboko\Component\Satellite\Feature\State\Factory\Repository;
 
 use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Feature\State;
+use PhpParser\Node;
 
 final class RabbitMQRepository implements Configurator\RepositoryInterface
 {
@@ -13,6 +14,13 @@ final class RabbitMQRepository implements Configurator\RepositoryInterface
     {
         $this->files = [];
         $this->packages = [];
+    }
+
+    public function withStepInfo(Node\Expr $stepName, Node\Expr $stepCode): self
+    {
+        $this->builder->withStepInfo($stepName, $stepCode);
+
+        return $this;
     }
 
     public function getBuilder(): State\Builder\RabbitMQBuilder

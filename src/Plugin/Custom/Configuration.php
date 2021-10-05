@@ -33,11 +33,6 @@ final class Configuration implements PluginConfigurationInterface
                 })
                 ->thenInvalid('Your configuration should either contain the "loader" or the "transformer" key, not both.')
             ->end()
-            ->beforeNormalization()
-                ->always(function ($data) {
-                    return $data;
-                })
-            ->end()
             ->children()
                 ->append(node: (new Configuration\CustomConfiguration('extractor'))->getConfigTreeBuilder()->getRootNode())
                 ->append(node: (new Configuration\CustomConfiguration('transformer'))->getConfigTreeBuilder()->getRootNode())
