@@ -30,7 +30,7 @@ final class WorkflowConsoleRuntime implements WorkflowRuntimeInterface
         $pipeline = new Pipeline($this->pipelineRunner);
         $this->workflow->job($pipeline);
 
-        return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline(basename($filename))));
+        return $factory(new Workflow\PipelineConsoleRuntime($this->output, $pipeline, $this->state->withPipeline(basename($filename)), $this->container));
     }
 
     public function job(RunnableInterface $job): self

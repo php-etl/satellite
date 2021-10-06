@@ -1,0 +1,44 @@
+satellite:
+  filesystem:
+    path: build/
+  composer:
+    require:
+      - php-etl/rabbitmq-flow:dev-feature/state
+  pipeline:
+    services:
+      Bunny\Client:
+        public: true
+        arguments:
+          - { host: 'localhost', vhost: '/', user: 'guest', password: 'guest' }
+        calls:
+          - connect: ~
+      Kiboko\Component\Flow\RabbitMQ\StateManager:
+        public: true
+        arguments:
+          - '@Bunny\Client'
+          - 'csv-to-ldjson'
+          - 10000
+    steps:
+      - name: 'Products extractor'
+        csv:
+          extractor:
+            file_path: '../data/products.csv'
+        state:
+          destinations:
+            - service: '@Kiboko\Component\Flow\RabbitMQ\StateManager'
+      - name: 'Products Transformer'
+        fastmap:
+          map:
+            - copy: '[sku]'
+              field: '[identifier]'
+        state:
+          destinations:
+            - service: '@Kiboko\Component\Flow\RabbitMQ\StateManager'
+      - name: 'Products Loader'
+        stream:
+          loader:
+            destination: '../data/products.ldjson'
+            format: 'json'
+        state:
+          destinations:
+            - service: '@Kiboko\Component\Flow\RabbitMQ\StateManager'

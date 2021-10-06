@@ -85,8 +85,12 @@ final class Service implements Configurator\FactoryInterface
 
                 if (array_key_exists('rabbitmq', $destination)) {
                     $factory = new State\Factory\RabbitMQFactory($this->interpreter, $this->stepName, $this->stepCode);
-
                     $rabbitmqRepository = $factory->compile($destination['rabbitmq']);
+
+                    $rabbitmqRepository->withStepInfo(
+                        compileValueWhenExpression($this->interpreter, $this->stepName),
+                        compileValueWhenExpression($this->interpreter, $this->stepCode)
+                    );
 
                     $repository->merge($rabbitmqRepository);
                     $builder->withState($rabbitmqRepository->getBuilder()->getNode());

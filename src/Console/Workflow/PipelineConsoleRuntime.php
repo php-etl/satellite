@@ -12,6 +12,7 @@ use Kiboko\Contract\Pipeline\RejectionInterface;
 use Kiboko\Contract\Pipeline\StateInterface;
 use Kiboko\Component\Satellite\Console\StateOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class PipelineConsoleRuntime implements PipelineRuntimeInterface
 {
@@ -19,6 +20,7 @@ final class PipelineConsoleRuntime implements PipelineRuntimeInterface
         ConsoleOutput $output,
         private PipelineInterface $pipeline,
         private StateOutput\Pipeline $state,
+        private ContainerInterface $container
     ) {
     }
 
@@ -78,5 +80,10 @@ final class PipelineConsoleRuntime implements PipelineRuntimeInterface
         $this->state->update();
 
         return $line;
+    }
+
+    public function container(): ContainerInterface
+    {
+        return $this->container;
     }
 }

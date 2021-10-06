@@ -58,7 +58,31 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
 
     public function compile(array $config): Repository\RabbitMQRepository
     {
-        $builder = new State\Builder\RabbitMQBuilder();
+        $builder = new State\Builder\RabbitMQBuilder(
+            compileValueWhenExpression($this->interpreter, $config['host']),
+            compileValueWhenExpression($this->interpreter, $config['port']),
+            compileValueWhenExpression($this->interpreter, $config['vhost']),
+            compileValueWhenExpression($this->interpreter, $config['topic']),
+        );
+
+        if (array_key_exists('user', $config) && array_key_exists('password', $config)) {
+            $builder->withAuthentication(
+                compileValueWhenExpression($this->interpreter, $config['user']),
+                compileValueWhenExpression($this->interpreter, $config['password']),
+            );
+        }
+
+        if (array_key_exists('line_threshold', $config)) {
+            $builder->withLineThreshold(
+                compileValueWhenExpression($this->interpreter, $config['line_threshold'])
+            );
+        }
+
+        if (array_key_exists('exchange', $config)) {
+            $builder->withExchange(
+                compileValueWhenExpression($this->interpreter, $config['exchange'])
+            );
+        }
 
         return new Repository\RabbitMQRepository($builder);
     }

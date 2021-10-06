@@ -48,7 +48,7 @@ final class RabbitMQConfiguration implements Config\Definition\ConfigurationInte
                         ->then(asExpression())
                     ->end()
                 ->end()
-                ->variableNode('message_limit')
+                ->variableNode('line_threshold')
                     ->validate()
                         ->ifTrue(isExpression())
                         ->then(asExpression())
