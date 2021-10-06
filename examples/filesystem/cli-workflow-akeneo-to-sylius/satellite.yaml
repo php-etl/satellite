@@ -1,6 +1,6 @@
-#version: "0.3"
-satellite:
-#  akeneo_to_sylius:
+version: '2'
+satellites:
+  - name: 'Akeneo to Sylius'
     serverless:
       provider:
         name: "aws"

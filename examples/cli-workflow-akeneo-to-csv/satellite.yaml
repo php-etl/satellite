@@ -1,87 +1,89 @@
-satellite:
-  filesystem:
-    path: build/
-  composer:
-    autoload:
-      psr4:
-      - namespace: "Pipeline\\"
-        paths: [ "" ]
-    require:
-      - "php-etl/pipeline:^0.3"
-      - "php-etl/workflow:^0.1"
-      - "php-etl/fast-map:^0.2"
-      - "php-etl/csv-flow:^0.2"
-      - "akeneo/api-php-client-ee"
-      - "diglin/sylius-api-php-client"
-      - "laminas/laminas-diactoros"
-      - "php-http/guzzle7-adapter"
-      - "monolog/monolog:^2.0"
-      - "elasticsearch/elasticsearch"
-  workflow:
-    jobs:
-    - name: 'Lorem ipsum dolor'
-      pipeline:
-        steps:
-        - akeneo:
-            extractor:
-              type: category
-              method: all
-            client:
-              api_url: 'http://localhost:8080'
-              client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
-              secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
-              username: 'kiboko_2145'
-              password: 62d0f1090
-#          logger:
-#            channel: pipeline
-#            destinations:
-#              - elasticsearch:
-#                  level: warning
-#                  hosts:
-#                    - elasticsearch.example.com:9200
-        - csv:
-            loader:
-              file_path: categories.csv
-              delimiter: ','
-              enclosure: '"'
-              escape: '\'
-#          logger:
-#            channel: pipeline
-#            destinations:
-#              - elasticsearch:
-#                  level: warning
-#                  hosts:
-#                    - elasticsearch.example.com:9200
-    - name: 'Sit amet consecutir'
-      pipeline:
-        steps:
-        - akeneo:
-            extractor:
-              type: product
-              method: all
-            client:
-              api_url: 'http://localhost:8080'
-              client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
-              secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
-              username: 'kiboko_2145'
-              password: 62d0f1090
-#          logger:
-#            channel: pipeline
-#            destinations:
-#              - elasticsearch:
-#                  level: warning
-#                  hosts:
-#                    - elasticsearch.example.com:9200
-        - csv:
-            loader:
-              file_path: products.csv
-              delimiter: ','
-              enclosure: '"'
-              escape: '\'
-#          logger:
-#            channel: pipeline
-#            destinations:
-#              - elasticsearch:
-#                  level: warning
-#                  hosts:
-#                    - elasticsearch.example.com:9200
+version: '2'
+satellites:
+  - name: 'Akeneo categories and products to separate CSVs'
+    filesystem:
+      path: build/
+    composer:
+      autoload:
+        psr4:
+        - namespace: "Pipeline\\"
+          paths: [ "" ]
+      require:
+        - "php-etl/pipeline:^0.3"
+        - "php-etl/workflow:^0.1"
+        - "php-etl/fast-map:^0.2"
+        - "php-etl/csv-flow:^0.2"
+        - "akeneo/api-php-client-ee"
+        - "diglin/sylius-api-php-client"
+        - "laminas/laminas-diactoros"
+        - "php-http/guzzle7-adapter"
+        - "monolog/monolog:^2.0"
+        - "elasticsearch/elasticsearch"
+    workflow:
+      jobs:
+      - name: "Lorem ipsum dolor'
+        pipeline:
+          steps:
+          - akeneo:
+              extractor:
+                type: category
+                method: all
+              client:
+                api_url: 'http://localhost:8080'
+                client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
+                secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
+                username: 'kiboko_2145'
+                password: 62d0f1090
+  #          logger:
+  #            channel: pipeline
+  #            destinations:
+  #              - elasticsearch:
+  #                  level: warning
+  #                  hosts:
+  #                    - elasticsearch.example.com:9200
+          - csv:
+              loader:
+                file_path: categories.csv
+                delimiter: ','
+                enclosure: '"'
+                escape: '\'
+  #          logger:
+  #            channel: pipeline
+  #            destinations:
+  #              - elasticsearch:
+  #                  level: warning
+  #                  hosts:
+  #                    - elasticsearch.example.com:9200
+      - name: 'Sit amet consecutir'
+        pipeline:
+          steps:
+          - akeneo:
+              extractor:
+                type: product
+                method: all
+              client:
+                api_url: 'http://localhost:8080'
+                client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
+                secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
+                username: 'kiboko_2145'
+                password: 62d0f1090
+  #          logger:
+  #            channel: pipeline
+  #            destinations:
+  #              - elasticsearch:
+  #                  level: warning
+  #                  hosts:
+  #                    - elasticsearch.example.com:9200
+          - csv:
+              loader:
+                file_path: products.csv
+                delimiter: ','
+                enclosure: '"'
+                escape: '\'
+  #          logger:
+  #            channel: pipeline
+  #            destinations:
+  #              - elasticsearch:
+  #                  level: warning
+  #                  hosts:
+  #                    - elasticsearch.example.com:9200

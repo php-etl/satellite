@@ -1,150 +1,152 @@
-satellite:
-  filesystem:
-    path: build/
-  composer:
-    require:
-      - "php-etl/pipeline:^0.3"
-      - "php-etl/fast-map:^0.2"
-      - "php-etl/csv-flow:^0.2"
-      - "php-etl/rabbitmq-flow:^0.1"
-      - "akeneo/api-php-client-ee"
-      - "laminas/laminas-diactoros"
-      - "php-http/guzzle7-adapter"
-  pipeline:
-    steps:
-    - akeneo:
-        enterprise: true
-        extractor:
-          type: productModel
-          method: all
-          search:
-            - { field: enabled, operator: '=', value: true }
-            - { field: completeness, operator: '>', value: 70, scope: ecommerce }
-            - { field: completeness, operator: '<', value: 85, scope: ecommerce }
-            - { field: categories, operator: IN, value: winter_collection }
-            - { field: family, operator: IN, value: [ camcorders, digital_cameras ] }
-        client:
-          api_url: '@=env("AKENEO_URL")'
-          client_id: '@=env("AKENEO_CLIENT_ID")'
-          secret: '@=env("AKENEO_CLIENT_SECRET")'
-          username: '@=env("AKENEO_USERNAME")'
-          password: '@=env("AKENEO_PASSWORD")'
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
-      rejection:
-        destinations:
-          - rabbitmq:
-              host: rabbitmq.example.com
-              port: 5432
-              vhost: /
-              exchange: default
-              topic: foo.rejects
-    - fastmap:
-        map:
-          - field: '[sku]'
-            copy: '[sku]'
-          - field: '[title]'
-            expression: 'input["sku"] ~" | "~ input["name"]'
-          - field: '[name]'
-            copy: '[name]'
-          - field: '[staticValue]'
-            constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
-          - field: '[foo]'
-            expression: 'input'
-            map:
-              - field: '[bar]'
-                copy: '[bar]'
-          - field: '[foo]'
-            expression: 'input'
-            list:
-              - field: '[bar]'
-                copy: '[bar]'
-#          - field: '[descriptions]'
-#            class: 'Pipeline\Usage'
-#            expression: 'input["foo"]'
-#            object:
-#              - field: 'usage'
-#                expression: '"Usage: " ~ input["usage"]'
-#              - field: 'warning'
-#                copy: '[warning]'
-#              - field: 'notice'
-#                copy: '[notice]'
-#          - field: '[messages]'
-#            class: 'Foo\DTO\Messages'
-#            expression: 'input'
-#            collection:
-#            - field: 'usage'
-#              expression: '"Usage: " ~ input["usage"]'
-#            - field: 'warning'
-#              copy: '[warning]'
-#            - field: 'notice'
-#              copy: '[notice]'
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
-      rejection:
-        destinations:
-          - rabbitmq:
-              host: rabbitmq.example.com
-              port: 5432
-              vhost: /
-              exchange: default
-              topic: foo.rejects
-    - akeneo:
-        expression_language:
-          - 'Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider'
-        lookup:
-          conditional:
-            - condition: 'input["type"] === "pim_attribute_simpleselect"'
-              type: attributeOption
-              code: '@=input["code"]'
-              method: all
-              search:
-                - { field: "attributeOption_attribute", operator: "=", value: '@=input["code"]' }
-              merge:
-                map:
-                  - field: '[options]'
-                    expression: 'join(lookup, ",")'
-        client:
-          api_url: 'http://localhost:8080'
-          client_id: '1_3clz4rzonukgsgoscoc488w0c4k0so48o0owc0k0sc40wso08g'
-          secret: '9tw5v88wl1s8s4ws8wsgk08gwkoo484cwc4k00wwkwosgwow4'
-          username: 'proximis_3328'
-          password: '93b66a306'
-      logger:
-        channel: pipeline
-        destinations:
-          - elasticsearch:
-              level: warning
-              hosts:
-                - elasticsearch.example.com:9200
-      rejection:
-        destinations:
-          - rabbitmq:
-              host: rabbitmq.example.com
-              port: 5432
-              vhost: /
-              exchange: default
-              topic: foo.rejects
-#    - csv:
-#        loader:
-#          file_path: output.csv
-#          delimiter: ','
-#          enclosure: '"'
-#          escape: '\'
-#      logger:
-#        channel: pipeline
-#        destinations:
-#          - elasticsearch:
-#              level: warning
-#              hosts:
-#                - elasticsearch.example.com:9200
+version: '2'
+satellites:
+  - name: 'Akeneo to CSV'
+    filesystem:
+      path: build/
+    composer:
+      require:
+        - "php-etl/pipeline:^0.3"
+        - "php-etl/fast-map:^0.2"
+        - "php-etl/csv-flow:^0.2"
+        - "php-etl/rabbitmq-flow:^0.1"
+        - "akeneo/api-php-client-ee"
+        - "laminas/laminas-diactoros"
+        - "php-http/guzzle7-adapter"
+    pipeline:
+      steps:
+      - akeneo:
+          enterprise: true
+          extractor:
+            type: productModel
+            method: all
+            search:
+              - { field: enabled, operator: '=', value: true }
+              - { field: completeness, operator: '>', value: 70, scope: ecommerce }
+              - { field: completeness, operator: '<', value: 85, scope: ecommerce }
+              - { field: categories, operator: IN, value: winter_collection }
+              - { field: family, operator: IN, value: [ camcorders, digital_cameras ] }
+          client:
+            api_url: '@=env("AKENEO_URL")'
+            client_id: '@=env("AKENEO_CLIENT_ID")'
+            secret: '@=env("AKENEO_CLIENT_SECRET")'
+            username: '@=env("AKENEO_USERNAME")'
+            password: '@=env("AKENEO_PASSWORD")'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+        rejection:
+          destinations:
+            - rabbitmq:
+                host: rabbitmq.example.com
+                port: 5432
+                vhost: /
+                exchange: default
+                topic: foo.rejects
+      - fastmap:
+          map:
+            - field: '[sku]'
+              copy: '[sku]'
+            - field: '[title]'
+              expression: 'input["sku"] ~" | "~ input["name"]'
+            - field: '[name]'
+              copy: '[name]'
+            - field: '[staticValue]'
+              constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
+            - field: '[foo]'
+              expression: 'input'
+              map:
+                - field: '[bar]'
+                  copy: '[bar]'
+            - field: '[foo]'
+              expression: 'input'
+              list:
+                - field: '[bar]'
+                  copy: '[bar]'
+  #          - field: '[descriptions]'
+  #            class: 'Pipeline\Usage'
+  #            expression: 'input["foo"]'
+  #            object:
+  #              - field: 'usage'
+  #                expression: '"Usage: " ~ input["usage"]'
+  #              - field: 'warning'
+  #                copy: '[warning]'
+  #              - field: 'notice'
+  #                copy: '[notice]'
+  #          - field: '[messages]'
+  #            class: 'Foo\DTO\Messages'
+  #            expression: 'input'
+  #            collection:
+  #            - field: 'usage'
+  #              expression: '"Usage: " ~ input["usage"]'
+  #            - field: 'warning'
+  #              copy: '[warning]'
+  #            - field: 'notice'
+  #              copy: '[notice]'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+        rejection:
+          destinations:
+            - rabbitmq:
+                host: rabbitmq.example.com
+                port: 5432
+                vhost: /
+                exchange: default
+                topic: foo.rejects
+      - akeneo:
+          expression_language:
+            - 'Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider'
+          lookup:
+            conditional:
+              - condition: 'input["type"] === "pim_attribute_simpleselect"'
+                type: attributeOption
+                code: '@=input["code"]'
+                method: all
+                search:
+                  - { field: "attributeOption_attribute", operator: "=", value: '@=input["code"]' }
+                merge:
+                  map:
+                    - field: '[options]'
+                      expression: 'join(lookup, ",")'
+          client:
+            api_url: 'http://localhost:8080'
+            client_id: '1_3clz4rzonukgsgoscoc488w0c4k0so48o0owc0k0sc40wso08g'
+            secret: '9tw5v88wl1s8s4ws8wsgk08gwkoo484cwc4k00wwkwosgwow4'
+            username: 'proximis_3328'
+            password: '93b66a306'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: warning
+                hosts:
+                  - elasticsearch.example.com:9200
+        rejection:
+          destinations:
+            - rabbitmq:
+                host: rabbitmq.example.com
+                port: 5432
+                vhost: /
+                exchange: default
+                topic: foo.rejects
+  #    - csv:
+  #        loader:
+  #          file_path: output.csv
+  #          delimiter: ','
+  #          enclosure: '"'
+  #          escape: '\'
+  #      logger:
+  #        channel: pipeline
+  #        destinations:
+  #          - elasticsearch:
+  #              level: warning
+  #              hosts:
+  #                - elasticsearch.example.com:9200
