@@ -106,13 +106,13 @@ satellites:
                   copy: '[identifier]'
                 - field: '[family]'
                   copy: '[family]'
-        logger:
-          channel: pipeline
-          destinations:
-            - elasticsearch:
-                level: warning
-                hosts:
-                  - elasticsearch.example.com:9200
+          logger:
+            channel: pipeline
+            destinations:
+              - elasticsearch:
+                  level: warning
+                  hosts:
+                    - elasticsearch.example.com:9200
       - batch:
           merge:
             size: 10
