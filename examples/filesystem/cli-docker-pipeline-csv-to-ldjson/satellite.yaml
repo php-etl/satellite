@@ -1,0 +1,17 @@
+satellite:
+  docker:
+    from: php:8.0-cli-alpine
+    workdir: /var/www/html
+  pipeline:
+    steps:
+      - csv:
+          extractor:
+            file_path: '../data/products.csv'
+      - fastmap:
+          map:
+            - copy: '[sku]'
+              field: '[identifier]'
+      - stream:
+          loader:
+            destination: '../data/products.ldjson'
+            format: 'json'
