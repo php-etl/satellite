@@ -11,10 +11,12 @@ services:
     - '4000:4000'
 
   satellite-1:
-    image: kiboko/satellite-1
+    image: kiboko/satellite:foo
+    volumes:
+    - ./hello.php:/var/www/html/hello.php
 
   satellite-2:
-    image: kiboko/satellite-1
+    image: kiboko/satellite:bar
 
 volumes:
   caddy_data:

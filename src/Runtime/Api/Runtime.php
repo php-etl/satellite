@@ -197,12 +197,12 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                     new Node\Arg(
                         new Node\Scalar\String_($path)
                     ),
-//                    new Node\Arg(
-//                        new Node\Expr\Include_(
-//                            new Node\Scalar\String_($routeConfig['function']),
-//                            Node\Expr\Include_::TYPE_REQUIRE,
-//                        )
-//                    ),
+                    new Node\Arg(
+                        new Node\Expr\Include_(
+                            new Node\Scalar\String_($routeConfig['function']),
+                            Node\Expr\Include_::TYPE_REQUIRE,
+                        )
+                    ),
                 ],
             ),
         );
