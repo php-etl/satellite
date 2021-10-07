@@ -187,7 +187,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
-    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory): Node\Stmt\Expression
+    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory, string $path): Node\Stmt\Expression
     {
         return new Node\Stmt\Expression(
             new Node\Expr\MethodCall(
@@ -195,14 +195,14 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 $routeConfig['method'] ?? 'get',
                 [
                     new Node\Arg(
-                        new Node\Scalar\String_($routeConfig['path'])
+                        new Node\Scalar\String_($path)
                     ),
-                    new Node\Arg(
-                        new Node\Expr\Include_(
-                            new Node\Scalar\String_($routeConfig['function']),
-                            Node\Expr\Include_::TYPE_REQUIRE,
-                        )
-                    ),
+//                    new Node\Arg(
+//                        new Node\Expr\Include_(
+//                            new Node\Scalar\String_($routeConfig['function']),
+//                            Node\Expr\Include_::TYPE_REQUIRE,
+//                        )
+//                    ),
                 ],
             ),
         );
@@ -210,8 +210,8 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
     private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
     {
-        foreach ($this->config['routes'] as $route) {
-            yield $this->routeToAST($route, $router, $factory);
+        foreach ($this->config['http_api']['routes'] as $route) {
+            yield $this->routeToAST($route, $router, $factory, $this->config['http_api']['path']);
         }
     }
 }

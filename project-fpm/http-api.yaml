@@ -22,7 +22,7 @@ satellite:
       - "middlewares/request-handler:dev-master"
       - "middlewares/fast-route:dev-master"
       - "laminas/laminas-diactoros"
-      - "laminas/laminas-httphandlerrunner:1.2.x-dev"
+      - "laminas/laminas-httphandlerrunner"
   http_api:
     path: /foo
     routes:

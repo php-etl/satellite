@@ -390,11 +390,98 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
+    private function compileApiJob(array $config): Satellite\Builder\Repository\API
+    {
+        $apiBuilder = new Satellite\Builder\API(
+            new Node\Expr\Variable('runtime'),
+        );
+
+        $repository = new Satellite\Builder\Repository\API($apiBuilder);
+
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+
+        $repository->addPackages(
+            'php-etl/pipeline-contracts:~0.3.0@dev',
+            'php-etl/pipeline:~0.4.0@dev',
+            'psr/log:^1.1',
+            'monolog/monolog',
+            'symfony/console:^5.2',
+            'symfony/dependency-injection:^5.2',
+        );
+
+        if (array_key_exists('expression_language', $config['http_api'])
+            && is_array($config['http_api']['expression_language'])
+            && count($config['http_api']['expression_language'])
+        ) {
+            foreach ($config['http_api']['expression_language'] as $provider) {
+                $interpreter->registerProvider(new $provider);
+            }
+        }
+
+//        foreach ($config['http_api']['routes'] as $route) {
+//            foreach ($route['pipeline']['steps'] as $step) {
+//                $plugins = array_intersect_key($this->plugins, $step);
+//                foreach ($plugins as $plugin) {
+//                    $plugin->appendTo($step, $repository);
+//                }
+//            }
+//        }
+
+        return $repository;
+    }
+
     private function compileApi(array $config): Satellite\Builder\Repository\API
     {
-        $pipeline = new Satellite\Builder\API();
+        $repository = $this->compileApiJob($config);
 
-        return new Satellite\Builder\Repository\API($pipeline);
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                    <?php
+
+                    use Kiboko\Component\Satellite\Console\APIConsoleRuntime;
+
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
+
+                    /** @var APIConsoleRuntime \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$api */
+                    \$api = require __DIR__ . '/pipeline.php';
+
+                    \$api(\$runtime)->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\API\APIRuntime())->getNode()
+                    )
+                )
+            )
+        );
+
+        $container = new SatelliteDependencyInjection();
+
+        $dumper = new PhpDumper($container($config['http_api']));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
+        );
+
+        return $repository;
     }
 
     private function compileHook(array $config): Satellite\Builder\Repository\Hook
