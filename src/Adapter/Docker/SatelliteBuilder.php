@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
@@ -26,9 +27,11 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private iterable $paths;
     /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
+    private array $composerAutoload;
 
     public function __construct(string $fromImage)
     {
+        $this->composerAutoload = [];
         $this->fromImage = $fromImage;
         $this->workdir = '/var/www/html/';
         $this->composerRequire = [];
@@ -44,6 +47,17 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     public function withWorkdir(string $path): self
     {
         $this->workdir = $path;
+
+        return $this;
+    }
+
+    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface
+    {
+        if (!array_key_exists('psr4', $this->composerAutoload)) {
+            $this->composerAutoload['psr4'] = [];
+        }
+
+        array_push($this->composerAutoload['psr4'], ...$autoloads);
 
         return $this;
     }
@@ -138,7 +152,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInstall());
-        } elseif (count($this->composerRequire) > 0) {
+        } else {
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));

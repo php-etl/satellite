@@ -45,7 +45,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 }
             }
 
-            if (array_key_exists('composer', $configuration) && array_key_exists('require', $configuration['composer'])) {
+            if (array_key_exists('require', $configuration['composer'])) {
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }
         }
