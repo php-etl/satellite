@@ -48,14 +48,14 @@
         "adlawson/vfs": "^0.12.1",
         "php-etl/phpunit-extension": "*",
         "php-etl/csv-plugin": "*",
-        "php-etl/fast-map-plugin": "*",
-        "php-etl/akeneo-plugin": "*",
-        "php-etl/sylius-plugin": "*",
         "php-etl/spreadsheet-plugin": "*",
         "php-etl/akeneo-expression-language": "^0.2.0",
         "php-etl/array-expression-language": "^0.1.0",
         "php-etl/string-expression-language": "^0.1.0",
-        "php-etl/sql-plugin": "*"
+        "php-etl/fast-map-plugin": "*",
+        "php-etl/akeneo-plugin": "*",
+        "php-etl/sql-plugin": "*",
+        "php-etl/sylius-plugin": "dev-feature/update-fast-map-plugin"
     },
     "autoload": {
         "psr-4": {
