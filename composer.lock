@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24e535f6b133f4c288f8bbe79f5584de",
+    "content-hash": "a5564bc85ff7506765d287d0bbd8c890",
     "packages": [
         {
             "name": "brick/math",
@@ -5060,16 +5060,16 @@
         },
         {
             "name": "php-etl/sylius-plugin",
-            "version": "dev-feature/update-fast-map-plugin",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "4de988348b6a25b24f53ae19ba4cd824c4f8732f"
+                "reference": "dc74b719dcd214096782fe993631b728d6ee48f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/4de988348b6a25b24f53ae19ba4cd824c4f8732f",
-                "reference": "4de988348b6a25b24f53ae19ba4cd824c4f8732f",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/dc74b719dcd214096782fe993631b728d6ee48f0",
+                "reference": "dc74b719dcd214096782fe993631b728d6ee48f0",
                 "shasum": ""
             },
             "require": {
@@ -5095,10 +5095,11 @@
                 "phpunit/phpunit": "^9.0",
                 "symfony/yaml": "^5.2"
             },
+            "default-branch": true,
             "type": "satellite-plugin",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3.x-dev"
+                    "dev-master": "0.4.x-dev"
                 },
                 "satellite": {
                     "class": "Kiboko\\Plugin\\Sylius\\Service"
@@ -5122,9 +5123,9 @@
             "description": "Adapters for the Sylius API client",
             "support": {
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
-                "source": "https://github.com/php-etl/sylius-plugin/tree/feature/update-fast-map-plugin"
+                "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-10-07T09:09:01+00:00"
+            "time": "2021-10-07T12:15:09+00:00"
         },
         {
             "name": "phpactor/docblock",
@@ -7911,8 +7912,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "php-etl/configurator-contracts": 20,
-        "composer/composer": 20,
-        "php-etl/sylius-plugin": 20
+        "composer/composer": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
