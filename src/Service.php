@@ -390,7 +390,7 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileApiJob(array $config): Satellite\Builder\Repository\API
+    private function compileApi(array $config): Satellite\Builder\Repository\API
     {
         $apiBuilder = new Satellite\Builder\API(
             new Node\Expr\Variable('runtime'),
@@ -398,41 +398,28 @@ final class Service implements Configurator\FactoryInterface
 
         $repository = new Satellite\Builder\Repository\API($apiBuilder);
 
-        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+        foreach ($config['http_api']['routes'] as $route) {
+            if (array_key_exists('pipeline', $route)) {
+                $pipeline = $this->compilePipelineJob($route);
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
-        $repository->addPackages(
-            'php-etl/pipeline-contracts:~0.3.0@dev',
-            'php-etl/pipeline:~0.4.0@dev',
-            'psr/log:^1.1',
-            'monolog/monolog',
-            'symfony/console:^5.2',
-            'symfony/dependency-injection:^5.2',
-        );
+                $repository->merge($pipeline);
+                $repository->addFiles(
+                    new Packaging\File(
+                        $pipelineFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
 
-        if (array_key_exists('expression_language', $config['http_api'])
-            && is_array($config['http_api']['expression_language'])
-            && count($config['http_api']['expression_language'])
-        ) {
-            foreach ($config['http_api']['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider);
+                $apiBuilder->addPipeline($pipelineFilename);
+            } else {
+                throw new \LogicException('Not implemented');
             }
         }
-
-//        foreach ($config['http_api']['routes'] as $route) {
-//            foreach ($route['pipeline']['steps'] as $step) {
-//                $plugins = array_intersect_key($this->plugins, $step);
-//                foreach ($plugins as $plugin) {
-//                    $plugin->appendTo($step, $repository);
-//                }
-//            }
-//        }
-
-        return $repository;
-    }
-
-    private function compileApi(array $config): Satellite\Builder\Repository\API
-    {
-        $repository = $this->compileApiJob($config);
 
         $repository->addFiles(
             new Packaging\File(
