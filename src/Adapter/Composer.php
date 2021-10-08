@@ -76,6 +76,16 @@ final class Composer
         );
     }
 
+    public function autoload(array $autoloads): void
+    {
+        $this->execute(
+            'composer',
+            'config',
+            'autoload',
+            ...$autoloads,
+        );
+    }
+
     public function install(): void
     {
         $this->execute(

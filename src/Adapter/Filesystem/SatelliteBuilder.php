@@ -44,7 +44,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $this->composerAutoload['psr4'] = [];
         }
 
-        array_push($this->composerAutoload['psr4'], ...$autoloads);
+        array_push($this->composerAutoload['psr4'], $autoloads);
 
         return $this;
     }
@@ -113,7 +113,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         } elseif (count($this->composerRequire) > 0) {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
-//            $composer->autoload($this->autoload);
+            $composer->autoload($this->composerAutoload);
         }
 
         $satellite->dependsOn(...$this->composerRequire);
