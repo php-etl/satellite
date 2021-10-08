@@ -9,14 +9,16 @@ use PhpParser\Node;
 
 final class Hook implements Builder
 {
+    public function __construct(
+        private array $pipeline
+    ) {
+    }
+
     public function getNode(): Node
     {
-        return new Node\Expr\Closure(subNodes: [
-            'params' => [
-                new Node\Param(
-                    var: new Node\Expr\Variable('request')
-                ),
-            ],
-        ]);
+        return new Node\Expr\Include_(
+            new Node\Scalar\String_($this->pipeline['http_hook']['function']),
+            Node\Expr\Include_::TYPE_REQUIRE,
+        );
     }
 }

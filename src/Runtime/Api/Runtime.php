@@ -47,11 +47,14 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'), 'NikiFastRoute')]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\FastRoute'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Utils\\Dispatcher'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Uuid'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\BasePath'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\RequestHandler'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Psr'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
 
             new Node\Stmt\Expression(
@@ -88,7 +91,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('fastRouteDispatcher'),
                     new Node\Expr\FuncCall(
-                        new Node\Name('FastRoute\\simpleDispatcher'),
+                        new Node\Name('NikiFastRoute\\simpleDispatcher'),
                         [
                             new Node\Arg(
                                 new Node\Expr\Closure([
@@ -96,7 +99,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         new Node\Param(
                                             new Node\Expr\Variable('router'),
                                             null,
-                                            new Node\Name('FastRoute\\RouteCollector')
+                                            new Node\Name('NikiFastRoute\\RouteCollector')
                                         )
                                     ],
                                     'uses' => [
@@ -117,19 +120,19 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('dispatcher'),
                     new Node\Expr\New_(
-                        new Node\Name('Middlewares\\Utils\\Dispatcher'),
+                        new Node\Name('Dispatcher'),
                         [
                             new Node\Arg(
                                 new Node\Expr\Array_(
                                     [
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\Uuid'),
+                                                new Node\Name('Uuid'),
                                             ),
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\BasePath'),
+                                                new Node\Name('BasePath'),
                                                 [
                                                     new Node\Arg(
                                                         new Node\Scalar\String_($this->config['path'] ?? '/')
@@ -139,7 +142,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\FastRoute'),
+                                                new Node\Name('FastRoute'),
                                                 [
                                                     new Node\Arg(
                                                         new Node\Expr\Variable('fastRouteDispatcher')
@@ -149,7 +152,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\RequestHandler'),
+                                                new Node\Name('RequestHandler'),
                                             ),
                                         ),
                                     ],
@@ -211,7 +214,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
     private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
     {
         foreach ($this->config['http_api']['routes'] as $route) {
-            yield $this->routeToAST($route, $router, $factory, $this->config['http_api']['path']);
+            yield $this->routeToAST($route, $router, $factory, $this->config['http_api']['path'] . $route['route']);
         }
     }
 }

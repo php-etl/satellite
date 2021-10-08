@@ -14,34 +14,32 @@ satellite:
         - namespace: "Pipeline\\"
           paths: [ "" ]
     require:
-      - "psr/http-message:^1.0@dev"
-      - "psr/http-factory:^1.0@dev"
-      - "psr/http-server-handler:^1.0@dev"
       - "middlewares/uuid:dev-master"
       - "middlewares/base-path:dev-master"
       - "middlewares/request-handler:dev-master"
-      - "middlewares/fast-route:dev-master"
       - "laminas/laminas-diactoros"
-      - "laminas/laminas-httphandlerrunner:1.2.x-dev"
+      - "laminas/laminas-httphandlerrunner"
+      - "nyholm/psr7-server"
+      - "nyholm/psr7"
   http_hook:
     path: /bar/hello
-    pipeline:
-      steps:
-        - fastmap:
-            map:
-              - field: '[sku]'
-                copy: '[sku]'
-              - field: '[title]'
-                expression: 'input["sku"] ~" | "~ input["name"]'
-              - field: '[name]'
-                copy: '[name]'
-              - field: '[staticValue]'
-                constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
-        - csv:
-            loader:
-              file_path: output.csv
-              delimiter: ','
-              enclosure: '"'
-              escape: '\'
-            logger:
-              type: stderr
+    function: "hello.php"
+    steps:
+      - fastmap:
+          map:
+            - field: '[sku]'
+              copy: '[sku]'
+            - field: '[title]'
+              expression: 'input["sku"] ~" | "~ input["name"]'
+            - field: '[name]'
+              copy: '[name]'
+            - field: '[staticValue]'
+              constant: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mollis efficitur justo, id facilisis elit venenatis et. Sed fermentum posuere convallis. Phasellus lectus neque, bibendum sit amet enim imperdiet, dignissim blandit nisi. Donec nec neque nisi. Vivamus luctus facilisis nibh id rhoncus. Vestibulum eget facilisis tortor. Etiam at cursus enim, vitae mollis ex. Proin at velit at erat bibendum ultricies. Duis ut velit malesuada, placerat nisl a, ultrices tortor.'
+      - csv:
+          loader:
+            file_path: output.csv
+            delimiter: ','
+            enclosure: '"'
+            escape: '\'
+          logger:
+            type: stderr

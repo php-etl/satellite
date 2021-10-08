@@ -72,6 +72,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                 ->end()
                 ->scalarNode('name')->end()
                 ->scalarNode('path')->end()
+                ->scalarNode('function')->end()
                 ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end();
 

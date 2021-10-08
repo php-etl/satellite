@@ -486,7 +486,7 @@ final class Service implements Configurator\FactoryInterface
 
     private function compileHook(array $config): Satellite\Builder\Repository\Hook
     {
-        $pipeline = new Satellite\Builder\Hook();
+        $pipeline = new Satellite\Builder\Hook($config);
 
         return new Satellite\Builder\Repository\Hook($pipeline);
     }
