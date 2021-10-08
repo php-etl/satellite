@@ -54,71 +54,69 @@ class RabbitMQBuilder implements Builder
 
     public function getNode(): Node\Expr
     {
-        return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\State'),
-            args: [
-                new Node\Arg(
-                    value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\StateManager'),
-                        args: array_filter([
-                            new Node\Arg(
-                                value: new Node\Expr\MethodCall(
-                                    var: new Node\Expr\New_(
-                                        class: new Node\Name\FullyQualified('Bunny\Client'),
-                                        args: [
-                                            new Node\Arg(
-                                                value: new Node\Expr\Array_(
-                                                    items: [
-                                                        new Node\Expr\ArrayItem(
-                                                            value: $this->host,
-                                                            key: new Node\Scalar\String_('host')
-                                                        ),
-                                                        new Node\Expr\ArrayItem(
-                                                            value: $this->port,
-                                                            key: new Node\Scalar\String_('port')
-                                                        ),
-                                                        new Node\Expr\ArrayItem(
-                                                            value: $this->vhost,
-                                                            key: new Node\Scalar\String_('vhost')
-                                                        ),
-                                                        new Node\Expr\ArrayItem(
-                                                            value: $this->user,
-                                                            key: new Node\Scalar\String_('user')
-                                                        ),
-                                                        new Node\Expr\ArrayItem(
-                                                            value: $this->password,
-                                                            key: new Node\Scalar\String_('password')
-                                                        ),
-                                                    ],
-                                                    attributes: [
-                                                        'kind' => Node\Expr\Array_::KIND_SHORT
-                                                    ]
+        return new Node\Expr\MethodCall(
+            var: new Node\Expr\New_(
+                class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\StateManager'),
+                args: array_filter([
+                    new Node\Arg(
+                        value: new Node\Expr\MethodCall(
+                            var: new Node\Expr\New_(
+                                class: new Node\Name\FullyQualified('Bunny\Client'),
+                                args: [
+                                    new Node\Arg(
+                                        value: new Node\Expr\Array_(
+                                            items: [
+                                                new Node\Expr\ArrayItem(
+                                                    value: $this->host,
+                                                    key: new Node\Scalar\String_('host')
                                                 ),
-                                            ),
-                                        ],
+                                                new Node\Expr\ArrayItem(
+                                                    value: $this->port,
+                                                    key: new Node\Scalar\String_('port')
+                                                ),
+                                                new Node\Expr\ArrayItem(
+                                                    value: $this->vhost,
+                                                    key: new Node\Scalar\String_('vhost')
+                                                ),
+                                                new Node\Expr\ArrayItem(
+                                                    value: $this->user,
+                                                    key: new Node\Scalar\String_('user')
+                                                ),
+                                                new Node\Expr\ArrayItem(
+                                                    value: $this->password,
+                                                    key: new Node\Scalar\String_('password')
+                                                ),
+                                            ],
+                                            attributes: [
+                                                'kind' => Node\Expr\Array_::KIND_SHORT
+                                            ]
+                                        ),
                                     ),
-                                    name: new Node\Name('connect')
-                                )
+                                ],
                             ),
-                            new Node\Arg(
-                                $this->topic
-                            ),
-                            $this->lineThreshold ? new Node\Arg(
-                                $this->lineThreshold
-                            ): null,
-                            $this->exchange ? new Node\Arg(
-                                $this->exchange
-                            ) : null,
-                        ])
+                            name: new Node\Name('connect')
+                        )
                     ),
-                ),
+                    new Node\Arg(
+                        $this->topic
+                    ),
+                    $this->lineThreshold ? new Node\Arg(
+                        $this->lineThreshold
+                    ): null,
+                    $this->exchange ? new Node\Arg(
+                        $this->exchange
+                    ) : null,
+                ])
+            ),
+            name: new Node\Name('stepState'),
+            args: [
                 new Node\Arg(
                     value: $this->stepCode
                 ),
                 new Node\Arg(
                     value: $this->stepName
                 ),
-            ],
+            ]
         );
     }
 }

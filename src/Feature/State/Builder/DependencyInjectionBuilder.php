@@ -26,23 +26,21 @@ class DependencyInjectionBuilder implements Builder
 
     public function getNode(): Node\Expr
     {
-        return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\State'),
-            args: [
-                new Node\Arg(
-                    value: new Node\Expr\MethodCall(
-                        var: new Node\Expr\MethodCall(
-                            var: new Node\Expr\Variable('runtime'),
-                            name: new Node\Name('container')
-                        ),
-                        name: new Node\Name('get'),
-                        args: [
-                            new Node\Arg(
-                                value: $this->service
-                            )
-                        ]
-                    ),
+        return new Node\Expr\MethodCall(
+            var: new Node\Expr\MethodCall(
+                var: new Node\Expr\MethodCall(
+                    var: new Node\Expr\Variable('runtime'),
+                    name: new Node\Name('container')
                 ),
+                name: new Node\Name('get'),
+                args: [
+                    new Node\Arg(
+                        value: $this->service
+                    )
+                ]
+            ),
+            name: new Node\Name('stepState'),
+            args: [
                 new Node\Arg(
                     value: $this->stepCode
                 ),
