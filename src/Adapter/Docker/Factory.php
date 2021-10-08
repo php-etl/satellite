@@ -67,6 +67,10 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 }
             }
 
+            if (array_key_exists('autoload', $configuration['composer']) && array_key_exists('psr4', $configuration['composer']['autoload'])) {
+                $builder->withComposerPSR4Autoload($configuration['composer']['autoload']['psr4']);
+            }
+
             if (array_key_exists('require', $configuration['composer'])) {
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }

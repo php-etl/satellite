@@ -55,7 +55,7 @@
         "php-etl/fast-map-plugin": "*",
         "php-etl/akeneo-plugin": "*",
         "php-etl/sql-plugin": "*",
-        "php-etl/sylius-plugin": "dev-feature/update-fast-map-plugin"
+        "php-etl/sylius-plugin": "*"
     },
     "autoload": {
         "psr-4": {

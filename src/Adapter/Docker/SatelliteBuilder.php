@@ -152,7 +152,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInstall());
-        } elseif (count($this->composerRequire) > 0) {
+        } else {
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));
