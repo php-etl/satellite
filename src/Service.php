@@ -226,7 +226,7 @@ final class Service implements Configurator\FactoryInterface
                 new Packaging\Asset\InMemory(
                     <<<PHP
                     <?php
-    
+                    
                     use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
                     
                     require __DIR__ . '/vendor/autoload.php';
