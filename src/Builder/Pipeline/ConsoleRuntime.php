@@ -12,7 +12,7 @@ final class ConsoleRuntime implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineConsoleRuntime'),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\Console'),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(

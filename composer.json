@@ -30,7 +30,9 @@
         "nikic/php-parser": "^4.10",
         "php-etl/packaging": "^0.1.0",
         "php-etl/satellite-toolbox": "*",
-        "php-etl/configurator-contracts": "^0.4.0@dev"
+        "php-etl/configurator-contracts": "^0.4.0",
+        "php-etl/pipeline-console-runtime": "^0.1.0",
+        "php-etl/workflow-console-runtime": "^0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",

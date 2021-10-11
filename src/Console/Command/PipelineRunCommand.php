@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
-use Kiboko\Component\Satellite;
+use Kiboko\Component\Runtime\Pipeline\Console as PipelineConsoleRuntime;
+use Kiboko\Component\State\StateOutput\PipelineStep;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +15,7 @@ final class PipelineRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:pipeline';
 
-    /** @var list<Satellite\Console\StateOutput\PipelineStep> */
+    /** @var list<PipelineStep> */
     private array $steps = [];
 
     protected function configure()
@@ -44,7 +45,7 @@ final class PipelineRunCommand extends Console\Command\Command
         $autoload = include 'vendor/autoload.php';
         $autoload->register();
 
-        $runtime = new Satellite\Console\PipelineConsoleRuntime(
+        $runtime = new PipelineConsoleRuntime(
             $output,
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
