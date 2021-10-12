@@ -14,7 +14,7 @@ use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'function.php')
+    public function __construct(private array $config, private string $filename = 'hook.php')
     {
     }
 
@@ -31,6 +31,10 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
             new Packaging\File($this->filename, new Packaging\Asset\InMemory(
                 '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
+        );
+
+        $satellite->withFile(
+            ...$repository->getFiles(),
         );
 
         $satellite->dependsOn(...$repository->getPackages());

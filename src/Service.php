@@ -473,8 +473,64 @@ final class Service implements Configurator\FactoryInterface
 
     private function compileHook(array $config): Satellite\Builder\Repository\Hook
     {
-        $pipeline = new Satellite\Builder\Hook($config);
+        $hookBuilder = new Satellite\Builder\Hook($config);
 
-        return new Satellite\Builder\Repository\Hook($pipeline);
+        $repository = new Satellite\Builder\Repository\Hook($hookBuilder);
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                    <?php
+                    
+                    use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
+                    
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
+                     
+                    /** @var HookConsoleRuntime \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+                    
+                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
+                    \$hook = require __DIR__ . '/hook.php';
+                    
+                    \$hook(\$runtime)->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\Hook\HookRuntime())->getNode()
+                    )
+                )
+            )
+        );
+
+        if (array_key_exists('pipeline', $config['http_hook'])) {
+            $pipeline = $this->compilePipelineJob($config['http_hook']);
+            $repository->merge($pipeline);
+            $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
+
+            $repository->addFiles(
+                    new Packaging\File(
+                        $pipelineFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Hook\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
+        } else {
+            throw new \LogicException('Not implemented');
+        }
+
+        return $repository;
     }
 }

@@ -22,6 +22,8 @@ satellite:
       - "laminas/laminas-httphandlerrunner"
       - "nyholm/psr7-server"
       - "nyholm/psr7"
+      - "php-etl/pipeline"
+      - "php-etl/satellite"
   http_api:
     path: /foo
     routes:
