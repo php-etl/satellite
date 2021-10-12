@@ -237,6 +237,8 @@ final class Service implements Configurator\FactoryInterface
                     /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
                     \$workflow = require __DIR__ . '/workflow.php';
                     
+                    chdir(__DIR__);
+                    
                     \$workflow(\$runtime);
                     \$runtime->run();
                     PHP
@@ -342,6 +344,8 @@ final class Service implements Configurator\FactoryInterface
 
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
+
+                    chdir(__DIR__);
 
                     \$pipeline(\$runtime);
                     \$runtime->run();
