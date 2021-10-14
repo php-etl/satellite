@@ -14,7 +14,6 @@ use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\SatelliteToolbox;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use PhpParser\PrettyPrinter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
@@ -484,12 +483,12 @@ final class Service implements Configurator\FactoryInterface
                     <<<PHP
                     <?php
                     
-                    use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
+                    use Kiboko\Component\Runtime\Hook\HookRuntime;
                     
                     require __DIR__ . '/vendor/autoload.php';
                     require __DIR__ . '/container.php';
                      
-                    /** @var HookConsoleRuntime \$runtime */
+                    /** @var HookRuntime \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
                     
                     /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
@@ -510,6 +509,18 @@ final class Service implements Configurator\FactoryInterface
                     )
                 )
             )
+        );
+
+        $container = new SatelliteDependencyInjection();
+
+        $dumper = new PhpDumper($container($config));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
         );
 
         if (array_key_exists('pipeline', $config['http_hook'])) {

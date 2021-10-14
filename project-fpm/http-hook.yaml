@@ -22,7 +22,6 @@ satellite:
       - "nyholm/psr7-server"
       - "nyholm/psr7"
       - "php-etl/pipeline"
-      - "php-etl/satellite"
   http_hook:
     path: /bar/hello
     function: "hello.php"

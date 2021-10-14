@@ -19,7 +19,7 @@ public function __construct(private Builder $builder)
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
-                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineRuntimeInterface'),
+                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\HookRuntimeInterface'),
                     )
                 ],
                 'stmts' => [
