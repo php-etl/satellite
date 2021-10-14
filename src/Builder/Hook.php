@@ -50,21 +50,53 @@ final class Hook implements Builder
 
     public function getNode(): Node
     {
-        /*
-
-        return $psr17Factory->createResponse(200)
-            ->withBody(
-                $psr17Factory->createStream(
-                    json_encode([
-                        'message' => 'Hello World!',
-                        'server' => gethostname(),
-                    ])
-                )
-            );
-         */
-        return new Node\Expr\Include_(
-            new Node\Scalar\String_($this->pipeline['http_hook']['function']),
-            Node\Expr\Include_::TYPE_REQUIRE,
+        return new Node\Stmt\Return_(
+            new Node\Expr\MethodCall(
+                new Node\Expr\MethodCall(
+                    new Node\Expr\Variable('psr17Factory'),
+                    'createResponse',
+                    [
+                        new Node\Arg(
+                            new Node\Scalar\DNumber(200),
+                        )
+                    ]
+                ),
+                'withBody',
+                [
+                    new Node\Arg(
+                        new Node\Expr\MethodCall(
+                            new Node\Expr\Variable('psr17Factory'),
+                            'createStream',
+                            [
+                                new Node\Arg(
+                                    new Node\Expr\FuncCall(
+                                        new Node\Name('json_encode'),
+                                        [
+                                            new Node\Arg(
+                                                new Node\Expr\Array_(
+                                                    [
+                                                        new Node\Expr\ArrayItem(
+                                                            new Node\Scalar\String_('Hello world'),
+                                                            new Node\Scalar\String_('message')
+                                                        ),
+                                                        new Node\Expr\ArrayItem(
+                                                            new Node\Expr\FuncCall(new Node\Name('gethostname')),
+                                                            new Node\Scalar\String_('server')
+                                                        ),
+                                                    ],
+                                                    [
+                                                        'kind' => Node\Expr\Array_::KIND_SHORT
+                                                    ]
+                                                )
+                                            )
+                                        ]
+                                    )
+                                )
+                            ]
+                        )
+                    )
+                ]
+            )
         );
     }
 }
