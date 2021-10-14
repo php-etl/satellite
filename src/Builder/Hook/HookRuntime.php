@@ -12,15 +12,8 @@ final class HookRuntime
             class: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Hook\\HookRuntime'),
             args: [
                 new Node\Arg(
-                    new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
-                        args: [
-                            new Node\Arg(
-                                value: new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
-                                ),
-                            ),
-                        ],
+                    value: new Node\Expr\New_(
+                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
                     ),
                 ),
                 new Node\Arg(

@@ -7,7 +7,7 @@ use PhpParser\Node;
 
 final class PipelineBuilder
 {
-public function __construct(private Builder $builder)
+    public function __construct(private Builder $builder)
     {
     }
 

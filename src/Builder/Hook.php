@@ -50,6 +50,18 @@ final class Hook implements Builder
 
     public function getNode(): Node
     {
+        /*
+
+        return $psr17Factory->createResponse(200)
+            ->withBody(
+                $psr17Factory->createStream(
+                    json_encode([
+                        'message' => 'Hello World!',
+                        'server' => gethostname(),
+                    ])
+                )
+            );
+         */
         return new Node\Expr\Include_(
             new Node\Scalar\String_($this->pipeline['http_hook']['function']),
             Node\Expr\Include_::TYPE_REQUIRE,
