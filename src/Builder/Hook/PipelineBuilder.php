@@ -19,7 +19,7 @@ final class PipelineBuilder
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
-                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\HookRuntimeInterface'),
+                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Hook\\HookRuntimeInterface'),
                     )
                 ],
                 'stmts' => [

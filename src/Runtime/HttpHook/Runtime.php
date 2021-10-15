@@ -178,7 +178,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                     )
                                                 ],
                                                 'uses' => [
-                                                    new Node\Expr\Variable('pipeline'),
+                                                    new Node\Expr\Variable('runtime'),
                                                     new Node\Expr\Variable('psr17Factory'),
                                                 ],
                                                 'stmts' => $this->buildDispatcherClosure($builder)
@@ -203,7 +203,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
             new Node\Stmt\Expression(
                 expr: new Node\Expr\Assign(
                     var: new Node\Expr\Variable('interpreter'),
-                    expr: new Node\Expr\New_(new Node\Name('Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage')),
+                    expr: new Node\Expr\New_(new Node\Name('Symfony\Component\ExpressionLanguage\ExpressionLanguage')),
                 ),
             ),
             new Node\Stmt\Expression(
@@ -245,21 +245,24 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 [
                     'stmts' => [
                         new Node\Stmt\Expression(
-                            expr: new Node\Expr\MethodCall(
-                                var: new Node\Expr\MethodCall(
-                                    var: new Node\Expr\Variable('pipeline'),
-                                    name: 'feed',
-                                    args: [
-                                        new Node\Arg(
-                                            new Node\Expr\Variable('item')
-                                        )
-                                    ]
-                                ),
-                                name: 'run'
-                            )
+                            new Node\Expr\MethodCall(
+                                var: new Node\Expr\Variable('runtime'),
+                                name: 'feed',
+                                args: [
+                                    new Node\Arg(
+                                        new Node\Expr\Variable('item')
+                                    )
+                                ]
+                            ),
                         ),
                     ]
                 ]
+            ),
+            new Node\Stmt\Expression(
+                new Node\Expr\MethodCall(
+                    var: new Node\Expr\Variable('runtime'),
+                    name: 'run'
+                )
             ),
             $builder->getNode()
         ];
