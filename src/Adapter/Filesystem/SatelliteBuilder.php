@@ -44,7 +44,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $this->composerAutoload['psr4'] = [];
         }
 
-        array_push($this->composerAutoload['psr4'], ...$autoloads);
+        array_push($this->composerAutoload['psr4'], $autoloads);
 
         return $this;
     }

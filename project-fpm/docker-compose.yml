@@ -12,15 +12,9 @@ services:
 
   satellite-1:
     image: kiboko/satellite:foo
-    volumes:
-      - ./hello.php:/var/www/html/hello.php
-      - ./hello2.php:/var/www/html/hello2.php
 
   satellite-2:
     image: kiboko/satellite:bar
-    volumes:
-      - ./hello.php:/var/www/html/hello.php
-      - ./hello2.php:/var/www/html/hello2.php
 
 volumes:
   caddy_data:

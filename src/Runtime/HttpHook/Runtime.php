@@ -87,7 +87,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                         new Node\Arg(
                                                             new Node\Expr\BinaryOp\Concat(
                                                                 new Node\Scalar\MagicConst\Dir(),
-                                                                new Node\Scalar\String_('/pipelinexxxxx.php')
+                                                                new Node\Scalar\String_('/pipeline.php')
                                                             )
                                                         )
                                                     ]
@@ -165,22 +165,42 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                                     ],
                                                                     'stmts' => [
                                                                         new Node\Stmt\Expression(
+                                                                            expr: new Node\Expr\Assign(
+                                                                                var: new Node\Expr\Variable('interpreter'),
+                                                                                expr: new Node\Expr\New_(new Node\Name('Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage')),
+                                                                            ),
+                                                                        ),
+                                                                        new Node\Stmt\Expression(
                                                                             expr: new Node\Expr\MethodCall(
                                                                                 var: new Node\Expr\MethodCall(
                                                                                     var: new Node\Expr\Variable('pipeline'),
                                                                                     name: 'feed',
                                                                                     args: [
                                                                                         new Node\Arg(
-                                                                                            value: new Node\Expr\FuncCall(
-                                                                                                name: new Node\Name('json_decode'),
+                                                                                            new Node\Expr\MethodCall(
+                                                                                                var: new Node\Expr\Variable('interpreter'),
+                                                                                                name: 'evaluate',
                                                                                                 args: [
                                                                                                     new Node\Arg(
-                                                                                                        value: new Node\Expr\MethodCall(
-                                                                                                            var: new Node\Expr\MethodCall(
-                                                                                                                var: new Node\Expr\Variable('request'),
-                                                                                                                name: 'getBody',
-                                                                                                            ),
-                                                                                                            name: 'getContents'
+                                                                                                        new Node\Scalar\String_($this->config['http_hook']['expression'])
+                                                                                                    ),
+                                                                                                    new Node\Arg(
+                                                                                                        new Node\Expr\FuncCall(
+                                                                                                            name: new Node\Name('json_decode'),
+                                                                                                            args: [
+                                                                                                                new Node\Arg(
+                                                                                                                    value: new Node\Expr\MethodCall(
+                                                                                                                        var: new Node\Expr\MethodCall(
+                                                                                                                            var: new Node\Expr\Variable('request'),
+                                                                                                                            name: 'getBody',
+                                                                                                                        ),
+                                                                                                                        name: 'getContents'
+                                                                                                                    )
+                                                                                                                ),
+                                                                                                                new Node\Arg(
+                                                                                                                    new Node\Expr\ConstFetch(new Node\Name('true'))
+                                                                                                                )
+                                                                                                            ]
                                                                                                         )
                                                                                                     )
                                                                                                 ]

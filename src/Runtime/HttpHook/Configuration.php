@@ -54,7 +54,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                 ->end()
                 ->scalarNode('name')->end()
                 ->scalarNode('path')->end()
-                ->scalarNode('function')->end()
+                ->scalarNode('expression')->end()
                 ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
             ->end();
 

@@ -487,14 +487,18 @@ final class Service implements Configurator\FactoryInterface
                     
                     require __DIR__ . '/vendor/autoload.php';
                     require __DIR__ . '/container.php';
-                     
+                    
                     /** @var HookRuntime \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
                     
-                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
+                    \$pipeline = require __DIR__ . '/pipeline.php';
+                    
                     \$hook = require __DIR__ . '/hook.php';
                     
-                    \$hook(\$runtime)->run();
+                    \$pipeline(\$runtime);
+                    \$hook(\$runtime);
+                    \$runtime->run();
                     PHP
                 )
             )
@@ -526,7 +530,7 @@ final class Service implements Configurator\FactoryInterface
         if (array_key_exists('pipeline', $config['http_hook'])) {
             $pipeline = $this->compilePipelineJob($config['http_hook']);
             $repository->merge($pipeline);
-            $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
+            $pipelineFilename = 'pipeline.php';
 
             $repository->addFiles(
                     new Packaging\File(

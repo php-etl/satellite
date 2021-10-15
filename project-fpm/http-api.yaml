@@ -24,6 +24,7 @@ satellite:
       - "nyholm/psr7"
       - "php-etl/pipeline"
       - "php-etl/satellite"
+      - "php-etl/hook-runtime"
   http_api:
     path: /foo
     routes:

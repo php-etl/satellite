@@ -1,12 +1,12 @@
 satellite:
-  docker:
-    from: php:8.0-fpm-alpine
-    workdir: /var/www/html
-    tags:
-      - kiboko/satellite:foo
-      - kiboko/satellite:bar
-#  filesystem:
-#    path: foo
+#  docker:
+#    from: php:8.0-fpm-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:foo
+#      - kiboko/satellite:bar
+  filesystem:
+    path: foo
   composer:
 #    from-local: true
     autoload:
@@ -24,7 +24,7 @@ satellite:
       - "php-etl/pipeline"
   http_hook:
     path: /bar/hello
-    function: "hello.php"
+    expression: 'input["_items"]'
     pipeline:
       steps:
         - fastmap:

@@ -17,6 +17,7 @@ final class HookRunCommand extends Console\Command\Command
     protected function configure()
     {
         $this->setDescription('Run the hook.');
+        $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -29,6 +30,14 @@ final class HookRunCommand extends Console\Command\Command
 
         $style->writeln(sprintf('<fg=cyan>Running hook in %s</>', $input->getArgument('path')));
 
+        $command = $this->getApplication()->find('build');
+        $arguments = [
+            'config' => $input->getArgument('config')
+        ];
+
+        $commandInput = new Console\Input\ArrayInput($arguments);
+        $result = $command->run($commandInput, $output);
+
         /** @var ClassLoader $autoload */
         if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
             $style->error('There is no compiled hook at the provided path');
@@ -38,35 +47,12 @@ final class HookRunCommand extends Console\Command\Command
         $cwd = getcwd();
         chdir($input->getArgument('path'));
 
+        $style->writeln(PHP_EOL.'<fg=cyan>Server</>');
         $process = new Process(['php', '-S', 'localhost:8000', 'main.php']);
         $process->setTimeout(null);
-        $process->run();
-
-//        $autoload = include 'vendor/autoload.php';
-//        $autoload->register();
-//
-//        require 'container.php';
-//        $container = new \ProjectServiceContainer();
-//
-//        $runtime = new Satellite\Console\HookConsoleRuntime(
-//            $output,
-//            new \Kiboko\Component\Satellite\Component\Hook(),
-//            new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger()),
-//            $container
-//        );
-//
-//        /** @var callable(runtime: HookRuntimeInterface): \Runtime $hook */
-//        $hook = include 'hook.php';
-//
-//        $start = microtime(true);
-//        $start = microtime(true);
-//        $hook($runtime);
-//        $runtime->run();
-//        $end = microtime(true);
-//
-//        $autoload->unregister();
-//
-//        $style->writeln(sprintf('time: %s', $this->formatTime($end - $start)));
+        $process->run(function ($type, $buffer) {
+            echo $buffer;
+        });
 
         chdir($cwd);
 

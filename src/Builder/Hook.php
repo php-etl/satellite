@@ -57,7 +57,7 @@ final class Hook implements Builder
                     'createResponse',
                     [
                         new Node\Arg(
-                            new Node\Scalar\DNumber(200),
+                            new Node\Scalar\LNumber(200),
                         )
                     ]
                 ),
