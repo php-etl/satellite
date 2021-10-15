@@ -21,7 +21,9 @@ satellite:
       - "laminas/laminas-httphandlerrunner"
       - "nyholm/psr7-server"
       - "nyholm/psr7"
-      - "php-etl/pipeline"
+      - "php-etl/hook-runtime"
+      - "symfony/expression-language"
+      - "php-etl/mapping-contracts"
   http_hook:
     path: /bar/hello
     expression: 'input["_items"]'
