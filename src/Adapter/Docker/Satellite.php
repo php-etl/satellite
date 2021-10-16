@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
+use Kiboko\Component\Packaging\TarArchive;
 use Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use Kiboko\Contract\Packaging;
@@ -55,7 +56,7 @@ final class Satellite implements SatelliteInterface
 
     public function build(LoggerInterface $logger): void
     {
-        $archive = new Packaging\TarArchive($this->dockerfile, ...$this->files);
+        $archive = new TarArchive($this->dockerfile, ...$this->files);
 
         $iterator = function (iterable $tags) {
             foreach ($tags as $tag) {

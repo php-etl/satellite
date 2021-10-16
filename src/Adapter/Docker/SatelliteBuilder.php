@@ -12,8 +12,10 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 {
     private string $fromImage;
     private string $workdir;
-    /** @var iterable<string> */
+    /** @var list<string> */
     private iterable $composerRequire;
+    /** @var list<array{psr-4: array<string, string>}> */
+    private array $composerAutoload;
     /** @var iterable<string> */
     private iterable $entrypoint;
     /** @var iterable<string> */
@@ -31,6 +33,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     {
         $this->fromImage = $fromImage;
         $this->workdir = '/var/www/html/';
+        $this->composerAutoload = [];
         $this->composerRequire = [];
         $this->entrypoint = [];
         $this->command = [];
@@ -44,6 +47,17 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     public function withWorkdir(string $path): self
     {
         $this->workdir = $path;
+
+        return $this;
+    }
+
+    public function withComposerPSR4Autoload(array $autoloads): self
+    {
+        if (!array_key_exists('psr4', $this->composerAutoload)) {
+            $this->composerAutoload['psr4'] = [];
+        }
+
+        array_push($this->composerAutoload['psr4'], ...$autoloads);
 
         return $this;
     }

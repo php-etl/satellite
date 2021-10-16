@@ -6,13 +6,13 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 {
-    /** @var iterable<string> */
+    /** @var list<string> */
     private iterable $composerRequire;
+    /** @var list<array{psr-4: array<string, string>}> */
     private array $composerAutoload;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
@@ -38,7 +38,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(array $autoloads): self
     {
         if (!array_key_exists('psr4', $this->composerAutoload)) {
             $this->composerAutoload['psr4'] = [];

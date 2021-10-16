@@ -20,7 +20,7 @@ function expectAttributes(object $object, string $class): \Traversable
     $reflection = new \ReflectionObject($object);
     $attributes = $reflection->getAttributes($class);
     if (count($attributes) < 1) {
-        throw new \RuntimeException('the provided configuration object should have a ' . $class . ' attribute defined.');
+        throw MissingAttributeException::expectedAttribute($class);
     }
 
     /** @var \ReflectionAttribute $attribute */
