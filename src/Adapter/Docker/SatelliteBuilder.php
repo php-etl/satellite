@@ -27,6 +27,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     private iterable $paths;
     /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
+    /** @var array<string, list<string>> */
     private array $composerAutoload;
 
     public function __construct(string $fromImage)
@@ -51,7 +52,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(array $autoloads): self
     {
         if (!array_key_exists('psr4', $this->composerAutoload)) {
             $this->composerAutoload['psr4'] = [];
@@ -157,6 +158,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));
         }
+
+        // FIXME: finish the Sylius API client migration
+        $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerAddGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git'));
 
         if (count($this->composerRequire) > 0) {
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerRequire(...$this->composerRequire));

@@ -76,7 +76,7 @@ final class Satellite implements SatelliteInterface
 
         $process->run(function ($type, $buffer) use ($logger) {
             if (Process::ERR === $type) {
-                $logger->error($buffer);
+                $logger->info($buffer);
             } else {
                 $logger->debug($buffer);
             }
