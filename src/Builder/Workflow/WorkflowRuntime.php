@@ -10,7 +10,7 @@ final class WorkflowRuntime implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\WorkflowConsoleRuntime'),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Workflow\\Console'),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(

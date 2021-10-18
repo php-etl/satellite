@@ -52,7 +52,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Satellite\\Console\\PipelineRuntimeInterface'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\PipelineRuntimeInterface'),
                             )
                         ],
                         'stmts' => [

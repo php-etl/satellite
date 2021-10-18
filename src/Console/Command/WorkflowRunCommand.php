@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
-use Kiboko\Component\Satellite;
+use Kiboko\Component\Runtime\Workflow\Console as WorkflowConsoleRuntime;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,7 +41,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         $autoload = include 'vendor/autoload.php';
         $autoload->register();
 
-        $runtime = new Satellite\Console\WorkflowConsoleRuntime(
+        $runtime = new WorkflowConsoleRuntime(
             $output,
             new \Kiboko\Component\Workflow\Workflow(),
             new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger()),

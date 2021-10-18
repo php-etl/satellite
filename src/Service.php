@@ -226,18 +226,21 @@ final class Service implements Configurator\FactoryInterface
                 new Packaging\Asset\InMemory(
                     <<<PHP
                     <?php
-                    
-                    use Kiboko\Component\Satellite\Console\WorkflowConsoleRuntime;
+    
+                    use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';
                     
-                    /** @var WorkflowConsoleRuntime \$runtime */
+                    /** @var WorkflowRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
                     
                     /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
                     \$workflow = require __DIR__ . '/workflow.php';
                     
-                    \$workflow(\$runtime)->run();
+                    chdir(__DIR__);
+                    
+                    \$workflow(\$runtime);
+                    \$runtime->run();
                     PHP
                 )
             )
@@ -247,7 +250,7 @@ final class Service implements Configurator\FactoryInterface
             new Packaging\File(
                 'runtime.php',
                 new Packaging\Asset\AST(
-                    new Node\Stmt\Expression(
+                    new Node\Stmt\Return_(
                         (new Satellite\Builder\Workflow\WorkflowRuntime())->getNode()
                     )
                 )
@@ -256,7 +259,7 @@ final class Service implements Configurator\FactoryInterface
 
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
-                $pipeline = $this->compilePipeline($job);
+                $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
                 $repository->merge($pipeline);
@@ -280,7 +283,7 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
+    private function compilePipelineJob(array $config): Satellite\Builder\Repository\Pipeline
     {
         $pipeline = new Satellite\Builder\Pipeline(
             new Node\Expr\Variable('runtime'),
@@ -293,11 +296,39 @@ final class Service implements Configurator\FactoryInterface
         $repository->addPackages(
             'php-etl/pipeline-contracts:~0.3.0@dev',
             'php-etl/pipeline:~0.4.0@dev',
+            'php-etl/console-state:~0.1.0@dev',
+            'php-etl/pipeline-console-runtime:~0.1.0@dev',
+            'php-etl/workflow-console-runtime:~0.1.0@dev',
             'psr/log:^1.1',
             'monolog/monolog',
             'symfony/console:^5.2',
             'symfony/dependency-injection:^5.2',
         );
+
+        if (array_key_exists('expression_language', $config['pipeline'])
+            && is_array($config['pipeline']['expression_language'])
+            && count($config['pipeline']['expression_language'])
+        ) {
+            foreach ($config['pipeline']['expression_language'] as $provider) {
+                $interpreter->registerProvider(new $provider);
+            }
+        }
+
+        foreach ($config['pipeline']['steps'] as $step) {
+            $plugins = array_intersect_key($this->plugins, $step);
+            foreach ($plugins as $plugin) {
+                $plugin->appendTo($step, $repository);
+            }
+        }
+
+        return $repository;
+    }
+
+    private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
+    {
+        $repository = $this->compilePipelineJob($config);
+
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $repository->addFiles(
             new Packaging\File(
@@ -306,7 +337,7 @@ final class Service implements Configurator\FactoryInterface
                     <<<PHP
                     <?php
 
-                    use Kiboko\Component\Satellite\Console\PipelineRuntimeInterface;
+                    use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
 
@@ -316,7 +347,10 @@ final class Service implements Configurator\FactoryInterface
                     /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
                     \$pipeline = require __DIR__ . '/pipeline.php';
 
-                    \$pipeline(\$runtime)->run();
+                    chdir(__DIR__);
+
+                    \$pipeline(\$runtime);
+                    \$runtime->run();
                     PHP
                 )
             )
