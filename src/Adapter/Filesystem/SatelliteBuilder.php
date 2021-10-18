@@ -109,10 +109,18 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             if ($this->composerLockFile !== null) {
                 $satellite->withFile($this->composerLockFile);
             }
+
+            // FIXME: finish the Sylius API client migration
+            $composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
+
             $composer->install();
-        } elseif (count($this->composerRequire) > 0) {
+        } else {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
+
+            // FIXME: finish the Sylius API client migration
+            $composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
+
 //            $composer->autoload($this->autoload);
         }
 

@@ -89,4 +89,15 @@ final class Composer
             '--no-dev',
         );
     }
+
+    public function addGithubRepository(string $name, string $url): void
+    {
+        $this->execute(
+            'composer',
+            'config',
+            sprintf('repositories.%s', $name),
+            'github',
+            $url,
+        );
+    }
 }

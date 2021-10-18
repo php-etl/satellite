@@ -328,6 +328,8 @@ final class Service implements Configurator\FactoryInterface
     {
         $repository = $this->compilePipelineJob($config);
 
+        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
@@ -364,6 +366,22 @@ final class Service implements Configurator\FactoryInterface
                 )
             )
         );
+
+        if (array_key_exists('expression_language', $config['pipeline'])
+            && is_array($config['pipeline']['expression_language'])
+            && count($config['pipeline']['expression_language'])
+        ) {
+            foreach ($config['pipeline']['expression_language'] as $provider) {
+                $interpreter->registerProvider(new $provider);
+            }
+        }
+
+        foreach ($config['pipeline']['steps'] as $step) {
+            $plugins = array_intersect_key($this->plugins, $step);
+            foreach ($plugins as $plugin) {
+                $plugin->appendTo($step, $repository);
+            }
+        }
 
         return $repository;
     }
