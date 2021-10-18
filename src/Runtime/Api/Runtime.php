@@ -13,7 +13,7 @@ use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'function.php')
+    public function __construct(private array $config, private string $filename = 'api.php')
     {
     }
 
@@ -61,6 +61,26 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
 
+            new Node\Stmt\Return_(
+                new Node\Expr\Closure(
+                    subNodes: [
+                        'static' => true,
+                        'params' => [
+                            new Node\Param(
+                                var: new Node\Expr\Variable('runtime'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\API\\ApiRuntime'),
+                            )
+                        ],
+                        'stmts' => $this->buildApiClosure()
+                    ]
+                ),
+            )
+        ];
+    }
+
+    public function buildApiClosure(): array
+    {
+        return [
             new Node\Stmt\Expression(
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('psr17Factory'),
@@ -107,6 +127,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         )
                                     ],
                                     'uses' => [
+                                        new Node\Expr\Variable('runtime'),
                                         new Node\Expr\Variable('psr17Factory')
                                     ],
                                     'stmts' => iterator_to_array($this->compileRoutes(
@@ -194,31 +215,107 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
-    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory, string $path): Node\Stmt\Expression
-    {
-        return new Node\Stmt\Expression(
-            new Node\Expr\MethodCall(
-                $router,
-                $routeConfig['method'] ?? 'get',
-                [
-                    new Node\Arg(
-                        new Node\Scalar\String_($path)
-                    ),
-                    new Node\Arg(
-                        new Node\Expr\Include_(
-                            new Node\Scalar\String_($routeConfig['function']),
-                            Node\Expr\Include_::TYPE_REQUIRE,
-                        )
-                    ),
-                ],
-            ),
-        );
-    }
-
     private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
     {
         foreach ($this->config['http_api']['routes'] as $route) {
-            yield $this->routeToAST($route, $router, $factory, $this->config['http_api']['path'] . $route['route']);
+            yield new Node\Stmt\Expression(
+                new Node\Expr\MethodCall(
+                    $router,
+                    $routeConfig['method'] ?? 'get',
+                    [
+                        new Node\Arg(
+                            new Node\Scalar\String_($this->config['http_api']['path'] . $route['route'])
+                        ),
+                        new Node\Arg(
+                            $this->compileClosure($route, $router, $factory)
+                        )
+                    ]
+                )
+            );
         }
+    }
+
+    private function compileClosure(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory)
+    {
+        return new Node\Expr\Closure(
+            subNodes: [
+                'params' => [
+                    new Node\Param(
+                        var: new Node\Expr\Variable('request'),
+                        type: new Node\Name\FullyQualified('Psr\Http\Message\RequestInterface'),
+                    )
+                ],
+                'uses' => [
+                    new Node\Expr\Variable('runtime'),
+                    new Node\Expr\Variable('psr17Factory'),
+                ],
+                'stmts' => [
+                    new Node\Stmt\Expression(
+                        expr: new Node\Expr\Assign(
+                            var: new Node\Expr\Variable('interpreter'),
+                            expr: new Node\Expr\New_(new Node\Name('Symfony\Component\ExpressionLanguage\ExpressionLanguage')),
+                        ),
+                    ),
+                    new Node\Stmt\Expression(
+                        new Node\Expr\Assign(
+                            new Node\Expr\Variable('items'),
+                            new Node\Expr\MethodCall(
+                                new Node\Expr\Variable('interpreter'),
+                                'evaluate',
+                                [
+                                    new Node\Arg(
+                                        new Node\Scalar\String_($routeConfig['expression'])
+                                    ),
+                                    new Node\Arg(
+                                        new Node\Expr\FuncCall(
+                                            name: new Node\Name('json_decode'),
+                                            args: [
+                                                new Node\Arg(
+                                                    value: new Node\Expr\MethodCall(
+                                                        var: new Node\Expr\MethodCall(
+                                                            var: new Node\Expr\Variable('request'),
+                                                            name: 'getBody',
+                                                        ),
+                                                        name: 'getContents'
+                                                    )
+                                                ),
+                                                new Node\Arg(
+                                                    new Node\Expr\ConstFetch(new Node\Name('true'))
+                                                )
+                                            ]
+                                        )
+                                    )
+                                ]
+                            )
+                        )
+                    ),
+                    new Node\Stmt\Foreach_(
+                        new Node\Expr\Variable('items'),
+                        new Node\Expr\Variable('item'),
+                        [
+                            'stmts' => [
+                                new Node\Stmt\Expression(
+                                    new Node\Expr\MethodCall(
+                                        var: new Node\Expr\Variable('runtime'),
+                                        name: 'feed',
+                                        args: [
+                                            new Node\Arg(
+                                                new Node\Expr\Variable('item')
+                                            )
+                                        ]
+                                    ),
+                                ),
+                            ]
+                        ]
+                    ),
+                    new Node\Stmt\Expression(
+                        new Node\Expr\MethodCall(
+                            var: new Node\Expr\Variable('runtime'),
+                            name: 'run'
+                        )
+                    )
+                ]
+            ],
+        );
     }
 }

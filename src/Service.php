@@ -449,7 +449,7 @@ final class Service implements Configurator\FactoryInterface
                 'runtime.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\API\APIRuntime())->getNode()
+                        (new Satellite\Builder\API\ApiRuntime())->getNode()
                     )
                 )
             )

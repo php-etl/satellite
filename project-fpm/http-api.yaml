@@ -1,12 +1,12 @@
 satellite:
-  docker:
-    from: php:8.0-fpm-alpine
-    workdir: /var/www/html
-    tags:
-      - kiboko/satellite:foo
-      - kiboko/satellite:bar
-#  filesystem:
-#    path: foo
+#  docker:
+#    from: php:8.0-fpm-alpine
+#    workdir: /var/www/html
+#    tags:
+#      - kiboko/satellite:foo
+#      - kiboko/satellite:bar
+  filesystem:
+    path: foo
   composer:
 #    from-local: true
     autoload:
@@ -24,12 +24,12 @@ satellite:
       - "nyholm/psr7"
       - "php-etl/pipeline"
       - "php-etl/satellite"
-      - "php-etl/hook-runtime"
+#      - "php-etl/hook-runtime"
   http_api:
     path: /foo
     routes:
       - route: /hello
-        function: "hello.php"
+        expression: 'input["_items"]'
         pipeline:
           steps:
             - fastmap:
@@ -51,7 +51,7 @@ satellite:
                 logger:
                   type: stderr
       - route: /events/products
-        function: "hello2.php"
+        expression: 'input["_items"]'
         pipeline:
           steps:
             - fastmap:

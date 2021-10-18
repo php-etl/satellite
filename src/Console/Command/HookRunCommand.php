@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-final class HookRunCommand extends Console\Command\Command
+class HookRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:hook';
 
@@ -28,7 +28,7 @@ final class HookRunCommand extends Console\Command\Command
             $output,
         );
 
-        $style->writeln(sprintf('<fg=cyan>Running hook in %s</>', $input->getArgument('path')));
+        $style->writeln(sprintf('<fg=cyan>Running in %s</>', $input->getArgument('path')));
 
         $command = $this->getApplication()->find('build');
         $arguments = [
@@ -36,11 +36,11 @@ final class HookRunCommand extends Console\Command\Command
         ];
 
         $commandInput = new Console\Input\ArrayInput($arguments);
-        $result = $command->run($commandInput, $output);
+        $command->run($commandInput, $output);
 
         /** @var ClassLoader $autoload */
         if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
-            $style->error('There is no compiled hook at the provided path');
+            $style->error('Nothing is compiled at the provided path');
             return 1;
         }
 
@@ -57,40 +57,5 @@ final class HookRunCommand extends Console\Command\Command
         chdir($cwd);
 
         return 0;
-    }
-
-    private function formatTime(float $time): string
-    {
-        if ($time < .00001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 2));
-        }
-        if ($time < .0001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 1));
-        }
-        if ($time < .001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000));
-        }
-        if ($time < .01) {
-            return sprintf('<fg=cyan>%sms</>', number_format($time * 1000, 2));
-        }
-        if ($time < .1) {
-            return sprintf('<fg=cyan>%sms</>', number_format($time * 1000, 1));
-        }
-        if ($time < 1) {
-            return sprintf('<fg=cyan>%sms</>', number_format($time * 1000));
-        }
-        if ($time < 10) {
-            return sprintf('<fg=cyan>%ss</>', number_format($time, 2));
-        }
-        if ($time < 3600) {
-            $minutes = floor($time / 60);
-            $seconds = $time - (60 * $minutes);
-            return sprintf('<fg=cyan>%smin</> <fg=cyan>%ss</>', number_format($minutes), number_format($seconds, 2));
-        }
-        $hours = floor($time / 3600);
-        $minutes = floor(($time - (3600 * $hours)) / 60);
-        $seconds = $time - (3600 * $hours) - (60 * $minutes);
-
-        return sprintf('<fg=cyan>%sh</> <fg=cyan>%smin</> <fg=cyan>%ss</>', number_format($hours), number_format($minutes), number_format($seconds, 2));
     }
 }
