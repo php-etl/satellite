@@ -1,15 +1,6 @@
 satellite:
   filesystem:
     path: build/
-  composer:
-    require:
-      - "php-etl/pipeline:^0.3"
-      - "php-etl/fast-map:^0.2"
-      - "php-etl/csv-flow:^0.2"
-      - "php-etl/rabbitmq-flow:^0.1"
-      - "akeneo/api-php-client-ee"
-      - "laminas/laminas-diactoros"
-      - "php-http/guzzle7-adapter"
   pipeline:
     steps:
     - akeneo:

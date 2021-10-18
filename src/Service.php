@@ -126,8 +126,11 @@ final class Service implements Configurator\FactoryInterface
     {
         foreach ($adapters as $adapter) {
             /** @var Configurator\Adapter $attribute */
-            foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
-                $this->addAdapter($attribute, $adapter);
+            try {
+                foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
+                    $this->addAdapter($attribute, $adapter);
+                }
+            } catch (MissingAttributeException $exception) {
             }
         }
 

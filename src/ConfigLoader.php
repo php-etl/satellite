@@ -47,7 +47,20 @@ class ConfigLoader implements ConfigLoaderInterface
                     }
                 }
 
-                if (array_key_exists('imports', $satellite['pipeline'])) {
+                if (array_key_exists('workflow', $satellite)
+                    && array_key_exists('imports', $satellite['workflow'])
+                ) {
+                    $imports = $satellite['workflow']['imports'];
+                    unset($satellite['workflow']['imports']);
+
+                    foreach ($imports as $import) {
+                        $satellite['workflow'] = array_merge($satellite['workflow'], $loader->load($import['resource']));
+                    }
+                }
+
+                if (array_key_exists('pipeline', $satellite)
+                    && array_key_exists('imports', $satellite['pipeline'])
+                ) {
                     $imports = $satellite['pipeline']['imports'];
                     unset($satellite['pipeline']['imports']);
 

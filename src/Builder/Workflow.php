@@ -59,6 +59,6 @@ final class Workflow implements Builder
             $workflow = $pipeline($workflow);
         }
 
-        return new Node\Stmt\Expression($workflow);
+        return $workflow;
     }
 }

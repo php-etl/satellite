@@ -20,21 +20,21 @@ final class ConfigurationApplier
 
     public function withExtractor(?string $key = 'extractor'): self
     {
-        $this->steps[] = new Extractor($this->plugin, $key, $this->interpreter);
+        $this->steps[] = new Extractor($this->plugin, $key, clone $this->interpreter);
 
         return $this;
     }
 
     public function withTransformer(?string $key = 'transformer'): self
     {
-        $this->steps[] = new Transformer($this->plugin, $key, $this->interpreter);
+        $this->steps[] = new Transformer($this->plugin, $key, clone $this->interpreter);
 
         return $this;
     }
 
     public function withLoader(?string $key = 'loader'): self
     {
-        $this->steps[] = new Loader($this->plugin, $key, $this->interpreter);
+        $this->steps[] = new Loader($this->plugin, $key, clone $this->interpreter);
 
         return $this;
     }
