@@ -29,7 +29,7 @@
         }
       ]
     },
-    "satellites": {
+    "runtimes": {
       "oneOf": [
         {
           "type": "object",
@@ -60,7 +60,7 @@
         "satellite": {
           "allOf": [
             { "$ref": "#/$defs/adapters" },
-            { "$ref": "#/$defs/satellites" },
+            { "$ref": "#/$defs/runtimes" },
             {
               "type": "object",
               "properties": {
@@ -84,7 +84,7 @@
             "^[a-z_]+[a-z0-9_]+$": {
               "allOf": [
                 { "$ref": "#/$defs/adapters" },
-                { "$ref": "#/$defs/satellites" },
+                { "$ref": "#/$defs/runtimes" },
                 {
                   "type": "object",
                   "additionalProperties": false,
