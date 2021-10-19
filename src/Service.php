@@ -223,6 +223,10 @@ final class Service implements Configurator\FactoryInterface
 
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
 
+        $repository->addPackages(
+            'php-etl/workflow:~0.1.0@dev',
+        );
+
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
