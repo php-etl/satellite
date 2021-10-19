@@ -24,7 +24,7 @@ satellite:
       - "nyholm/psr7"
       - "php-etl/pipeline"
       - "php-etl/satellite"
-#      - "php-etl/hook-runtime"
+      - "php-etl/api-runtime"
   http_api:
     path: /foo
     routes:
@@ -36,8 +36,6 @@ satellite:
                 map:
                   - field: '[sku]'
                     copy: '[sku]'
-                  - field: '[title]'
-                    expression: 'input["sku"] ~" | "~ input["name"]'
                   - field: '[name]'
                     copy: '[name]'
                   - field: '[staticValue]'
@@ -58,8 +56,6 @@ satellite:
                 map:
                   - field: '[sku]'
                     copy: '[sku]'
-                  - field: '[title]'
-                    expression: 'input["sku"] ~" | "~ input["name"]'
                   - field: '[name]'
                     copy: '[name]'
                   - field: '[staticValue]'

@@ -22,7 +22,7 @@ final class RuntimeChoice
         $satellite = ($this->adapterChoice)($configuration)->build();
 
         if (array_key_exists('http_api', $configuration)) {
-            $factory = new Satellite\Runtime\Api\Factory();
+            $factory = new Satellite\Runtime\API\Factory();
         } elseif (array_key_exists('http_hook', $configuration)) {
             $factory = new Satellite\Runtime\HttpHook\Factory();
         } elseif (array_key_exists('pipeline', $configuration)) {
