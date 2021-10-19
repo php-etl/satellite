@@ -6,12 +6,14 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\SatelliteToolbox;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
@@ -44,7 +46,7 @@ final class Service implements Configurator\FactoryInterface
                 new Adapter\Filesystem\Factory(),
             )
             ->registerRuntimes(
-                new Runtime\Api\Factory(),
+                new Runtime\API\Factory(),
                 new Runtime\HttpHook\Factory(),
                 new Runtime\Pipeline\Factory(),
                 new Runtime\Workflow\Factory(),
@@ -204,12 +206,18 @@ final class Service implements Configurator\FactoryInterface
     {
         if (array_key_exists('workflow', $config)) {
             return $this->compileWorkflow($config);
-        } elseif (array_key_exists('pipeline', $config)) {
+        }
+
+        if (array_key_exists('pipeline', $config)) {
             return $this->compilePipeline($config);
-        } elseif (array_key_exists('http_hook', $config)) {
+        }
+
+        if (array_key_exists('http_hook', $config)) {
             return $this->compileHook($config);
-        } elseif (array_key_exists('http_api', $config)) {
-            return $this->compileApi($config);
+        }
+
+        if (array_key_exists('http_api', $config)) {
+            return $this->compileAPI($config);
         }
 
         throw new \LogicException('Not implemented');
@@ -229,7 +237,7 @@ final class Service implements Configurator\FactoryInterface
                 new Packaging\Asset\InMemory(
                     <<<PHP
                     <?php
-    
+
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';
@@ -263,7 +271,7 @@ final class Service implements Configurator\FactoryInterface
         foreach ($config['workflow']['jobs'] as $job) {
             if (array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
-                $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline', true));
 
                 $repository->merge($pipeline);
                 $repository->addFiles(
@@ -389,17 +397,188 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileApi(array $config): Satellite\Builder\Repository\API
+    private function compileAPI(array $config): Satellite\Builder\Repository\API
     {
-        $pipeline = new Satellite\Builder\API();
+        $apiBuilder = new Satellite\Builder\API();
 
-        return new Satellite\Builder\Repository\API($pipeline);
+        $repository = new Satellite\Builder\Repository\API($apiBuilder);
+
+        $pipelineMapping = [];
+
+        foreach ($config['http_api']['routes'] as $route) {
+            if (array_key_exists('pipeline', $route)) {
+                $pipeline = $this->compilePipelineJob($route);
+                $pipelineFilename = sprintf('%s.php', uniqid('pipeline', true));
+                $pipelineMapping[$route['route']] = $pipelineFilename;
+
+                $repository->merge($pipeline);
+                $repository->addFiles(
+                    new Packaging\File(
+                        $pipelineFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\API\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
+
+//                $apiBuilder->addPipeline($pipelineFilename);
+            } else {
+                throw new \LogicException('Not implemented');
+            }
+        }
+
+        $compiledMapping = "";
+        foreach ($pipelineMapping as $route => $pipeline) {
+            $compiledMapping .= PHP_EOL . <<<PHP
+            \$pipeline = require('$pipeline');
+            \$hook = require('hook.php');
+            \$pipeline(\$hook);
+            \$runtime->addHookRuntime('$route',\$hook);
+            PHP;
+        }
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                    <?php
+
+                    use Kiboko\Component\Runtime\Api\APIRuntime;
+
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
+
+                    /** @var APIRuntime \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+                    PHP .
+                    $compiledMapping . PHP_EOL
+                    .
+                    <<<PHP
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$api */
+                    \$api = require __DIR__ . '/api.php';
+
+                    \$api(\$runtime);
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'hook.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\Hook\HookRuntime())->getNode()
+                    )
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\API\APIRuntime())->getNode()
+                    )
+                )
+            )
+        );
+
+        $container = new SatelliteDependencyInjection();
+
+        $dumper = new PhpDumper($container($config['http_api']));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
+        );
+
+        return $repository;
     }
 
     private function compileHook(array $config): Satellite\Builder\Repository\Hook
     {
-        $pipeline = new Satellite\Builder\Hook();
+        $hookBuilder = new Satellite\Builder\Hook($config);
 
-        return new Satellite\Builder\Repository\Hook($pipeline);
+        $repository = new Satellite\Builder\Repository\Hook($hookBuilder);
+
+        $repository->addFiles(
+            new Packaging\File(
+                'main.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                    <?php
+                    
+                    use Kiboko\Component\Runtime\Hook\HookRuntime;
+                    
+                    require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
+                    
+                    /** @var HookRuntime \$runtime */
+                    \$runtime = require __DIR__ . '/runtime.php';
+                    
+                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
+                    \$pipeline = require __DIR__ . '/pipeline.php';
+                    
+                    \$hook = require __DIR__ . '/hook.php';
+                    
+                    \$pipeline(\$runtime);
+                    \$hook(\$runtime);
+                    \$runtime->run();
+                    PHP
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'runtime.php',
+                new Packaging\Asset\AST(
+                    new Node\Stmt\Return_(
+                        (new Satellite\Builder\Hook\HookRuntime())->getNode()
+                    )
+                )
+            )
+        );
+
+        $container = new SatelliteDependencyInjection();
+
+        $dumper = new PhpDumper($container($config));
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    $dumper->dump()
+                )
+            ),
+        );
+
+        if (array_key_exists('pipeline', $config['http_hook'])) {
+            $pipeline = $this->compilePipelineJob($config['http_hook']);
+            $repository->merge($pipeline);
+            $pipelineFilename = 'pipeline.php';
+
+            $repository->addFiles(
+                new Packaging\File(
+                    $pipelineFilename,
+                    new Packaging\Asset\AST(
+                        new Node\Stmt\Return_(
+                            (new Satellite\Builder\Hook\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                        )
+                    )
+                )
+            );
+        } else {
+            throw new \LogicException('Not implemented');
+        }
+
+        return $repository;
     }
 }

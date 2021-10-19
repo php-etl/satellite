@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Runtime\HttpHook;
+namespace Kiboko\Component\Satellite\Runtime\API;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
@@ -42,20 +42,29 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         return $this;
     }
 
+
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('http_hook');
+        $builder = new TreeBuilder('http_api');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-            ->arrayNode('expression_language')
-            ->scalarPrototype()->end()
-            ->end()
-            ->scalarNode('name')->end()
-            ->scalarNode('path')->end()
-            ->scalarNode('expression')->end()
-            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->scalarNode('name')->end()
+                ->scalarNode('path')->end()
+                ->arrayNode('routes')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->end()
+                            ->scalarNode('route')->end()
+                            ->scalarNode('expression')->end()
+                            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $builder;

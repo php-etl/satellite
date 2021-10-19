@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Runtime\Api;
+namespace Kiboko\Component\Satellite\Runtime\API;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;

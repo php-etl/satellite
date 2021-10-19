@@ -4,17 +4,17 @@ services:
   http:
     image: caddy:2-alpine
     volumes:
-    - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-    - ./index.html:/var/www/html/index.html
-    - caddy_data:/data
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./index.html:/var/www/html/index.html
+      - caddy_data:/data
     ports:
-    - '4000:4000'
+      - '4000:4000'
 
   satellite-1:
-    image: kiboko/satellite-1
+    image: kiboko/satellite:foo
 
   satellite-2:
-    image: kiboko/satellite-1
+    image: kiboko/satellite:bar
 
 volumes:
   caddy_data:
