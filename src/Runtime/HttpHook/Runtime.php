@@ -259,9 +259,12 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                 ]
             ),
             new Node\Stmt\Expression(
-                new Node\Expr\MethodCall(
-                    var: new Node\Expr\Variable('runtime'),
-                    name: 'run'
+                new Node\Expr\Assign(
+                    new Node\Expr\Variable('response'),
+                    new Node\Expr\MethodCall(
+                        var: new Node\Expr\Variable('runtime'),
+                        name: 'run'
+                    )
                 )
             ),
             $builder->getNode()

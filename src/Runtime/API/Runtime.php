@@ -23,8 +23,11 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         return $this->filename;
     }
 
-    public function prepare(Configurator\FactoryInterface $service, Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
-    {
+    public function prepare(
+        Configurator\FactoryInterface $service,
+        Satellite\SatelliteInterface $satellite,
+        LoggerInterface $logger
+    ): void {
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
@@ -237,8 +240,12 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         }
     }
 
-    private function compileClosure(Builder $builder, array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory)
-    {
+    private function compileClosure(
+        Builder $builder,
+        array $routeConfig,
+        Node\Expr\Variable $router,
+        Node\Expr\Variable $factory
+    ) {
         return new Node\Expr\Closure(
             subNodes: [
                 'params' => [
@@ -314,13 +321,16 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                         ]
                     ),
                     new Node\Stmt\Expression(
-                        new Node\Expr\MethodCall(
-                            var: new Node\Expr\Variable('runtime'),
-                            name: 'run',
-                            args: [
-                                new Node\Arg(
-                                    new Node\Scalar\String_($routeConfig['route']))
-                            ]
+                        expr: new Node\Expr\Assign(
+                            var: new Node\Expr\Variable('response'),
+                            expr: new Node\Expr\MethodCall(
+                                var: new Node\Expr\Variable('runtime'),
+                                name: 'run',
+                                args: [
+                                    new Node\Arg(
+                                        new Node\Scalar\String_($routeConfig['route']))
+                                ]
+                            )
                         )
                     ),
                     $builder->getNode()

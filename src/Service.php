@@ -422,8 +422,6 @@ final class Service implements Configurator\FactoryInterface
                         )
                     )
                 );
-
-//                $apiBuilder->addPipeline($pipelineFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -432,8 +430,8 @@ final class Service implements Configurator\FactoryInterface
         $compiledMapping = "";
         foreach ($pipelineMapping as $route => $pipeline) {
             $compiledMapping .= PHP_EOL . <<<PHP
-            \$pipeline = require('$pipeline');
-            \$hook = require('hook.php');
+            \$pipeline = require '$pipeline';
+            \$hook = require 'hook.php';
             \$pipeline(\$hook);
             \$runtime->addHookRuntime('$route',\$hook);
             PHP;
@@ -505,9 +503,9 @@ final class Service implements Configurator\FactoryInterface
 
     private function compileHook(array $config): Satellite\Builder\Repository\Hook
     {
-        $hookBuilder = new Satellite\Builder\Hook($config);
+        $responseBuilder = new Satellite\Builder\Response();
 
-        $repository = new Satellite\Builder\Repository\Hook($hookBuilder);
+        $repository = new Satellite\Builder\Repository\Hook($responseBuilder);
 
         $repository->addFiles(
             new Packaging\File(

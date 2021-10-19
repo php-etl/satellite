@@ -37,7 +37,7 @@ final class API implements Builder
                                                 new Node\Expr\Array_(
                                                     [
                                                         new Node\Expr\ArrayItem(
-                                                            new Node\Scalar\String_('Hello world'),
+                                                            new Node\Expr\Variable('response'),
                                                             new Node\Scalar\String_('message')
                                                         ),
                                                         new Node\Expr\ArrayItem(

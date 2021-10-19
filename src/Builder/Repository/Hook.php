@@ -15,7 +15,7 @@ final class Hook implements Configurator\RepositoryInterface
     /** @var string[] */
     private array $packages;
 
-    public function __construct(private Satellite\Builder\Hook $builder)
+    public function __construct(private Satellite\Builder\Response $builder)
     {
         $this->files = [];
         $this->packages = [];
@@ -47,7 +47,7 @@ final class Hook implements Configurator\RepositoryInterface
         return $this->packages;
     }
 
-    public function getBuilder(): Satellite\Builder\Hook
+    public function getBuilder(): Satellite\Builder\Response
     {
         return $this->builder;
     }
