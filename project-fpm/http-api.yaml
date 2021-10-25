@@ -21,6 +21,7 @@ satellite:
       - "php-etl/pipeline"
       - "php-etl/satellite"
       - "php-etl/api-runtime"
+      - "php-etl/mapping-contracts"
   http_api:
     path: /foo
     routes:

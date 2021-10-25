@@ -312,7 +312,8 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                 new Node\Scalar\String_($routeConfig['route'])
                                             ),
                                             new Node\Arg(
-                                                new Node\Expr\Variable('item')
+                                                value: new Node\Expr\Variable('item'),
+                                                unpack: true
                                             )
                                         ]
                                     ),
