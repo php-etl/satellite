@@ -52,13 +52,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(array $autoloads): self
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): self
     {
-        if (!array_key_exists('psr4', $this->composerAutoload)) {
-            $this->composerAutoload['psr4'] = [];
-        }
-
-        array_push($this->composerAutoload['psr4'], $autoloads);
+        $this->composerAutoload['psr4'][$namespace] = $paths;
 
         return $this;
     }
@@ -157,6 +153,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));
+            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerAutoload($this->composerAutoload));
         }
 
         // FIXME: finish the Sylius API client migration

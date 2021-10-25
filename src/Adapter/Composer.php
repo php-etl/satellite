@@ -21,13 +21,8 @@ final class Composer
         };
     }
 
-    private function execute(string ...$command): void
+    private function execute(Process $process): void
     {
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->workdir);
-
-        $process->setTimeout(300);
-
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
                 $this->logger->info($buffer);
@@ -41,9 +36,34 @@ final class Composer
         }
     }
 
+    private function command(string ...$command): void
+    {
+        $process = new Process($command);
+        $process->setWorkingDirectory($this->workdir);
+
+        $process->setTimeout(300);
+
+        $this->execute($process);
+    }
+
+    private function pipe(Process ...$processes): void
+    {
+        $process = Process::fromShellCommandline(implode('|', array_map(fn (Process $process) => $process->getCommandLine(), $processes)));
+        $process->setWorkingDirectory($this->workdir);
+
+        $process->setTimeout(300);
+
+        $this->execute($process);
+    }
+
+    private function subcommand(string ...$command): Process
+    {
+        return new Process($command);
+    }
+
     public function require(string ...$packages): void
     {
-        $this->execute(
+        $this->command(
             'composer',
             'require',
             '--with-dependencies',
@@ -58,7 +78,7 @@ final class Composer
 
     public function minimumStability(string $stability): void
     {
-        $this->execute(
+        $this->command(
             'composer',
             'config',
             'minimum-stability',
@@ -68,7 +88,7 @@ final class Composer
 
     public function init(string $name): void
     {
-        $this->execute(
+        $this->command(
             'composer',
             'init',
             '--no-interaction',
@@ -76,19 +96,30 @@ final class Composer
         );
     }
 
+    /**
+     * @param array<string, array<string, string|list<string>>> $autoloads
+     */
     public function autoload(array $autoloads): void
     {
-        $this->execute(
-            'composer',
-            'config',
-            'autoload',
-            ...$autoloads,
-        );
+        foreach ($autoloads as $type => $autoload) {
+            match ($type) {
+                'psr4' => $this->pipe(
+                    $this->subcommand('cat', 'composer.json'),
+                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."psr-4" |= . + %s', json_encode($autoload))),
+                    $this->subcommand('tee', 'composer.json'),
+                ),
+                'file' => $this->pipe(
+                    $this->subcommand('cat', 'composer.json'),
+                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."file" |= . + %s', json_encode($autoload))),
+                    $this->subcommand('tee', 'composer.json'),
+                )
+            };
+        }
     }
 
     public function install(): void
     {
-        $this->execute(
+        $this->command(
             'composer',
             'install',
             '--prefer-dist',
@@ -102,7 +133,7 @@ final class Composer
 
     public function addGithubRepository(string $name, string $url): void
     {
-        $this->execute(
+        $this->command(
             'composer',
             'config',
             sprintf('repositories.%s', $name),
