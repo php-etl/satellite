@@ -20,6 +20,7 @@ satellite:
       - "php-etl/hook-runtime"
       - "symfony/expression-language"
       - "php-etl/mapping-contracts"
+      - "tuupola/slim-jwt-auth"
   http_hook:
     path: /bar/hello
     expression: 'input["_items"]'

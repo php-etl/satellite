@@ -169,6 +169,25 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                     ),
                                     new Node\Expr\ArrayItem(
+                                        new Node\Expr\New_(
+                                            new Node\Name('Tuupola\\Middleware\\JwtAuthentication'),
+                                            [
+                                                new Node\Arg(
+                                                    value: new Node\Expr\Array_(
+                                                        items: [
+                                                            new Node\Expr\ArrayItem(
+                                                                value: new Node\Scalar\String_(
+                                                                    getenv('JWT_SECRET') ?: throw new \Exception('Environment variable "JWT_SECRET" is not set.')
+                                                                ),
+                                                                key: new Node\Scalar\String_('secret')
+                                                            )
+                                                        ]
+                                                    )
+                                                )
+                                            ]
+                                        )
+                                    ),
+                                    new Node\Expr\ArrayItem(
                                         value: new Node\Expr\Closure(
                                             subNodes: [
                                                 'params' => [
