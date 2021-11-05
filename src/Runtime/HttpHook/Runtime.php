@@ -169,7 +169,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                     ),
                                     new Node\Expr\ArrayItem(
-                                        (new Satellite\Runtime\Authentication())->build(),
+                                        (new Satellite\Runtime\Authorization())->build($this->config['http_hook']),
                                     ),
                                     new Node\Expr\ArrayItem(
                                         value: new Node\Expr\Closure(

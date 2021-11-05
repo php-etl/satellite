@@ -24,6 +24,14 @@ satellite:
       - "tuupola/slim-basic-auth"
   http_hook:
     path: /bar/hello
+    authorization:
+      jwt:
+        secret: 'spaghetti'
+      basic:
+        - user: bob
+          password: pass
+        - user: bill
+          password: lol
     expression: 'input["_items"]'
     pipeline:
       steps:

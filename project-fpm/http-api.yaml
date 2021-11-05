@@ -26,6 +26,14 @@ satellite:
       - "tuupola/slim-basic-auth"
   http_api:
     path: /foo
+    authorization:
+      jwt:
+        secret: 'spaghetti'
+      basic:
+        - user: bob
+          password: pass
+        - user: bill
+          password: lol
     routes:
       - route: /hello
         expression: 'input["_items"]'

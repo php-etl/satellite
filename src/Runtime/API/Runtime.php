@@ -171,7 +171,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                             ),
                                         ),
                                         new Node\Expr\ArrayItem(
-                                            (new Satellite\Runtime\Authentication())->build(),
+                                            (new Satellite\Runtime\Authorization())->build($this->config['http_api']),
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
