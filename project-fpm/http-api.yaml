@@ -23,6 +23,7 @@ satellite:
       - "php-etl/api-runtime"
       - "php-etl/mapping-contracts"
       - "tuupola/slim-jwt-auth"
+      - "tuupola/slim-basic-auth"
   http_api:
     path: /foo
     routes:
