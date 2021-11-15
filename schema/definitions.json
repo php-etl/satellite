@@ -309,6 +309,7 @@
       "additionalProperties": false,
       "properties": {
         "expression_language": { "$ref": "#/$defs/expression_language" },
+        "services": { "$ref": "#/$defs/services" },
         "steps": {
           "oneOf": [
             { "$ref": "#/$defs/steps-list" },
@@ -324,6 +325,7 @@
       "properties": {
         "name": { "type": "string" },
         "expression_language": { "$ref": "#/$defs/expression_language" },
+        "services": { "$ref": "#/$defs/services" },
         "jobs": {
           "type": "array",
           "items": {
@@ -422,8 +424,59 @@
     },
     "state": {
       "type": "object",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "properties": {
+        "destinations": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "rabbitmq": {
+                    "type": "object",
+                    "properties": {
+                      "host": { "type": "string" },
+                      "port": { "type": "integer" },
+                      "vhost": { "type": "string" },
+                      "exchange": { "type": "string" },
+                      "topic": { "type": "string" },
+                      "user": { "type": "string" },
+                      "password": { "type": "string" },
+                      "line_threshold": { "type": "integer" }
+                    },
+                    "required": [ "host", "vhost", "topic" ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "required": [ "destinations" ]
     },
-    "expression_language": { "type": "array", "items": { "type":  "string" } }
+    "expression_language": { "type": "array", "items": { "type":  "string" } },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "class": { "type": "string" },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "calls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "public": { "type": "boolean" }
+        }
+      }
+    }
   }
 }
