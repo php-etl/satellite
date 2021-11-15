@@ -38,13 +38,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface
     {
-        if (!array_key_exists('psr4', $this->composerAutoload)) {
-            $this->composerAutoload['psr4'] = [];
-        }
-
-        array_push($this->composerAutoload['psr4'], ...$autoloads);
+        $this->composerAutoload['psr4'][$namespace] = $paths;
 
         return $this;
     }
@@ -121,7 +117,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             // FIXME: finish the Sylius API client migration
             $composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
 
-//            $composer->autoload($this->autoload);
+            $composer->autoload($this->composerAutoload);
         }
 
         $satellite->dependsOn(...$this->composerRequire);

@@ -8,7 +8,7 @@ use Kiboko\Contract\Packaging;
 
 interface SatelliteBuilderInterface
 {
-    public function withComposerPSR4Autoload(array $autoloads): SatelliteBuilderInterface;
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface;
 
     public function withComposerRequire(string ...$package): SatelliteBuilderInterface;
 
