@@ -28,12 +28,7 @@ satellite:
     path: /foo
     authorization:
       jwt:
-        secret: 'spaghetti'
-      basic:
-        - user: bob
-          password: pass
-        - user: bill
-          password: lol
+        secret: 'my_secret'
     routes:
       - route: /hello
         expression: 'input["_items"]'

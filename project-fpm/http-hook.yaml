@@ -25,13 +25,11 @@ satellite:
   http_hook:
     path: /bar/hello
     authorization:
-      jwt:
-        secret: 'spaghetti'
       basic:
-        - user: bob
-          password: pass
+        - user: john
+          password: my_password
         - user: bill
-          password: lol
+          password: other_password
     expression: 'input["_items"]'
     pipeline:
       steps:
