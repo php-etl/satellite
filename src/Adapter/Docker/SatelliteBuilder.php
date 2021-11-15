@@ -54,6 +54,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function withComposerPSR4Autoload(string $namespace, string ...$paths): self
     {
+        if (!array_key_exists('psr4', $this->composerAutoload)) {
+            $this->composerAutoload['psr4'] = [];
+        }
         $this->composerAutoload['psr4'][$namespace] = $paths;
 
         return $this;
