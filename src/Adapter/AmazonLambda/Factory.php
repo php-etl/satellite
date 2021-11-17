@@ -18,7 +18,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);
 
         if (array_key_exists('composer', $configuration)) {
-            if (array_key_exists('from-local', $configuration['composer']) && $configuration['composer']['from-local'] === true) {
+            if (array_key_exists('from_local', $configuration['composer']) && $configuration['composer']['from_local'] === true) {
                 if (file_exists('composer.lock')) {
                     $builder->withComposerFile(new Packaging\Asset\LocalFile('composer.json'), new Packaging\Asset\LocalFile('composer.lock'));
                 } else {
