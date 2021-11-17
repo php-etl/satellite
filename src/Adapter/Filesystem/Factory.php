@@ -56,6 +56,25 @@ final class Factory implements Satellite\Adapter\FactoryInterface
             }
         }
 
+        if (array_key_exists('copy', $configuration['filesystem'])) {
+            foreach ($configuration['filesystem']['copy'] as $item) {
+                if (is_dir($item['from'])) {
+                    $builder->withDirectory(
+                        source: new Packaging\Directory($item['from']),
+                        destinationPath: $item['to']
+                    );
+                } else {
+                    $builder->withFile(
+                        source: new Packaging\File(
+                            path: $item['from'],
+                            content: new Packaging\Asset\LocalFile($item['from'])
+                        ),
+                        destinationPath: $item['to']
+                    );
+                }
+            }
+        }
+
         return $builder;
     }
 }

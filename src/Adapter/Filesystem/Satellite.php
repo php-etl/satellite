@@ -20,7 +20,6 @@ final class Satellite implements SatelliteInterface
         private Composer $composer,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
-        $this->workdir = $workdir;
         $this->files = $files;
         $this->dependencies = [];
     }
@@ -45,6 +44,10 @@ final class Satellite implements SatelliteInterface
         foreach ($this->files as $file) {
             if ($file instanceof Packaging\DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
+                    $dir = $this->workdir . '/' . substr($current->getPath(), 0, strrpos($current->getPath(), '/'));
+
+                    is_dir($dir) || mkdir($dir, 0777, true);
+
                     $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
                     stream_copy_to_stream($current->asResource(), $stream);
                     fclose($stream);
