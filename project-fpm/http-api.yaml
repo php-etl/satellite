@@ -8,7 +8,7 @@ satellite:
 #  filesystem:
 #    path: foo
   composer:
-#    from-local: true
+#    from_local: true
     autoload:
       psr4:
         - namespace: "Pipeline\\"
