@@ -56,6 +56,8 @@ final class Satellite implements SatelliteInterface
             }
         }
 
+        $this->composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
+        $this->composer->install();
         $this->composer->require(...$this->dependencies);
     }
 }
