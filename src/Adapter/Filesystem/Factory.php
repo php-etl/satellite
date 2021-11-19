@@ -63,7 +63,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                         source: new Packaging\Directory($item['from']),
                         destinationPath: $item['to']
                     );
-                } else {
+                } elseif (is_file($item['from'])) {
                     $builder->withFile(
                         source: new Packaging\File(
                             path: $item['from'],
@@ -71,6 +71,8 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                         ),
                         destinationPath: $item['to']
                     );
+                } else {
+                    throw new \Exception(sprintf('Cannot copy, no directory or file was found with path: %s', $item['from']));
                 }
             }
         }

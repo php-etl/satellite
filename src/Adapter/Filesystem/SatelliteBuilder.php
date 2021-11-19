@@ -100,9 +100,8 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $composer,
         );
 
-        // TODO: allow adding $to
-        foreach ($this->paths as [$from, $to]) {
-            $satellite->withFile($from);
+        foreach ($this->files as $file) {
+            $satellite->withFile($file);
         }
 
         if ($this->composerJsonFile !== null) {
