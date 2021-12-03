@@ -106,9 +106,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
         if ($this->composerJsonFile !== null) {
             $satellite->withFile($this->composerJsonFile);
-            if ($this->composerLockFile !== null) {
-                $satellite->withFile($this->composerLockFile);
-            }
+            $satellite->withFile($this->composerLockFile);
         } else {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
@@ -117,9 +115,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
 
             $composer->autoload($this->composerAutoload);
-        }
 
-        $satellite->dependsOn(...$this->composerRequire);
+            $satellite->dependsOn(...$this->composerRequire);
+        }
 
         return $satellite;
     }

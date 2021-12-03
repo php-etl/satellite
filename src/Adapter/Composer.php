@@ -63,6 +63,10 @@ final class Composer
 
     public function require(string ...$packages): void
     {
+        if (empty($packages)) {
+            return;
+        }
+
         $this->command(
             'composer',
             'require',
