@@ -555,12 +555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "306204b5d57beb0c0435ad072f76d8b24ee86a76"
+                "reference": "5d2992195d110f12e1fccb05b254e75e42363dd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/306204b5d57beb0c0435ad072f76d8b24ee86a76",
-                "reference": "306204b5d57beb0c0435ad072f76d8b24ee86a76",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/5d2992195d110f12e1fccb05b254e75e42363dd9",
+                "reference": "5d2992195d110f12e1fccb05b254e75e42363dd9",
                 "shasum": ""
             },
             "require": {
@@ -612,7 +612,7 @@
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/master"
             },
-            "time": "2021-09-21T21:51:45+00:00"
+            "time": "2021-12-03T10:50:38+00:00"
         },
         {
             "name": "php-etl/workflow-console-runtime",

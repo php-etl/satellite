@@ -7,15 +7,20 @@ namespace Kiboko\Component\Satellite\Feature\Composer;
 use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyExclusiveFields;
 
 final class Configuration implements FeatureConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('composer');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
+            ->beforeNormalization()
+                ->ifTrue(fn ($data) => array_key_exists('from_local', $data) && $data['from_local'] === true)
+                ->then(mutuallyExclusiveFields('from_local', 'autoload', 'repositories', 'require'))
+            ->end()
             ->children()
                 ->booleanNode('from_local')->defaultFalse()->end()
                 ->arrayNode('autoload')

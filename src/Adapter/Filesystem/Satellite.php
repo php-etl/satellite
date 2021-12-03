@@ -59,7 +59,7 @@ final class Satellite implements SatelliteInterface
         $dir = $this->workdir . '/' . dirname($file->getPath());
         is_dir($dir) || mkdir($dir, 0755, true);
 
-        $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
+        $stream = fopen($this->workdir . '/' . $file->getPath(), 'wb');
         stream_copy_to_stream($file->asResource(), $stream);
         fclose($stream);
     }
