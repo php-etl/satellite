@@ -100,6 +100,10 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $composer,
         );
 
+        foreach ($this->files as $file) {
+            $satellite->withFile($file);
+        }
+
         if ($this->composerJsonFile !== null) {
             $satellite->withFile($this->composerJsonFile);
             if ($this->composerLockFile !== null) {

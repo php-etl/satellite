@@ -20,7 +20,6 @@ final class Satellite implements SatelliteInterface
         private Composer $composer,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
-        $this->workdir = $workdir;
         $this->files = $files;
         $this->dependencies = [];
     }
@@ -45,19 +44,23 @@ final class Satellite implements SatelliteInterface
         foreach ($this->files as $file) {
             if ($file instanceof Packaging\DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
-                    $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
-                    stream_copy_to_stream($current->asResource(), $stream);
-                    fclose($stream);
+                    $this->checkDirectoryAndCopyFile($current);
                 }
             } else {
-                $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
-                stream_copy_to_stream($file->asResource(), $stream);
-                fclose($stream);
+                $this->checkDirectoryAndCopyFile($file);
             }
         }
 
-        $this->composer->addGithubRepository('sylius-api-php-client', 'git@github.com:gplanchat/sylius-api-php-client.git');
-        $this->composer->install();
         $this->composer->require(...$this->dependencies);
+    }
+
+    private function checkDirectoryAndCopyFile(Packaging\FileInterface $file)
+    {
+        $dir = $this->workdir . '/' . dirname($file->getPath());
+        is_dir($dir) || mkdir($dir, 0755, true);
+
+        $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
+        stream_copy_to_stream($file->asResource(), $stream);
+        fclose($stream);
     }
 }

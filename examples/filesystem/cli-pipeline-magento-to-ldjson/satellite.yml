@@ -1,0 +1,17 @@
+satellite:
+    filesystem:
+        path: build
+        copy:
+        - from: generated
+          to: destination_to_generated
+        - from: src
+          to: destination_to_src
+    composer:
+        from_local: true
+    pipeline:
+        steps:
+            - custom:
+                extractor:
+                    use: 'App\StoreExtractor'
+                    services:
+                        App\StoreExtractor: ~

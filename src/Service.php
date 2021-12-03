@@ -345,6 +345,7 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';

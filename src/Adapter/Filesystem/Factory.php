@@ -40,6 +40,9 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                         new Packaging\File('composer.json', new Packaging\Asset\LocalFile('composer.json')),
                     );
                 }
+                if (file_exists('vendor')) {
+                    $builder->withDirectory(new Packaging\Directory('vendor/'));
+                }
             }
 
             if (array_key_exists('autoload', $configuration['composer']) && array_key_exists('psr4', $configuration['composer']['autoload'])) {
@@ -50,6 +53,27 @@ final class Factory implements Satellite\Adapter\FactoryInterface
 
             if (array_key_exists('require', $configuration['composer'])) {
                 $builder->withComposerRequire(...$configuration['composer']['require']);
+            }
+        }
+
+        if (array_key_exists('copy', $configuration['filesystem'])) {
+            foreach ($configuration['filesystem']['copy'] as $item) {
+                if (is_dir($item['from'])) {
+                    $builder->withDirectory(
+                        source: new Packaging\Directory($item['from']),
+                        destinationPath: $item['to']
+                    );
+                } elseif (is_file($item['from'])) {
+                    $builder->withFile(
+                        source: new Packaging\File(
+                            path: $item['from'],
+                            content: new Packaging\Asset\LocalFile($item['from'])
+                        ),
+                        destinationPath: $item['to']
+                    );
+                } else {
+                    throw new \Exception(sprintf('Cannot copy, no directory or file was found with path: %s', $item['from']));
+                }
             }
         }
 
