@@ -36,12 +36,12 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                         new Packaging\File('composer.lock', new Packaging\Asset\LocalFile('composer.lock')),
                     );
                 } else {
-                    throw new \Exception('composer.json and composer.lock must both be present next to the configuration file when using the option "from_local"');
+                    throw new Satellite\Exception\LocalFileNotFoundException('composer.json, composer.lock');
                 }
                 if (file_exists('vendor')) {
                     $builder->withDirectory(new Packaging\Directory('vendor/'));
                 } else {
-                    throw new \Exception('vendor/ must be present when using the option "from_local". Please run `composer install`.');
+                    throw new Satellite\Exception\LocalFileNotFoundException('vendor/. Please run `composer install`.');
                 }
             }
 
@@ -72,7 +72,7 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                         destinationPath: $item['to']
                     );
                 } else {
-                    throw new \Exception(sprintf('Cannot copy, no directory or file was found with path: %s', $item['from']));
+                    throw new Satellite\Exception\LocalFileNotFoundException($item['from']);
                 }
             }
         }
