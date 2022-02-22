@@ -14,10 +14,6 @@ final class AdapterChoice
             $factory = new Satellite\Adapter\Docker\Factory();
         } elseif (array_key_exists('filesystem', $configuration)) {
             $factory = new Satellite\Adapter\Filesystem\Factory();
-        } elseif (array_key_exists('amazon_lambda', $configuration)) {
-            $factory = new Satellite\Adapter\AmazonLambda\Factory();
-        } elseif (array_key_exists('google_cloud_function', $configuration)) {
-            $factory = new Satellite\Adapter\GoogleCloudFunction\Factory();
         } else {
             throw new \RuntimeException('No compatible adapter was found for your satellite configuration.');
         }

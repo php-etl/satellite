@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Serverless;
+namespace Kiboko\Component\Satellite\Adapter\Cloud;
 
+use Kiboko\Component\Satellite\Adapter\Composer;
 use Kiboko\Contract\Packaging;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use Psr\Log\LoggerInterface;
@@ -15,10 +16,11 @@ final class Satellite implements SatelliteInterface
     private iterable $dependencies;
 
     public function __construct(
-        private Serverless $serverless,
         private string $workdir,
+        private Composer $composer,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
+        $this->workdir = $workdir;
         $this->files = $files;
         $this->dependencies = [];
     }
@@ -37,8 +39,9 @@ final class Satellite implements SatelliteInterface
         return $this;
     }
 
-    public function build(LoggerInterface $logger): void
-    {
+    public function build(
+        LoggerInterface $logger
+    ): void {
         foreach ($this->files as $file) {
             if ($file instanceof Packaging\DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
@@ -52,5 +55,7 @@ final class Satellite implements SatelliteInterface
                 fclose($stream);
             }
         }
+
+        $this->composer->require(...$this->dependencies);
     }
 }
