@@ -1,8 +1,12 @@
 satellite:
   cloud:
-    url: 'https://localhost/runtime/pipelines/declare'
-#    url: 'https://localhost/runtime/pipeline/steps/append'
-    filesystem: ''
+    url: 'https://localhost/'
+    name: 'Satellite Example'
+    # 'docker', or 'filesystem'
+    type: 'docker'
+  composer:
+    require:
+      - "php-etl/pipeline:^0.3"
   pipeline:
     steps:
       - csv:

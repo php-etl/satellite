@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Console\Command;
+namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
 use Nyholm\Psr7\Request;
 use Symfony\Component\Console;

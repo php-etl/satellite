@@ -42,6 +42,7 @@ final class Service implements Configurator\FactoryInterface
             ->registerAdapters(
                 new Adapter\Docker\Factory(),
                 new Adapter\Filesystem\Factory(),
+                new Adapter\Cloud\Factory(),
             )
             ->registerRuntimes(
                 new Runtime\Api\Factory(),

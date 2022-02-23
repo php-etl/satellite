@@ -18,7 +18,8 @@ $app = new \Symfony\Component\Console\Application();
 
 $app->addCommands([
     new \Kiboko\Component\Satellite\Console\Command\BuildCommand(),
-    new \Kiboko\Component\Satellite\Console\Command\LoginCommand(),
+    new \Kiboko\Component\Satellite\Console\Command\Cloud\LoginCommand(),
+    new \Kiboko\Component\Satellite\Console\Command\Cloud\CreateCommand(),
     new \Kiboko\Component\Satellite\Console\Command\ValidateCommand(),
     new \Kiboko\Component\Satellite\Console\Command\PipelineRunCommand(),
     new \Kiboko\Component\Satellite\Console\Command\WorkflowRunCommand(),

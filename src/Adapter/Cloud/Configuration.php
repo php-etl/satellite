@@ -17,6 +17,8 @@ final class Configuration implements AdapterConfigurationInterface
         $builder->getRootNode()
             ->children()
                 ->scalarNode('url')->end()
+                ->scalarNode('name')->end()
+                ->scalarNode('type')->end()
             ->end();
 
         return $builder;
