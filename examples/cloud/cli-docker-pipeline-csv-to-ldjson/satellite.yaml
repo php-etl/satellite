@@ -1,0 +1,18 @@
+satellite:
+  cloud:
+    url: 'https://localhost/runtime/pipelines/declare'
+#    url: 'https://localhost/runtime/pipeline/steps/append'
+    filesystem: ''
+  pipeline:
+    steps:
+      - csv:
+          extractor:
+            file_path: '../data/products.csv'
+      - fastmap:
+          map:
+            - copy: '[sku]'
+              field: '[identifier]'
+      - stream:
+          loader:
+            destination: '../data/products.ldjson'
+            format: 'json'

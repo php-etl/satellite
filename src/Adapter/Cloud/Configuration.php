@@ -16,7 +16,7 @@ final class Configuration implements AdapterConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('host')->end()
+                ->scalarNode('url')->end()
             ->end();
 
         return $builder;

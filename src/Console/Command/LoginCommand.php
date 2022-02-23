@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command;
 
-use GuzzleHttp\Client;
+use Nyholm\Psr7\Request;
 use Symfony\Component\Console;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
 
 final class LoginCommand extends Console\Command\Command
 {
@@ -26,19 +28,37 @@ final class LoginCommand extends Console\Command\Command
             $output,
         );
 
-        $client = new Client();
-        $response = $client->request(
+        $client = new Psr18Client(HttpClient::create([
+            // Need this options with localhost, should be removed
+            'verify_peer' => false,
+            'verify_host' => true,
+        ]));
+
+        $request = new Request(
             'POST',
             $input->getArgument('url'),
             [
-                'body' => [
-                    'username' => $input->getArgument('username'),
-                    'password' => $input->getArgument('password')
-                ]
-            ]
+                'Content-Type' => 'application/json'
+            ],
+            json_encode([
+                'username' => $input->getArgument('username'),
+                'password' => $input->getArgument('password')
+            ], JSON_THROW_ON_ERROR)
         );
+        $response = $client->sendRequest($request);
 
-        $response = $response->getBody();
+        if ($response->getStatusCode() === 200) {
+            $concurrentDirectory = getcwd() . '/.gyroscops';
+            if (!file_exists($concurrentDirectory) && !mkdir($concurrentDirectory) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
+            file_put_contents($concurrentDirectory . '/auth.json', $response->getBody()->getContents(), JSON_THROW_ON_ERROR);
+        } else {
+            $style->error('Unable to retrieve the token.');
+            return Console\Command\Command::FAILURE;
+        }
+
+        $style->success('Authentication token successfully recovered.');
 
         return Console\Command\Command::SUCCESS;
     }
