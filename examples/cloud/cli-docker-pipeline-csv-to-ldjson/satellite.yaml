@@ -1,9 +1,10 @@
 satellite:
   cloud:
-    url: 'https://localhost/'
-    name: 'Satellite Example'
-    # 'docker', or 'filesystem'
-    type: 'docker'
+    url: https://localhost
+    name: Satellite Example
+    project: 84f6c86c-c3d2-47ae-a812-3ce580929f3c
+    filesystem:
+      path: build/
   composer:
     require:
       - "php-etl/pipeline:^0.3"

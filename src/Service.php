@@ -63,7 +63,7 @@ final class Service implements Configurator\FactoryInterface
             );
     }
 
-    private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface $adapter): self
+    private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface|Satellite\Adapter\CloudFactoryInterface $adapter): self
     {
         $this->adapters[$attribute->name] = $adapter;
         $this->configuration->addAdapter($attribute->name, $adapter->configuration());
@@ -123,7 +123,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    public function registerAdapters(Satellite\Adapter\FactoryInterface ...$adapters): self
+    public function registerAdapters(Satellite\Adapter\FactoryInterface|Satellite\Adapter\CloudFactoryInterface ...$adapters): self
     {
         foreach ($adapters as $adapter) {
             /** @var Configurator\Adapter $attribute */

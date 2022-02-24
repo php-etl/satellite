@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
-use Nyholm\Psr7\Request;
 use Symfony\Component\Console;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpClient\Psr18Client;
 
 final class LoginCommand extends Console\Command\Command
 {
@@ -28,24 +25,13 @@ final class LoginCommand extends Console\Command\Command
             $output,
         );
 
-        $client = new Psr18Client(HttpClient::create([
-            // Need this options with localhost, should be removed
-            'verify_peer' => false,
-            'verify_host' => true,
-        ]));
+        $client = \Gyroscops\Api\Client::create();
 
-        $request = new Request(
-            'POST',
-            $input->getArgument('url'),
-            [
-                'Content-Type' => 'application/json'
-            ],
-            json_encode([
-                'username' => $input->getArgument('username'),
-                'password' => $input->getArgument('password')
-            ], JSON_THROW_ON_ERROR)
-        );
-        $response = $client->sendRequest($request);
+        $data = new \Gyroscops\Api\Model\Credentials();
+        $data->setUsername($input->getArgument('username'));
+        $data->setPassword($input->getArgument('password'));
+
+        $response = $client->postCredentialsItem();
 
         if ($response->getStatusCode() === 200) {
             $concurrentDirectory = getcwd() . '/.gyroscops';

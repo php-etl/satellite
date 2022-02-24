@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
 use Kiboko\Component\Satellite;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Processor;
+use Psr\Log;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config;
 use Symfony\Component\Console;
@@ -56,12 +55,19 @@ final class CreateCommand extends Console\Command\Command
 
         try {
             $configuration = $service->normalize($configuration);
-        } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
+        } catch (Config\Definition\Exception\InvalidTypeException | Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
             return 255;
         }
 
-        $style->success('Authentication token successfully recovered.');
+        $reponse = (new Satellite\Adapter\Cloud\Factory())($configuration["satellite"]);
+
+        if ($statusCode !== 200) {
+            $style->error('The satellite configuration cannot be sent.');
+            return Console\Command\Command::FAILURE;
+        }
+
+        $style->success('The satellite configuration has been sent correctly.');
 
         return Console\Command\Command::SUCCESS;
     }
