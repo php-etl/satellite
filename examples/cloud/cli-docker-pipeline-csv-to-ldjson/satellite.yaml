@@ -2,22 +2,28 @@ satellite:
   cloud:
     url: https://localhost
     name: Satellite Example
-    project: 84f6c86c-c3d2-47ae-a812-3ce580929f3c
-    filesystem:
-      path: build/
+    project: baa56754-648d-4821-b053-d146c5d34e2b
   composer:
     require:
       - "php-etl/pipeline:^0.3"
   pipeline:
+    label: 'My products pipeline'
+    code: 'products_pipeline'
     steps:
-      - csv:
+      - label: 'Extract products'
+        code: 'csv.extractor'
+        csv:
           extractor:
             file_path: '../data/products.csv'
-      - fastmap:
+      - label: 'Transform products'
+        code: 'fastmap'
+        fastmap:
           map:
             - copy: '[sku]'
               field: '[identifier]'
-      - stream:
+      - label: 'Loads products'
+        code: 'stream.loader'
+        stream:
           loader:
             destination: '../data/products.ldjson'
             format: 'json'

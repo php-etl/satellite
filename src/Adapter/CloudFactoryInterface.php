@@ -10,5 +10,9 @@ interface CloudFactoryInterface
 {
     public function configuration(): AdapterConfigurationInterface;
 
-    public function __invoke(array $configuration): \Psr\Http\Message\ResponseInterface;
+    public function create(array $configuration): void;
+
+    public function update(array $configuration): void;
+
+    public function remove(array $configuration): void;
 }

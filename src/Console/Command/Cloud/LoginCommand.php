@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
+use Gyroscops\Api\Client;
 use Symfony\Component\Console;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
 
 final class LoginCommand extends Console\Command\Command
 {
@@ -25,15 +28,23 @@ final class LoginCommand extends Console\Command\Command
             $output,
         );
 
-        $client = \Gyroscops\Api\Client::create();
+        $httpClient = HttpClient::createForBaseUri(
+            $input->getArgument('url'),
+            [
+                'verify_peer' => false,
+            ]
+        );
+
+        $psr18Client = new Psr18Client($httpClient);
+        $client = \Gyroscops\Api\Client::create($psr18Client);
 
         $data = new \Gyroscops\Api\Model\Credentials();
         $data->setUsername($input->getArgument('username'));
         $data->setPassword($input->getArgument('password'));
 
-        $response = $client->postCredentialsItem();
+        $response = $client->postCredentialsItem($data, Client::FETCH_RESPONSE);
 
-        if ($response->getStatusCode() === 200) {
+        if ($response !== null && $response->getStatusCode() === 200) {
             $concurrentDirectory = getcwd() . '/.gyroscops';
             if (!file_exists($concurrentDirectory) && !mkdir($concurrentDirectory) && !is_dir($concurrentDirectory)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));

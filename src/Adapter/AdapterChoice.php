@@ -14,6 +14,8 @@ final class AdapterChoice
             $factory = new Satellite\Adapter\Docker\Factory();
         } elseif (array_key_exists('filesystem', $configuration)) {
             $factory = new Satellite\Adapter\Filesystem\Factory();
+        } elseif (array_key_exists('cloud', $configuration)) {
+            $factory = new Satellite\Adapter\Cloud\Factory();
         } else {
             throw new \RuntimeException('No compatible adapter was found for your satellite configuration.');
         }

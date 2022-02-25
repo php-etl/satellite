@@ -6,19 +6,20 @@ namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
 use Gyroscops\Api\Client;
 use Kiboko\Component\Satellite;
+use Psr\Log;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config;
 use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
-final class CreateCommand extends Console\Command\Command
+final class RemoveCommand extends Console\Command\Command
 {
-    protected static $defaultName = 'create';
+    protected static $defaultName = 'remove';
 
     protected function configure(): void
     {
-        $this->setDescription('Sends configuration to the Gyroscops API.');
+        $this->setDescription('Removes a part of configuration.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -75,7 +76,7 @@ final class CreateCommand extends Console\Command\Command
         $client = Client::create($psr18Client);
 
         $factory = new Satellite\Adapter\Cloud\Factory($client);
-        $factory->create($configuration["satellite"]);
+        $factory->remove($configuration["satellite"]);
 
 //        if ($response->getStatusCode() === 200) {
 //            $style->error('The satellite configuration cannot be sent.');
