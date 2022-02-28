@@ -1,11 +1,12 @@
 satellite:
   cloud:
-    url: https://localhost
-    name: Satellite Example
+    url: https://localhost/
     project: baa56754-648d-4821-b053-d146c5d34e2b
   composer:
-    require:
-      - "php-etl/pipeline:^0.3"
+    autoload:
+      psr4:
+        - namespace: 'App\\'
+          paths: ['src/']
   pipeline:
     label: 'My products pipeline'
     code: 'products_pipeline'

@@ -42,7 +42,6 @@ final class Service implements Configurator\FactoryInterface
             ->registerAdapters(
                 new Adapter\Docker\Factory(),
                 new Adapter\Filesystem\Factory(),
-                new Adapter\Cloud\Factory(),
             )
             ->registerRuntimes(
                 new Runtime\Api\Factory(),
@@ -63,7 +62,7 @@ final class Service implements Configurator\FactoryInterface
             );
     }
 
-    private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface|Satellite\Adapter\CloudFactoryInterface $adapter): self
+    private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface $adapter): self
     {
         $this->adapters[$attribute->name] = $adapter;
         $this->configuration->addAdapter($attribute->name, $adapter->configuration());
@@ -123,7 +122,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    public function registerAdapters(Satellite\Adapter\FactoryInterface|Satellite\Adapter\CloudFactoryInterface ...$adapters): self
+    public function registerAdapters(Satellite\Adapter\FactoryInterface ...$adapters): self
     {
         foreach ($adapters as $adapter) {
             /** @var Configurator\Adapter $attribute */
