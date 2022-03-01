@@ -17,8 +17,7 @@ final class DeclarePipelineCommandHandler
             (new Api\Model\PipelineDeclarePipelineCommandInput())
                 ->setLabel($command->label)
                 ->setCode($command->code)
-                ->setProject($command->project)
-                ->setBuildPath('./build'),
+                ->setProject($command->project),
             Api\Client::FETCH_RESPONSE
         );
 

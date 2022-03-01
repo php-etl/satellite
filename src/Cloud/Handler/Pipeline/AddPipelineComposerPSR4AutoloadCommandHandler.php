@@ -14,10 +14,11 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
     public function __invoke(AddPipelineComposerPSR4AutoloadCommand $command): Result
     {
         $response = $this->client->addComposerPipelinePipelineCollection(
-            (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInputJsonld())
-                ->setId($command->pipeline)
+            (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInput())
+                ->setPipeline($command->pipeline)
                 ->setNamespace($command->namespace)
-                ->setPaths($command->paths)
+                ->setPaths($command->paths),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

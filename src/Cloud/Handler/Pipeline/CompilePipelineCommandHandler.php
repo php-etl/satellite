@@ -15,7 +15,8 @@ final class CompilePipelineCommandHandler
     public function __invoke(CompilePipelineCommand $command): Result
     {
         $response = $this->client->pipelineCompilationPipelineCollection(
-            (new Api\Model\PipelineCompilePipelineCommandInputJsonld())->setId($command->pipeline)
+            (new Api\Model\PipelineCompilePipelineCommandInput())->setPipeline($command->pipeline),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

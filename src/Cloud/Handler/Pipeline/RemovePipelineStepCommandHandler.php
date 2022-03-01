@@ -14,9 +14,10 @@ final class RemovePipelineStepCommandHandler
     public function __invoke(RemovePipelineStepCommand $command): Result
     {
         $response = $this->client->removePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepRemovePipelineStepCommandInputJsonld())
-                ->setId($command->pipeline)
-                ->setCode($command->code)
+            (new Api\Model\PipelineStepRemovePipelineStepCommandInput())
+                ->setPipeline($command->pipeline)
+                ->setCode($command->code),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

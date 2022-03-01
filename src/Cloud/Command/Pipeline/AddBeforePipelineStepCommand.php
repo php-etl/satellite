@@ -5,7 +5,7 @@ namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 use Gyroscops\Api\Model\PipelineStepAddBeforePipelineStepCommandInputJsonld;
 use Kiboko\Component\Satellite\Cloud\Command\Command;
 
-final class AddBeforePipelineStepCommand extends PipelineStepAddBeforePipelineStepCommandInputJsonld implements Command
+final class AddBeforePipelineStepCommand implements Command
 {
     public function __construct(
         public string $pipeline,

@@ -15,12 +15,13 @@ final class ReplacePipelineStepCommandHandler
     public function __invoke(ReplacePipelineStepCommand $command): Result
     {
         $response = $this->client->replacePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepReplacePipelineStepCommandInputJsonld())
-                ->setId($command->pipeline)
+            (new Api\Model\PipelineStepReplacePipelineStepCommandInput())
+                ->setPipeline($command->pipeline)
                 ->setCode($command->code)
                 ->setLabel($command->label)
                 ->setConfiguration($command->configuration)
-                ->setProbes($command->probes)
+                ->setProbes($command->probes),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

@@ -14,12 +14,13 @@ final class AddBeforePipelineStepCommandHandler
     public function __invoke(AddBeforePipelineStepCommand $command): Result
     {
         $response = $this->client->addBeforePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepAddBeforePipelineStepCommandInputJsonld())
+            (new Api\Model\PipelineStepAddBeforePipelineStepCommandInput())
                 ->setNext($command->next)
                 ->setLabel($command->label)
                 ->setCode($command->code)
                 ->setConfiguration($command->configuration)
-                ->setProbes($command->probes)
+                ->setProbes($command->probes),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

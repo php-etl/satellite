@@ -14,7 +14,7 @@ final class AddAfterPipelineStepCommandHandler
     public function __invoke(AddAfterPipelineStepCommand $command): Result
     {
         $response = $this->client->addAfterPipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepAddAfterPipelineStepCommandInputJsonld())
+            (new Api\Model\PipelineStepAddAfterPipelineStepCommandInput())
                 ->setPrevious($command->previous)
                 ->setLabel($command->label)
                 ->setCode($command->code)

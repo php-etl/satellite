@@ -15,10 +15,11 @@ final class RemovePipelineStepProbeCommandHandler
     public function __invoke(RemovePipelineStepProbeCommand $command): Result
     {
         $response = $this->client->removePipelineStepProbePipelineStepProbeCollection(
-            (new Api\Model\PipelineStepProbeRemovePipelineStepProbCommandInputJsonld())
+            (new Api\Model\PipelineStepProbeRemovePipelineStepProbCommandInput())
                 ->setId($command->pipeline)
                 ->setCode($command->stepCode)
-                ->setProbe($command->probe)
+                ->setProbe($command->probe),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

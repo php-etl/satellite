@@ -2,7 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
-use Gyroscops\Api\Model\ProbeJsonld;
+use Gyroscops\Api\Model\Probe;
 use Kiboko\Component\Satellite\Cloud\Command\Command;
 
 final class AddPipelineStepProbeCommand implements Command
@@ -10,7 +10,7 @@ final class AddPipelineStepProbeCommand implements Command
     public function __construct(
         public string $pipeline,
         public string $stepCode,
-        public ProbeJsonld $probe
+        public Probe $probe
     )
     {}
 }

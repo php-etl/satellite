@@ -14,10 +14,11 @@ final class AddPipelineStepProbeCommandHandler
     public function __invoke(AddPipelineStepProbeCommand $command): Result
     {
         $response = $this->client->addPipelineStepProbePipelineStepProbeCollection(
-            (new Api\Model\PipelineStepProbeAddPipelineStepProbCommandInputJsonld())
+            (new Api\Model\PipelineStepProbeAddPipelineStepProbCommandInput())
                 ->setId($command->pipeline)
                 ->setCode($command->stepCode)
-                ->setProbe($command->probe)
+                ->setProbe($command->probe),
+            Api\Client::FETCH_RESPONSE
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {

@@ -2,6 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Console\Command\Cloud;
 
-class TokenException extends \RuntimeException
+class UnableToUpdateException extends \RuntimeException
 {
 }

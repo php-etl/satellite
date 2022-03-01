@@ -73,11 +73,20 @@ final class CreateCommand extends Console\Command\Command
         $psr18Client = new Psr18Client($httpClient);
         $client = Client::create($psr18Client);
 
+//        $authenticationRegistry = new AuthenticationRegistry([new ApiKeyAuthentication($token)]);
+//        $baseUri = new BaseUriPlugin(new Uri($configuration["satellite"]["cloud"]["url"]));
+//        $client = Client::create(null, [$authenticationRegistry, $baseUri]);
+
         $bus = new Satellite\Cloud\CommandBus([
             Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
         ]);
+
+        $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
+        if (file_exists($currentDirectory . '/satellite.lock')) {
+            throw new \RuntimeException('Pipeline cannot be created because its already exists.');
+        }
 
         $result = $bus->execute(
             new Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand(
@@ -87,24 +96,23 @@ final class CreateCommand extends Console\Command\Command
             )
         );
 
-        $pipeline = json_decode($result?->getBody()->getContents(), true);
-        if ($pipeline) {
+        if ($result) {
             $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
             if (!file_exists($currentDirectory) && !mkdir($currentDirectory) && !is_dir($currentDirectory)) {
                 throw new \RuntimeException(sprintf('Directory "%s" was not created', $currentDirectory));
             }
-            file_put_contents($currentDirectory . '/satellite.lock', $result?->getBody(), JSON_THROW_ON_ERROR);
+            file_put_contents($currentDirectory . '/satellite.lock', $result->getBody(), JSON_THROW_ON_ERROR);
         }
 
         if (array_key_exists('composer', $configuration["satellite"])
             && array_key_exists('autoload', $configuration["satellite"]["composer"])
             && array_key_exists('psr4', $configuration["satellite"]["composer"]["autoload"])
         ) {
-            foreach ($configuration["satellite"]["composer"]["autoload"]["psr4"] as $autoload) {
+            foreach ($configuration["satellite"]["composer"]["autoload"]["psr4"] as $key => $autoload) {
                 $bus->execute(
                     new Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand(
-                        $pipeline["id"],
-                        $autoload["namespace"],
+                        $result->toArray()["id"],
+                        $key,
                         $autoload["paths"]
                     )
                 );
@@ -114,10 +122,10 @@ final class CreateCommand extends Console\Command\Command
         foreach ($configuration["satellite"]["pipeline"]["steps"] as $step) {
             $bus->execute(
                 new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
-                    $pipeline["id"],
+                    $result->toArray()["id"],
                     $step["code"],
                     $step["label"],
-                    $step,
+                    array_splice($step, -1),
                     []
                 )
             );
