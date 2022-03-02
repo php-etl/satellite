@@ -88,18 +88,13 @@ final class UpdateCommand extends Console\Command\Command
         }
 
         $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];
-        $pipeline = $client->getPipelineItem($pipelineId);
-        if (is_null($pipeline)) {
-            throw new \RuntimeException(strtr('Impossible to find pipeline with id %id%.',
-                [
-                    '%id%' => $pipelineId
-                ]
-            ));
+        $response = $client->getPipelineItem($pipelineId, Client::FETCH_RESPONSE);
+        if ($response !== null && $response->getStatusCode() !== 200 ) {
+            throw new \RuntimeException($response->getReasonPhrase());
         }
 
-
         $steps = $client->apiPipelinesStepsGetSubresourcePipelineSubresource($pipelineId);
-        $iterator = new \MultipleIterator(\MultipleIterator::MIT_NEED_ALL);
+        $iterator = new \MultipleIterator(\MultipleIterator::MIT_NEED_ANY);
         $iterator->attachIterator(new \ArrayIterator($steps));
         $iterator->attachIterator(new \ArrayIterator($configuration["satellite"]["pipeline"]["steps"]));
 
@@ -108,15 +103,37 @@ final class UpdateCommand extends Console\Command\Command
          */
         foreach ($iterator as [$result, $step]) {
             if ($result->getCode() !== $step["code"]) {
-                // Si les étapes ne sont pas identiques et que c'est la premiere alors, je lance une AddBeforePipelineStepCommand
-                // Si les étapes ne sont pas identiques et que la nouvelle étape est ajoutée entre 2 steps, je lance un AddAfterPipelineStepCommand
-
-                echo 'test';
+                $bus->execute(
+                    new Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand(
+                        $pipelineId,
+                        $result->getCode(),
+                        $step["code"],
+                        $step["label"],
+                        $step,
+                        []
+                    )
+                );
             }
 
-            if (is_null($result) && isset($step["code"])) {
-                // La nouvelle étape est ajoutée à la fin, je lance un AppendPipelineStepCommand
-                echo 'test';
+            if (!is_null($step)) {
+                $bus->execute(
+                    new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
+                        $pipelineId,
+                        $step["code"],
+                        $step["label"],
+                        $step,
+                        []
+                    )
+                );
+            }
+
+            if (is_null($step)) {
+                $bus->execute(
+                    new Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand(
+                        $pipelineId,
+                        $step["code"],
+                    )
+                );
             }
         }
 
