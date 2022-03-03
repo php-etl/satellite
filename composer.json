@@ -33,7 +33,7 @@
         "symfony/http-client": "^6.0",
         "nyholm/psr7": "^1.5",
         "psr/http-client": "^1.0",
-        "jane-php/open-api-runtime": "^7.2",
+        "jane-php/open-api-runtime": "^7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
