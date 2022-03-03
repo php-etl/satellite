@@ -10,7 +10,7 @@ final class RemovePipelineCommandHandler
     public function __construct(private Api\Client $client)
     {}
 
-    public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepCommand $command): Cloud\Event\RemovedPipeline
+    public function __invoke(Cloud\Command\Pipeline\RemovePipelineCommand $command): Cloud\Event\RemovedPipeline
     {
         $response = $this->client->deletePipelinePipelineItem($command->pipeline);
 

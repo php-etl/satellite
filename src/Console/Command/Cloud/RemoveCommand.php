@@ -49,12 +49,7 @@ final class RemoveCommand extends Console\Command\Command
             }
         }
 
-        $directory = getcwd();
-        if (file_exists($directory . '/.gyro.php')) {
-            $service = require $directory . '/.gyro.php';
-        } else {
-            $service = new Satellite\Service();
-        }
+        $service = new Satellite\Cloud\Service();
 
         try {
             $configuration = $service->normalize($configuration);
@@ -65,7 +60,7 @@ final class RemoveCommand extends Console\Command\Command
 
         $token = json_decode(file_get_contents(getcwd() . '/.gyroscops/auth.json'), true)["token"];
         $httpClient = HttpClient::createForBaseUri(
-            $configuration["cloud"]["url"],
+            $configuration["satellite"]["cloud"]["url"],
             [
                 'verify_peer' => false,
                 'auth_bearer' => $token
@@ -81,7 +76,7 @@ final class RemoveCommand extends Console\Command\Command
 
         $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
         if (!file_exists($lockFile)) {
-            throw new UnableToUpdateException('Pipeline should be created before remove it.');
+            throw new \RuntimeException('Pipeline should be created before remove it.');
         }
         $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];
         $response = $client->getPipelineItem($pipelineId, Client::FETCH_RESPONSE);
@@ -89,7 +84,7 @@ final class RemoveCommand extends Console\Command\Command
             throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        $bus->push(
+        $bus->execute(
             new Satellite\Cloud\Command\Pipeline\RemovePipelineCommand($pipelineId)
         );
 

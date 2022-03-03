@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter;
 
+use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 
-interface CloudFactoryInterface
+interface FactoryInterface
 {
     public function configuration(): AdapterConfigurationInterface;
 
-    public function create(array $configuration): void;
-
-    public function update(array $configuration): void;
-
-    public function remove(array $configuration): void;
+    public function __invoke(array $configuration): SatelliteBuilderInterface;
 }

@@ -15,6 +15,7 @@ final class ReplacePipelineStepCommandHandler
     {
         $response = $this->client->replacePipelineStepPipelineStepCollection(
             (new Api\Model\PipelineStepReplacePipelineStepCommandInput())
+                ->setFormer($command->former)
                 ->setPipeline($command->pipeline)
                 ->setCode($command->code)
                 ->setLabel($command->label)

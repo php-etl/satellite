@@ -103,7 +103,7 @@ final class UpdateCommand extends Console\Command\Command
          * @var PipelineStep $result
          */
         foreach ($iterator as [$result, $step]) {
-            if ($result->getCode() !== $step["code"]) {
+            if (!is_null($result) && !is_null($step) && ($result->getCode() !== $step["code"])) {
                 $bus->execute(
                     new Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand(
                         $pipelineId,
@@ -132,7 +132,7 @@ final class UpdateCommand extends Console\Command\Command
                 $bus->execute(
                     new Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand(
                         $pipelineId,
-                        $step["code"],
+                        $result->getCode(),
                     )
                 );
             }
