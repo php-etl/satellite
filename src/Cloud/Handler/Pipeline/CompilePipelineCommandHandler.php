@@ -3,8 +3,7 @@
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\CompilePipelineCommand;
-use Kiboko\Component\Satellite\Cloud\Result;
+use Kiboko\Component\Satellite\Cloud;
 
 final class CompilePipelineCommandHandler
 {
@@ -12,7 +11,7 @@ final class CompilePipelineCommandHandler
     {
     }
 
-    public function __invoke(CompilePipelineCommand $command): Result
+    public function __invoke(Cloud\Command\Pipeline\CompilePipelineCommand $command): Cloud\Event\CompiledPipeline
     {
         $response = $this->client->pipelineCompilationPipelineCollection(
             (new Api\Model\PipelineCompilePipelineCommandInput())->setPipeline($command->pipeline),
@@ -20,9 +19,11 @@ final class CompilePipelineCommandHandler
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {
-            throw new \RuntimeException($response->getReasonPhrase());
+            throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        return new Result($response->getStatusCode(), $response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new Cloud\Event\CompiledPipeline($result["id"]);
     }
 }

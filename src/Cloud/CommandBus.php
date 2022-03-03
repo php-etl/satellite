@@ -9,10 +9,10 @@ final class CommandBus
     ) {
     }
 
-    public function execute(object $command): Result
+    public function execute(object $command)
     {
         $commandClass = get_class($command);
-        $handler = $this->handlers[$commandClass] ?? throw new \RuntimeException("No handler for $commandClass command.");
+        $handler = $this->handlers[$commandClass] ?? throw new \RuntimeException(sprintf('No handler for %s command', $commandClass));
 
         return $handler($command);
     }

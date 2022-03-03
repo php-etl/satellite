@@ -96,13 +96,14 @@ final class CreateCommand extends Console\Command\Command
             )
         );
 
-        if ($result) {
-            $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
-            if (!file_exists($currentDirectory) && !mkdir($currentDirectory) && !is_dir($currentDirectory)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $currentDirectory));
-            }
-            file_put_contents($currentDirectory . '/satellite.lock', $result->getBody(), JSON_THROW_ON_ERROR);
+        $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
+        if (!file_exists($currentDirectory) && !mkdir($currentDirectory) && !is_dir($currentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $currentDirectory));
         }
+        file_put_contents($currentDirectory . '/satellite.lock',
+            json_encode(['id' => $result->getId()], JSON_THROW_ON_ERROR),
+            JSON_THROW_ON_ERROR
+        );
 
         if (array_key_exists('composer', $configuration["satellite"])
             && array_key_exists('autoload', $configuration["satellite"]["composer"])
@@ -111,7 +112,7 @@ final class CreateCommand extends Console\Command\Command
             foreach ($configuration["satellite"]["composer"]["autoload"]["psr4"] as $key => $autoload) {
                 $bus->execute(
                     new Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand(
-                        $result->toArray()["id"],
+                        $result->getId(),
                         $key,
                         $autoload["paths"]
                     )
@@ -122,7 +123,7 @@ final class CreateCommand extends Console\Command\Command
         foreach ($configuration["satellite"]["pipeline"]["steps"] as $step) {
             $bus->execute(
                 new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
-                    $result->toArray()["id"],
+                    $result->getId(),
                     $step["code"],
                     $step["label"],
                     array_splice($step, -1),

@@ -3,15 +3,14 @@
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand;
-use Kiboko\Component\Satellite\Cloud\Result;
+use Kiboko\Component\Satellite\Cloud;
 
 final class AddPipelineComposerPSR4AutoloadCommandHandler
 {
     public function __construct(private Api\Client $client)
     {}
 
-    public function __invoke(AddPipelineComposerPSR4AutoloadCommand $command): Result
+    public function __invoke(Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand $command): Cloud\Event\AddedPipelineComposerPSR4Autoload
     {
         $response = $this->client->addComposerPipelinePipelineCollection(
             (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInput())
@@ -22,9 +21,11 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {
-            throw new \RuntimeException($response->getReasonPhrase());
+            throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        return new Result($response->getStatusCode(), $response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new Cloud\Event\AddedPipelineComposerPSR4Autoload($result["id"], $result["namespace"], $result["paths"]);
     }
 }

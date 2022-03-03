@@ -75,15 +75,25 @@ final class RemoveCommand extends Console\Command\Command
         $psr18Client = new Psr18Client($httpClient);
         $client = Client::create($psr18Client);
 
-        $factory = new Satellite\Adapter\Cloud\Factory($client);
-        $factory->remove($configuration["satellite"]);
+        $bus = new Satellite\Cloud\CommandBus([
+            Satellite\Cloud\Command\Pipeline\RemovePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client),
+        ]);
 
-//        if ($response->getStatusCode() === 200) {
-//            $style->error('The satellite configuration cannot be sent.');
-//            return Console\Command\Command::FAILURE;
-//        }
+        $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
+        if (!file_exists($lockFile)) {
+            throw new UnableToUpdateException('Pipeline should be created before remove it.');
+        }
+        $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];
+        $response = $client->getPipelineItem($pipelineId, Client::FETCH_RESPONSE);
+        if ($response !== null && $response->getStatusCode() !== 200 ) {
+            throw new \RuntimeException($response->getReasonPhrase());
+        }
 
-        $style->success('The satellite configuration has been sent correctly.');
+        $bus->push(
+            new Satellite\Cloud\Command\Pipeline\RemovePipelineCommand($pipelineId)
+        );
+
+        $style->success('The satellite configuration has been removed correctly.');
 
         return Console\Command\Command::SUCCESS;
     }

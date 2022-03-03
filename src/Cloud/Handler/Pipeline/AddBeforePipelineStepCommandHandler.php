@@ -3,15 +3,14 @@
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand;
-use Kiboko\Component\Satellite\Cloud\Result;
+use Kiboko\Component\Satellite\Cloud;
 
 final class AddBeforePipelineStepCommandHandler
 {
     public function __construct(private Api\Client $client)
     {}
 
-    public function __invoke(AddBeforePipelineStepCommand $command): Result
+    public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {
         $response = $this->client->addBeforePipelineStepPipelineStepCollection(
             (new Api\Model\PipelineStepAddBeforePipelineStepCommandInput())
@@ -24,9 +23,11 @@ final class AddBeforePipelineStepCommandHandler
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {
-            throw new \RuntimeException($response->getReasonPhrase());
+            throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        return new Result($response->getStatusCode(), $response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new Cloud\Event\AddedBeforePipelineStep($result["id"]);
     }
 }

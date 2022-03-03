@@ -80,11 +80,12 @@ final class UpdateCommand extends Console\Command\Command
             Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
         ]);
 
         $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
         if (!file_exists($lockFile)) {
-            throw new UnableToUpdateException('Pipeline should be created before updated it.');
+            throw new \RuntimeException('Pipeline should be created before updated it.');
         }
 
         $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];

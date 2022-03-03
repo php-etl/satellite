@@ -3,16 +3,15 @@
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand;
-use Kiboko\Component\Satellite\Cloud\Result;
-use Psr\Http\Message\ResponseInterface;
+use Kiboko\Component\Satellite\Cloud;
 
 final class ReplacePipelineStepCommandHandler
 {
     public function __construct(private Api\Client $client)
-    {}
+    {
+    }
 
-    public function __invoke(ReplacePipelineStepCommand $command): Result
+    public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {
         $response = $this->client->replacePipelineStepPipelineStepCollection(
             (new Api\Model\PipelineStepReplacePipelineStepCommandInput())
@@ -25,9 +24,11 @@ final class ReplacePipelineStepCommandHandler
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {
-            throw new \RuntimeException($response->getReasonPhrase());
+            throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        return new Result($response->getStatusCode(), $response->getBody()->getContents());
+        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new Cloud\Event\ReplacedPipelineStep($result["id"]);
     }
 }
