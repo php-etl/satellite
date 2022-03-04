@@ -109,7 +109,7 @@ final class UpdateCommand extends Console\Command\Command
                         $pipelineId,
                         $result->getCode(),
                         $step["code"],
-                        $step["label"],
+                        $step["name"],
                         $step,
                         []
                     )
@@ -121,7 +121,7 @@ final class UpdateCommand extends Console\Command\Command
                     new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
                         $pipelineId,
                         $step["code"],
-                        $step["label"],
+                        $step["name"],
                         $step,
                         []
                     )

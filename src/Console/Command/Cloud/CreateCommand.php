@@ -90,7 +90,7 @@ final class CreateCommand extends Console\Command\Command
 
         $result = $bus->execute(
             new Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand(
-                $configuration["satellite"]["pipeline"]["label"],
+                $configuration["satellite"]["pipeline"]["name"],
                 $configuration["satellite"]["pipeline"]["code"],
                 $configuration["satellite"]["cloud"]["project"]
             )
@@ -125,7 +125,7 @@ final class CreateCommand extends Console\Command\Command
                 new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
                     $result->getId(),
                     $step["code"],
-                    $step["label"],
+                    $step["name"],
                     array_splice($step, -1),
                     []
                 )
