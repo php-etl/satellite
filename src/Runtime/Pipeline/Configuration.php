@@ -70,7 +70,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                 ->arrayNode('expression_language')
                     ->scalarPrototype()->end()
                 ->end()
-                ->scalarNode('label')->end()
+                ->scalarNode('name')->end()
                 ->scalarNode('code')->end()
                 ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end();
@@ -83,7 +83,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         foreach ($this->plugins as $plugin) {
             $node
                 ->children()
-                    ->scalarNode('label')->end()
+                    ->scalarNode('name')->end()
                     ->scalarNode('code')->end()
                 ->end()
                 ->append($plugin->getConfigTreeBuilder()->getRootNode());

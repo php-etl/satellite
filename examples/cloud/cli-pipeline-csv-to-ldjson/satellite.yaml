@@ -8,21 +8,27 @@ satellite:
         - namespace: 'App\\'
           paths: ['src/']
   pipeline:
-    label: 'My products pipeline'
+    name: 'My products pipeline'
     code: 'products_pipeline'
     steps:
-      - label: 'Extract products'
+      - name: 'Extract products'
         code: 'csv.extractor'
         csv:
           extractor:
             file_path: '../data/products.csv'
-      - label: 'Transform products'
+      - name: 'Transform products'
         code: 'fastmap'
         fastmap:
           map:
             - copy: '[sku]'
               field: '[identifier]'
-      - label: 'Loads products'
+      - name: 'Transform'
+        code: 'my_fastmap'
+        fastmap:
+          map:
+            - copy: '[identifier]'
+              field: '[sku]'
+      - name: 'Loads products'
         code: 'stream.loader'
         stream:
           loader:
