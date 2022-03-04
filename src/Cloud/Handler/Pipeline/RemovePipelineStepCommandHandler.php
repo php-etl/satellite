@@ -12,7 +12,7 @@ final class RemovePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepCommand $command): Cloud\Event\RemovedPipelineStep
     {
-        $response = $this->client->deletePipelineStepPipelineItem($command->code, $command->pipeline);
+        $response = $this->client->deletePipelineStepPipelineItem($command->code, $command->pipeline, Api\Client::FETCH_RESPONSE);
 
         if ($response !== null && $response->getStatusCode() !== 204) {
             throw throw new \RuntimeException($response->getReasonPhrase());

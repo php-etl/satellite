@@ -21,6 +21,10 @@ final class UpdateCommand extends Console\Command\Command
     {
         $this->setDescription('Updates the configuration to the Gyroscops API.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addOption('disable-ssl', null, Console\Input\InputOption::VALUE_OPTIONAL,
+            '',
+            false
+        );
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -66,7 +70,7 @@ final class UpdateCommand extends Console\Command\Command
         $httpClient = HttpClient::createForBaseUri(
             $configuration["satellite"]["cloud"]["url"],
             [
-                'verify_peer' => false,
+                'verify_peer' => $input->getOption('disable-ssl') === "true" ? false : true,
                 'auth_bearer' => $token
             ]
         );

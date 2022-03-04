@@ -20,6 +20,10 @@ final class CreateCommand extends Console\Command\Command
     {
         $this->setDescription('Sends configuration to the Gyroscops API.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addOption('disable-ssl', null, Console\Input\InputOption::VALUE_OPTIONAL,
+            '',
+            false
+        );
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -65,17 +69,13 @@ final class CreateCommand extends Console\Command\Command
         $httpClient = HttpClient::createForBaseUri(
             $configuration["satellite"]["cloud"]["url"],
             [
-                'verify_peer' => false,
+                'verify_peer' => $input->getOption('disable-ssl') === "true" ? false : true,
                 'auth_bearer' => $token
             ]
         );
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Client::create($psr18Client);
-
-//        $authenticationRegistry = new AuthenticationRegistry([new ApiKeyAuthentication($token)]);
-//        $baseUri = new BaseUriPlugin(new Uri($configuration["satellite"]["cloud"]["url"]));
-//        $client = Client::create(null, [$authenticationRegistry, $baseUri]);
 
         $bus = new Satellite\Cloud\CommandBus([
             Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
