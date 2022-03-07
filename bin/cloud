@@ -17,10 +17,10 @@ use Symfony\Component\Console\Output;
 $app = new \Symfony\Component\Console\Application();
 
 $app->addCommands([
-    new \Kiboko\Component\Satellite\Console\Command\BuildCommand(),
-    new \Kiboko\Component\Satellite\Console\Command\ValidateCommand(),
-    new \Kiboko\Component\Satellite\Console\Command\PipelineRunCommand(),
-    new \Kiboko\Component\Satellite\Console\Command\WorkflowRunCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\LoginCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\CreateCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\UpdateCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\RemoveCommand(),
 ]);
 
 $app->run(new Input\ArgvInput(), new Output\ConsoleOutput());

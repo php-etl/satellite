@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Console\Command\Cloud;
+namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
 use Gyroscops\Api\Client;
 use Kiboko\Component\Satellite;
-use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
