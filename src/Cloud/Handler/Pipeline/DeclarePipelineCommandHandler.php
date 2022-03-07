@@ -7,25 +7,21 @@ use Kiboko\Component\Satellite\Cloud;
 
 final class DeclarePipelineCommandHandler
 {
-    public function __construct(private Api\Client $client)
-    {}
+    public function __construct(
+        private Api\Client $client
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\DeclarePipelineCommand $command): Cloud\Event\PipelineDeclared
     {
-        $response = $this->client->declarePipelinePipelineCollection(
+        $result = $this->client->declarePipelinePipelineCollection(
             (new Api\Model\PipelineDeclarePipelineCommandInput())
                 ->setLabel($command->label)
                 ->setCode($command->code)
-                ->setProject($command->project),
-            Api\Client::FETCH_RESPONSE
+                ->setProject((string) $command->project)
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
-        }
+        assert($result !== null);
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\PipelineDeclared($result['id']);
+        return new Cloud\Event\PipelineDeclared($result);
     }
 }

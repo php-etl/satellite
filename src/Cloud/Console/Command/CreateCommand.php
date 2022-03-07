@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
-use Gyroscops\Api\Client;
+use Gyroscops\Api;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
@@ -19,11 +19,10 @@ final class CreateCommand extends Console\Command\Command
     protected function configure(): void
     {
         $this->setDescription('Sends configuration to the Gyroscops API.');
+        $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
+        $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
+        $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
-        $this->addOption('disable-ssl', null, Console\Input\InputOption::VALUE_OPTIONAL,
-            '',
-            false
-        );
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -32,6 +31,17 @@ final class CreateCommand extends Console\Command\Command
             $input,
             $output,
         );
+
+        if ($input->getOption('beta')) {
+            $url = 'https://beta.gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        } else if ($input->getOption('url')) {
+            $url = $input->getOption('url');
+            $ssl = $input->getOption('ssl') ?? true;
+        } else {
+            $url = 'https://gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        }
 
         $filename = $input->getArgument('config');
         if ($filename !== null) {
@@ -58,79 +68,80 @@ final class CreateCommand extends Console\Command\Command
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException | Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
-            return 255;
+            return self::FAILURE;
         }
 
-        $token = json_decode(file_get_contents(getcwd() . '/.gyroscops/auth.json'), true, 512, JSON_THROW_ON_ERROR)["token"];
-        if (!$token) {
-            throw new TokenException('Unable to retrieve authentication token.');
+        $auth = new Satellite\Cloud\Auth();
+        try {
+            $token = $auth->token($url);
+        } catch (\OutOfBoundsException) {
+            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+            return self::FAILURE;
         }
 
         $httpClient = HttpClient::createForBaseUri(
-            $configuration["satellite"]["cloud"]["url"],
+            $url,
             [
-                'verify_peer' => $input->getOption('disable-ssl') === "true" ? false : true,
+                'verify_peer' => $ssl,
                 'auth_bearer' => $token
             ]
         );
 
         $psr18Client = new Psr18Client($httpClient);
-        $client = Client::create($psr18Client);
+        $client = Api\Client::create($psr18Client);
 
-        $bus = new Satellite\Cloud\CommandBus([
-            Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
-        ]);
+        $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
-        $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
-        if (file_exists($currentDirectory . '/satellite.lock')) {
-            throw new \RuntimeException('Pipeline cannot be created because its already exists.');
+        $configPath = $input->getArgument('config');
+        $configDirectory = dirname($configPath);
+        if (file_exists($configDirectory . '/satellite.lock')) {
+            throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 
-        $result = $bus->execute(
+        $bus->push(
             new Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand(
-                $configuration["satellite"]["pipeline"]["name"],
-                $configuration["satellite"]["pipeline"]["code"],
-                $configuration["satellite"]["cloud"]["project"]
-            )
-        );
+                $configuration['satellite']['pipeline']['name'],
+                $configuration['satellite']['pipeline']['code'],
+                new Satellite\Cloud\DTO\ProjectId($configuration['satellite']['cloud']['project']),
+                new Satellite\Cloud\DTO\StepList(
+                    ...array_map(function (array $stepConfig) {
+                        $name = $stepConfig['name'];
+                        $code = $stepConfig['code'];
+                        unset($stepConfig['name'], $stepConfig['code']);
 
-        $currentDirectory = dirname(getcwd() . '/' . $input->getArgument('config'));
-        if (!file_exists($currentDirectory) && !mkdir($currentDirectory) && !is_dir($currentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $currentDirectory));
-        }
-        file_put_contents($currentDirectory . '/satellite.lock',
-            json_encode(['id' => $result->getId()], JSON_THROW_ON_ERROR),
-            JSON_THROW_ON_ERROR
-        );
-
-        if (array_key_exists('composer', $configuration["satellite"])
-            && array_key_exists('autoload', $configuration["satellite"]["composer"])
-            && array_key_exists('psr4', $configuration["satellite"]["composer"]["autoload"])
-        ) {
-            foreach ($configuration["satellite"]["composer"]["autoload"]["psr4"] as $key => $autoload) {
-                $bus->execute(
-                    new Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand(
-                        $result->getId(),
-                        $key,
-                        $autoload["paths"]
+                        return new Satellite\Cloud\DTO\Step(
+                            $name,
+                            $code,
+                            $stepConfig,
+                        );
+                    }, $configuration['satellite']['pipeline']['steps'])
+                ),
+                new Satellite\Cloud\DTO\Autoload(
+                    ...array_map(
+                        function (
+                            string $namespace,
+                            array $paths,
+                        ): Satellite\Cloud\DTO\PSR4AutoloadConfig {
+                            return new Satellite\Cloud\DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']);
+                        },
+                        array_keys($configuration['satellite']['composer']['autoload']['psr4'] ?? []),
+                        $configuration['satellite']['composer']['autoload']['psr4'] ?? [],
                     )
-                );
-            }
-        }
-
-        foreach ($configuration["satellite"]["pipeline"]["steps"] as $step) {
-            $bus->execute(
-                new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
-                    $result->getId(),
-                    $step["code"],
-                    $step["name"],
-                    array_splice($step, -1),
-                    []
                 )
-            );
-        }
+            )
+        )->then(
+            function (Satellite\Cloud\DTO\PipelineId $pipeline) use ($configDirectory) {
+                file_put_contents(
+                    $configDirectory . '/.lock',
+                    json_encode(['id' => (string) $pipeline], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT),
+                );
+            },
+            function (\Throwable $exception) use ($style) {
+                $style->error($exception->getMessage());
+            }
+        );
+
+        $bus->execute();
 
         $style->success('The satellite configuration has been sent correctly.');
 

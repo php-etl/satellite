@@ -7,9 +7,9 @@ use Kiboko\Component\Satellite\Cloud;
 
 final class ReplacePipelineStepCommandHandler
 {
-    public function __construct(private Api\Client $client)
-    {
-    }
+    public function __construct(
+        private Api\Client $client
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {

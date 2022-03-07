@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
-use Gyroscops\Api\Client;
+use Gyroscops\Api;
 use Gyroscops\Api\Model\PipelineStep;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config;
@@ -20,11 +20,10 @@ final class UpdateCommand extends Console\Command\Command
     protected function configure(): void
     {
         $this->setDescription('Updates the configuration to the Gyroscops API.');
+        $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
+        $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
+        $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
-        $this->addOption('disable-ssl', null, Console\Input\InputOption::VALUE_OPTIONAL,
-            '',
-            false
-        );
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -33,6 +32,17 @@ final class UpdateCommand extends Console\Command\Command
             $input,
             $output,
         );
+
+        if ($input->getOption('beta')) {
+            $url = 'https://beta.gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        } else if ($input->getOption('url')) {
+            $url = $input->getOption('url');
+            $ssl = $input->getOption('ssl') ?? true;
+        } else {
+            $url = 'https://gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        }
 
         $filename = $input->getArgument('config');
         if ($filename !== null) {
@@ -59,33 +69,29 @@ final class UpdateCommand extends Console\Command\Command
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException | Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
-            return 255;
+            return self::FAILURE;
         }
 
-        $token = json_decode(file_get_contents(getcwd() . '/.gyroscops/auth.json'), true)["token"];
-        if (!$token) {
-            throw new TokenException('Unable to retrieve authentication token.');
+        $auth = new Satellite\Cloud\Auth();
+        try {
+            $token = $auth->token($url);
+        } catch (\OutOfBoundsException) {
+            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+            return self::FAILURE;
         }
 
         $httpClient = HttpClient::createForBaseUri(
-            $configuration["satellite"]["cloud"]["url"],
+            $url,
             [
-                'verify_peer' => $input->getOption('disable-ssl') === "true" ? false : true,
+                'verify_peer' => $ssl,
                 'auth_bearer' => $token
             ]
         );
 
         $psr18Client = new Psr18Client($httpClient);
-        $client = Client::create($psr18Client);
+        $client = Api\Client::create($psr18Client);
 
-        $bus = new Satellite\Cloud\CommandBus([
-            Satellite\Cloud\Command\Pipeline\AddAfterPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddAfterPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
-        ]);
+        $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
         $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
         if (!file_exists($lockFile)) {

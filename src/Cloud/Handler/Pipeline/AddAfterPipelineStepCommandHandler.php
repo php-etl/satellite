@@ -7,26 +7,24 @@ use Kiboko\Component\Satellite\Cloud;
 
 final class AddAfterPipelineStepCommandHandler
 {
-    public function __construct(private Api\Client $client)
-    {}
+    public function __construct(
+        private Api\Client $client
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\AddAfterPipelineStepCommand $command): Cloud\Event\AddedAfterPipelineStep
     {
-        $response = $this->client->addAfterPipelineStepPipelineStepCollection(
+        $result = $this->client->addAfterPipelineStepPipelineStepCollection(
             (new Api\Model\PipelineStepAddAfterPipelineStepCommandInput())
-                ->setPrevious($command->previous)
-                ->setLabel($command->label)
-                ->setCode($command->code)
-                ->setConfiguration($command->configuration)
-                ->setProbes($command->probes),
-            Api\Client::FETCH_RESPONSE
+                ->setPrevious((string) $command->previous)
+                ->setLabel($command->step->name)
+                ->setCode($command->step->code)
+                ->setConfiguration($command->step->config)
+                ->setProbes($command->step->probes)
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile adding pipeline step.');
         }
-
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
         return new Cloud\Event\AddedAfterPipelineStep($result["id"]);
     }

@@ -3,14 +3,13 @@
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
 use Kiboko\Component\Satellite\Cloud\Command\Command;
+use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
+use Kiboko\Component\Satellite\Cloud\DTO\Step;
 
 final class AppendPipelineStepCommand implements Command
 {
     public function __construct(
-        public string $pipeline,
-        public string $code,
-        public string $label,
-        public array $configuration,
-        public array $probes
+        public PipelineId $pipeline,
+        public Step $step,
     ){}
 }

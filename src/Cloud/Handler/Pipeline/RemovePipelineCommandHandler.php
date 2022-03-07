@@ -7,8 +7,9 @@ use Kiboko\Component\Satellite\Cloud;
 
 final class RemovePipelineCommandHandler
 {
-    public function __construct(private Api\Client $client)
-    {}
+    public function __construct(
+        private Api\Client $client
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineCommand $command): Cloud\Event\RemovedPipeline
     {

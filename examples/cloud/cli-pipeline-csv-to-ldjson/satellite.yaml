@@ -1,6 +1,5 @@
 satellite:
   cloud:
-    url: https://localhost/
     project: baa56754-648d-4821-b053-d146c5d34e2b
   composer:
     autoload:

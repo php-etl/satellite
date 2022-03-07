@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
-use Gyroscops\Api\Client;
+use Gyroscops\Api;
 use Kiboko\Component\Satellite;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
@@ -19,11 +19,10 @@ final class RemoveCommand extends Console\Command\Command
     protected function configure(): void
     {
         $this->setDescription('Removes a part of configuration.');
+        $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
+        $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
+        $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
-        $this->addOption('disable-ssl', null, Console\Input\InputOption::VALUE_OPTIONAL,
-            '',
-            false
-        );
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -32,6 +31,17 @@ final class RemoveCommand extends Console\Command\Command
             $input,
             $output,
         );
+
+        if ($input->getOption('beta')) {
+            $url = 'https://beta.gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        } else if ($input->getOption('url')) {
+            $url = $input->getOption('url');
+            $ssl = $input->getOption('ssl') ?? true;
+        } else {
+            $url = 'https://gyroscops.com';
+            $ssl = $input->getOption('ssl') ?? true;
+        }
 
         $filename = $input->getArgument('config');
         if ($filename !== null) {
@@ -58,38 +68,46 @@ final class RemoveCommand extends Console\Command\Command
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException | Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
-            return 255;
+            return self::FAILURE;
         }
 
-        $token = json_decode(file_get_contents(getcwd() . '/.gyroscops/auth.json'), true)["token"];
+        $auth = new Satellite\Cloud\Auth();
+        try {
+            $token = $auth->token($url);
+        } catch (\OutOfBoundsException) {
+            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+            return self::FAILURE;
+        }
+
         $httpClient = HttpClient::createForBaseUri(
-            $configuration["satellite"]["cloud"]["url"],
+            $url,
             [
-                'verify_peer' => $input->getOption('disable-ssl') === "true" ? false : true,
+                'verify_peer' => $ssl,
                 'auth_bearer' => $token
             ]
         );
 
         $psr18Client = new Psr18Client($httpClient);
-        $client = Client::create($psr18Client);
+        $client = Api\Client::create($psr18Client);
 
-        $bus = new Satellite\Cloud\CommandBus([
-            Satellite\Cloud\Command\Pipeline\RemovePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client),
-        ]);
+        $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
         $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
         if (!file_exists($lockFile)) {
             throw new \RuntimeException('Pipeline should be created before remove it.');
         }
+
         $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];
         $response = $client->getPipelineItem($pipelineId, Client::FETCH_RESPONSE);
         if ($response !== null && $response->getStatusCode() !== 200 ) {
             throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        $bus->execute(
+        $bus->push(
             new Satellite\Cloud\Command\Pipeline\RemovePipelineCommand($pipelineId)
         );
+
+        $bus->execute();
 
         $style->success('The satellite configuration has been removed correctly.');
 

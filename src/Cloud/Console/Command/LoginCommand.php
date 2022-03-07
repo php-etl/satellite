@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
 use Gyroscops\Api;
-use Kiboko\Component\Satellite\Cloud\Auth;
-use Kiboko\Component\Satellite\Console\Command\Cloud\Client;
+use Kiboko\Component\Satellite;
 use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
@@ -17,7 +16,7 @@ final class LoginCommand extends Console\Command\Command
 
     protected function configure(): void
     {
-        $this->setDescription('Connects to the Gyroscops API.');
+        $this->setDescription('Authenticate to the Gyroscops API.');
         $this->addArgument('username', mode: Console\Input\InputArgument::OPTIONAL);
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
@@ -64,12 +63,7 @@ final class LoginCommand extends Console\Command\Command
             try {
                 assert($token instanceof Api\Model\Token);
 
-                $directory = getenv('HOME') . '/.gyroscops';
-                if (!file_exists($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" can not be created', $directory));
-                }
-
-                $auth = new Auth($directory . '/auth.json');
+                $auth = new Satellite\Cloud\Auth();
                 $auth->append($url, $token->getToken());
                 $auth->dump();
 

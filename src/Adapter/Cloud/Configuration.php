@@ -16,7 +16,6 @@ final class Configuration implements Configurator\AdapterConfigurationInterface
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('url')->isRequired()->end()
                 ->scalarNode('project')->isRequired()->end()
             ->end();
 
