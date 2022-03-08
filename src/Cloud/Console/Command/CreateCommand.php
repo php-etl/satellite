@@ -130,20 +130,23 @@ final class CreateCommand extends Console\Command\Command
                 )
             )
         )->then(
-            function (Satellite\Cloud\DTO\PipelineId $pipeline) use ($configDirectory) {
+            function (Satellite\Cloud\DTO\PipelineId $pipeline) use ($configDirectory, $style) {
                 file_put_contents(
                     $configDirectory . '/.lock',
                     json_encode(['id' => (string) $pipeline], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT),
                 );
+
+                $style->success('The satellite configuration has been sent successfully.');
             },
             function (\Throwable $exception) use ($style) {
-                $style->error($exception->getMessage());
+                $style->error([
+                    'An unexpected error happened, the satellite configuration could not be sent.',
+                    $exception->getMessage()
+                ]);
             }
         );
 
         $bus->execute();
-
-        $style->success('The satellite configuration has been sent correctly.');
 
         return Console\Command\Command::SUCCESS;
     }

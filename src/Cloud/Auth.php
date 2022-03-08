@@ -37,6 +37,13 @@ final class Auth
         $this->configuration = \json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
     }
 
+    public function dump(): void
+    {
+        $content = \json_encode($this->configuration, flags: JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+
+        \file_put_contents($this->pathName . '/auth.json', $content);
+    }
+
     public function append(string $url, string $token): void
     {
         $this->configuration[$url] = [
@@ -50,10 +57,9 @@ final class Auth
             ?? throw new \OutOfBoundsException('There is no available token to authenticate to the service.');
     }
 
-    public function dump(): void
+    public function organization(string $url): OrganizationId
     {
-        $content = \json_encode($this->configuration, flags: JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-
-        \file_put_contents($this->pathName . '/auth.json', $content);
+        return $this->configuration[$url]['token']
+            ?? throw new \OutOfBoundsException('There is no available token to authenticate to the service.');
     }
 }
