@@ -47,7 +47,7 @@
         "phpstan/phpstan": "^0.12",
         "friends-of-phpspec/phpspec-code-coverage": "*",
         "fakerphp/faker": "^1.9",
-        "composer/composer": "2.1.x-dev",
+        "composer/composer": "2.1@stable",
         "justinrainbow/json-schema": "^5.2",
         "adlawson/vfs": "^0.12.1",
         "php-etl/phpunit-extension": "*",
@@ -63,8 +63,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Kiboko\\Component\\Satellite\\": "src/",
-            "Gyroscops\\Api\\": "generated/"
+            "Kiboko\\Component\\Satellite\\": "src/"
         },
         "files": [
             "src/attributes.php"

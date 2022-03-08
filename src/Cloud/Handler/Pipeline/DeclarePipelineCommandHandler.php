@@ -22,6 +22,6 @@ final class DeclarePipelineCommandHandler
 
         assert($result !== null);
 
-        return new Cloud\Event\PipelineDeclared($result);
+        return new Cloud\Event\PipelineDeclared($result->id);
     }
 }
