@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Cloud\AccessDeniedException;
 use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
@@ -50,26 +51,39 @@ final class LoginCommand extends Console\Command\Command
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
+        $auth = new Satellite\Cloud\Auth();
+
+        try {
+            $credentials = $auth->credentials($url);
+
+            $token = $auth->authenticateWithCredentials($client, $credentials);
+            $auth->persistToken($url, $token);
+            $auth->flush();
+
+            $style->success('Authentication token successfully refreshed.');
+
+            return self::SUCCESS;
+        } catch (\AssertionError) {
+            // The provided credentials are incorrect
+        } catch (\OutOfBoundsException) {
+            // No credentials found for the provided instance
+        }
 
         $retries = 3;
         $username = $input->getArgument('username') ?? $style->ask('Username:');
 
         while (true) {
-            $data = new \Gyroscops\Api\Model\Credentials();
-            $data->setUsername($username);
-            $data->setPassword($style->askHidden('Password:'));
-
-            $token = $client->postCredentialsItem($data);
             try {
-                assert($token instanceof Api\Model\Token);
+                $password = $style->askHidden('Password:');
+                $token = $auth->authenticateWithCredentials($client, new Satellite\Cloud\Credentials($username, $password));
 
-                $auth = new Satellite\Cloud\Auth();
-                $auth->append($url, $token->getToken());
-                $auth->dump();
+                $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password));
+                $auth->persistToken($url, $token);
+                $auth->flush();
 
                 $style->success('Authentication token successfully stored.');
                 break;
-            } catch (\AssertionError) {
+            } catch (AccessDeniedException) {
                 if (--$retries > 0) {
                     $style->error('Your credentials were not correct, the login was not successful.');
                     continue;

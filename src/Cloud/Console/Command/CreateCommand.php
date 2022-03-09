@@ -74,8 +74,8 @@ final class CreateCommand extends Console\Command\Command
         $auth = new Satellite\Cloud\Auth();
         try {
             $token = $auth->token($url);
-        } catch (\OutOfBoundsException) {
-            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+        } catch (Satellite\Cloud\AccessDeniedException) {
+            $style->error('Your credentials were not found or has expired, please run <info>cloud login</>.');
             return self::FAILURE;
         }
 

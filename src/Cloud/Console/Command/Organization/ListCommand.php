@@ -4,6 +4,7 @@ namespace Kiboko\Component\Satellite\Cloud\Console\Command\Organization;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Cloud\AccessDeniedException;
 use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
@@ -41,8 +42,8 @@ final class ListCommand extends Console\Command\Command
         $auth = new Satellite\Cloud\Auth();
         try {
             $token = $auth->token($url);
-        } catch (\OutOfBoundsException) {
-            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+        } catch (AccessDeniedException) {
+            $style->error('Your credentials were not found, please run <info>cloud login</>.');
             return self::FAILURE;
         }
 
