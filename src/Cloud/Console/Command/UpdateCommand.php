@@ -73,10 +73,13 @@ final class UpdateCommand extends Console\Command\Command
         }
 
         $auth = new Satellite\Cloud\Auth();
+        $context = new Satellite\Cloud\Context();
         try {
             $token = $auth->token($url);
-        } catch (\OutOfBoundsException) {
-            $style->error(sprintf('Your credentials were not found, please run <info>%s login</>.', $input->getFirstArgument()));
+        } catch (Satellite\Cloud\AccessDeniedException) {
+            $style->error('Your credentials were not found or has expired.');
+            $style->writeLn('You may want to run <info>cloud login</>.');
+
             return self::FAILURE;
         }
 
@@ -93,62 +96,21 @@ final class UpdateCommand extends Console\Command\Command
 
         $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
-        $lockFile = dirname(getcwd() . '/' . $input->getArgument('config')) . '/satellite.lock';
-        if (!file_exists($lockFile)) {
-            throw new \RuntimeException('Pipeline should be created before updated it.');
+        $configPath = $input->getArgument('config');
+        $configDirectory = dirname($configPath);
+        if (file_exists($configDirectory . '/satellite.lock')) {
+            throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 
-        $pipelineId = json_decode(file_get_contents($lockFile), true, 512, JSON_THROW_ON_ERROR)["id"];
-        $response = $client->getPipelineItem($pipelineId, Client::FETCH_RESPONSE);
-        if ($response !== null && $response->getStatusCode() !== 200 ) {
-            throw new \RuntimeException($response->getReasonPhrase());
+        $pipeline = new Satellite\Cloud\Pipeline($context);
+        $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code']);
+        foreach ($pipeline->update($model, Satellite\Cloud\Pipeline::fromConfiguration($configuration['satellite'])) as $command) {
+            $bus->push($command);
         }
 
-        $steps = $client->apiPipelinesStepsGetSubresourcePipelineSubresource($pipelineId);
-        $iterator = new \MultipleIterator(\MultipleIterator::MIT_NEED_ANY);
-        $iterator->attachIterator(new \ArrayIterator($steps));
-        $iterator->attachIterator(new \ArrayIterator($configuration["satellite"]["pipeline"]["steps"]));
+        $bus->execute();
 
-        /**
-         * @var PipelineStep $result
-         */
-        foreach ($iterator as [$result, $step]) {
-            if (!is_null($result) && !is_null($step) && ($result->getCode() !== $step["code"])) {
-                $bus->execute(
-                    new Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand(
-                        $pipelineId,
-                        $result->getCode(),
-                        $step["code"],
-                        $step["name"],
-                        $step,
-                        []
-                    )
-                );
-            }
-
-            if (!is_null($step)) {
-                $bus->execute(
-                    new Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand(
-                        $pipelineId,
-                        $step["code"],
-                        $step["name"],
-                        $step,
-                        []
-                    )
-                );
-            }
-
-            if (is_null($step)) {
-                $bus->execute(
-                    new Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand(
-                        $pipelineId,
-                        $result->getCode(),
-                    )
-                );
-            }
-        }
-
-        $style->success('The satellite configuration has been updated correctly.');
+        $style->success('The satellite configuration has been updated successfully.');
 
         return Console\Command\Command::SUCCESS;
     }

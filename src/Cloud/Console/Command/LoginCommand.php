@@ -64,9 +64,9 @@ final class LoginCommand extends Console\Command\Command
 
             return self::SUCCESS;
         } catch (\AssertionError) {
-            // The provided credentials are incorrect
+            // NOOP: The provided credentials are incorrect
         } catch (\OutOfBoundsException) {
-            // No credentials found for the provided instance
+            // NOOP: No credentials found for the provided instance
         }
 
         $retries = 3;

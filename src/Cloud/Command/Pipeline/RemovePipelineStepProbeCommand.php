@@ -2,16 +2,14 @@
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
-use Gyroscops\Api\Model\Probe;
 use Kiboko\Component\Satellite\Cloud\Command\Command;
-use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
-use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
+use Kiboko\Component\Satellite\Cloud\DTO;
 
 final class RemovePipelineStepProbeCommand implements Command
 {
     public function __construct(
-        public PipelineId $pipeline,
-        public StepCode $stepCode,
-        public Probe $probe,
+        public DTO\PipelineId $pipeline,
+        public DTO\StepCode $stepCode,
+        public DTO\Probe $probe,
     ) {}
 }

@@ -16,7 +16,7 @@ final class AddAfterPipelineStepCommandHandler
         $result = $this->client->addAfterPipelineStepPipelineStepCollection(
             (new Api\Model\PipelineStepAddAfterPipelineStepCommandInput())
                 ->setPrevious((string) $command->previous)
-                ->setLabel($command->step->name)
+                ->setLabel($command->step->label)
                 ->setCode($command->step->code)
                 ->setConfiguration($command->step->config)
                 ->setProbes($command->step->probes)

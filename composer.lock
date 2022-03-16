@@ -717,12 +717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "f3d5f7e6a1bc764b924a6c352079e6c0c1f8c7f1"
+                "reference": "2d197c1d6a061be1cd469b9886c37d07819db730"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/f3d5f7e6a1bc764b924a6c352079e6c0c1f8c7f1",
-                "reference": "f3d5f7e6a1bc764b924a6c352079e6c0c1f8c7f1",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/2d197c1d6a061be1cd469b9886c37d07819db730",
+                "reference": "2d197c1d6a061be1cd469b9886c37d07819db730",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +763,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/master"
             },
-            "time": "2022-03-08T08:23:41+00:00"
+            "time": "2022-03-10T15:14:59+00:00"
         },
         {
             "name": "php-etl/packaging",
@@ -6416,16 +6416,16 @@
         },
         {
             "name": "phpactor/docblock",
-            "version": "0.3.5",
+            "version": "0.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpactor/docblock.git",
-                "reference": "908c303f34db5c2c9f7d3186001490f95a2d8f5d"
+                "reference": "a5567feab7b36938d6a1018a60efc5a7c4fd696c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpactor/docblock/zipball/908c303f34db5c2c9f7d3186001490f95a2d8f5d",
-                "reference": "908c303f34db5c2c9f7d3186001490f95a2d8f5d",
+                "url": "https://api.github.com/repos/phpactor/docblock/zipball/a5567feab7b36938d6a1018a60efc5a7c4fd696c",
+                "reference": "a5567feab7b36938d6a1018a60efc5a7c4fd696c",
                 "shasum": ""
             },
             "require": {
@@ -6462,9 +6462,9 @@
             "description": "Simple Docblock Parser",
             "support": {
                 "issues": "https://github.com/phpactor/docblock/issues",
-                "source": "https://github.com/phpactor/docblock/tree/0.3.5"
+                "source": "https://github.com/phpactor/docblock/tree/0.3.6"
             },
-            "time": "2021-12-13T18:04:28+00:00"
+            "time": "2022-03-08T11:46:42+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

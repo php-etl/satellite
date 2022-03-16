@@ -2,12 +2,13 @@
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-final class Pipeline
+final class Pipeline implements PipelineInterface
 {
     public function __construct(
+        private string $label,
         private string $code,
-        private string $name,
         private StepList $steps,
+        private Autoload $autoload,
     ) {}
 
     public function code(): string
@@ -15,13 +16,18 @@ final class Pipeline
         return $this->code;
     }
 
-    public function name(): string
+    public function label(): string
     {
-        return $this->name;
+        return $this->label;
     }
 
     public function steps(): StepList
     {
         return $this->steps;
+    }
+
+    public function autoload(): Autoload
+    {
+        return $this->autoload;
     }
 }

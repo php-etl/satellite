@@ -2,13 +2,11 @@
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-final class Step
+final class Probe
 {
     public function __construct(
         public string $label,
-        public StepCode $code,
-        public array $config,
-        public ProbeList $probes,
+        public string $code,
         public int $order,
     ) {}
 }

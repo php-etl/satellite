@@ -83,7 +83,7 @@ final class Auth
     {
         $this->configuration[$url] += [
             'token' => $token,
-            'date' => (new \DateTimeImmutable())->format('U'),
+            'date' => (new \DateTimeImmutable())->format(\DateTimeImmutable::RFC3339_EXTENDED),
         ];
     }
 
@@ -96,10 +96,10 @@ final class Auth
             throw new AccessDeniedException('There is no available token to authenticate to the service.');
         }
 
-        $date = \DateTimeImmutable::createFromFormat('U', $this->configuration[$url]['date']);
-        if ($date <= new \DateTimeImmutable('-1 hour')) {
-            throw new AccessDeniedException('There is no available token to authenticate to the service.');
-        }
+//        $date = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $this->configuration[$url]['date']);
+//        if ($date <= new \DateTimeImmutable('-1 hour')) {
+//            throw new AccessDeniedException('The stored token has expired, you need a fresh token to authenticate to the service.');
+//        }
 
         return $this->configuration[$url]['token'];
     }
@@ -117,11 +117,5 @@ final class Auth
             $this->configuration[$url]['login'],
             $this->configuration[$url]['password']
         );
-    }
-
-    public function organization(string $url): OrganizationId
-    {
-        return $this->configuration[$url]['token']
-            ?? throw new AccessDeniedException('There is no available token to authenticate to the service.');
     }
 }

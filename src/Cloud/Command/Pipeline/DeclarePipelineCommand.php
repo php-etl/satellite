@@ -3,17 +3,16 @@
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
 use Kiboko\Component\Satellite\Cloud\Command\Command;
-use Kiboko\Component\Satellite\Cloud\DTO\Autoload;
-use Kiboko\Component\Satellite\Cloud\DTO\ProjectId;
-use Kiboko\Component\Satellite\Cloud\DTO\StepList;
+use Kiboko\Component\Satellite\Cloud\DTO;
 
 final class DeclarePipelineCommand implements Command
 {
     public function __construct(
-        public string $label,
         public string $code,
-        public ProjectId $project,
-        public StepList $stepList,
-        public ?Autoload $autoload = null,
+        public string $label,
+        public DTO\StepList $steps,
+        public DTO\Autoload $autoload,
+        public DTO\OrganizationId $organizationId,
+        public DTO\ProjectId $project,
     ) {}
 }

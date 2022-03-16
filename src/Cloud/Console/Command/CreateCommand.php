@@ -72,10 +72,13 @@ final class CreateCommand extends Console\Command\Command
         }
 
         $auth = new Satellite\Cloud\Auth();
+        $context = new Satellite\Cloud\Context();
         try {
             $token = $auth->token($url);
         } catch (Satellite\Cloud\AccessDeniedException) {
-            $style->error('Your credentials were not found or has expired, please run <info>cloud login</>.');
+            $style->error('Your credentials were not found or has expired.');
+            $style->writeLn('You may want to run <info>cloud login</>.');
+
             return self::FAILURE;
         }
 
@@ -98,55 +101,14 @@ final class CreateCommand extends Console\Command\Command
             throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 
-        $bus->push(
-            new Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand(
-                $configuration['satellite']['pipeline']['name'],
-                $configuration['satellite']['pipeline']['code'],
-                new Satellite\Cloud\DTO\ProjectId($configuration['satellite']['cloud']['project']),
-                new Satellite\Cloud\DTO\StepList(
-                    ...array_map(function (array $stepConfig) {
-                        $name = $stepConfig['name'];
-                        $code = $stepConfig['code'];
-                        unset($stepConfig['name'], $stepConfig['code']);
-
-                        return new Satellite\Cloud\DTO\Step(
-                            $name,
-                            $code,
-                            $stepConfig,
-                        );
-                    }, $configuration['satellite']['pipeline']['steps'])
-                ),
-                new Satellite\Cloud\DTO\Autoload(
-                    ...array_map(
-                        function (
-                            string $namespace,
-                            array $paths,
-                        ): Satellite\Cloud\DTO\PSR4AutoloadConfig {
-                            return new Satellite\Cloud\DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']);
-                        },
-                        array_keys($configuration['satellite']['composer']['autoload']['psr4'] ?? []),
-                        $configuration['satellite']['composer']['autoload']['psr4'] ?? [],
-                    )
-                )
-            )
-        )->then(
-            function (Satellite\Cloud\DTO\PipelineId $pipeline) use ($configDirectory, $style) {
-                file_put_contents(
-                    $configDirectory . '/.lock',
-                    json_encode(['id' => (string) $pipeline], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT),
-                );
-
-                $style->success('The satellite configuration has been sent successfully.');
-            },
-            function (\Throwable $exception) use ($style) {
-                $style->error([
-                    'An unexpected error happened, the satellite configuration could not be sent.',
-                    $exception->getMessage()
-                ]);
-            }
-        );
+        $pipeline = new Satellite\Cloud\Pipeline($context);
+        foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromConfiguration($configuration['satellite'])) as $command) {
+            $bus->push($command);
+        }
 
         $bus->execute();
+
+        $style->success('The satellite configuration has been pushed successfully.');
 
         return Console\Command\Command::SUCCESS;
     }
