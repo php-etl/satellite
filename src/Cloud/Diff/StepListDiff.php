@@ -2,11 +2,9 @@
 
 namespace Kiboko\Component\Satellite\Cloud\Diff;
 
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\AddAfterPipelineStepCommand;
 use Kiboko\Component\Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand;
 use Kiboko\Component\Satellite\Cloud\Command\Pipeline\MoveAfterPipelineStepCommand;
 use Kiboko\Component\Satellite\Cloud\Command\Pipeline\MoveBeforePipelineStepCommand;
-use Kiboko\Component\Satellite\Cloud\Command\Pipeline\PrependPipelineStepCommand;
 use Kiboko\Component\Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand;
 use Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -23,15 +21,16 @@ final class StepListDiff
         $leftPositions = $left->codes();
         $rightPositions = $right->codes();
 
+        $offset = 0;
         foreach ($leftPositions as $currentPosition => $code) {
             // If the $left code does not exist in the $right list, then the step must be removed
             if (($desiredPosition = array_search($code, $rightPositions, true)) === false) {
-                $removed[] = $code;
+                $offset++;
                 $commands->push(new RemovePipelineStepCommand($this->pipelineId, new DTO\StepCode($code)));
                 continue;
             }
 
-            if ($desiredPosition <= $currentPosition) {
+            if (($desiredPosition + $offset) <= $currentPosition) {
                 continue;
             }
             // If the $search (current) is greater than $actual (actual), then we should move the step at the end of the list
@@ -45,12 +44,24 @@ final class StepListDiff
                 continue;
             }
 
-            if ($currentPosition <= $desiredPosition) {
+            if ($currentPosition <= ($desiredPosition + $offset)) {
                 continue;
             }
 
+            if ($desiredPosition === 0) {
+                $commands->push(new MoveBeforePipelineStepCommand(
+                    $this->pipelineId,
+                    new DTO\StepCode($rightPositions[0]),
+                    new DTO\StepCode($code)
+                ));
+                continue;
+            }
             // If the $search is greater than $actual, then we should move the step at the beginning of the list
-            $commands->push(new MoveBeforePipelineStepCommand($this->pipelineId, new DTO\StepCode($rightPositions[$desiredPosition - 1]), new DTO\StepCode($code)));
+            $commands->push(new MoveBeforePipelineStepCommand(
+                $this->pipelineId,
+                new DTO\StepCode($rightPositions[$desiredPosition - 1]),
+                new DTO\StepCode($code)
+            ));
         }
 
         return $commands;

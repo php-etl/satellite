@@ -46,12 +46,77 @@ class StepListDiffTest extends TestCase
         );
     }
 
+    public function initialDataWithFiveSteps(): \Traversable
+    {
+        yield new DTO\Step(
+            'Lorem ipsum',
+            new DTO\StepCode('lorem_ipsum'),
+            [],
+            new DTO\ProbeList(
+                new DTO\Probe('Lorem ipsum', 'lorem_ipsum', 1),
+                new DTO\Probe('Dolor sit amet', 'dolor_sit_amet', 2),
+            ),
+            1
+        );
+
+        yield new DTO\Step(
+            'Dolor sit amet',
+            new DTO\StepCode('dolor_sit_amet'),
+            [],
+            new DTO\ProbeList(
+                new DTO\Probe('Lorem ipsum', 'lorem_ipsum', 1),
+                new DTO\Probe('Dolor sit amet', 'dolor_sit_amet', 2),
+            ),
+            2
+        );
+
+        yield new DTO\Step(
+            'Consecutir es',
+            new DTO\StepCode('consecutir_es'),
+            [],
+            new DTO\ProbeList(
+                new DTO\Probe('Lorem ipsum', 'lorem_ipsum', 1),
+                new DTO\Probe('Dolor sit amet', 'dolor_sit_amet', 2),
+            ),
+            3
+        );
+
+        yield new DTO\Step(
+            'Adipiscing elit',
+            new DTO\StepCode('adipiscing_elit'),
+            [],
+            new DTO\ProbeList(
+                new DTO\Probe('Lorem ipsum', 'lorem_ipsum', 1),
+                new DTO\Probe('Dolor sit amet', 'dolor_sit_amet', 2),
+            ),
+            4
+        );
+
+        yield new DTO\Step(
+            'Sed cursus nunc nec',
+            new DTO\StepCode('sed_cursus_nunc_nec'),
+            [],
+            new DTO\ProbeList(
+                new DTO\Probe('Lorem ipsum', 'lorem_ipsum', 1),
+                new DTO\Probe('Dolor sit amet', 'dolor_sit_amet', 2),
+            ),
+            5
+        );
+    }
+
     public function equivalentDataProvider(): \Traversable
     {
         yield 'Step list with 3 steps' => [
             new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
             new DTO\StepList(...iterator_to_array($this->initialDataWithThreeSteps())),
             new DTO\StepList(...iterator_to_array($this->initialDataWithThreeSteps())),
+            new DTO\CommandBatch(),
+        ];
+
+        yield 'Step list with 5 steps' => [
+            new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
             new DTO\CommandBatch(),
         ];
     }
@@ -68,6 +133,17 @@ class StepListDiffTest extends TestCase
             )),
             new DTO\CommandBatch(),
         ];
+
+        yield 'Step list with 5 steps' => [
+            new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => new DTO\Step($step->label, $step->code, $step->config, $step->probes, $step->order + 1),
+                iterator_to_array($this->initialDataWithFiveSteps())
+            )),
+            new DTO\CommandBatch(),
+        ];
     }
 
     public function equivalentDataWithDifferentOrderPutFirstAsLast(): \Traversable
@@ -79,6 +155,19 @@ class StepListDiffTest extends TestCase
                 fn (DTO\Step $step)
                     => $step->order !== 1 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 4),
                 iterator_to_array($this->initialDataWithThreeSteps())
+            )),
+            new DTO\CommandBatch(
+                new Command\Pipeline\MoveAfterPipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es'), new DTO\StepCode('lorem_ipsum')),
+            ),
+        ];
+
+        yield 'Step list with 5 steps' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => $step->order !== 1 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 4),
+                iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
                 new Command\Pipeline\MoveAfterPipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es'), new DTO\StepCode('lorem_ipsum')),
@@ -116,6 +205,45 @@ class StepListDiffTest extends TestCase
                 new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('dolor_sit_amet')),
             ),
         ];
+
+        yield 'Step list with 5 steps, putting second as first' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => $step->order !== 2 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 0),
+                iterator_to_array($this->initialDataWithFiveSteps())
+            )),
+            new DTO\CommandBatch(
+                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('dolor_sit_amet')),
+            ),
+        ];
+
+        yield 'Step list with 5 steps, putting third as first' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => $step->order !== 3 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 0),
+                iterator_to_array($this->initialDataWithFiveSteps())
+            )),
+            new DTO\CommandBatch(
+                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('consecutir_es')),
+            ),
+        ];
+
+        yield 'Step list with 5 steps, putting fourth as first' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => $step->order !== 4 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 0),
+                iterator_to_array($this->initialDataWithFiveSteps())
+            )),
+            new DTO\CommandBatch(
+                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('adipiscing_elit')),
+            ),
+        ];
     }
 
     public function equivalentDataWithDifferentOrderPutMiddleAsLast(): \Traversable
@@ -143,6 +271,17 @@ class StepListDiffTest extends TestCase
                 fn (DTO\Step $step)
                     => new DTO\Step($step->label . ' 2', $step->code, $step->config, $step->probes, $step->order),
                 iterator_to_array($this->initialDataWithThreeSteps())
+            )),
+            new DTO\CommandBatch(),
+        ];
+
+        yield 'Step list with 5 steps' => [
+            new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_map(
+                fn (DTO\Step $step)
+                    => new DTO\Step($step->label . ' 2', $step->code, $step->config, $step->probes, $step->order),
+                iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(),
         ];
@@ -213,6 +352,15 @@ class StepListDiffTest extends TestCase
                 new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum')),
             ),
         ];
+
+        yield 'Step list with 5 steps' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_slice(iterator_to_array($this->initialDataWithFiveSteps()), 1)),
+            new DTO\CommandBatch(
+                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum')),
+            ),
+        ];
     }
 
     public function equivalentDataWithRemovedLastItemProvider(): \Traversable
@@ -223,6 +371,15 @@ class StepListDiffTest extends TestCase
             new DTO\StepList(...array_slice(iterator_to_array($this->initialDataWithThreeSteps()), 0, -1)),
             new DTO\CommandBatch(
                 new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es')),
+            ),
+        ];
+
+        yield 'Step list with 5 steps' => [
+            $pipelineId = new DTO\PipelineId('00000000-0000-0000-0000-000000000000'),
+            new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
+            new DTO\StepList(...array_slice(iterator_to_array($this->initialDataWithFiveSteps()), 0, -1)),
+            new DTO\CommandBatch(
+                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('sed_cursus_nunc_nec')),
             ),
         ];
     }
