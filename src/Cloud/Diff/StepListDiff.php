@@ -78,25 +78,13 @@ final class StepListDiff
                         );
                     }
 
-                    $a = array_slice($rightPositions, 0, $index)[0];
-                    $b = array_slice($rightPositions, $index + 1)[0];
-                    if ($a === $rightPositions[$desiredPosition -1] && $b === $rightPositions[$desiredPosition + 1]) {
-                        $commands->push(new AddAfterPipelineStepCommand($this->pipelineId, $rightPositions[$desiredPosition -1], $right->get($code)));
-                    }
-
                     if ($currentPosition > count($leftPositions)) {
                         $commands->push(new AppendPipelineStepCommand($this->pipelineId, $right->get($code)));
                     }
                 }
-
-                // If the $right code does exist in the $left list, check if the step moved
-                if ($currentPosition !== false) {
-                    // If the $right position is different from the $currentPosition position
-                    if ($desiredPosition !== $currentPosition) {
-                        // Use ReorderPipelineStepCommand ??
-                    }
-                }
             }
+
+            $commands->push(new ReorderPipelineStepCommand($this->pipelineId, $rightPositions));
         }
 
         return $commands;
