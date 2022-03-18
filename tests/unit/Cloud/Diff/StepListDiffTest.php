@@ -157,7 +157,12 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithThreeSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveAfterPipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es'), new DTO\StepCode('lorem_ipsum')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('lorem_ipsum'),
+                ),
             ),
         ];
 
@@ -170,7 +175,14 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveAfterPipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es'), new DTO\StepCode('lorem_ipsum')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('adipiscing_elit'),
+                    new DTO\StepCode('sed_cursus_nunc_nec'),
+                    new DTO\StepCode('lorem_ipsum'),
+                ),
             ),
         ];
     }
@@ -186,7 +198,12 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithThreeSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('consecutir_es')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('dolor_sit_amet'),
+                ),
             ),
         ];
     }
@@ -202,7 +219,12 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithThreeSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('dolor_sit_amet')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('consecutir_es'),
+                ),
             ),
         ];
 
@@ -215,7 +237,14 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('dolor_sit_amet')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('adipiscing_elit'),
+                    new DTO\StepCode('sed_cursus_nunc_nec'),
+                ),
             ),
         ];
 
@@ -228,7 +257,14 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('consecutir_es')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('adipiscing_elit'),
+                    new DTO\StepCode('sed_cursus_nunc_nec'),
+                ),
             ),
         ];
 
@@ -241,7 +277,14 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum'), new DTO\StepCode('adipiscing_elit')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('adipiscing_elit'),
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('dolor_sit_amet'),
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('sed_cursus_nunc_nec'),
+                ),
             ),
         ];
     }
@@ -257,7 +300,12 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithThreeSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\MoveBeforePipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es'), new DTO\StepCode('dolor_sit_amet')),
+                new Command\Pipeline\ReorderPipelineStepCommand(
+                    $pipelineId,
+                    new DTO\StepCode('lorem_ipsum'),
+                    new DTO\StepCode('consecutir_es'),
+                    new DTO\StepCode('dolor_sit_amet'),
+                ),
             ),
         ];
     }
