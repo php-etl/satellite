@@ -171,7 +171,7 @@ class StepListDiffTest extends TestCase
             new DTO\StepList(...iterator_to_array($this->initialDataWithFiveSteps())),
             new DTO\StepList(...array_map(
                 fn (DTO\Step $step)
-                    => $step->order !== 1 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 4),
+                    => $step->order !== 1 ? $step : new DTO\Step($step->label, $step->code, $step->config, $step->probes, 6),
                 iterator_to_array($this->initialDataWithFiveSteps())
             )),
             new DTO\CommandBatch(
@@ -346,10 +346,7 @@ class StepListDiffTest extends TestCase
                 iterator_to_array($this->initialDataWithThreeSteps())
             )),
             new DTO\CommandBatch(
-                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum')),
-                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('dolor_sit_amet')),
-                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es')),
-                new Command\Pipeline\AppendPipelineStepCommand($pipelineId,
+                new Command\Pipeline\PrependPipelineStepCommand($pipelineId,
                     new DTO\Step(
                         'Lorem ipsum',
                         new DTO\StepCode('lorem_ipsum_2'),
@@ -361,7 +358,8 @@ class StepListDiffTest extends TestCase
                         1
                     ),
                 ),
-                new Command\Pipeline\AppendPipelineStepCommand($pipelineId,
+                new Command\Pipeline\AddAfterPipelineStepCommand($pipelineId,
+                    new DTO\StepCode('lorem_ipsum_2'),
                     new DTO\Step(
                         'Dolor sit amet',
                         new DTO\StepCode('dolor_sit_amet_2'),
@@ -373,7 +371,8 @@ class StepListDiffTest extends TestCase
                         2
                     ),
                 ),
-                new Command\Pipeline\AppendPipelineStepCommand($pipelineId,
+                new Command\Pipeline\AddAfterPipelineStepCommand($pipelineId,
+                    new DTO\StepCode('dolor_sit_amet_2'),
                     new DTO\Step(
                         'Consecutir es',
                         new DTO\StepCode('consecutir_es_2'),
@@ -385,6 +384,9 @@ class StepListDiffTest extends TestCase
                         3
                     ),
                 ),
+                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('lorem_ipsum')),
+                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('dolor_sit_amet')),
+                new Command\Pipeline\RemovePipelineStepCommand($pipelineId, new DTO\StepCode('consecutir_es')),
             ),
 
         ];

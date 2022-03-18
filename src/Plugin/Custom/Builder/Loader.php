@@ -9,7 +9,6 @@ use PhpParser\Node;
 
 final class Loader implements StepBuilderInterface
 {
-    private ?Node\Expr $service;
     private ?Node\Expr $logger;
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
