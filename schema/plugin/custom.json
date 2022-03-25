@@ -6,6 +6,24 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" }
+    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+    "extractor": {
+      "type": "object"
+    },
+    "transformer": {
+      "type": "object"
+    },
+    "loader": {
+      "type": "object",
+      "properties": {
+        "use": { "type": "string" },
+        "services": {
+          "type": "object",
+          "patternProperties": {
+            ".*": { "type": "string" }
+          }
+        }
+      }
+    }
   }
 }

@@ -31,35 +31,16 @@ final class Service implements Configurator\FactoryInterface
     private array $plugins = [];
 
     /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
-    public function __construct(
-        callable ...$factories
-    ) {
+    public function __construct()
+    {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
         $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+    }
 
-        $this
-            ->registerAdapters(
-                new Adapter\Docker\Factory(),
-                new Adapter\Filesystem\Factory(),
-            )
-            ->registerRuntimes(
-                new Runtime\Api\Factory(),
-                new Runtime\HttpHook\Factory(),
-                new Runtime\Pipeline\Factory(),
-                new Runtime\Workflow\Factory(),
-            )
-            ->registerFactories(
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
-                ...$factories
-            );
+    public function adapterChoice(): Satellite\Adapter\AdapterChoice
+    {
+        return new Satellite\Adapter\AdapterChoice($this->adapters);
     }
 
     private function addAdapter(Configurator\Adapter $attribute, Satellite\Adapter\FactoryInterface $adapter): self
@@ -237,6 +218,7 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
                     
                     /** @var WorkflowRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
@@ -345,6 +327,7 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
+                    require __DIR__ . '/container.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';

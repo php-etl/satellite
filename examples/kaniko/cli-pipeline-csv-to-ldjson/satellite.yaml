@@ -1,6 +1,6 @@
 satellite:
-  cloud:
-    project: baa56754-648d-4821-b053-d146c5d34e2b
+  kaniko:
+    from: 'php:8.1-cli-alpine'
   composer:
     autoload:
       psr4:

@@ -28,7 +28,7 @@ class DefaultCommand extends Console\Command\Command
         $style->writeln((new PrettyPrinter\Standard())->prettyPrintFile([
             new Node\Stmt\Return_(
                 new Node\Expr\ShellExec(
-                    parts: [$factory->compile($config)->getBuilder()->getNode()]
+                    parts: [new$factory->compile($config)->getBuilder()->getNode()]
                 )
             ),
         ]));

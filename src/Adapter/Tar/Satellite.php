@@ -2,26 +2,35 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Filesystem;
+namespace Kiboko\Component\Satellite\Adapter\Tar;
 
-use Kiboko\Component\Satellite\Adapter\Composer;
-use Kiboko\Contract\Packaging;
+use Kiboko\Component\Packaging\TarArchive;
 use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
 final class Satellite implements SatelliteInterface
 {
+    /** @var string[] */
+    private array $imageTags;
     /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
     private iterable $dependencies;
 
     public function __construct(
-        private string $workdir,
-        private Composer $composer,
+        private string $outputPath,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
+        $this->imageTags = [];
         $this->files = $files;
         $this->dependencies = [];
+    }
+
+    public function addTags(string ...$imageTags): self
+    {
+        array_push($this->imageTags, ...$imageTags);
+
+        return $this;
     }
 
     public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
@@ -41,20 +50,13 @@ final class Satellite implements SatelliteInterface
     public function build(
         LoggerInterface $logger,
     ): void {
-        foreach ($this->files as $file) {
-            if ($file instanceof Packaging\DirectoryInterface) {
-                foreach (new \RecursiveIteratorIterator($file) as $current) {
-                    $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
-                    stream_copy_to_stream($current->asResource(), $stream);
-                    fclose($stream);
-                }
-            } else {
-                $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
-                stream_copy_to_stream($file->asResource(), $stream);
-                fclose($stream);
-            }
-        }
+        $archive = new TarArchive(...$this->files);
 
-        $this->composer->require(...$this->dependencies);
+        mkdir(dirname($this->outputPath), 0755, true);
+
+        $stream = \gzopen($this->outputPath, 'wb');
+        assert($stream !== false, new \ErrorException(error_get_last()['message'], filename: error_get_last()['file'], line: error_get_last()['line'],));
+        stream_copy_to_stream($archive->asResource(), $stream);
+        \gzclose($stream);
     }
 }

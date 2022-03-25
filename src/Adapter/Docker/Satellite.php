@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
+use Kiboko\Component\Dockerfile;
 use Kiboko\Component\Packaging\TarArchive;
-use Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Satellite\SatelliteInterface;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
@@ -20,7 +20,7 @@ final class Satellite implements SatelliteInterface
     private iterable $dependencies;
 
     public function __construct(
-        private Dockerfile $dockerfile,
+        private Dockerfile\Dockerfile $dockerfile,
         private string $workdir,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
@@ -41,7 +41,7 @@ final class Satellite implements SatelliteInterface
         array_push($this->files, ...$files);
 
         foreach ($files as $file) {
-            $this->dockerfile->push(new Docker\Dockerfile\Copy($file->getPath(), $this->workdir));
+            $this->dockerfile->push(new Dockerfile\Dockerfile\Copy($file->getPath(), $this->workdir));
         }
 
         return $this;
@@ -50,13 +50,14 @@ final class Satellite implements SatelliteInterface
     public function dependsOn(string ...$dependencies): self
     {
         array_push($this->dependencies, ...$dependencies);
-        $this->dockerfile->push(new Docker\PHP\ComposerRequire(...$dependencies));
+        $this->dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$dependencies));
 
         return $this;
     }
 
-    public function build(LoggerInterface $logger): void
-    {
+    public function build(
+        LoggerInterface $logger,
+    ): void {
         $archive = new TarArchive($this->dockerfile, ...$this->files);
 
         $iterator = function (iterable $tags) {

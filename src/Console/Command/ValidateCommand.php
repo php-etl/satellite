@@ -17,6 +17,7 @@ final class ValidateCommand extends Console\Command\Command
     {
         $this->setDescription('Validate the satellite configuration.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addOption('output', 'o', Console\Input\InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
@@ -47,9 +48,9 @@ final class ValidateCommand extends Console\Command\Command
 
         $directory = dirname($filename);
         if (file_exists($directory . '/.gyro.php')) {
-            $service = require $directory . '/.gyro.php';
+            $service = (require $directory . '/.gyro.php')($input->getOption('output') ?? 'php://fd/3');
         } else {
-            $service = new Satellite\Service();
+            $service = new Satellite\Service($input->getOption('output') ?? 'php://fd/3');
         }
 
         try {

@@ -18,6 +18,7 @@ final class BuildCommand extends Console\Command\Command
     {
         $this->setDescription('Build the satellite.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addOption('output', 'o', Console\Input\InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
@@ -47,11 +48,11 @@ final class BuildCommand extends Console\Command\Command
         }
 
         $directory = getcwd();
-        if (file_exists($directory . '/.gyro.php')) {
-            $service = require $directory . '/.gyro.php';
-        } else {
-            $service = new Satellite\Service();
+        if (!file_exists($directory . '/.gyro.php')) {
+            throw new \RuntimeException('Could not load Gyroscops Satellit plugins.');
         }
+
+        $service = (require $directory . '/.gyro.php')($input->getOption('output') ?? 'php://fd/3');
 
         try {
             $configuration = $service->normalize($configuration);
@@ -61,7 +62,6 @@ final class BuildCommand extends Console\Command\Command
         }
 
         \chdir(\dirname($filename));
-
 
         if (array_key_exists('satellite', $configuration)) {
             $output->writeln([
@@ -73,7 +73,7 @@ final class BuildCommand extends Console\Command\Command
 
             $factory = new Satellite\Runtime\RuntimeChoice(
                 $service,
-                new Satellite\Adapter\AdapterChoice(),
+                $service->adapterChoice(),
                 new class() extends Log\AbstractLogger {
                     public function log($level, $message, array $context = array())
                     {
@@ -95,12 +95,16 @@ final class BuildCommand extends Console\Command\Command
 
                 $factory = new Satellite\Runtime\RuntimeChoice(
                     $service,
-                    new Satellite\Adapter\AdapterChoice(),
-                    new class() extends Log\AbstractLogger {
+                    $service->adapterChoice(),
+                    new class($output) extends Log\AbstractLogger {
+                        public function __construct(
+                            private Console\Output\OutputInterface $output,
+                        ) {}
+
                         public function log($level, $message, array $context = array())
                         {
                             $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                            fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                            $this->output->writeln($prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
                         }
                     },
                 );

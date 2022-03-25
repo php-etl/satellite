@@ -126,16 +126,16 @@ satellite:
               vhost: /
               exchange: default
               topic: foo.rejects
-#    - csv:
-#        loader:
-#          file_path: output.csv
-#          delimiter: ','
-#          enclosure: '"'
-#          escape: '\'
-#      logger:
-#        channel: pipeline
-#        destinations:
-#          - elasticsearch:
-#              level: warning
-#              hosts:
-#                - elasticsearch.example.com:9200
+    - csv:
+        loader:
+          file_path: output.csv
+          delimiter: ','
+          enclosure: '"'
+          escape: '\'
+      logger:
+        channel: pipeline
+        destinations:
+          - elasticsearch:
+              level: warning
+              hosts:
+                - elasticsearch.example.com:9200

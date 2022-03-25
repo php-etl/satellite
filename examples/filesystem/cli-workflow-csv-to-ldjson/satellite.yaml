@@ -1,35 +1,37 @@
-satellite:
-  filesystem:
-    path: build/
-  composer:
-    require:
-      - php-etl/pipeline:^0.3.0
-      - php-etl/bucket:^0.2.0
-      - php-etl/csv-flow:^0.2.0
-      - psr/log:^1.1
-  workflow:
-    jobs:
-      - name: 'Products Pipeline'
-        pipeline:
-          steps:
-            - csv:
-                extractor:
-                  file_path: '../data/products.csv'
-            - fastmap:
-                map:
-                  - copy: '[sku]'
-                    field: '[identifier]'
-            - stream:
-                loader:
-                  destination: '../data/products.ldjson'
-                  format: 'json'
-      - name: 'Customers Pipeline'
-        pipeline:
-          steps:
-            - csv:
-                extractor:
-                  file_path: '../data/customers.csv'
-            - stream:
-                loader:
-                  destination: '../data/customers.ldjson'
-                  format: 'json'
+version: "0.3"
+satellites:
+  - label: "foo"
+    filesystem:
+      path: build/
+    composer:
+      require:
+        - php-etl/pipeline:^0.3.0
+        - php-etl/bucket:^0.2.0
+        - php-etl/csv-flow:^0.2.0
+        - psr/log:^1.1
+    workflow:
+      jobs:
+        - name: 'Products Pipeline'
+          pipeline:
+            steps:
+              - csv:
+                  extractor:
+                    file_path: '../data/products.csv'
+              - fastmap:
+                  map:
+                    - copy: '[sku]'
+                      field: '[identifier]'
+              - stream:
+                  loader:
+                    destination: '../data/products.ldjson'
+                    format: 'json'
+        - name: 'Customers Pipeline'
+          pipeline:
+            steps:
+              - csv:
+                  extractor:
+                    file_path: '../data/customers.csv'
+              - stream:
+                  loader:
+                    destination: '../data/customers.ldjson'
+                    format: 'json'

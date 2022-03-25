@@ -32,7 +32,6 @@ final class Service
         $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
 
         $this
-            ->registerCloudAdapter()
             ->registerRuntimes(
                 new Satellite\Runtime\Api\Factory(),
                 new Satellite\Runtime\HttpHook\Factory(),
@@ -106,13 +105,6 @@ final class Service
                 $applier->withLoader($step->name);
             }
         }
-
-        return $this;
-    }
-
-    public function registerCloudAdapter(): self
-    {
-        $this->configuration->addAdapter("cloud", new Satellite\Adapter\Cloud\Configuration());
 
         return $this;
     }

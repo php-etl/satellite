@@ -18,7 +18,7 @@ final class Pipeline implements PipelineInterface
         private Context $context,
     ) {}
 
-    public static function fromConfiguration(array $configuration): DTO\Pipeline
+    public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
         return new DTO\Pipeline(
             $configuration['pipeline']['name'],
@@ -38,7 +38,7 @@ final class Pipeline implements PipelineInterface
                         ),
                         $order,
                     );
-                }, $configuration['pipeline']['steps'], range(0, count($configuration['pipeline']['steps'])))
+                }, $configuration['pipeline']['steps'], range(0, count($configuration['pipeline']['steps']) - 1))
             ),
             new DTO\Autoload(
                 ...array_map(

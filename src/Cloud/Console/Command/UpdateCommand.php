@@ -104,7 +104,7 @@ final class UpdateCommand extends Console\Command\Command
 
         $pipeline = new Satellite\Cloud\Pipeline($context);
         $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code']);
-        foreach ($pipeline->update($model, Satellite\Cloud\Pipeline::fromConfiguration($configuration['satellite'])) as $command) {
+        foreach ($pipeline->update($model, Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
             $bus->push($command);
         }
 

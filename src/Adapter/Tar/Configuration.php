@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter\Docker;
+namespace Kiboko\Component\Satellite\Adapter\Tar;
 
 use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -11,16 +11,12 @@ final class Configuration implements AdapterConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('docker');
+        $builder = new TreeBuilder('tar');
 
         /** @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('from')->end()
-                ->scalarNode('workdir')->end()
-                ->arrayNode('tags')
-                    ->scalarPrototype()->end()
-                ->end()
+                ->scalarNode('output')->end()
             ->end();
 
         return $builder;

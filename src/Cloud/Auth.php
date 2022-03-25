@@ -37,7 +37,11 @@ final class Auth
             return;
         }
 
-        $this->configuration = \json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
+        try {
+            $this->configuration = \json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            $this->configuration = [];
+        }
     }
 
     public function flush(): void
@@ -73,6 +77,9 @@ final class Auth
 
     public function persistCredentials(string $url, Credentials $credentials): void
     {
+        if (!array_key_exists($url, $this->configuration)) {
+            $this->configuration[$url] = [];
+        }
         $this->configuration[$url] += [
             'login' => $credentials->username,
             'password' => $credentials->password,
@@ -81,6 +88,9 @@ final class Auth
 
     public function persistToken(string $url, string $token): void
     {
+        if (!array_key_exists($url, $this->configuration)) {
+            $this->configuration[$url] = [];
+        }
         $this->configuration[$url] += [
             'token' => $token,
             'date' => (new \DateTimeImmutable())->format(\DateTimeImmutable::RFC3339_EXTENDED),

@@ -102,8 +102,16 @@ final class CreateCommand extends Console\Command\Command
         }
 
         $pipeline = new Satellite\Cloud\Pipeline($context);
-        foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromConfiguration($configuration['satellite'])) as $command) {
-            $bus->push($command);
+        if (!array_key_exists('version', $configuration)) {
+            foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
+                $bus->push($command);
+            }
+        } else {
+            foreach ($configuration['satellites'] as $satellite) {
+                foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($satellite)) as $command) {
+                    $bus->push($command);
+                }
+            }
         }
 
         $bus->execute();
