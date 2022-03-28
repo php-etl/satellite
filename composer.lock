@@ -5660,7 +5660,7 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"
@@ -5773,7 +5773,7 @@
                 "phpunit/phpunit": "^9.0"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"
@@ -5970,7 +5970,7 @@
                 "phpunit/phpunit": "^9.0"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.6.x-dev"
@@ -6248,7 +6248,7 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
@@ -6310,7 +6310,7 @@
                 "phpunit/phpunit": "^9.0"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.2.x-dev"
@@ -6429,7 +6429,7 @@
                 "symfony/yaml": "^5.2"
             },
             "default-branch": true,
-            "type": "satellite-plugin",
+            "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"

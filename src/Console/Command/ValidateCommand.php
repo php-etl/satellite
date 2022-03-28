@@ -46,12 +46,23 @@ final class ValidateCommand extends Console\Command\Command
             }
         }
 
-        $directory = dirname($filename);
-        if (file_exists($directory . '/.gyro.php')) {
-            $service = (require $directory . '/.gyro.php')($input->getOption('output') ?? 'php://fd/3');
-        } else {
-            $service = new Satellite\Service($input->getOption('output') ?? 'php://fd/3');
+        for ($directory = getcwd(); $directory !== '/'; $directory = dirname($directory)) {
+            if (file_exists($directory . '/.gyro.php')) {
+                break;
+            }
         }
+
+        if (!file_exists($directory . '/.gyro.php')) {
+            throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
+        }
+
+        $context = new Satellite\Console\RuntimeContext(
+            $input->getOption('output') ?? 'php://fd/3',
+            new Satellite\ExpressionLanguage\ExpressionLanguage(),
+        );
+
+        $factory = require $directory . '/.gyro.php';
+        $service = $factory($context);
 
         try {
             $configuration = $service->normalize($configuration);
