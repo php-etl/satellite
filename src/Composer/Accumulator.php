@@ -43,7 +43,8 @@ final class Accumulator implements \IteratorAggregate, \Stringable
             <<<PHP
             <?php declare(strict_types=1);
             use \\Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage;
-            return new \Kiboko\Component\Satellite\Service(
+            return fn (string \$buildPath) => new \Kiboko\Component\Satellite\Service(
+                \$buildPath,
                 %s
             );
             PHP,

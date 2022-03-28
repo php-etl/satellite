@@ -1,0 +1,81 @@
+version: "0.3"
+satellites:
+  lorem:
+    label: 'Push to Magento 2'
+    filesystem:
+      path: build/
+    composer:
+      autoload:
+        psr4:
+          - namespace: "App\\Pipeline\\"
+            paths: [ "../src" ]
+      require:
+        - 'bunny/bunny:@dev'
+        - 'php-etl/mapping-contracts'
+    workflow:
+      name: 'Push products'
+      jobs:
+        - name: 'Simple products'
+          pipeline:
+            steps:
+              - akeneo:
+                  enterprise: true
+                  extractor:
+                    type: product
+                    method: all
+                  client:
+                    api_url: '@=env("AKENEO_URL")'
+                    client_id: '@=env("AKENEO_CLIENT_ID")'
+                    secret: '@=env("AKENEO_CLIENT_SECRET")'
+                    username: '@=env("AKENEO_USERNAME")'
+                    password: '@=env("AKENEO_PASSWORD")'
+              - fastmap:
+                  expression_language:
+                    - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+                  map:
+                    - field: '[properties]'
+                      expression: 'input'
+                      map:
+                        - field: '[message_id]'
+                          constant: '14'
+                    - field: '[type_id]'
+                      constant: 'simple'
+                    - field: '[attribute_set_id]'
+                      constant: 'default'
+                    - field: '[sku]'
+                      copy: '[identifier]'
+                    - field: '[name]'
+                      expression: |
+                        attribute(
+                          input["values"]["name"],
+                          locale("en_US", null),
+                          scope("ecommerce", null)
+                        )
+              - custom:
+                  loader:
+                    use: 'App\Pipeline\SimpleLoader'
+                    services:
+                      App\Pipeline\SimpleLoader: ~
+#        - name: 'Configurable products'
+#          pipeline:
+#            steps:
+#              - akeneo:
+#                  enterprise: true
+#                  extractor:
+#                    type: productModel
+#                    method: all
+#                  client:
+#                    api_url: '@=env("AKENEO_URL")'
+#                    client_id: '@=env("AKENEO_CLIENT_ID")'
+#                    secret: '@=env("AKENEO_CLIENT_SECRET")'
+#                    username: '@=env("AKENEO_USERNAME")'
+#                    password: '@=env("AKENEO_PASSWORD")'
+#              - fastmap:
+#                  map:
+#                    - field: '[sku]'
+#                      copy: '[code]'
+#              - custom:
+#                  loader:
+#                    use: 'App\Pipeline\ConfigurableLoader'
+#                    services:
+#                      App\Pipeline\ConfigurableLoader: ~

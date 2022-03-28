@@ -8,18 +8,24 @@ use Kiboko\Component\Satellite;
 
 final class AdapterChoice
 {
+    public function __construct(
+        private array $adapters,
+    ) {}
+
     public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
     {
-        if (array_key_exists('docker', $configuration)) {
-            $factory = new Satellite\Adapter\Docker\Factory();
-        } elseif (array_key_exists('filesystem', $configuration)) {
-            $factory = new Satellite\Adapter\Filesystem\Factory();
-        } elseif (array_key_exists('amazon_lambda', $configuration)) {
-            $factory = new Satellite\Adapter\AmazonLambda\Factory();
-        } elseif (array_key_exists('google_cloud_function', $configuration)) {
-            $factory = new Satellite\Adapter\GoogleCloudFunction\Factory();
-        } else {
-            throw new \RuntimeException('No compatible adapter was found for your satellite configuration.');
+        $factory = null;
+        foreach ($this->adapters as $alias => $adapter) {
+            if (array_key_exists($alias, $configuration)) {
+                $factory = $adapter;
+                break;
+            }
+        }
+
+        try {
+            assert($factory instanceof FactoryInterface);
+        } catch (\AssertionError $exception) {
+            throw new \RuntimeException('No compatible adapter was found for your satellite configuration.', previous: $exception);
         }
 
         return $factory($configuration);

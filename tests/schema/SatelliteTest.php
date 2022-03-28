@@ -50,12 +50,12 @@ final class SatelliteTest extends TestCase
 
     public function validDataProvider()
     {
-        yield '[0.2] Empty unique satellite' => [
-            (object) [
-                'satellite' => (object) []
-            ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
-        ];
+//        yield '[0.2] Empty unique satellite' => [
+//            (object) [
+//                'satellite' => (object) []
+//            ],
+//            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+//        ];
 
         yield '[0.2] Empty unique satellite' => [
             (object) [

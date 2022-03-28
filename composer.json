@@ -29,7 +29,13 @@
         "php-etl/satellite-toolbox": "*",
         "php-etl/configurator-contracts": "^0.4.0",
         "php-etl/pipeline-console-runtime": "^0.1.0",
-        "php-etl/workflow-console-runtime": "^0.1.0"
+        "php-etl/workflow-console-runtime": "^0.1.0",
+        "symfony/http-client": "^6.0",
+        "nyholm/psr7": "^1.5",
+        "psr/http-client": "^1.0",
+        "php-etl/gyroscops-api-client": "0.1.x-dev",
+        "react/promise": "^2.9",
+        "php-etl/dockerfile": "^0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
@@ -42,7 +48,7 @@
         "phpstan/phpstan": "^0.12",
         "friends-of-phpspec/phpspec-code-coverage": "*",
         "fakerphp/faker": "^1.9",
-        "composer/composer": "2.1.x-dev",
+        "composer/composer": "2.1@stable",
         "justinrainbow/json-schema": "^5.2",
         "adlawson/vfs": "^0.12.1",
         "php-etl/phpunit-extension": "*",
@@ -80,6 +86,29 @@
     "extra": {
         "branch-alias": {
             "dev-master": "0.3.x-dev"
+        },
+        "gyroscops": {
+            "adapters": [
+                "Kiboko\\Component\\Satellite\\Adapter\\Docker\\Factory",
+                "Kiboko\\Component\\Satellite\\Adapter\\Filesystem\\Factory",
+                "Kiboko\\Component\\Satellite\\Adapter\\Tar\\Factory"
+            ],
+            "runtimes": [
+                "Kiboko\\Component\\Satellite\\Runtime\\Api\\Factory",
+                "Kiboko\\Component\\Satellite\\Runtime\\HttpHook\\Factory",
+                "Kiboko\\Component\\Satellite\\Runtime\\Pipeline\\Factory",
+                "Kiboko\\Component\\Satellite\\Runtime\\Workflow\\Factory"
+            ],
+            "plugins": [
+                "Kiboko\\Component\\Satellite\\Feature\\Logger\\Service",
+                "Kiboko\\Component\\Satellite\\Feature\\State\\Service",
+                "Kiboko\\Component\\Satellite\\Feature\\Rejection\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\Custom\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\Stream\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\SFTP\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\FTP\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\Batching\\Service"
+            ]
         }
     },
     "scripts": {

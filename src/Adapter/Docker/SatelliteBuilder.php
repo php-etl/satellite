@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
+use Kiboko\Component\Dockerfile;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
@@ -128,51 +128,51 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function build(): Satellite\SatelliteInterface
     {
-        $dockerfile = new Dockerfile(
-            new Dockerfile\From($this->fromImage),
-            new Satellite\Adapter\Docker\Dockerfile\Workdir($this->workdir),
+        $dockerfile = new Dockerfile\Dockerfile(
+            new Dockerfile\Dockerfile\From($this->fromImage),
+            new Dockerfile\Dockerfile\Workdir($this->workdir),
         );
 
         foreach ($this->paths as [$from, $to]) {
-            $dockerfile->push(new Dockerfile\Copy($from, $to));
+            $dockerfile->push(new Dockerfile\Dockerfile\Copy($from, $to));
         }
 
         if ($this->composerJsonFile !== null) {
-            $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.json'));
+            $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.json'));
             $this->files->append(new \ArrayIterator([
                 new Packaging\File('composer.json', $this->composerJsonFile),
             ]));
 
             if ($this->composerLockFile !== null) {
-                $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Copy('composer.json', 'composer.lock'));
+                $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.lock'));
                 $this->files->append(new \ArrayIterator([
                     new Packaging\File('composer.lock', $this->composerLockFile),
                 ]));
             }
 
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInstall());
+            $dockerfile->push(new Dockerfile\PHP\Composer());
+            $dockerfile->push(new Dockerfile\PHP\ComposerInstall());
         } else {
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\Composer());
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerMinimumStability('dev'));
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerAutoload($this->composerAutoload));
+            $dockerfile->push(new Dockerfile\PHP\Composer());
+            $dockerfile->push(new Dockerfile\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
+            $dockerfile->push(new Dockerfile\PHP\ComposerMinimumStability('dev'));
+            $dockerfile->push(new Dockerfile\PHP\ComposerAutoload($this->composerAutoload));
         }
 
         // FIXME: finish the Sylius API client migration
-        $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerConfigForceHttps());
-        $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerAddVcsRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client'));
+        $dockerfile->push(new Dockerfile\PHP\ComposerConfigForceHttps());
+        $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client'));
 
         if (count($this->composerRequire) > 0) {
-            $dockerfile->push(new Satellite\Adapter\Docker\PHP\ComposerRequire(...$this->composerRequire));
+            $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
         }
 
         if (count($this->entrypoint) > 0) {
-            $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Entrypoint(...$this->entrypoint));
+            $dockerfile->push(new Dockerfile\Dockerfile\Entrypoint(...$this->entrypoint));
         }
 
         if (count($this->command) > 0) {
-            $dockerfile->push(new Satellite\Adapter\Docker\Dockerfile\Cmd(...$this->command));
+            $dockerfile->push(new Dockerfile\Dockerfile\Cmd(...$this->command));
         }
 
         $satellite = new Satellite\Adapter\Docker\Satellite(

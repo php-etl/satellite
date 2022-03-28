@@ -71,6 +71,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('name')->end()
+                ->scalarNode('code')->end()
                 ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end();
 
@@ -80,7 +81,12 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyPlugins(ArrayNodeDefinition $node): self
     {
         foreach ($this->plugins as $plugin) {
-            $node->append($plugin->getConfigTreeBuilder()->getRootNode());
+            $node
+                ->children()
+                    ->scalarNode('name')->end()
+                    ->scalarNode('code')->end()
+                ->end()
+                ->append($plugin->getConfigTreeBuilder()->getRootNode());
         }
 
         return $this;
@@ -89,7 +95,11 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyFeatures(ArrayNodeDefinition $node): self
     {
         foreach ($this->features as $feature) {
-            $node->append($feature->getConfigTreeBuilder()->getRootNode());
+            $node->children()
+                ->scalarNode('name')->end()
+                    ->scalarNode('code')->end()
+                ->end()
+                ->append($feature->getConfigTreeBuilder()->getRootNode());
         }
 
         return $this;

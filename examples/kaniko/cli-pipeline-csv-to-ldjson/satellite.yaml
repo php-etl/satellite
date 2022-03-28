@@ -1,0 +1,35 @@
+satellite:
+  kaniko:
+    from: 'php:8.1-cli-alpine'
+  composer:
+    autoload:
+      psr4:
+        - namespace: 'App\\'
+          paths: ['src/']
+  pipeline:
+    name: 'My products pipeline'
+    code: 'products_pipeline'
+    steps:
+      - name: 'Extract products'
+        code: 'csv.extractor'
+        csv:
+          extractor:
+            file_path: '../data/products.csv'
+      - name: 'Transform products'
+        code: 'fastmap'
+        fastmap:
+          map:
+            - copy: '[sku]'
+              field: '[identifier]'
+      - name: 'Transform'
+        code: 'my_fastmap'
+        fastmap:
+          map:
+            - copy: '[identifier]'
+              field: '[sku]'
+      - name: 'Loads products'
+        code: 'stream.loader'
+        stream:
+          loader:
+            destination: '../data/products.ldjson'
+            format: 'json'

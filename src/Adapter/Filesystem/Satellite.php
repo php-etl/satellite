@@ -20,7 +20,6 @@ final class Satellite implements SatelliteInterface
         private Composer $composer,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
-        $this->workdir = $workdir;
         $this->files = $files;
         $this->dependencies = [];
     }
@@ -40,7 +39,7 @@ final class Satellite implements SatelliteInterface
     }
 
     public function build(
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ): void {
         foreach ($this->files as $file) {
             if ($file instanceof Packaging\DirectoryInterface) {

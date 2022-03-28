@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    require __DIR__ . '/../../../../vendor/autoload.php';
+} else if (file_exists(__DIR__ . '/../../../vendor/autoload.php')) {
+    require __DIR__ . '/../../../vendor/autoload.php';
+} else if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require __DIR__ . '/../../vendor/autoload.php';
+} else {
+    require __DIR__ . '/../vendor/autoload.php';
+}
+
+use Symfony\Component\Console\Input;
+use Symfony\Component\Console\Output;
+
+$app = new \Symfony\Component\Console\Application();
+
+$app->addCommands([
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\LoginCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\CreateCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\UpdateCommand(),
+    new \Kiboko\Component\Satellite\Cloud\Console\Command\RemoveCommand(),
+
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Organization\ListCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Organization\ChangeCommand(),
+
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\ListCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\ChangeCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\CreateCommand(),
+]);
+
+$app->run(new Input\ArgvInput(), new Output\ConsoleOutput());
