@@ -76,15 +76,14 @@ final class Service implements Configurator\FactoryInterface
     }
 
     /** @param Configurator\FactoryInterface $plugin */
-    private function addPipeline(
+    private function addPipelinePlugin(
         Configurator\Pipeline $attribute,
-        Configurator\FactoryInterface $plugin,
-        ExpressionLanguage $interpreter,
+        Configurator\PipelinePluginInterface $plugin,
     ): self {
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
-        $this->plugins[$attribute->name] = $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $interpreter);
+        $this->plugins[$attribute->name] = $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $plugin->interpreter());
         $applier->withPackages(...$attribute->dependencies);
 
         foreach ($attribute->steps as $step) {
@@ -139,7 +138,7 @@ final class Service implements Configurator\FactoryInterface
 
             /** @var Configurator\Pipeline $attribute */
             foreach (extractAttributes($plugin, Configurator\Pipeline::class) as $attribute) {
-                $this->addPipeline($attribute, $plugin, $this->interpreter);
+                $this->addPipelinePlugin($attribute, $plugin);
             }
         }
 
