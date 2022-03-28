@@ -41,15 +41,34 @@ final class ComposerScripts
     ): void {
         /** @var Package\BasePackage $package */
         foreach ($repository->getPackages() as $package) {
-            if ($package instanceof Package\AliasPackage
-                || $package->getType() !== 'satellite-plugin'
+            if ($package instanceof Package\AliasPackage) {
+                continue;
+            }
+            if ($package->getType() !== 'satellite-plugin'
+                && $package->getType() !== 'gyroscops-plugin'
+                && $package->getName() !== 'php-etl/satellite'
             ) {
                 continue;
             }
+            if ($package->getType() === 'satellite-plugin') {
+                $io->warning(strtr(
+                    'The package %package% is using a deprecated type: "satellite-plugin", you may upgrade it to use the'
+                        .' "gyroscops-plugin" type, the support for this type may disappear at any time.',
+                    [
+                        '%package%' => $package->getName(),
+                    ]
+                ));
+            }
 
-            if (!isset($package->getExtra()['satellite']['class'])) {
+            if (!isset($package->getExtra()['satellite']['class'])
+                && !isset($package->getExtra()['gyroscops']['plugins'])
+                && !isset($package->getExtra()['gyroscops']['adapters'])
+                && !isset($package->getExtra()['gyroscops']['runtimes'])
+            ) {
                 $io->error(strtr(
-                    'There is no service class defined for the package %package%, please set the extra.satellite.class parameter in your composer.json file.',
+                    'There is no service class defined for the package %package%, please set the extra.gyroscops.plugins,'
+                    .' extra.gyroscops.adapters or extra.gyroscops.runtimes parameters in your composer.json file. The'
+                    .' support for this type may disappear at any time.',
                     [
                         '%package%' => $package->getName(),
                     ]
@@ -57,10 +76,22 @@ final class ComposerScripts
                 continue;
             }
 
+            if (isset($package->getExtra()['satellite']['class'])) {
+                $io->warning(strtr(
+                    'The package %package% is using a deprecated configuration: extras.satellite.class, you may upgrade'
+                        .' it to use the extra.gyroscops.plugins, extra.gyroscops.adapters or extra.gyroscops.runtimes'
+                        .' parameters in your composer.json file. The support for this type may disappear at any time.',
+                    [
+                        '%package%' => $package->getName(),
+                    ]
+                ));
+            }
+
             $io->write(strtr(
-                '  - Using satellite plugin <info>%package%</>.',
+                '  - Registering <fg=yellow>Gyroscops</> plugins from <info>%package%</> (<comment>%version%</>).',
                 [
                     '%package%' => $package->getPrettyName(),
+                    '%version%' => $package->getPrettyVersion(),
                 ]
             ));
 

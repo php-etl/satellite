@@ -22,7 +22,7 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         return $this;
     }
 
-    public function getIterator(): iterable
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->packages);
     }
@@ -31,9 +31,88 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     {
         /** @var Package $package */
         foreach ($this as $package) {
-            yield <<<PHP
-                fn (ExpressionLanguage \$interpreter) => new {$package->getExtra()['satellite']['class']}(\$interpreter)
-                PHP;
+            $configuration = $package->getExtra();
+            if (array_key_exists('satellite', $configuration)) {
+                // Enter fallback mode.
+                if (!array_key_exists('class', $configuration['satellite'])) {
+                    continue;
+                }
+
+                yield <<<PHP
+                    new \\{$configuration['satellite']['class']}(\$context->interpreter())
+                    PHP;
+                continue;
+            }
+            if (!array_key_exists('gyroscops', $configuration)) {
+                continue;
+            }
+            if (!array_key_exists('plugins', $configuration['gyroscops'])) {
+                continue;
+            }
+
+            if (is_string($configuration['gyroscops']['plugins'])) {
+                yield <<<PHP
+                    new \\{$configuration['gyroscops']['plugins']}(\$context->interpreter())
+                    PHP;
+            } else if (is_array($configuration['gyroscops']['plugins'])) {
+                foreach ($configuration['gyroscops']['plugins'] as $plugin) {
+                    yield <<<PHP
+                        new \\{$plugin}(\$context->interpreter())
+                        PHP;
+                }
+            }
+        }
+    }
+
+    public function formatAdapterInstance(): \Generator
+    {
+        /** @var Package $package */
+        foreach ($this as $package) {
+            $configuration = $package->getExtra();
+            if (!array_key_exists('gyroscops', $configuration)) {
+                continue;
+            }
+            if (!array_key_exists('adapters', $configuration['gyroscops'])) {
+                continue;
+            }
+
+            if (is_string($configuration['gyroscops']['adapters'])) {
+                yield <<<PHP
+                    new \\{$configuration['gyroscops']['adapters']}(\$context->workingDirectory())
+                    PHP;
+            } else if (is_array($configuration['gyroscops']['adapters'])) {
+                foreach ($configuration['gyroscops']['adapters'] as $adapter) {
+                    yield <<<PHP
+                        new \\{$adapter}(\$context->workingDirectory())
+                        PHP;
+                }
+            }
+        }
+    }
+
+    public function formatRuntimeInstance(): \Generator
+    {
+        /** @var Package $package */
+        foreach ($this as $package) {
+            $configuration = $package->getExtra();
+            if (!array_key_exists('gyroscops', $configuration)) {
+                continue;
+            }
+            if (!array_key_exists('runtimes', $configuration['gyroscops'])) {
+                continue;
+            }
+
+            if (is_string($configuration['gyroscops']['runtimes'])) {
+                yield <<<PHP
+                    new \\{$configuration['gyroscops']['runtimes']}()
+                    PHP;
+            } else if (is_array($configuration['gyroscops']['runtimes'])) {
+                foreach ($configuration['gyroscops']['runtimes'] as $runtime) {
+                    yield <<<PHP
+                        new \\{$runtime}()
+                        PHP;
+                }
+            }
         }
     }
 
@@ -41,14 +120,22 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     {
         return sprintf(
             <<<PHP
-            <?php declare(strict_types=1);
-            use \\Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage;
-            return fn (string \$buildPath) => new \Kiboko\Component\Satellite\Service(
-                \$buildPath,
-                %s
-            );
-            PHP,
-            implode(",\n".str_pad('', 4), iterator_to_array($this->formatPluginInstance()))
+                <?php declare(strict_types=1);
+                use \\Kiboko\\Component\\Satellite\\RuntimeContextInterface;
+                return fn (RuntimeContextInterface \$context) => (new \Kiboko\Component\Satellite\Service())
+                    ->registerPlugins(
+                        %s
+                    )
+                    ->registerAdapters(
+                        %s
+                    )
+                    ->registerRuntimes(
+                        %s
+                    );
+                PHP,
+            implode(",\n".str_pad('', 8), iterator_to_array($this->formatPluginInstance())),
+            implode(",\n".str_pad('', 8), iterator_to_array($this->formatAdapterInstance())),
+            implode(",\n".str_pad('', 8), iterator_to_array($this->formatRuntimeInstance())),
         );
     }
 }

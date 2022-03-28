@@ -130,12 +130,9 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
-    public function registerFactories(callable ...$factories): self
+    public function registerPlugins(Configurator\PipelinePluginInterface|Configurator\PipelineFeatureInterface ...$plugins): self
     {
-        foreach ($factories as $factory) {
-            $plugin = $factory($interpreter = clone $this->interpreter);
-
+        foreach ($plugins as $plugin) {
             /** @var Configurator\Feature $attribute */
             foreach (extractAttributes($plugin, Configurator\Feature::class) as $attribute) {
                 $this->addFeature($attribute, $plugin);
