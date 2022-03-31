@@ -13,11 +13,15 @@ final class AddPipelineStepProbeCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddPipelineStepProbeCommand $command): Cloud\Event\AddedPipelineStepProbe
     {
-        $response = $this->client->addPipelineStepProbePipelineStepProbeCollection(
-            (new Api\Model\PipelineStepProbeAddPipelineStepProbCommandInput())
-                ->setId($command->pipeline)
-                ->setCode($command->stepCode)
-                ->setProbe($command->probe),
+        $response = $this->client->addPipelineStepProbePipelineCollection(
+            (new Api\Model\PipelineAddPipelineStepProbCommandInput())
+                ->setId((string) $command->pipeline)
+                ->setCode((string) $command->stepCode)
+                ->setProbe(
+                    (new Api\Model\Probe())
+                        ->setCode($command->probe->code)
+                        ->setLabel($command->probe->label)
+                ),
             Api\Client::FETCH_RESPONSE
         );
 

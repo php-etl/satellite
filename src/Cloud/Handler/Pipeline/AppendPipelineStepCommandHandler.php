@@ -13,13 +13,18 @@ final class AppendPipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AppendPipelineStepCommand $command): Cloud\Event\AppendedPipelineStep
     {
-        $response = $this->client->appendPipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepAppendPipelineStepCommandInput())
-                ->setPipeline($command->pipeline)
-                ->setCode($command->code)
-                ->setLabel($command->label)
-                ->setConfiguration($command->configuration)
-                ->setProbes($command->probes),
+        $response = $this->client->appendPipelineStepPipelineCollection(
+            (new Api\Model\PipelineAppendPipelineStepCommandInput())
+                ->setPipeline((string) $command->pipeline)
+                ->setCode((string) $command->step->code)
+                ->setLabel($command->step->label)
+                ->setConfiguration($command->step->config)
+                ->setProbes(
+                    array_map(
+                        fn (Cloud\DTO\Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+                        $command->step->probes->toArray()
+                    )
+                ),
             Api\Client::FETCH_RESPONSE
         );
 

@@ -42,4 +42,9 @@ final class StepList implements \Countable, \IteratorAggregate
     {
         return \count($this->steps);
     }
+
+    public function toArray(): array
+    {
+        return $this->steps;
+    }
 }

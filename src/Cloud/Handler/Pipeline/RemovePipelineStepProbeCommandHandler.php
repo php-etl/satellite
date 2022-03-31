@@ -13,11 +13,11 @@ final class RemovePipelineStepProbeCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepProbeCommand $command): Cloud\Event\RemovedPipelineStepProbe
     {
-        $response = $this->client->removePipelineStepProbePipelineStepProbeCollection(
-            (new Api\Model\PipelineStepProbeRemovePipelineStepProbCommandInput())
-                ->setId($command->pipeline)
-                ->setCode($command->stepCode)
-                ->setProbe($command->probe),
+        $response = $this->client->removePipelineStepProbePipelineItem(
+            (string) $command->stepCode,
+            $command->probe->code,
+            $command->probe->label,
+            (string) $command->pipeline,
             Api\Client::FETCH_RESPONSE
         );
 
@@ -25,6 +25,8 @@ final class RemovePipelineStepProbeCommandHandler
             throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
-        return new Cloud\Event\RemovedPipelineStepProbe();
+        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new Cloud\Event\RemovedPipelineStepProbe($result["id"]);
     }
 }

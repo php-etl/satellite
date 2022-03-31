@@ -13,14 +13,19 @@ final class ReplacePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {
-        $response = $this->client->replacePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepReplacePipelineStepCommandInput())
-                ->setFormer($command->former)
-                ->setPipeline($command->pipeline)
-                ->setCode($command->code)
-                ->setLabel($command->label)
-                ->setConfiguration($command->configuration)
-                ->setProbes($command->probes),
+        $response = $this->client->replacePipelineStepPipelineCollection(
+            (new Api\Model\PipelineReplacePipelineStepCommandInput())
+                ->setFormer((string) $command->former)
+                ->setPipeline((string) $command->pipeline)
+                ->setCode((string) $command->step->code)
+                ->setLabel($command->step->label)
+                ->setConfiguration($command->step->config)
+                ->setProbes(
+                    array_map(
+                        fn (Cloud\DTO\Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+                        $command->step->probes->toArray()
+                    )
+                ),
             Api\Client::FETCH_RESPONSE
         );
 

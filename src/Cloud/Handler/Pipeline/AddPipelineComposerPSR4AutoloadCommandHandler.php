@@ -15,7 +15,7 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
     {
         $response = $this->client->addComposerPipelinePipelineCollection(
             (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInput())
-                ->setPipeline($command->pipeline)
+                ->setPipeline((string) $command->pipeline)
                 ->setNamespace($command->namespace)
                 ->setPaths($command->paths),
             Api\Client::FETCH_RESPONSE

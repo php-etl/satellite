@@ -14,7 +14,7 @@ final class CompilePipelineCommandHandler
     public function __invoke(Cloud\Command\Pipeline\CompilePipelineCommand $command): Cloud\Event\CompiledPipeline
     {
         $response = $this->client->pipelineCompilationPipelineCollection(
-            (new Api\Model\PipelineCompilePipelineCommandInput())->setPipeline($command->pipeline),
+            (new Api\Model\PipelineCompilePipelineCommandInput())->setPipeline((string) $command->pipeline),
             Api\Client::FETCH_RESPONSE
         );
 

@@ -13,13 +13,18 @@ final class AddAfterPipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddAfterPipelineStepCommand $command): Cloud\Event\AddedAfterPipelineStep
     {
-        $result = $this->client->addAfterPipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepAddAfterPipelineStepCommandInput())
+        $result = $this->client->addAfterPipelineStepPipelineCollection(
+            (new Api\Model\PipelineAddAfterPipelineStepCommandInput())
                 ->setPrevious((string) $command->previous)
                 ->setLabel($command->step->label)
-                ->setCode($command->step->code)
+                ->setCode((string) $command->step->code)
                 ->setConfiguration($command->step->config)
-                ->setProbes($command->step->probes)
+                ->setProbes(
+                    array_map(
+                        fn (Cloud\DTO\Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+                        $command->step->probes->toArray()
+                    )
+                )
         );
 
         if ($result === null) {

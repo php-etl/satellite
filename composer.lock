@@ -764,12 +764,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "343737bbbb8634799d345573cdc699e93876ebd4"
+                "reference": "8134a674a2aebe75195c9acaa72273365ce82bba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/343737bbbb8634799d345573cdc699e93876ebd4",
-                "reference": "343737bbbb8634799d345573cdc699e93876ebd4",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/8134a674a2aebe75195c9acaa72273365ce82bba",
+                "reference": "8134a674a2aebe75195c9acaa72273365ce82bba",
                 "shasum": ""
             },
             "require": {
@@ -810,7 +810,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/master"
             },
-            "time": "2022-04-01T07:40:16+00:00"
+            "time": "2022-03-30T15:22:59+00:00"
         },
         {
             "name": "php-etl/packaging",

@@ -24,4 +24,9 @@ final class ProbeList
     {
         return \count($this->probes);
     }
+
+    public function toArray(): array
+    {
+        return $this->probes;
+    }
 }
