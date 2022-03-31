@@ -22,6 +22,7 @@ final class DeclarePipelineCommandHandler
         );
 
         if ($response !== null && $response->getStatusCode() !== 202) {
+            throw throw new \RuntimeException($response->getReasonPhrase());
         }
 
         $result = json_decode($response->getBody()->getContents(), true);
