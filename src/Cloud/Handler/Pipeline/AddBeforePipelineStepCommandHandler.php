@@ -13,7 +13,7 @@ final class AddBeforePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {
-        $response = $this->client->addBeforePipelineStepPipelineCollection(
+        $result = $this->client->addBeforePipelineStepPipelineCollection(
             (new Api\Model\PipelineAddBeforePipelineStepCommandInput())
                 ->setNext((string) $command->next)
                 ->setLabel($command->step->label)
@@ -25,15 +25,12 @@ final class AddBeforePipelineStepCommandHandler
                         $command->step->probes->toArray()
                     )
                 ),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile adding before pipeline step.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\AddedBeforePipelineStep($result["id"]);
+        return new Cloud\Event\AddedBeforePipelineStep($result->id);
     }
 }

@@ -159,12 +159,11 @@ final class Pipeline implements PipelineInterface
             throw new \RuntimeException('Label does not match between actual and desired pipeline definition.');
         }
 
-        $commands = [];
+        // Check the changes in the list of steps
+        $diff = new Diff\StepListDiff($actual->id());
+        $commands = $diff->diff($actual->steps(), $desired->steps());
 
-        if (count($actual->steps()) !== count($desired->steps())) {
-            // TODO: make diff of the steps
-        }
-
+        // Check the changes in the list of autoloads
         if (count($actual->autoload()) !== count($desired->autoload())) {
             // TODO: make diff of the autoload
         }

@@ -2,16 +2,15 @@
 
 namespace unit\Cloud\Console\Command;
 
-use Gyroscops\Api\Client;
-use Kiboko\Component\Satellite\Cloud\Console\Command\CreateCommand;
+use Kiboko\Component\Satellite\Cloud;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CreateCommandTest extends TestCase
 {
-    public function testCreateCommandWithUrlAndDisablingSSL(): void
+    public function testExecute(): void
     {
-        $command = new CreateCommand();
+        $command = new  Cloud\Console\Command\CreateCommand();
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'config' => __DIR__.'/../../../examples/satellite.yaml',
@@ -20,5 +19,8 @@ class CreateCommandTest extends TestCase
         ]);
 
         $commandTester->assertCommandIsSuccessful();
+
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString('The satellite configuration has been pushed successfully.', $output);
     }
 }

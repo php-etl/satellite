@@ -3,36 +3,51 @@
 namespace unit\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
-use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Kiboko\Component\Satellite\Cloud;
 
 class RemovePipelineStepCommandHandlerTest extends TestCase
 {
-    public function testHandlerIsCorrect(): void
+    public function testHandlerIsSuccessful(): void
     {
         $client = $this->createMock(Api\Client::class);
         $client
             ->expects($this->once())
             ->method('deletePipelineStepPipelineItem')
             ->willReturn(
-                new Response(
-                    status: 204,
-                    headers: [
-                        'content-type' => 'application/json; charset=utf-8'
-                    ],
-                )
+                (object) [],
             );
 
         $handler = new Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client);
 
         $command = new Cloud\Command\Pipeline\RemovePipelineStepCommand(
-            new Cloud\DTO\PipelineId('0ee7d62c-81c5-4cb4-9614-4a73ff3df996'),
-            new Cloud\DTO\StepCode('csv.extractor'),
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
+            new Cloud\DTO\StepCode('xlsx.loader'),
         );
 
         $event = $handler($command);
 
         $this->assertIsObject($event);
+    }
+
+    public function testHandlerThrowsAnException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Something went wrong wile removing a step from the pipeline');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('deletePipelineStepPipelineItem')
+            ->willReturn(null);
+
+        $handler = new Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\RemovePipelineStepCommand(
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
+            new Cloud\DTO\StepCode('xlsx.loader'),
+        );
+
+        $handler($command);
     }
 }

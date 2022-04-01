@@ -4,31 +4,30 @@ namespace unit\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
-use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use unit\Kiboko\Component\Satellite\Cloud\Diff\ProbeListDiffTest;
 
 class AppendPipelineStepCommandHandlerTest extends TestCase
 {
-    public function testHandlerIsCorrect(): void
+    public function testHandlerIsSuccessful(): void
     {
         $client = $this->createMock(Api\Client::class);
         $client
             ->expects($this->once())
             ->method('appendPipelineStepPipelineCollection')
             ->willReturn(
-                new Response(
-                    status: 202,
-                    headers: [
-                        'content-type' => 'application/json; charset=utf-8'
-                    ],
-                )
+                (object) [
+                    "id" => "fa729c14-d075-4d19-8705-aa7056a7b6b9",
+                    "code" => "xlsx.loader",
+                    "label" => "Loads products",
+                    "configuration" => [],
+                    "probes" => [],
+                ]
             );
 
         $handler = new Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client);
 
         $command = new Cloud\Command\Pipeline\AppendPipelineStepCommand(
-            new Cloud\DTO\PipelineId('0ee7d62c-81c5-4cb4-9614-4a73ff3df996'),
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
             new Cloud\DTO\Step(
                 'Loads products',
                 new Cloud\DTO\StepCode('xlsx.loader'),
@@ -41,5 +40,32 @@ class AppendPipelineStepCommandHandlerTest extends TestCase
         $event = $handler($command);
 
         $this->assertIsObject($event);
+    }
+
+    public function testHandlerThrowsAnException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Something went wrong wile appending a step into the pipeline');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('appendPipelineStepPipelineCollection')
+            ->willReturn(null);
+
+        $handler = new Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\AppendPipelineStepCommand(
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
+            new Cloud\DTO\Step(
+                'Loads products',
+                new Cloud\DTO\StepCode('xlsx.loader'),
+                [],
+                new Cloud\DTO\ProbeList(),
+                2
+            ),
+        );
+
+        $handler($command);
     }
 }

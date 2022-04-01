@@ -13,7 +13,7 @@ final class AppendPipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AppendPipelineStepCommand $command): Cloud\Event\AppendedPipelineStep
     {
-        $response = $this->client->appendPipelineStepPipelineCollection(
+        $result = $this->client->appendPipelineStepPipelineCollection(
             (new Api\Model\PipelineAppendPipelineStepCommandInput())
                 ->setPipeline((string) $command->pipeline)
                 ->setCode((string) $command->step->code)
@@ -25,15 +25,12 @@ final class AppendPipelineStepCommandHandler
                         $command->step->probes->toArray()
                     )
                 ),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile appending a step into the pipeline.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\AppendedPipelineStep($result["id"]);
+        return new Cloud\Event\AppendedPipelineStep($result->id);
     }
 }

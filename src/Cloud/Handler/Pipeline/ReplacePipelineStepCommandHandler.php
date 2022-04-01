@@ -13,7 +13,7 @@ final class ReplacePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {
-        $response = $this->client->replacePipelineStepPipelineCollection(
+        $result = $this->client->replacePipelineStepPipelineCollection(
             (new Api\Model\PipelineReplacePipelineStepCommandInput())
                 ->setFormer((string) $command->former)
                 ->setPipeline((string) $command->pipeline)
@@ -26,15 +26,12 @@ final class ReplacePipelineStepCommandHandler
                         $command->step->probes->toArray()
                     )
                 ),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile replacing a step from the pipeline.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\ReplacedPipelineStep($result["id"]);
+        return new Cloud\Event\ReplacedPipelineStep($result->id);
     }
 }

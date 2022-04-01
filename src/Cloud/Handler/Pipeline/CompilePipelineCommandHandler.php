@@ -13,17 +13,14 @@ final class CompilePipelineCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\CompilePipelineCommand $command): Cloud\Event\CompiledPipeline
     {
-        $response = $this->client->pipelineCompilationPipelineCollection(
+        $result = $this->client->pipelineCompilationPipelineCollection(
             (new Api\Model\PipelineCompilePipelineCommandInput())->setPipeline((string) $command->pipeline),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile compiling the pipeline.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\CompiledPipeline($result["id"]);
+        return new Cloud\Event\CompiledPipeline($result->id);
     }
 }

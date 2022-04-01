@@ -4,30 +4,30 @@ namespace unit\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
-use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class AddPipelineComposerPSR4AutoloadCommandHandlerTest extends TestCase
 {
-    public function testHandlerIsCorrect(): void
+    public function testHandlerIsSuccessful(): void
     {
         $client = $this->createMock(Api\Client::class);
         $client
             ->expects($this->once())
             ->method('addComposerPipelinePipelineCollection')
             ->willReturn(
-                new Response(
-                    status: 202,
-                    headers: [
-                        'content-type' => 'application/json; charset=utf-8'
+                (object) [
+                    "id" => "fa729c14-d075-4d19-8705-aa7056a7b6b9",
+                    "namespace" => 'App\\',
+                    "paths" => [
+                        'src/'
                     ],
-                )
+                ]
             );
 
         $handler = new Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client);
 
         $command = new Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand(
-            new Cloud\DTO\PipelineId('0ee7d62c-81c5-4cb4-9614-4a73ff3df996'),
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
             'App\\',
             [
                 'src/'
@@ -37,5 +37,29 @@ class AddPipelineComposerPSR4AutoloadCommandHandlerTest extends TestCase
         $event = $handler($command);
 
         $this->assertIsObject($event);
+    }
+
+    public function testHandlerThrowsAnException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Something went wrong wile adding composer PSR4 into the pipeline');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('addComposerPipelinePipelineCollection')
+            ->willReturn(null);
+
+        $handler = new Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand(
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
+            'App\\',
+            [
+                'src/'
+            ]
+        );
+
+        $handler($command);
     }
 }

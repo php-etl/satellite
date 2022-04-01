@@ -1,6 +1,4 @@
 satellite:
-  kaniko:
-    from: 'php:8.1-cli-alpine'
   composer:
     autoload:
       psr4:

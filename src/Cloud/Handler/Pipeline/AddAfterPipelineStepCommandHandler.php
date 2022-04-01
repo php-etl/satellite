@@ -28,9 +28,9 @@ final class AddAfterPipelineStepCommandHandler
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile adding pipeline step.');
+            throw throw new \RuntimeException('Something went wrong wile adding after pipeline step.');
         }
 
-        return new Cloud\Event\AddedAfterPipelineStep($result["id"]);
+        return new Cloud\Event\AddedAfterPipelineStep($result->id);
     }
 }

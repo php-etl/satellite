@@ -13,18 +13,15 @@ final class RemovePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepCommand $command): Cloud\Event\RemovedPipelineStep
     {
-        $response = $this->client->deletePipelineStepPipelineItem(
+        $result = $this->client->deletePipelineStepPipelineItem(
             (string) $command->code,
             (string) $command->pipeline,
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 204) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile removing a step from the pipeline.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\RemovedPipelineStep($result["id"]);
+        return new Cloud\Event\RemovedPipelineStep((string) $command->code);
     }
 }

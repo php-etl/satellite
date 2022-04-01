@@ -13,7 +13,7 @@ final class AddPipelineStepProbeCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddPipelineStepProbeCommand $command): Cloud\Event\AddedPipelineStepProbe
     {
-        $response = $this->client->addPipelineStepProbePipelineCollection(
+        $result = $this->client->addPipelineStepProbePipelineCollection(
             (new Api\Model\PipelineAddPipelineStepProbCommandInput())
                 ->setId((string) $command->pipeline)
                 ->setCode((string) $command->stepCode)
@@ -22,15 +22,12 @@ final class AddPipelineStepProbeCommandHandler
                         ->setCode($command->probe->code)
                         ->setLabel($command->probe->label)
                 ),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile adding a probe into the step.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\AddedPipelineStepProbe($result["id"]);
+        return new Cloud\Event\AddedPipelineStepProbe($result->id);
     }
 }

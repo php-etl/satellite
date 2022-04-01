@@ -13,20 +13,17 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand $command): Cloud\Event\AddedPipelineComposerPSR4Autoload
     {
-        $response = $this->client->addComposerPipelinePipelineCollection(
+        $result = $this->client->addComposerPipelinePipelineCollection(
             (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInput())
                 ->setPipeline((string) $command->pipeline)
                 ->setNamespace($command->namespace)
                 ->setPaths($command->paths),
-            Api\Client::FETCH_RESPONSE
         );
 
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        if ($result === null) {
+            throw throw new \RuntimeException('Something went wrong wile adding composer PSR4 into the pipeline.');
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-        return new Cloud\Event\AddedPipelineComposerPSR4Autoload($result["id"], $result["namespace"], $result["paths"]);
+        return new Cloud\Event\AddedPipelineComposerPSR4Autoload($result->id, $result->namespace, $result->paths);
     }
 }
