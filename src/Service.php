@@ -140,7 +140,7 @@ final class Service implements Configurator\FactoryInterface
 
             /** @var Configurator\Pipeline $attribute */
             foreach (extractAttributes($plugin, Configurator\Pipeline::class) as $attribute) {
-                $this->addPipeline($attribute, $plugin, $interpreter);
+                $this->addPipeline($attribute, $plugin, $this->interpreter);
             }
         }
 
@@ -277,8 +277,6 @@ final class Service implements Configurator\FactoryInterface
 
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
-
         $repository->addPackages(
             'php-etl/pipeline-contracts:~0.3.0@dev',
             'php-etl/pipeline:~0.4.0@dev',
@@ -296,7 +294,7 @@ final class Service implements Configurator\FactoryInterface
             && count($config['pipeline']['expression_language'])
         ) {
             foreach ($config['pipeline']['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider);
             }
         }
 
