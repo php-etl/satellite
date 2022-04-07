@@ -23,9 +23,16 @@
         {
           "type": "object",
           "properties": {
-            "serverless": { "$ref": "schema/definitions.json#/$defs/serverless" }
+            "serverless": { "$ref": "schema/definitions.json#/$defs/tar" }
           },
-          "required": [ "serverless" ]
+          "required": [ "tar" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "serverless": { "$ref": "schema/definitions.json#/$defs/kaniko" }
+          },
+          "required": [ "kaniko" ]
         }
       ]
     },

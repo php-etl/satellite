@@ -79,7 +79,25 @@
       },
       "required": [ "from", "workdir" ]
     },
+    "kaniko": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": { "type": "string" },
+        "workdir": { "type": "string" },
+        "tags": { "type": "array", "items": { "type":  "string" } }
+      },
+      "required": [ "from", "workdir" ]
+    },
     "filesystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" }
+      },
+      "required": [ "path" ]
+    },
+    "tar": {
       "type": "object",
       "additionalProperties": false,
       "properties": {

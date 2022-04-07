@@ -3,6 +3,7 @@
 namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use Symfony\Component\Config;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -17,6 +18,10 @@ class ConfigLoader implements ConfigLoaderInterface
         string $path,
     ): \Generator {
         $config = $loader->load($path);
+
+        if ($config === null) {
+            throw new InvalidConfigurationException('Provided configuration seems to be empty, supported formats are YAML and JSON.');
+        }
 
         if (array_key_exists('imports', $config)) {
             $imports = $config['imports'];
