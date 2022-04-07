@@ -9,7 +9,7 @@ satellite:
         - "laminas/laminas-diactoros"
         - "php-http/guzzle7-adapter"
         - "php-etl/mapping-contracts:dev-fix-dependencies as 0.2.0"
-        - "monolog/monolog"
+        - "monolog/monolog:^2.0"
         - "elasticsearch/elasticsearch"
 
   pipeline:
