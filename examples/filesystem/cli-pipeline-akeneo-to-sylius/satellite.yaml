@@ -15,7 +15,7 @@ satellite:
       - "diglin/sylius-api-php-client"
       - "laminas/laminas-diactoros"
       - "php-http/guzzle7-adapter"
-      - "monolog/monolog:^2.0"
+      - "monolog/monolog"
       - "elasticsearch/elasticsearch"
   pipeline:
     steps:

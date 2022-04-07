@@ -283,9 +283,9 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/pipeline-console-runtime:~0.1.0@dev',
             'php-etl/workflow-console-runtime:~0.1.0@dev',
             'psr/log:^1.1',
-            'monolog/monolog:^2.2',
-            'symfony/console:^5.2',
-            'symfony/dependency-injection:^5.2',
+            'monolog/monolog',
+            'symfony/console:^5.4',
+            'symfony/dependency-injection:^5.4',
         );
 
         if (array_key_exists('expression_language', $config['pipeline'])

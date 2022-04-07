@@ -10,9 +10,9 @@ satellite:
       - "akeneo/api-php-client-ee"
       - "laminas/laminas-diactoros"
       - "php-http/guzzle7-adapter"
-      - "monolog/monolog:^2.0"
+      - "monolog/monolog"
       - "elasticsearch/elasticsearch"
-      - "symfony/dependency-injection:^5.2"
+      - "symfony/dependency-injection:^5.4"
   pipeline:
     steps:
     - akeneo:
