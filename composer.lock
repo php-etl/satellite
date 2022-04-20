@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1032e000b5bdb0fd8d4c8a2b2deaf3ad",
+    "content-hash": "2c88ae654695b48691abc94b86292d8d",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -609,7 +609,7 @@
         },
         {
             "name": "php-etl/configurator-contracts",
-            "version": "dev-master",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
@@ -627,7 +627,6 @@
                 "php-etl/packaging-contracts": "^0.1.0",
                 "symfony/config": "^5.2"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -656,7 +655,7 @@
             "description": "This library describes contracts for defining configuration formats and building optimized code from it",
             "support": {
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
-                "source": "https://github.com/php-etl/configurator-contracts/tree/master"
+                "source": "https://github.com/php-etl/configurator-contracts/tree/v0.4.1"
             },
             "time": "2022-03-28T21:03:54+00:00"
         },
@@ -9059,7 +9058,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php-etl/configurator-contracts": 20,
         "php-etl/gyroscops-api-client": 20,
         "composer/composer": 0
     },
