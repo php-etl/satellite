@@ -15,9 +15,11 @@ class ConfigLoader implements ConfigLoaderInterface
     /** @return \Generator<array> */
     private function load(
         Config\Loader\LoaderInterface $loader,
-        string $path,
-    ): \Generator {
+        string                        $path,
+    ): \Generator
+    {
         $config = $loader->load($path);
+        $currentPath = dirname($path);
 
         if ($config === null) {
             throw new InvalidConfigurationException('Provided configuration seems to be empty, supported formats are YAML and JSON.');
@@ -28,7 +30,7 @@ class ConfigLoader implements ConfigLoaderInterface
             unset($config['imports']);
 
             foreach ($imports as $import) {
-                yield from $this->load($loader, $import['resource']);
+                yield from $this->load($loader, $currentPath . '/' . $import['resource']);
             }
         }
 
@@ -38,7 +40,10 @@ class ConfigLoader implements ConfigLoaderInterface
                 unset($config['satellites']['imports']);
 
                 foreach ($imports as $import) {
-                    $config['satellites'] = array_merge($config['satellites'], $loader->load($import['resource']));
+                    $config['satellites'] = array_merge(
+                        $config['satellites'],
+                        $loader->load($currentPath . '/' . $import['resource'])
+                    );
                 }
             }
 
@@ -48,7 +53,10 @@ class ConfigLoader implements ConfigLoaderInterface
                     unset($satellite['imports']);
 
                     foreach ($imports as $import) {
-                        $satellite = array_merge($satellite, $loader->load($import['resource']));
+                        $satellite = array_merge(
+                            $satellite,
+                            $loader->load($currentPath . '/' . $import['resource'])
+                        );
                     }
                 }
 
@@ -58,7 +66,10 @@ class ConfigLoader implements ConfigLoaderInterface
                         unset($satellite['workflow']['imports']);
 
                         foreach ($imports as $import) {
-                            $satellite['workflow'] = array_merge($satellite['workflow'], $loader->load($import['resource']));
+                            $satellite['workflow'] = array_merge(
+                                $satellite['workflow'],
+                                $loader->load($currentPath . '/' . $import['resource'])
+                            );
                         }
                     }
 
@@ -68,7 +79,10 @@ class ConfigLoader implements ConfigLoaderInterface
                         unset($satellite['workflow']['jobs']['imports']);
 
                         foreach ($imports as $import) {
-                            $satellite['workflow']['jobs'] = array_merge($satellite['workflow']['jobs'], $loader->load($import['resource']));
+                            $satellite['workflow']['jobs'] = array_merge(
+                                $satellite['workflow']['jobs'],
+                                $loader->load($currentPath . '/' . $import['resource'])
+                            );
                         }
                     }
                 }
@@ -80,7 +94,10 @@ class ConfigLoader implements ConfigLoaderInterface
                     unset($satellite['pipeline']['imports']);
 
                     foreach ($imports as $import) {
-                        $satellite['pipeline'] = array_merge($satellite['pipeline'], $loader->load($import['resource']));
+                        $satellite['pipeline'] = array_merge(
+                            $satellite['pipeline'],
+                            $loader->load($currentPath . '/' . $import['resource'])
+                        );
                     }
                 }
             }
