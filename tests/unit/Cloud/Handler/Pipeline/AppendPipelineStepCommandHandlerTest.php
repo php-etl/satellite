@@ -44,8 +44,7 @@ class AppendPipelineStepCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Something went wrong wile appending a step into the pipeline');
+        $this->expectException(Cloud\SendPipelineConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client

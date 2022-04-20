@@ -21,32 +21,12 @@ final class DeclarePipelineCommandHandler
                 ->setCode($command->code)
                 ->setProject((string) $command->project)
                 ->setOrganization((string) $command->organizationId)
-                ->setSteps(array_map(
-                    fn (Cloud\DTO\Step $step) =>
-                        (new Api\Model\StepInput())
-                            ->setCode((string) $step->code)
-                            ->setLabel($step->label)
-                            ->setConfig($step->config)
-                            ->setProbes(array_map(
-                                fn (Cloud\DTO\Probe $probe) =>
-                                    (new Api\Model\Probe())
-                                        ->setCode($probe->code)
-                                        ->setLabel($probe->label),
-                                $step->probes->toArray()
-                            )),
-                    $command->steps->toArray()
-                ))
-                ->setAutoloads(array_map(
-                    fn (Cloud\DTO\PSR4AutoloadConfig $autoloadConfig) =>
-                        (new Api\Model\AutoloadInput())
-                            ->setNamespace($autoloadConfig->namespace)
-                            ->setPaths($autoloadConfig->paths),
-                    $command->autoload->autoloads
-                )),
+                ->setSteps($command->steps->map())
+                ->setAutoloads($command->autoload->map())
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile declaring the pipeline.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while declaring the pipeline.');
         }
 
         return new Cloud\Event\PipelineDeclared($result->id);

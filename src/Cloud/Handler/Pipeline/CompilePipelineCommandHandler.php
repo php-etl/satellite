@@ -20,7 +20,7 @@ final class CompilePipelineCommandHandler
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile compiling the pipeline.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to compile the pipeline.');
         }
 
         return new Cloud\Event\CompiledPipeline($result->id);

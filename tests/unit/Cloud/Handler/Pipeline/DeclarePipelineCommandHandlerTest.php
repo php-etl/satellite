@@ -49,8 +49,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Something went wrong wile declaring the pipeline');
+        $this->expectException(Cloud\SendPipelineConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client

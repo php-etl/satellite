@@ -23,7 +23,7 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile adding composer PSR4 into the pipeline.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to add PSR4 autoloads into the pipeline.');
         }
 
         return new Cloud\Event\AddedPipelineComposerPSR4Autoload($result->id, $result->namespace, $result->paths);

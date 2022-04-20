@@ -27,7 +27,7 @@ final class AddPipelineStepProbeCommandHandler
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile adding a probe into the step.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to add a probe into an existing pipeline step.');
         }
 
         return new Cloud\Event\AddedPipelineStepProbe($result->id);

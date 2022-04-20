@@ -2,6 +2,8 @@
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
+use Gyroscops\Api;
+
 final class ProbeList
 {
     /** @var list<Probe> */
@@ -25,8 +27,11 @@ final class ProbeList
         return \count($this->probes);
     }
 
-    public function toArray(): array
+    public function map(): array
     {
-        return $this->probes;
+        return array_map(
+            fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+            $this->probes
+        );
     }
 }

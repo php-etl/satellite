@@ -41,8 +41,7 @@ class AddPipelineComposerPSR4AutoloadCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Something went wrong wile adding composer PSR4 into the pipeline');
+        $this->expectException(Cloud\SendPipelineConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client

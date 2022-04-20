@@ -21,16 +21,11 @@ final class AddBeforePipelineStepCommandHandler
                 ->setLabel($command->step->label)
                 ->setCode((string) $command->step->code)
                 ->setConfiguration($command->step->config)
-                ->setProbes(
-                    array_map(
-                        fn (Cloud\DTO\Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
-                        $command->step->probes->toArray()
-                    )
-                ),
+                ->setProbes($command->step->probes->map())
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile adding before pipeline step.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to add a new step before an existing pipeline step.');
         }
 
         return new Cloud\Event\AddedBeforePipelineStep($result->id);

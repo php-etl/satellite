@@ -21,16 +21,11 @@ final class AppendPipelineStepCommandHandler
                 ->setCode((string) $command->step->code)
                 ->setLabel($command->step->label)
                 ->setConfiguration($command->step->config)
-                ->setProbes(
-                    array_map(
-                        fn (Cloud\DTO\Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
-                        $command->step->probes->toArray()
-                    )
-                ),
+                ->setProbes($command->step->probes->map())
         );
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile appending a step into the pipeline.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to append a pipeline step.');
         }
 
         return new Cloud\Event\AppendedPipelineStep($result->id);

@@ -32,8 +32,7 @@ class RemovePipelineStepCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Something went wrong wile removing a step from the pipeline');
+        $this->expectException(Cloud\SendPipelineConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client

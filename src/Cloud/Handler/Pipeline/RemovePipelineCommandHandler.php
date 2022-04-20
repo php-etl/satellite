@@ -18,7 +18,7 @@ final class RemovePipelineCommandHandler
         $result = $this->client->deletePipelinePipelineItem((string) $command->pipeline);
 
         if ($result === null) {
-            throw throw new \RuntimeException('Something went wrong wile removing the pipeline.');
+            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to remove a step from the pipeline.');
         }
 
         return new Cloud\Event\RemovedPipeline((string) $command->pipeline);
