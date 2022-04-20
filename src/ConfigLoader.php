@@ -22,7 +22,7 @@ class ConfigLoader implements ConfigLoaderInterface
         $currentPath = dirname($path);
 
         if ($config === null) {
-            throw new InvalidConfigurationException('Provided configuration seems to be empty, supported formats are YAML and JSON.');
+            throw new InvalidConfigurationException('Provided configuration seems to be empty or in an unsupported format. Supported formats are YAML and JSON.');
         }
 
         if (array_key_exists('imports', $config)) {
