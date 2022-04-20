@@ -15,9 +15,8 @@ class ConfigLoader implements ConfigLoaderInterface
     /** @return \Generator<array> */
     private function load(
         Config\Loader\LoaderInterface $loader,
-        string                        $path,
-    ): \Generator
-    {
+        string $path,
+    ): \Generator {
         $config = $loader->load($path);
         $currentPath = dirname($path);
 
