@@ -23,7 +23,7 @@ final class RemovePipelineStepProbeCommandHandler
         );
 
         if ($result === null) {
-            throw new Cloud\SendPipelineConfigurationException('Something went wrong while removing a probe from the step.');
+            throw new Cloud\RemovePipelineStepProbeConfigurationException('Something went wrong while removing a probe from the step.');
         }
 
         return new Cloud\Event\RemovedPipelineStepProbe($result->id);

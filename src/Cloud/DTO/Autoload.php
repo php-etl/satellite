@@ -2,8 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-use Gyroscops\Api;
-
 final class Autoload implements \Countable, \IteratorAggregate
 {
     public array $autoloads;
@@ -24,13 +22,8 @@ final class Autoload implements \Countable, \IteratorAggregate
         return \count($this->autoloads);
     }
 
-    public function map(): array
+    public function map(callable $callback): array
     {
-        return array_map(
-            fn (PSR4AutoloadConfig $autoloadConfig) => (new Api\Model\AutoloadInput())
-                ->setNamespace($autoloadConfig->namespace)
-                ->setPaths($autoloadConfig->paths),
-            $this->autoloads
-        );
+        return array_map($callback, $this->autoloads);
     }
 }

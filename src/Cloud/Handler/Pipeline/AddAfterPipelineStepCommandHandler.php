@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
+use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
 final class AddAfterPipelineStepCommandHandler
 {
@@ -21,11 +22,13 @@ final class AddAfterPipelineStepCommandHandler
                 ->setLabel($command->step->label)
                 ->setCode((string) $command->step->code)
                 ->setConfiguration($command->step->config)
-                ->setProbes($command->step->probes->map())
+                ->setProbes($command->step->probes->map(
+                    fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
+                ))
         );
 
         if ($result === null) {
-            throw new Cloud\SendPipelineConfigurationException('Something went wrong while trying to add a new step after an existing pipeline step.');
+            throw new Cloud\AddAfterPipelineStepConfigurationException('Something went wrong while trying to add a new step after an existing pipeline step.');
         }
 
         return new Cloud\Event\AddedAfterPipelineStep($result->id);

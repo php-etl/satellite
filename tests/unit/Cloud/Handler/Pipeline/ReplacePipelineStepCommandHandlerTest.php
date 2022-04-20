@@ -47,7 +47,7 @@ class ReplacePipelineStepCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(Cloud\SendPipelineConfigurationException::class);
+        $this->expectException(Cloud\ReplacePipelineStepConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client

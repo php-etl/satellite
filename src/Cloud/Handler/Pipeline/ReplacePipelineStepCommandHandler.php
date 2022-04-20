@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
+use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
 final class ReplacePipelineStepCommandHandler
 {
@@ -22,11 +23,13 @@ final class ReplacePipelineStepCommandHandler
                 ->setCode((string) $command->step->code)
                 ->setLabel($command->step->label)
                 ->setConfiguration($command->step->config)
-                ->setProbes($command->step->probes->map())
+                ->setProbes($command->step->probes->map(
+                    fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+                ))
         );
 
         if ($result === null) {
-            throw new Cloud\SendPipelineConfigurationException('Something went wrong while replacing a step from the pipeline.');
+            throw new Cloud\ReplacePipelineStepConfigurationException('Something went wrong while replacing a step from the pipeline.');
         }
 
         return new Cloud\Event\ReplacedPipelineStep($result->id);

@@ -2,8 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-use Gyroscops\Api;
-
 final class StepList implements \Countable, \IteratorAggregate
 {
     /** @var list<Step> */
@@ -45,15 +43,8 @@ final class StepList implements \Countable, \IteratorAggregate
         return \count($this->steps);
     }
 
-    public function map(): array
+    public function map(callable $callback): array
     {
-        return array_map(
-            fn (Step $step) => (new Api\Model\StepInput())
-                ->setCode((string) $step->code)
-                ->setLabel($step->label)
-                ->setConfig($step->config)
-                ->setProbes($step->probes->map()),
-            $this->steps
-        );
+        return array_map($callback, $this->steps);
     }
 }

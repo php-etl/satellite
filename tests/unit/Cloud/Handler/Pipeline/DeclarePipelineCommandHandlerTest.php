@@ -49,7 +49,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(Cloud\SendPipelineConfigurationException::class);
+        $this->expectException(Cloud\DeclarePipelineConfigurationException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client
