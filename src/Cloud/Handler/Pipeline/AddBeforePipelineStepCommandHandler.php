@@ -16,19 +16,33 @@ final class AddBeforePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {
-        $result = $this->client->addBeforePipelineStepPipelineCollection(
-            (new Api\Model\PipelineAddBeforePipelineStepCommandInput())
-                ->setNext((string) $command->next)
-                ->setLabel($command->step->label)
-                ->setCode((string) $command->step->code)
-                ->setConfiguration($command->step->config)
-                ->setProbes($command->step->probes->map(
-                    fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
-                ))
-        );
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->addBeforePipelineStepPipelineCollection(
+                (new Api\Model\PipelineAddBeforePipelineStepCommandInput())
+                    ->setNext((string) $command->next)
+                    ->setLabel($command->step->label)
+                    ->setCode((string) $command->step->code)
+                    ->setConfiguration($command->step->config)
+                    ->setProbes($command->step->probes->map(
+                        fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
+                    ))
+            );
+        } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionBadRequestException $exception) {
+            throw new Cloud\AddBeforePipelineStepFailedException(
+                'Something went wrong while trying to add a new step before an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.',
+                previous: $exception
+            );
+        } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+            throw new Cloud\AddBeforePipelineStepFailedException(
+                'Something went wrong while trying to add a new step before an existing pipeline step. It seems the data you sent was invalid, please check your input.',
+                previous: $exception
+            );
+        }
 
         if ($result === null) {
-            throw new Cloud\AddBeforePipelineStepConfigurationException('Something went wrong while trying to add a new step before an existing pipeline step.');
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step.');
         }
 
         return new Cloud\Event\AddedBeforePipelineStep($result->id);

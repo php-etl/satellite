@@ -15,15 +15,24 @@ final class RemovePipelineStepProbeCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepProbeCommand $command): Cloud\Event\RemovedPipelineStepProbe
     {
-        $result = $this->client->removePipelineStepProbePipelineItem(
-            (string) $command->stepCode,
-            $command->probe->code,
-            $command->probe->label,
-            (string) $command->pipeline,
-        );
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->removePipelineStepProbePipelineItem(
+                (string) $command->stepCode,
+                $command->probe->code,
+                $command->probe->label,
+                (string) $command->pipeline,
+            );
+        } catch (Api\Exception\RemovePipelineStepProbePipelineItemNotFoundException $exception) {
+            throw new Cloud\RemovePipelineStepProbeFailedException(
+                'Something went wrong while removing a probe from the step. Maybe you are trying to delete a probe that never existed or has already been deleted.',
+                previous: $exception
+            );
+        }
 
         if ($result === null) {
-            throw new Cloud\RemovePipelineStepProbeConfigurationException('Something went wrong while removing a probe from the step.');
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\RemovePipelineStepProbeFailedException('Something went wrong while removing a probe from the step.');
         }
 
         return new Cloud\Event\RemovedPipelineStepProbe($result->id);

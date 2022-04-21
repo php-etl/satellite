@@ -4,7 +4,6 @@ namespace unit\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
-use Kiboko\Component\Satellite\Cloud\Event\PipelineDeclared;
 use PHPUnit\Framework\TestCase;
 
 class DeclarePipelineCommandHandlerTest extends TestCase
@@ -16,7 +15,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('declarePipelinePipelineCollection')
             ->willReturn(
-                (object) [
+                (object)[
                     "id" => "73906092-387e-4d7c-b02d-f0c8f8844286",
                     "label" => "Products pipeline",
                     "code" => "products_pipeline",
@@ -43,19 +42,73 @@ class DeclarePipelineCommandHandlerTest extends TestCase
 
         $event = $handler($command);
 
-        $this->assertIsObject($event);
-        $this->assertEquals(PipelineDeclared::class, $event::class);
+        $this->assertEquals(Cloud\Event\PipelineDeclared::class, $event::class);
+        $this->assertEquals('73906092-387e-4d7c-b02d-f0c8f8844286', $event->getId());
     }
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(Cloud\DeclarePipelineConfigurationException::class);
+        $this->expectException(Cloud\DeclarePipelineFailedException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client
             ->expects($this->once())
             ->method('declarePipelinePipelineCollection')
             ->willReturn(null);
+
+        $handler = new Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\DeclarePipelineCommand(
+            'products_pipeline',
+            'Products pipeline',
+            new Cloud\DTO\StepList(),
+            new Cloud\DTO\Autoload(),
+            new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
+            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+        );
+
+        $handler($command);
+    }
+
+    public function testHandlerThrowsABadRequestException(): void
+    {
+        $this->expectException(Cloud\DeclarePipelineFailedException::class);
+        $this->expectExceptionMessage('Something went wrong while declaring the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('declarePipelinePipelineCollection')
+            ->willThrowException(
+                new Api\Exception\DeclarePipelinePipelineCollectionBadRequestException()
+            );
+
+        $handler = new Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\DeclarePipelineCommand(
+            'products_pipeline',
+            'Products pipeline',
+            new Cloud\DTO\StepList(),
+            new Cloud\DTO\Autoload(),
+            new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
+            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+        );
+
+        $handler($command);
+    }
+
+    public function testHandlerThrowsAnUnprocessableEntityException(): void
+    {
+        $this->expectException(Cloud\DeclarePipelineFailedException::class);
+        $this->expectExceptionMessage('Something went wrong while declaring the pipeline. It seems the data you sent was invalid, please check your input.');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('declarePipelinePipelineCollection')
+            ->willThrowException(
+                new Api\Exception\DeclarePipelinePipelineCollectionUnprocessableEntityException()
+            );
 
         $handler = new Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client);
 

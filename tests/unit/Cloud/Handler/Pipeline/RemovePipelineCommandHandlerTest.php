@@ -26,18 +26,41 @@ class RemovePipelineCommandHandlerTest extends TestCase
 
         $event = $handler($command);
 
-        $this->assertIsObject($event);
+        $this->assertEquals(Cloud\Event\RemovedPipeline::class, $event::class);
+        $this->assertEquals('fa729c14-d075-4d19-8705-aa7056a7b6b9', $event->getId());
     }
 
     public function testHandlerThrowsAnException(): void
     {
-        $this->expectException(Cloud\RemovePipelineConfigurationException::class);
+        $this->expectException(Cloud\RemovePipelineFailedException::class);
 
         $client = $this->createMock(Api\Client::class);
         $client
             ->expects($this->once())
             ->method('deletePipelinePipelineItem')
             ->willReturn(null);
+
+        $handler = new Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client);
+
+        $command = new Cloud\Command\Pipeline\RemovePipelineCommand(
+            new Cloud\DTO\PipelineId('fa729c14-d075-4d19-8705-aa7056a7b6b9'),
+        );
+
+        $handler($command);
+    }
+
+    public function testHandlerThrowsANotFoundException(): void
+    {
+        $this->expectException(Cloud\RemovePipelineFailedException::class);
+        $this->expectExceptionMessage('Something went wrong while trying to remove a step from the pipeline. Maybe you are trying to delete a pipeline that never existed or has already been deleted.');
+
+        $client = $this->createMock(Api\Client::class);
+        $client
+            ->expects($this->once())
+            ->method('deletePipelinePipelineItem')
+            ->willThrowException(
+                new Api\Exception\DeletePipelinePipelineItemNotFoundException()
+            );
 
         $handler = new Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client);
 

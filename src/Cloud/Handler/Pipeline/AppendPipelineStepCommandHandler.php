@@ -16,19 +16,33 @@ final class AppendPipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AppendPipelineStepCommand $command): Cloud\Event\AppendedPipelineStep
     {
-        $result = $this->client->appendPipelineStepPipelineCollection(
-            (new Api\Model\PipelineAppendPipelineStepCommandInput())
-                ->setPipeline((string) $command->pipeline)
-                ->setCode((string) $command->step->code)
-                ->setLabel($command->step->label)
-                ->setConfiguration($command->step->config)
-                ->setProbes($command->step->probes->map(
-                    fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
-                ))
-        );
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->appendPipelineStepPipelineCollection(
+                (new Api\Model\PipelineAppendPipelineStepCommandInput())
+                    ->setPipeline((string) $command->pipeline)
+                    ->setCode((string) $command->step->code)
+                    ->setLabel($command->step->label)
+                    ->setConfiguration($command->step->config)
+                    ->setProbes($command->step->probes->map(
+                        fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
+                    ))
+            );
+        } catch (Api\Exception\AppendPipelineStepPipelineCollectionBadRequestException $exception) {
+            throw new Cloud\AppendPipelineStepFailedException(
+                'Something went wrong while trying to append a pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.',
+                previous: $exception
+            );
+        } catch (Api\Exception\AppendPipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+            throw new Cloud\AppendPipelineStepFailedException(
+                'Something went wrong while trying to append a pipeline step. It seems the data you sent was invalid, please check your input.',
+                previous: $exception
+            );
+        }
 
         if ($result === null) {
-            throw new Cloud\AppendPipelineStepConfigurationException('Something went wrong while trying to append a pipeline step.');
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step.');
         }
 
         return new Cloud\Event\AppendedPipelineStep($result->id);
