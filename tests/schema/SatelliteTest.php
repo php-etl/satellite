@@ -48,7 +48,7 @@ final class SatelliteTest extends TestCase
         return \json_decode(\file_get_contents($path));
     }
 
-    public function validDataProvider()
+    public function validDataProvider(): \Generator
     {
 //        yield '[0.2] Empty unique satellite' => [
 //            (object) [
@@ -57,18 +57,12 @@ final class SatelliteTest extends TestCase
 //            $this->schemaFromPath(__DIR__.'/../../schema.json'),
 //        ];
 
-        yield '[0.2] Empty unique satellite' => [
-            (object) [
-                'satellite' => (object) []
-            ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
-        ];
-
         yield 'Unique satellite deploying in Docker' => [
             (object) [
                 'satellite' => (object) [
                     'docker' => (object) [
-                        'from' => 'php:8.0-cli'
+                        'from' => 'php:8.0-cli',
+                        'workdir' => 'build/'
                     ],
                     'pipeline' => (object) [
                         'steps' => []
@@ -83,16 +77,10 @@ final class SatelliteTest extends TestCase
                 'satellite' => (object) [
                     'filesystem' => (object) [
                         'path' => 'build/'
+                    ],
+                    'pipeline' => (object) [
+                        'steps' => []
                     ]
-                ]
-            ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
-        ];
-
-        yield 'Empty multiple satellite' => [
-            (object) [
-                'version' => '0.3',
-                'satellites' => (object) [
                 ]
             ],
             $this->schemaFromPath(__DIR__ . '/../../schema.json'),
@@ -112,6 +100,24 @@ final class SatelliteTest extends TestCase
 
     public function invalidDataProvider(): \Generator
     {
+        yield '[0.2] Empty unique satellite' => [
+            (object) [
+                'satellite' => (object) []
+            ],
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+        ];
+
+        yield 'Empty multiple satellite' => [
+            (object) [
+                'version' => '0.3',
+                'satellites' => (object) [
+                    'satellite1' => [],
+                    'satellite2' => [],
+                ],
+            ],
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+        ];
+
         yield 'Unrelated file format' => [
             [
                 'foo' => []

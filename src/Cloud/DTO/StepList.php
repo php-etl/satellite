@@ -13,14 +13,14 @@ final class StepList implements \Countable, \IteratorAggregate
         $this->steps = $steps;
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $steps = $this->steps;
         usort($steps, fn (Step $left, Step $right) => $left->order <=> $right->order);
         return new \ArrayIterator($steps);
     }
 
-    public function codes()
+    public function codes(): array
     {
         $steps = $this->steps;
         usort($steps, fn (Step $left, Step $right) => $left->order <=> $right->order);
@@ -38,7 +38,7 @@ final class StepList implements \Countable, \IteratorAggregate
         throw new \OutOfBoundsException('There was no step found matching the provided code');
     }
 
-    public function count()
+    public function count(): int
     {
         return \count($this->steps);
     }

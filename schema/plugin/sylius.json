@@ -6,7 +6,7 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+    "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
     "extractor": {
       "type": "object",
       "additionalProperties": false,
@@ -35,11 +35,11 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "api_url": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "client_id": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "secret": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "username": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "password": { "$ref": "../expressions.json#/$defs/expression-or-string" }
+        "api_url": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "client_id": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "secret": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "username": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "password": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" }
       }
     }
   }

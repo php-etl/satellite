@@ -10,7 +10,7 @@
           "type": "object",
           "properties": {
             "docker": {
-              "$ref": "schema/definitions.json#/$defs/docker"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/docker"
             }
           },
           "required": [
@@ -21,7 +21,7 @@
           "type": "object",
           "properties": {
             "filesystem": {
-              "$ref": "schema/definitions.json#/$defs/filesystem"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/filesystem"
             }
           },
           "required": [
@@ -32,7 +32,7 @@
           "type": "object",
           "properties": {
             "serverless": {
-              "$ref": "schema/definitions.json#/$defs/serverless"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/serverless"
             }
           },
           "required": [
@@ -47,7 +47,7 @@
           "type": "object",
           "properties": {
             "pipeline": {
-              "$ref": "schema/definitions.json#/$defs/pipeline"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/pipeline"
             }
           },
           "required": [
@@ -58,7 +58,7 @@
           "type": "object",
           "properties": {
             "workflow": {
-              "$ref": "schema/definitions.json#/$defs/workflow"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/workflow"
             }
           },
           "required": [
@@ -69,7 +69,7 @@
           "type": "object",
           "properties": {
             "action": {
-              "$ref": "schema/definitions.json#/$defs/action"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/action"
             }
           },
           "required": [
@@ -91,7 +91,7 @@
           "type": "object",
           "properties": {
             "composer": {
-              "$ref": "schema/definitions.json#/$defs/composer"
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/composer"
             }
           }
         }

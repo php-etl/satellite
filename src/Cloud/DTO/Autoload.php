@@ -12,12 +12,12 @@ final class Autoload implements \Countable, \IteratorAggregate
         $this->autoloads = $autoloads;
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->autoloads);
     }
 
-    public function count()
+    public function count(): int
     {
         return \count($this->autoloads);
     }
