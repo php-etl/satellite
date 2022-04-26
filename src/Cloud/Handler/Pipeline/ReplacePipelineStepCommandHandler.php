@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
+use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
 final class ReplacePipelineStepCommandHandler
 {
@@ -13,23 +16,36 @@ final class ReplacePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {
-        $response = $this->client->replacePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepReplacePipelineStepCommandInput())
-                ->setFormer($command->former)
-                ->setPipeline($command->pipeline)
-                ->setCode($command->code)
-                ->setLabel($command->label)
-                ->setConfiguration($command->configuration)
-                ->setProbes($command->probes),
-            Api\Client::FETCH_RESPONSE
-        );
-
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->replacePipelineStepPipelineCollection(
+                (new Api\Model\PipelineReplacePipelineStepCommandInput())
+                    ->setFormer((string) $command->former)
+                    ->setPipeline((string) $command->pipeline)
+                    ->setCode((string) $command->step->code)
+                    ->setLabel($command->step->label)
+                    ->setConfiguration($command->step->config)
+                    ->setProbes($command->step->probes->map(
+                        fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
+                    ))
+            );
+        } catch (Api\Exception\ReplacePipelineStepPipelineCollectionBadRequestException $exception) {
+            throw new Cloud\ReplacePipelineStepFailedException(
+                'Something went wrong while replacing a step from the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.',
+                previous: $exception
+            );
+        } catch (Api\Exception\ReplacePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+            throw new Cloud\ReplacePipelineStepFailedException(
+                'Something went wrong while replacing a step from the pipeline. It seems the data you sent was invalid, please check your input.',
+                previous: $exception
+            );
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        if ($result === null) {
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline.');
+        }
 
-        return new Cloud\Event\ReplacedPipelineStep($result["id"]);
+        return new Cloud\Event\ReplacedPipelineStep($result->id);
     }
 }

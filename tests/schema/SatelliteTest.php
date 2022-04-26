@@ -37,8 +37,8 @@ final class SatelliteTest extends TestCase
 
         foreach ($schemas as $schema) {
             $this->storage->addSchema(
-                'https://raw.githubusercontent.com/php-etl/satellite/master/'.$schema,
-                $this->schemaFromPath(__DIR__.'/../../'.$schema)
+                'https://raw.githubusercontent.com/php-etl/satellite/master/' . $schema,
+                $this->schemaFromPath(__DIR__ . '/../../' . $schema)
             );
         }
     }
@@ -48,7 +48,7 @@ final class SatelliteTest extends TestCase
         return \json_decode(\file_get_contents($path));
     }
 
-    public function validDataProvider()
+    public function validDataProvider(): \Generator
     {
 //        yield '[0.2] Empty unique satellite' => [
 //            (object) [
@@ -57,48 +57,33 @@ final class SatelliteTest extends TestCase
 //            $this->schemaFromPath(__DIR__.'/../../schema.json'),
 //        ];
 
-        yield '[0.2] Empty unique satellite' => [
-            (object) [
-                'version' => '0.2',
-                'satellite' => (object) []
-            ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
-        ];
-
         yield 'Unique satellite deploying in Docker' => [
             (object) [
-                'version' => '0.2',
                 'satellite' => (object) [
                     'docker' => (object) [
-                        'from' => 'php:8.0-cli'
+                        'from' => 'php:8.0-cli',
+                        'workdir' => 'build/'
                     ],
                     'pipeline' => (object) [
                         'steps' => []
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Unique satellite deploying in Filesystem' => [
             (object) [
-                'version' => '0.2',
                 'satellite' => (object) [
                     'filesystem' => (object) [
                         'path' => 'build/'
+                    ],
+                    'pipeline' => (object) [
+                        'steps' => []
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
-        ];
-
-        yield 'Empty multiple satellite' => [
-            (object) [
-                'version' => '0.3',
-                'satellites' => (object) [
-                ]
-            ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Akeneo plugin extractor' => [
@@ -109,17 +94,35 @@ final class SatelliteTest extends TestCase
                     'method' => 'all'
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema/plugin/akeneo.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
     }
 
-    public function invalidDataProvider()
+    public function invalidDataProvider(): \Generator
     {
+        yield '[0.2] Empty unique satellite' => [
+            (object) [
+                'satellite' => (object) []
+            ],
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+        ];
+
+        yield 'Empty multiple satellite' => [
+            (object) [
+                'version' => '0.3',
+                'satellites' => (object) [
+                    'satellite1' => [],
+                    'satellite2' => [],
+                ],
+            ],
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+        ];
+
         yield 'Unrelated file format' => [
             [
                 'foo' => []
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Unique satellite with multiple adapters' => [
@@ -133,11 +136,12 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Empty satellite with multiple adapters' => [
             [
+                'version' => '0.3',
                 'satellites' => [
                     'product_export' => [
                         'docker' => [
@@ -149,7 +153,7 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Akeneo plugin empty extractor' => [
@@ -158,7 +162,7 @@ final class SatelliteTest extends TestCase
                 'extractor' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema/plugin/akeneo.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
 
         yield 'Akeneo plugin empty lookup' => [
@@ -167,16 +171,16 @@ final class SatelliteTest extends TestCase
                 'lookup' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema/plugin/akeneo.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
 
         yield 'Akeneo plugin empty loader' => [
-            (object) [
+            (object)[
                 'enterprise' => true,
                 'loader' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__.'/../../schema/plugin/akeneo.json'),
+            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
     }
 

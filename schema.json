@@ -9,23 +9,35 @@
         {
           "type": "object",
           "properties": {
-            "docker": { "$ref": "schema/definitions.json#/$defs/docker" }
+            "docker": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/docker"
+            }
           },
-          "required": [ "docker" ]
+          "required": [
+            "docker"
+          ]
         },
         {
           "type": "object",
           "properties": {
-            "filesystem": { "$ref": "schema/definitions.json#/$defs/filesystem" }
+            "filesystem": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/filesystem"
+            }
           },
-          "required": [ "filesystem" ]
+          "required": [
+            "filesystem"
+          ]
         },
         {
           "type": "object",
           "properties": {
-            "serverless": { "$ref": "schema/definitions.json#/$defs/serverless" }
+            "serverless": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/serverless"
+            }
           },
-          "required": [ "serverless" ]
+          "required": [
+            "serverless"
+          ]
         }
       ]
     },
@@ -34,84 +46,114 @@
         {
           "type": "object",
           "properties": {
-            "pipeline": { "$ref": "schema/definitions.json#/$defs/pipeline" }
+            "pipeline": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/pipeline"
+            }
           },
-          "required": [ "pipeline" ]
+          "required": [
+            "pipeline"
+          ]
         },
         {
           "type": "object",
           "properties": {
-            "workflow": { "$ref": "schema/definitions.json#/$defs/workflow" }
+            "workflow": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/workflow"
+            }
           },
-          "required": [ "workflow" ]
+          "required": [
+            "workflow"
+          ]
         },
         {
           "type": "object",
           "properties": {
-            "action": { "$ref": "schema/definitions.json#/$defs/action" }
+            "action": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/action"
+            }
           },
-          "required": [ "action" ]
+          "required": [
+            "action"
+          ]
         }
       ]
     },
     "version-0.2": {
       "type": "object",
-      "properties": {
-        "satellite": {
-          "allOf": [
-            { "$ref": "#/$defs/adapters" },
-            { "$ref": "#/$defs/runtimes" },
-            {
-              "type": "object",
-              "properties": {
-                "composer": { "$ref": "schema/definitions.json#/$defs/composer" }
-              }
+      "allOf": [
+        {
+          "$ref": "#/$defs/adapters"
+        },
+        {
+          "$ref": "#/$defs/runtimes"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "composer": {
+              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/composer"
             }
-          ]
+          }
         }
-      },
-      "required": [ "satellite" ]
+      ]
     },
     "version-0.3": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {
-        "version": { "type": "string", "const": "0.3" },
-        "satellites": {
-          "type": "object",
-          "additionalProperties": false,
-          "patternProperties": {
-            "^[a-z_]+[a-z0-9_]+$": {
-              "allOf": [
-                { "$ref": "#/$defs/adapters" },
-                { "$ref": "#/$defs/runtimes" },
-                {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "composer": { "type": "object" }
-                  }
+      "patternProperties": {
+        "^[a-z_]+[a-z0-9_]+$": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/adapters"
+            },
+            {
+              "$ref": "#/$defs/runtimes"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "composer": {
+                  "type": "object"
                 }
-              ]
+              }
             }
-          }
+          ]
         }
-      },
-      "required": [ "version", "satellites" ]
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "oneOf": [
+        {
+          "type": "string",
+          "const": "0.2"
+        },
+        {
+          "type": "string",
+          "const": "0.3"
+        }
+      ]
+    },
+    "satellite": {
+      "$ref": "#/$defs/version-0.2"
     }
   },
   "if": {
-    "not": {
-      "required": [ "version" ]
+    "properties": {
+      "version": {
+        "const": "0.3"
+      }
     }
   },
-  "then": { "$ref": "#/$defs/version-0.2"},
-  "else": {
-    "if": {
-      "properties": {
-        "version": { "type": "string", "const": "0.3" }
+  "then": {
+    "properties": {
+      "satellites": {
+        "$ref": "#/$defs/version-0.3"
       }
-    },
-    "then": { "$ref": "#/$defs/version-0.3"}
-  }
+    }
+  },
+  "additionalProperties": false
 }

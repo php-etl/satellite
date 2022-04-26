@@ -13,8 +13,8 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-              "copy": { "$ref": "../expressions.json#/$defs/property-path" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+              "copy": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" },
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" }
             },
             "required": [ "copy", "field" ]
           },
@@ -23,7 +23,7 @@
             "additionalProperties": false,
             "properties": {
               "expression": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" }
             },
             "required": [ "expression", "field" ]
           },
@@ -32,7 +32,7 @@
             "additionalProperties": false,
             "properties": {
               "constant": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" }
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" }
             },
             "required": [ "constant", "field" ]
           },
@@ -41,7 +41,7 @@
             "additionalProperties": false,
             "properties": {
               "expression": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" },
               "object": { "$ref": "#/$defs/fastmap-items" },
               "class": { "type": "string" }
             },
@@ -52,7 +52,7 @@
             "additionalProperties": false,
             "properties": {
               "expression": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" },
               "collection": { "$ref": "#/$defs/fastmap-items" },
               "class": { "type": "string" }
             },
@@ -63,7 +63,7 @@
             "additionalProperties": false,
             "properties": {
               "expression": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" },
               "map": { "$ref": "#/$defs/fastmap-items" }
             },
             "required": [ "expression", "field", "map" ]
@@ -73,7 +73,7 @@
             "additionalProperties": false,
             "properties": {
               "expression": { "type": "string" },
-              "field": { "$ref": "../expressions.json#/$defs/property-path" },
+              "field": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/property-path" },
               "list": { "$ref": "#/$defs/fastmap-items" }
             },
             "required": [ "expression", "field", "list" ]
@@ -135,7 +135,7 @@
     {
       "type": "object",
       "properties": {
-        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" }
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" }
       }
     }
   ]

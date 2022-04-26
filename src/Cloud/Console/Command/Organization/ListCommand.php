@@ -60,11 +60,6 @@ final class ListCommand extends Console\Command\Command
 
         $organizations = $client->getOrganizationCollection();
 
-        $choices = [];
-        foreach ($organizations as $organization) {
-            $choices[$organization->getId()] = $organization->getName();
-        }
-
         $context = new Satellite\Cloud\Context();
 
         try {
