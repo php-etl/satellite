@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
+use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
 final class AddBeforePipelineStepCommandHandler
 {
@@ -13,22 +16,35 @@ final class AddBeforePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {
-        $response = $this->client->addBeforePipelineStepPipelineStepCollection(
-            (new Api\Model\PipelineStepAddBeforePipelineStepCommandInput())
-                ->setNext($command->next)
-                ->setLabel($command->label)
-                ->setCode($command->code)
-                ->setConfiguration($command->configuration)
-                ->setProbes($command->probes),
-            Api\Client::FETCH_RESPONSE
-        );
-
-        if ($response !== null && $response->getStatusCode() !== 202) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->addBeforePipelineStepPipelineCollection(
+                (new Api\Model\PipelineAddBeforePipelineStepCommandInput())
+                    ->setNext((string) $command->next)
+                    ->setLabel($command->step->label)
+                    ->setCode((string) $command->step->code)
+                    ->setConfiguration($command->step->config)
+                    ->setProbes($command->step->probes->map(
+                        fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
+                    ))
+            );
+        } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionBadRequestException $exception) {
+            throw new Cloud\AddBeforePipelineStepFailedException(
+                'Something went wrong while trying to add a new step before an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.',
+                previous: $exception
+            );
+        } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+            throw new Cloud\AddBeforePipelineStepFailedException(
+                'Something went wrong while trying to add a new step before an existing pipeline step. It seems the data you sent was invalid, please check your input.',
+                previous: $exception
+            );
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        if ($result === null) {
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step.');
+        }
 
-        return new Cloud\Event\AddedBeforePipelineStep($result["id"]);
+        return new Cloud\Event\AddedBeforePipelineStep($result->id);
     }
 }

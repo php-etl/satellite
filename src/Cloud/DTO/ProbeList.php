@@ -24,4 +24,9 @@ final class ProbeList
     {
         return \count($this->probes);
     }
+
+    public function map(callable $callback): array
+    {
+        return array_map($callback, $this->probes);
+    }
 }

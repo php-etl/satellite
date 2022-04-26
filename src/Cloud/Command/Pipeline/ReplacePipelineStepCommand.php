@@ -12,6 +12,6 @@ final class ReplacePipelineStepCommand implements Command
     public function __construct(
         public PipelineId $pipeline,
         public StepCode $former,
-        public Step $tep,
+        public Step $step,
     ) {}
 }

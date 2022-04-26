@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 
@@ -13,14 +15,24 @@ final class RemovePipelineStepCommandHandler
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepCommand $command): Cloud\Event\RemovedPipelineStep
     {
-        $response = $this->client->deletePipelineStepPipelineItem($command->code, $command->pipeline, Api\Client::FETCH_RESPONSE);
-
-        if ($response !== null && $response->getStatusCode() !== 204) {
-            throw throw new \RuntimeException($response->getReasonPhrase());
+        try {
+            /** @var \stdClass $result */
+            $result = $this->client->deletePipelineStepPipelineItem(
+                (string) $command->code,
+                (string) $command->pipeline,
+            );
+        } catch (Api\Exception\DeletePipelineStepPipelineItemNotFoundException $exception) {
+            throw new Cloud\RemovePipelineStepFailedException(
+                'Something went wrong while trying to remove a probe from the step. Maybe you are trying to delete a step that never existed or has already been deleted.',
+                previous: $exception
+            );
         }
 
-        $result = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        if ($result === null) {
+            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
+            throw new Cloud\RemovePipelineStepFailedException('Something went wrong while trying to remove a probe from the step.');
+        }
 
-        return new Cloud\Event\RemovedPipelineStep($result["id"]);
+        return new Cloud\Event\RemovedPipelineStep((string) $command->code);
     }
 }
