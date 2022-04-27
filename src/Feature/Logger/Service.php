@@ -93,7 +93,7 @@ final class Service implements Configurator\PipelineFeatureInterface
 
             $monologBuilder = new Builder\MonologLogger($config['channel']);
 
-            $repository->addPackages('psr/log:^1.1', 'monolog/monolog');
+            $repository->addPackages('monolog/monolog');
 
             foreach ($config['destinations'] as $destination) {
                 if (array_key_exists('stream', $destination)) {

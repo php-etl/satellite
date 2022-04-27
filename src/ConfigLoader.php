@@ -3,6 +3,7 @@
 namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use Symfony\Component\Config;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -17,13 +18,18 @@ class ConfigLoader implements ConfigLoaderInterface
         string $path,
     ): \Generator {
         $config = $loader->load($path);
+        $currentPath = dirname($path);
+
+        if ($config === null) {
+            throw new InvalidConfigurationException('Provided configuration seems to be empty or in an unsupported format. Supported formats are YAML and JSON.');
+        }
 
         if (array_key_exists('imports', $config)) {
             $imports = $config['imports'];
             unset($config['imports']);
 
             foreach ($imports as $import) {
-                yield from $this->load($loader, $import['resource']);
+                yield from $this->load($loader, $currentPath . '/' . $import['resource']);
             }
         }
 
@@ -33,7 +39,10 @@ class ConfigLoader implements ConfigLoaderInterface
                 unset($config['satellites']['imports']);
 
                 foreach ($imports as $import) {
-                    $config['satellites'] = array_merge($config['satellites'], $loader->load($import['resource']));
+                    $config['satellites'] = array_merge(
+                        $config['satellites'],
+                        $loader->load($currentPath . '/' . $import['resource'])
+                    );
                 }
             }
 
@@ -43,18 +52,37 @@ class ConfigLoader implements ConfigLoaderInterface
                     unset($satellite['imports']);
 
                     foreach ($imports as $import) {
-                        $satellite = array_merge($satellite, $loader->load($import['resource']));
+                        $satellite = array_merge(
+                            $satellite,
+                            $loader->load($currentPath . '/' . $import['resource'])
+                        );
                     }
                 }
 
-                if (array_key_exists('workflow', $satellite)
-                    && array_key_exists('imports', $satellite['workflow'])
-                ) {
-                    $imports = $satellite['workflow']['imports'];
-                    unset($satellite['workflow']['imports']);
+                if (array_key_exists('workflow', $satellite)) {
+                    if (array_key_exists('imports', $satellite['workflow'])) {
+                        $imports = $satellite['workflow']['imports'];
+                        unset($satellite['workflow']['imports']);
 
-                    foreach ($imports as $import) {
-                        $satellite['workflow'] = array_merge($satellite['workflow'], $loader->load($import['resource']));
+                        foreach ($imports as $import) {
+                            $satellite['workflow'] = array_merge(
+                                $satellite['workflow'],
+                                $loader->load($currentPath . '/' . $import['resource'])
+                            );
+                        }
+                    }
+
+
+                    if (array_key_exists('imports', $satellite['workflow']['jobs'])) {
+                        $imports = $satellite['workflow']['jobs']['imports'];
+                        unset($satellite['workflow']['jobs']['imports']);
+
+                        foreach ($imports as $import) {
+                            $satellite['workflow']['jobs'] = array_merge(
+                                $satellite['workflow']['jobs'],
+                                $loader->load($currentPath . '/' . $import['resource'])
+                            );
+                        }
                     }
                 }
 
@@ -65,7 +93,10 @@ class ConfigLoader implements ConfigLoaderInterface
                     unset($satellite['pipeline']['imports']);
 
                     foreach ($imports as $import) {
-                        $satellite['pipeline'] = array_merge($satellite['pipeline'], $loader->load($import['resource']));
+                        $satellite['pipeline'] = array_merge(
+                            $satellite['pipeline'],
+                            $loader->load($currentPath . '/' . $import['resource'])
+                        );
                     }
                 }
             }

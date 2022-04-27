@@ -31,13 +31,16 @@
         {
           "type": "object",
           "properties": {
-            "serverless": {
-              "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/serverless"
-            }
+            "tar": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/tar" }
           },
-          "required": [
-            "serverless"
-          ]
+          "required": [ "tar" ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kaniko": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/kaniko" }
+          },
+          "required": [ "kaniko" ]
         }
       ]
     },

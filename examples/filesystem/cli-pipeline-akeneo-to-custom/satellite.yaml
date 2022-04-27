@@ -12,7 +12,7 @@ satellite:
       - "php-http/guzzle7-adapter"
       - "monolog/monolog"
       - "elasticsearch/elasticsearch"
-      - "symfony/dependency-injection:^5.2"
+      - "symfony/dependency-injection:^5.4"
   pipeline:
     steps:
     - akeneo:

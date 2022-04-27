@@ -30,12 +30,11 @@ final class Service implements Configurator\FactoryInterface
     /** @var array<string, Satellite\Pipeline\ConfigurationApplier> */
     private array $plugins = [];
 
-    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
-    public function __construct()
+    public function __construct(?ExpressionLanguage $expressionLanguage = null)
     {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
-        $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
+        $this->interpreter = $expressionLanguage ?? new Satellite\ExpressionLanguage\ExpressionLanguage();
     }
 
     public function adapterChoice(): Satellite\Adapter\AdapterChoice
@@ -284,8 +283,8 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/workflow-console-runtime:~0.1.0@dev',
             'psr/log:^1.1',
             'monolog/monolog',
-            'symfony/console:^5.2',
-            'symfony/dependency-injection:^5.2',
+            'symfony/console:^5.4',
+            'symfony/dependency-injection:^5.4',
         );
 
         if (array_key_exists('expression_language', $config['pipeline'])

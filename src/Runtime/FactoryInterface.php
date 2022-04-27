@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 interface FactoryInterface
 {
-    public function configuration(): ConfigurationInterface;
+    public function configuration(): Configurator\RuntimeConfigurationInterface;
 
     public function addFeature(string $name, Configurator\FactoryInterface $feature): self;
     public function addPlugin(string $name, Configurator\FactoryInterface $plugin): self;
