@@ -13,9 +13,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[Configurator\Pipeline(
     name: "custom",
     steps: [
-        "extractor" => "extractor",
-        "transformer" => "transformer",
-        "loader" => "loader",
+        new Configurator\Pipeline\StepExtractor(),
+        new Configurator\Pipeline\StepTransformer(),
+        new Configurator\Pipeline\StepLoader(),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface

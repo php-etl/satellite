@@ -14,7 +14,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
     name: "sftp",
     dependencies: ["ext-ssh2"],
     steps: [
-        "loader" => "loader",
+        new Configurator\Pipeline\StepLoader(),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface

@@ -13,7 +13,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
     name: "ftp",
     dependencies: ["ext-ftp"],
     steps: [
-        "loader" => "loader",
+        new Configurator\Pipeline\StepLoader(),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface
