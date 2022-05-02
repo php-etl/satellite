@@ -213,7 +213,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/container.php';
                     
                     /** @var WorkflowRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
@@ -275,8 +274,6 @@ final class Service implements Configurator\FactoryInterface
 
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        $interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
-
         $repository->addPackages(
             'php-etl/pipeline-contracts:~0.3.0@dev',
             'php-etl/pipeline:~0.4.0@dev',
@@ -294,7 +291,7 @@ final class Service implements Configurator\FactoryInterface
             && count($config['pipeline']['expression_language'])
         ) {
             foreach ($config['pipeline']['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider);
             }
         }
 
@@ -322,7 +319,6 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
-                    require __DIR__ . '/container.php';
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';

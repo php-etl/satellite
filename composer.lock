@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "394a78114e68beba5c49ad78999d84f3",
+    "content-hash": "2c88ae654695b48691abc94b86292d8d",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -609,16 +609,16 @@
         },
         {
             "name": "php-etl/configurator-contracts",
-            "version": "v0.4.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "46ffa3bd58a7c60a3150b6ccdf505d12d039a261"
+                "reference": "c98c11de81f004c6c96351d108b36de574d8c60d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/46ffa3bd58a7c60a3150b6ccdf505d12d039a261",
-                "reference": "46ffa3bd58a7c60a3150b6ccdf505d12d039a261",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/c98c11de81f004c6c96351d108b36de574d8c60d",
+                "reference": "c98c11de81f004c6c96351d108b36de574d8c60d",
                 "shasum": ""
             },
             "require": {
@@ -655,9 +655,9 @@
             "description": "This library describes contracts for defining configuration formats and building optimized code from it",
             "support": {
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
-                "source": "https://github.com/php-etl/configurator-contracts/tree/v0.4.0"
+                "source": "https://github.com/php-etl/configurator-contracts/tree/v0.4.1"
             },
-            "time": "2021-09-26T19:30:48+00:00"
+            "time": "2022-03-28T21:03:54+00:00"
         },
         {
             "name": "php-etl/console-state",
@@ -763,12 +763,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "2d197c1d6a061be1cd469b9886c37d07819db730"
+                "reference": "343737bbbb8634799d345573cdc699e93876ebd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/2d197c1d6a061be1cd469b9886c37d07819db730",
-                "reference": "2d197c1d6a061be1cd469b9886c37d07819db730",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/343737bbbb8634799d345573cdc699e93876ebd4",
+                "reference": "343737bbbb8634799d345573cdc699e93876ebd4",
                 "shasum": ""
             },
             "require": {
@@ -809,7 +809,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/master"
             },
-            "time": "2022-03-10T15:14:59+00:00"
+            "time": "2022-04-01T07:40:16+00:00"
         },
         {
             "name": "php-etl/packaging",
@@ -5623,12 +5623,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "1010a1df101df6f53345ca96becb4c9caf9cef2e"
+                "reference": "270fa46701949a5501d84305ffa5d643d3f4ad59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/1010a1df101df6f53345ca96becb4c9caf9cef2e",
-                "reference": "1010a1df101df6f53345ca96becb4c9caf9cef2e",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/270fa46701949a5501d84305ffa5d643d3f4ad59",
+                "reference": "270fa46701949a5501d84305ffa5d643d3f4ad59",
                 "shasum": ""
             },
             "require": {
@@ -5665,8 +5665,10 @@
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\Akeneo\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Akeneo\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -5689,7 +5691,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/master"
             },
-            "time": "2021-10-08T07:47:55+00:00"
+            "time": "2022-03-28T21:03:55+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
@@ -5748,12 +5750,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "4bca82bfd5550787dc45fcec7442587d7fcfffd0"
+                "reference": "7181c83c9d0f97e571218e94753d2cfc4b194398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/4bca82bfd5550787dc45fcec7442587d7fcfffd0",
-                "reference": "4bca82bfd5550787dc45fcec7442587d7fcfffd0",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/7181c83c9d0f97e571218e94753d2cfc4b194398",
+                "reference": "7181c83c9d0f97e571218e94753d2cfc4b194398",
                 "shasum": ""
             },
             "require": {
@@ -5778,8 +5780,10 @@
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\CSV\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\CSV\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -5802,7 +5806,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/master"
             },
-            "time": "2021-10-01T19:58:48+00:00"
+            "time": "2022-03-28T21:03:55+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -5879,12 +5883,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-config.git",
-                "reference": "56bdf2447328465df53ec171608ec03aa644ab4b"
+                "reference": "6120cc16e4dae8e1ccf10f8a2bb29454a78dc5c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/56bdf2447328465df53ec171608ec03aa644ab4b",
-                "reference": "56bdf2447328465df53ec171608ec03aa644ab4b",
+                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/6120cc16e4dae8e1ccf10f8a2bb29454a78dc5c2",
+                "reference": "6120cc16e4dae8e1ccf10f8a2bb29454a78dc5c2",
                 "shasum": ""
             },
             "require": {
@@ -5932,7 +5936,7 @@
                 "issues": "https://github.com/php-etl/fast-map-config/issues",
                 "source": "https://github.com/php-etl/fast-map-config/tree/master"
             },
-            "time": "2021-06-03T09:09:09+00:00"
+            "time": "2022-03-30T13:48:56+00:00"
         },
         {
             "name": "php-etl/fast-map-plugin",
@@ -5940,12 +5944,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "d2d977d8c3d9b45616bb08dd0818ff3f8105bd8d"
+                "reference": "edccec51f37b1c310cae7a96b6447de10f074717"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/d2d977d8c3d9b45616bb08dd0818ff3f8105bd8d",
-                "reference": "d2d977d8c3d9b45616bb08dd0818ff3f8105bd8d",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/edccec51f37b1c310cae7a96b6447de10f074717",
+                "reference": "edccec51f37b1c310cae7a96b6447de10f074717",
                 "shasum": ""
             },
             "require": {
@@ -5975,8 +5979,10 @@
                 "branch-alias": {
                     "dev-master": "0.6.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\FastMap\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\FastMap\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -5999,7 +6005,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/master"
             },
-            "time": "2021-10-18T22:41:17+00:00"
+            "time": "2022-03-28T21:03:54+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -6221,12 +6227,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "f617f8062dc6dab4f82750a7f69a046fb4e243dc"
+                "reference": "8718980b26a4587cef3d224c9f72a95159096fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/f617f8062dc6dab4f82750a7f69a046fb4e243dc",
-                "reference": "f617f8062dc6dab4f82750a7f69a046fb4e243dc",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/8718980b26a4587cef3d224c9f72a95159096fbd",
+                "reference": "8718980b26a4587cef3d224c9f72a95159096fbd",
                 "shasum": ""
             },
             "require": {
@@ -6253,8 +6259,10 @@
                 "branch-alias": {
                     "dev-master": "0.3.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\Spreadsheet\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Spreadsheet\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -6277,7 +6285,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/master"
             },
-            "time": "2021-11-15T18:41:23+00:00"
+            "time": "2022-03-29T07:22:00+00:00"
         },
         {
             "name": "php-etl/sql-plugin",
@@ -6285,12 +6293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "178f7990036f914ef35a232db526331f58835b1a"
+                "reference": "dc4cf798d6571934570947c1f9b729bed63e6975"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/178f7990036f914ef35a232db526331f58835b1a",
-                "reference": "178f7990036f914ef35a232db526331f58835b1a",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/dc4cf798d6571934570947c1f9b729bed63e6975",
+                "reference": "dc4cf798d6571934570947c1f9b729bed63e6975",
                 "shasum": ""
             },
             "require": {
@@ -6315,8 +6323,10 @@
                 "branch-alias": {
                     "dev-master": "0.2.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\SQL\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\SQL\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -6339,7 +6349,7 @@
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
                 "source": "https://github.com/php-etl/sql-plugin/tree/master"
             },
-            "time": "2021-10-07T09:04:31+00:00"
+            "time": "2022-03-28T21:03:55+00:00"
         },
         {
             "name": "php-etl/string-expression-language",
@@ -6397,12 +6407,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "dc74b719dcd214096782fe993631b728d6ee48f0"
+                "reference": "59f623eaa8c42daf18286576ca55099e78cd234b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/dc74b719dcd214096782fe993631b728d6ee48f0",
-                "reference": "dc74b719dcd214096782fe993631b728d6ee48f0",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/59f623eaa8c42daf18286576ca55099e78cd234b",
+                "reference": "59f623eaa8c42daf18286576ca55099e78cd234b",
                 "shasum": ""
             },
             "require": {
@@ -6434,8 +6444,10 @@
                 "branch-alias": {
                     "dev-master": "0.4.x-dev"
                 },
-                "satellite": {
-                    "class": "Kiboko\\Plugin\\Sylius\\Service"
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Sylius\\Service"
+                    ]
                 }
             },
             "autoload": {
@@ -6458,7 +6470,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/master"
             },
-            "time": "2021-10-07T12:15:09+00:00"
+            "time": "2022-03-28T21:03:54+00:00"
         },
         {
             "name": "phpactor/docblock",

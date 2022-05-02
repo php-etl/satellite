@@ -7,11 +7,11 @@
     "csv-properties": {
       "type": "object",
       "properties": {
-        "file_path": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "max_lines": { "$ref": "../expressions.json#/$defs/expression-or-number" },
-        "delimiter": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "enclosure": { "$ref": "../expressions.json#/$defs/expression-or-string" },
-        "escape": { "$ref": "../expressions.json#/$defs/expression-or-string" }
+        "file_path": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "max_lines": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-number" },
+        "delimiter": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "enclosure": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "escape": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" }
       },
       "required": [ "file_path" ]
     }
@@ -21,7 +21,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
         "extractor": { "$ref": "#/$defs/csv-properties" }
       }
     },
@@ -29,7 +29,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "expression_language": { "$ref": "../definitions.json#/$defs/expression_language" },
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
         "loader": {
           "allOf": [
             { "$ref": "#/$defs/csv-properties" },
