@@ -85,7 +85,7 @@
     "bin": ["bin/satellite"],
     "extra": {
         "branch-alias": {
-            "dev-master": "0.3.x-dev"
+            "dev-main": "0.3.x-dev"
         },
         "gyroscops": {
             "adapters": [
