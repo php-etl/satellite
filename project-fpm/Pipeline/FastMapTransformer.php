@@ -3,7 +3,7 @@
 namespace Pipeline;
 
 use Kiboko\Component\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\FastMap\Contracts\CompiledMapperInterface;
+use Kiboko\Contract\Mapping\CompiledMapperInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 
 final class FastMapTransformer implements TransformerInterface

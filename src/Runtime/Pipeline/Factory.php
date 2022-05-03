@@ -32,7 +32,7 @@ final class Factory implements Satellite\Runtime\FactoryInterface
         return $this;
     }
 
-    public function configuration(): ConfigurationInterface
+    public function configuration(): Configurator\RuntimeConfigurationInterface
     {
         return $this->configuration;
     }

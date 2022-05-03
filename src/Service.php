@@ -206,10 +206,9 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
-                new Packaging\Asset\InMemory(
-                    <<<PHP
+                new Packaging\Asset\InMemory(<<<PHP
                     <?php
-    
+
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';

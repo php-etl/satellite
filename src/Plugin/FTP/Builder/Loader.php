@@ -69,7 +69,7 @@ final class Loader implements StepBuilderInterface
 
     public function withServer(array $config, Node ...$server): self
     {
-        array_push($this->servers, array_merge($config, [...$server]));
+        $this->servers[] = array_merge($config, [...$server]);
 
         return $this;
     }

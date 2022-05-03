@@ -2,7 +2,6 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory;
 
-use Kiboko\Component\Satellite\Plugin\SFTP\Configuration;
 use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -10,7 +9,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Kiboko\Component\Satellite\Plugin\SFTP;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Config\Definition\Exception as Symfony;
-use Kiboko\Component\Satellite\Plugin\SFTP;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Loader implements Configurator\FactoryInterface

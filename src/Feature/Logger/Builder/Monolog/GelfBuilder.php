@@ -166,15 +166,15 @@ final class GelfBuilder implements MonologBuilderInterface
 
         if ($this->timeout !== null) {
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('read_timeout'),
             );
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('write_timeout'),
             );
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('connect_timeout'),
             );
         }

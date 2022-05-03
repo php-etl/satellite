@@ -28,11 +28,12 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
     /** @var array<string, list<string>> */
-    private array $composerAutoload;
+    private array $composerAutoload = [
+        'psr4' => []
+    ];
 
     public function __construct(string $fromImage)
     {
-        $this->composerAutoload = [];
         $this->fromImage = $fromImage;
         $this->workdir = '/var/www/html/';
         $this->composerRequire = [];
@@ -156,7 +157,10 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $dockerfile->push(new Dockerfile\PHP\Composer());
             $dockerfile->push(new Dockerfile\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Dockerfile\PHP\ComposerMinimumStability('dev'));
-            if (count($this->composerAutoload) > 0) {
+            if (array_key_exists('psr4', $this->composerAutoload)
+                && is_array($this->composerAutoload['psr4'])
+                && count($this->composerAutoload['psr4']) > 0
+            ) {
                 $dockerfile->push(new Dockerfile\PHP\ComposerAutoload($this->composerAutoload));
             }
         }
