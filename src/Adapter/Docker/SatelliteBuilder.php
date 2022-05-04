@@ -165,10 +165,6 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             }
         }
 
-        // FIXME: finish the Sylius API client migration
-        $dockerfile->push(new Dockerfile\PHP\ComposerConfigForceHttps());
-        $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client'));
-
         if (count($this->composerRequire) > 0) {
             $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
         }
