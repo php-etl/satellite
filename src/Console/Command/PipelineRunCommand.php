@@ -15,12 +15,9 @@ final class PipelineRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:pipeline';
 
-    /** @var list<PipelineStep> */
-    private array $steps = [];
-
     protected function configure()
     {
-        $this->setDescription('Run the satellite.');
+        $this->setDescription('Run the pipeline satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -31,11 +28,11 @@ final class PipelineRunCommand extends Console\Command\Command
             $output,
         );
 
-        $style->writeln(sprintf('<fg=cyan>Running satellite in %s</>', $input->getArgument('path')));
+        $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
         /** @var ClassLoader $autoload */
         if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
-            $style->error('There is no compiled satellite at the provided path');
+            $style->error('There is no compiled pipeline at the provided path');
             return 1;
         }
 

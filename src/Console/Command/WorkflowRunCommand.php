@@ -16,7 +16,7 @@ final class WorkflowRunCommand extends Console\Command\Command
 
     protected function configure()
     {
-        $this->setDescription('Run the workflow.');
+        $this->setDescription('Run the workflow satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
