@@ -17,6 +17,8 @@ final class StreamBuilder implements MonologBuilderInterface
     {
         $this->level = null;
         $this->formatters = [];
+        $this->filePermissions = 0755;
+        $this->useLocking = false;
     }
 
     public function withLevel(string $level): self
