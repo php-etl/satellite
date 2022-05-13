@@ -21,6 +21,7 @@ class Loader implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
     public function __construct(
         ?ExpressionLanguage $interpreter = null
@@ -122,6 +123,14 @@ class Loader implements Configurator\FactoryInterface
                             return $argument;
                         }, $arguments));
                     }
+                }
+
+                if (array_key_exists('factory', $service)
+                    && is_array($service['factory'])
+                    && array_key_exists('class', $service['factory'])
+                    && array_key_exists('method', $service['factory'])
+                ) {
+                    $definition->setFactory([$service['factory']['class'], $service['factory']['method']]);
                 }
             }
         }

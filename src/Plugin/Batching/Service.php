@@ -19,8 +19,8 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 #[Configurator\Pipeline(
     name: "batch",
     steps: [
-        new Configurator\Pipeline\StepLoader('merge'),
-        new Configurator\Pipeline\StepLoader('fork'),
+        new Configurator\Pipeline\StepTransformer('merge'),
+        new Configurator\Pipeline\StepTransformer('fork'),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface

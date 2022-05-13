@@ -12,7 +12,9 @@ final class RabbitMQRepository implements Configurator\RepositoryInterface
     public function __construct(private Rejection\Builder\RabbitMQBuilder $builder)
     {
         $this->files = [];
-        $this->packages = [];
+        $this->packages = [
+            'php-etl/rabbitmq-flow'
+        ];
     }
 
     public function getBuilder(): Rejection\Builder\RabbitMQBuilder

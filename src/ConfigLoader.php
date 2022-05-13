@@ -77,7 +77,10 @@ class ConfigLoader implements ConfigLoaderInterface
                     }
 
 
-                    if (array_key_exists('imports', $satellite['workflow']['jobs'])) {
+                    if (array_key_exists('jobs', $satellite['workflow'])
+                        && is_array($satellite['workflow']['jobs'])
+                        && array_key_exists('imports', $satellite['workflow']['jobs'])
+                    ) {
                         $imports = $satellite['workflow']['jobs']['imports'];
                         unset($satellite['workflow']['jobs']['imports']);
 
