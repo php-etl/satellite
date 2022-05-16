@@ -44,6 +44,7 @@ final class RabbitMQBuilder implements Builder
             new Node\Arg($this->host, name: new Node\Identifier('host')),
             new Node\Arg($this->vhost, name: new Node\Identifier('vhost')),
             new Node\Arg($this->topic, name: new Node\Identifier('topic')),
+            new Node\Arg(new Node\Expr\ConstFetch(new Node\Name('null')), name: new Node\Identifier('stepUuid')),
         ];
 
         if ($this->exchange !== null) {
