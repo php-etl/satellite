@@ -8,15 +8,16 @@ use PhpParser\Node\Identifier;
 
 final class RabbitMQBuilder implements Builder
 {
-    public ?Node\Expr $user = null;
-    public ?Node\Expr $password = null;
-    public ?Node\Expr $exchange = null;
+    private ?Node\Expr $user = null;
+    private ?Node\Expr $password = null;
+    private ?Node\Expr $exchange = null;
 
     public function __construct(
-        public Node\Expr $host,
-        public Node\Expr $port,
-        public Node\Expr $vhost,
-        public Node\Expr $topic,
+        private Node\Expr $stepUuid,
+        private Node\Expr $host,
+        private Node\Expr $port,
+        private Node\Expr $vhost,
+        private Node\Expr $topic,
     ) {
     }
 
@@ -44,7 +45,7 @@ final class RabbitMQBuilder implements Builder
             new Node\Arg($this->host, name: new Node\Identifier('host')),
             new Node\Arg($this->vhost, name: new Node\Identifier('vhost')),
             new Node\Arg($this->topic, name: new Node\Identifier('topic')),
-            new Node\Arg(new Node\Expr\ConstFetch(new Node\Name('null')), name: new Node\Identifier('stepUuid')),
+            new Node\Arg($this->stepUuid, name: new Node\Identifier('stepUuid')),
         ];
 
         if ($this->exchange !== null) {

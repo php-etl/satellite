@@ -57,6 +57,7 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
     public function compile(array $config): Repository\RabbitMQRepository
     {
         $builder = new Rejection\Builder\RabbitMQBuilder(
+            stepUuid: compileValueWhenExpression($this->interpreter, uniqid()),
             host: compileValueWhenExpression($this->interpreter, $config['host']),
             port: compileValueWhenExpression($this->interpreter, $config['port']),
             vhost: compileValueWhenExpression($this->interpreter, $config['vhost']),
