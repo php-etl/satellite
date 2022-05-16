@@ -212,7 +212,10 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
                     
                     require __DIR__ . '/vendor/autoload.php';
-                    
+                    if (file_exists(__DIR__ . '/container.php')) {
+                        require __DIR__ . '/container.php';
+                    }
+
                     /** @var WorkflowRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
                     
@@ -318,6 +321,9 @@ final class Service implements Configurator\FactoryInterface
                     use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
                     require __DIR__ . '/vendor/autoload.php';
+                    if (file_exists(__DIR__ . '/container.php')) {
+                        require __DIR__ . '/container.php';
+                    }
 
                     /** @var PipelineRuntimeInterface \$runtime */
                     \$runtime = require __DIR__ . '/runtime.php';
