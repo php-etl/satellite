@@ -5,6 +5,7 @@ namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use Kiboko\Component\Satellite\ExpressionLanguage\Provider;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -68,6 +69,7 @@ class Loader implements Configurator\FactoryInterface
         $builder = new Custom\Builder\Loader(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $container = new ContainerBuilder();
+        $container->addExpressionLanguageProvider(new Provider());
 
         if (array_key_exists('parameters', $config)
             && is_array($config['parameters'])
