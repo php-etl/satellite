@@ -40,7 +40,8 @@ final class WorkflowRunCommand extends Console\Command\Command
         chdir($input->getArgument('path'));
 
         $dotenv = new Dotenv();
-        $dotenv->load('.env');
+        $dotenv->usePutenv();
+        $dotenv->loadEnv('.env');
 
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
