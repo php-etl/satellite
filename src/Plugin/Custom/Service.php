@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Custom;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -29,7 +30,7 @@ final class Service implements Configurator\PipelinePluginInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage

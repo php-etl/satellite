@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Feature\Logger;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Logger\Builder\LogstashFormatterBuilder;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Configurator\Feature;
@@ -21,7 +22,7 @@ final class Service implements Configurator\PipelineFeatureInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage

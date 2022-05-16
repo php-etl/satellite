@@ -3,6 +3,7 @@
 namespace Kiboko\Component\Satellite\Feature\Logger\Factory;
 
 use Kiboko\Contract\Configurator;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Logger;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -20,7 +21,7 @@ final class ElasticSearchFactory implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Logger\Configuration\GelfConfiguration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

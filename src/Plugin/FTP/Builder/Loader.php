@@ -3,6 +3,7 @@
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -27,7 +28,7 @@ final class Loader implements StepBuilderInterface
         $this->servers = [];
         $this->serversMapping = [];
         $this->putStatements = [];
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function addServerBasePath(string $host, Node\Expr $base_path)

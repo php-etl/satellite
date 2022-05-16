@@ -4,6 +4,7 @@
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -28,7 +29,7 @@ class Transformer implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

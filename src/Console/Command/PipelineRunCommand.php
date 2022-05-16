@@ -40,6 +40,9 @@ final class PipelineRunCommand extends Console\Command\Command
         chdir($input->getArgument('path'));
 
         $autoload = include 'vendor/autoload.php';
+        $autoload->addClassMap([
+            \ProjectServiceContainer::class => 'container.php'
+        ]);
         $autoload->register();
 
         $runtime = new PipelineConsoleRuntime(

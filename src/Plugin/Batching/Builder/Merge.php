@@ -130,6 +130,18 @@ final class Merge implements StepBuilderInterface
                                                         ),
                                                         new Node\Stmt\Expression(
                                                             expr: new Node\Expr\Assign(
+                                                                var: new Node\Expr\ArrayDimFetch(
+                                                                    var: new Node\Expr\PropertyFetch(
+                                                                        var: new Node\Expr\Variable('this'),
+                                                                        name: new Node\Identifier('storage'),
+                                                                    ),
+                                                                    dim: null,
+                                                                ),
+                                                                expr: new Node\Expr\Variable('line'),
+                                                            ),
+                                                        ),
+                                                        new Node\Stmt\Expression(
+                                                            expr: new Node\Expr\Assign(
                                                                 var: new Node\Expr\Variable('line'),
                                                                 expr: new Node\Expr\Yield_(
                                                                     value: new Node\Expr\New_(

@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -23,7 +24,7 @@ final class Loader implements StepBuilderInterface
         $this->state = null;
         $this->servers = [];
         $this->putStatements = [];
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function withLogger(Node\Expr $logger): self

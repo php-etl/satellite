@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\FTP;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -21,7 +22,7 @@ class Server implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new FTP\Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

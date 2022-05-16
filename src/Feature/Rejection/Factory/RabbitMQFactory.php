@@ -3,6 +3,7 @@
 namespace Kiboko\Component\Satellite\Feature\Rejection\Factory;
 
 use Kiboko\Contract\Configurator;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Rejection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -21,7 +22,7 @@ final class RabbitMQFactory implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Rejection\Configuration\RabbitMQConfiguration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

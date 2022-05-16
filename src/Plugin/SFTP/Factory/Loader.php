@@ -2,6 +2,7 @@
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -22,7 +23,7 @@ class Loader implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new SFTP\Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

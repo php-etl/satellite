@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use PhpParser\Node;
@@ -24,7 +25,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         $this->index = null;
         $this->hosts = [];
         $this->formatters = [];
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function withLevel(string $level): self

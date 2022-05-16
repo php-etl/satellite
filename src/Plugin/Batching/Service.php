@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
+// FIXME: hidden dependency to php-etl/fast-map
 use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
 use Kiboko\Contract\Configurator;
@@ -34,7 +36,7 @@ final class Service implements Configurator\PipelinePluginInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
