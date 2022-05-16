@@ -4,6 +4,7 @@ namespace Kiboko\Component\Satellite\Feature\Rejection\Builder;
 
 use PhpParser\Builder;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 
 final class RabbitMQBuilder implements Builder
 {
@@ -45,31 +46,32 @@ final class RabbitMQBuilder implements Builder
             new Node\Arg($this->topic, name: new Node\Identifier('topic')),
         ];
 
+        if ($this->exchange !== null) {
+            $args[] = new Node\Arg($this->exchange, name: new Node\Identifier('exchange'));
+        }
+
+        if ($this->port !== null) {
+            $args[] = new Node\Arg($this->port, name: new Node\Identifier('port'));
+        }
+
         if ($this->user !== null) {
             array_push(
                 $args,
                 new Node\Arg($this->user, name: new Node\Identifier('user')),
                 new Node\Arg($this->password, name: new Node\Identifier('password')),
             );
-        }
 
-        if ($this->exchange !== null) {
-            array_push(
-                $args,
-                new Node\Arg($this->exchange, name: new Node\Identifier('exchange')),
+            return new Node\Expr\StaticCall(
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+                name: new Identifier('withAuthentication'),
+                args: $args,
+            );
+        } else {
+            return new Node\Expr\StaticCall(
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+                name: new Identifier('withoutAuthentication'),
+                args: $args,
             );
         }
-
-        if ($this->port !== null) {
-            array_push(
-                $args,
-                new Node\Arg($this->port, name: new Node\Identifier('port')),
-            );
-        }
-
-        return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
-            args: $args
-        );
     }
 }
