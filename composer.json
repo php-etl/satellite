@@ -35,7 +35,8 @@
         "psr/http-client": "^1.0",
         "php-etl/gyroscops-api-client": "0.1.x-dev",
         "react/promise": "^2.9",
-        "php-etl/dockerfile": "^0.1.0"
+        "php-etl/dockerfile": "^0.1.0",
+        "symfony/dotenv": "^6.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",

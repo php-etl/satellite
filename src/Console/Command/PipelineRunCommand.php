@@ -6,10 +6,10 @@ namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
 use Kiboko\Component\Runtime\Pipeline\Console as PipelineConsoleRuntime;
-use Kiboko\Component\State\StateOutput\PipelineStep;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
 final class PipelineRunCommand extends Console\Command\Command
 {
@@ -38,6 +38,9 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $cwd = getcwd();
         chdir($input->getArgument('path'));
+
+        $dotenv = new Dotenv();
+        $dotenv->load('.env');
 
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
