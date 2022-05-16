@@ -69,7 +69,6 @@ class Loader implements Configurator\FactoryInterface
         $builder = new Custom\Builder\Loader(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $container = new ContainerBuilder();
-        $container->addExpressionLanguageProvider(new Provider());
 
         if (array_key_exists('parameters', $config)
             && is_array($config['parameters'])
