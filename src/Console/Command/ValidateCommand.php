@@ -13,7 +13,7 @@ final class ValidateCommand extends Console\Command\Command
 {
     protected static $defaultName = 'validate';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Validate the satellite configuration.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
@@ -28,7 +28,7 @@ final class ValidateCommand extends Console\Command\Command
         );
 
         $filename = $input->getArgument('config');
-        if ($filename !== null) {
+        if (null !== $filename) {
             $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
@@ -46,13 +46,13 @@ final class ValidateCommand extends Console\Command\Command
             }
         }
 
-        for ($directory = getcwd(); $directory !== '/'; $directory = dirname($directory)) {
-            if (file_exists($directory . '/.gyro.php')) {
+        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+            if (file_exists($directory.'/.gyro.php')) {
                 break;
             }
         }
 
-        if (!file_exists($directory . '/.gyro.php')) {
+        if (!file_exists($directory.'/.gyro.php')) {
             throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
         }
 
@@ -61,19 +61,20 @@ final class ValidateCommand extends Console\Command\Command
             new Satellite\ExpressionLanguage\ExpressionLanguage(),
         );
 
-        $factory = require $directory . '/.gyro.php';
+        $factory = require $directory.'/.gyro.php';
         $service = $factory($context);
 
         try {
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
+
             return 255;
         }
 
         $style->success('The configuration is valid.');
 
-        $style->writeln(\json_encode($configuration, JSON_PRETTY_PRINT));
+        $style->writeln(json_encode($configuration, \JSON_PRETTY_PRINT));
 
         return 0;
     }

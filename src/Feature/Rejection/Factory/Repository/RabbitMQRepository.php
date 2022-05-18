@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Rejection\Factory\Repository;
 
-use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Feature\Rejection;
+use Kiboko\Contract\Configurator;
 
 final class RabbitMQRepository implements Configurator\RepositoryInterface
 {
@@ -13,7 +15,7 @@ final class RabbitMQRepository implements Configurator\RepositoryInterface
     {
         $this->files = [];
         $this->packages = [
-            'php-etl/rabbitmq-flow'
+            'php-etl/rabbitmq-flow',
         ];
     }
 

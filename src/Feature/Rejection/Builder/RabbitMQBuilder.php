@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Rejection\Builder;
 
@@ -48,15 +50,15 @@ final class RabbitMQBuilder implements Builder
             new Node\Arg($this->stepUuid, name: new Node\Identifier('stepUuid')),
         ];
 
-        if ($this->exchange !== null) {
+        if (null !== $this->exchange) {
             $args[] = new Node\Arg($this->exchange, name: new Node\Identifier('exchange'));
         }
 
-        if ($this->port !== null) {
+        if (null !== $this->port) {
             $args[] = new Node\Arg($this->port, name: new Node\Identifier('port'));
         }
 
-        if ($this->user !== null) {
+        if (null !== $this->user) {
             array_push(
                 $args,
                 new Node\Arg($this->user, name: new Node\Identifier('user')),
@@ -68,12 +70,12 @@ final class RabbitMQBuilder implements Builder
                 name: new Identifier('withAuthentication'),
                 args: $args,
             );
-        } else {
-            return new Node\Expr\StaticCall(
+        }
+
+        return new Node\Expr\StaticCall(
                 class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
                 name: new Identifier('withoutAuthentication'),
                 args: $args,
             );
-        }
     }
 }

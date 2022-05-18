@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Factory;
 
-use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Logger;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -57,15 +59,15 @@ final class ElasticSearchFactory implements Configurator\FactoryInterface
     {
         $builder = new Logger\Builder\Monolog\ElasticSearchBuilder($this->interpreter);
 
-        if (array_key_exists('level', $config)) {
+        if (\array_key_exists('level', $config)) {
             $builder->withLevel($config['level']);
         }
 
-        if (array_key_exists('hosts', $config)) {
+        if (\array_key_exists('hosts', $config)) {
             $builder->withHosts(...$config['hosts']);
         }
 
-        if (array_key_exists('index', $config)) {
+        if (\array_key_exists('index', $config)) {
             $builder->withIndex($config['index']);
         }
 

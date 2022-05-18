@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -31,7 +33,7 @@ final class Loader implements StepBuilderInterface
         $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
-    public function addServerBasePath(string $host, Node\Expr $base_path)
+    public function addServerBasePath(string $host, Node\Expr $base_path): void
     {
         $this->serversMapping[$host] = $base_path;
     }
@@ -44,6 +46,7 @@ final class Loader implements StepBuilderInterface
                 value: $basePath,
             );
         }
+
         return $output;
     }
 
@@ -90,12 +93,12 @@ final class Loader implements StepBuilderInterface
     {
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
             foreach ($this->servers as $index => $server) {
-                if ($condition != null) {
+                if (null != $condition) {
                     yield new Node\Stmt\If_(
                         cond: $condition,
                         subNodes: [
                             'stmts' => [
-                                ...$this->getPutNode($index, $server, $path, $content, $mode)
+                                ...$this->getPutNode($index, $server, $path, $content, $mode),
                             ],
                         ]
                     );
@@ -109,11 +112,11 @@ final class Loader implements StepBuilderInterface
     private function getPutNode($index, $server, $path, $content, $mode): array
     {
         return [
-             new Node\Stmt\If_(
-                 cond: new Node\Expr\BinaryOp\Identical(
-                     left: new Node\Expr\FuncCall(
-                         name: new Node\Name('ftp_fput'),
-                         args: [
+            new Node\Stmt\If_(
+                cond: new Node\Expr\BinaryOp\Identical(
+                    left: new Node\Expr\FuncCall(
+                        name: new Node\Name('ftp_fput'),
+                        args: [
                             new Node\Arg(
                                 new Node\Expr\ArrayDimFetch(
                                     new Node\Expr\PropertyFetch(
@@ -126,33 +129,32 @@ final class Loader implements StepBuilderInterface
                             new Node\Arg(
                                 value: new Node\Expr\BinaryOp\Concat(
                                     new Node\Scalar\Encapsed([
-                                            new Node\Expr\ArrayDimFetch(
-                                                new Node\Expr\PropertyFetch(
-                                                    new Node\Expr\Variable('this'),
-                                                    new Node\Identifier('serversMapping')
-                                                ),
-                                                dim:
-                                                    new Node\Scalar\LNumber($index),
+                                        new Node\Expr\ArrayDimFetch(
+                                            new Node\Expr\PropertyFetch(
+                                                new Node\Expr\Variable('this'),
+                                                new Node\Identifier('serversMapping')
                                             ),
+                                            dim: new Node\Scalar\LNumber($index),
+                                        ),
 
                                         new Node\Scalar\EncapsedStringPart('/'),
                                     ]),
                                     new Node\Expr\FuncCall(
                                         new Node\Name('basename'),
                                         [
-                                            new Node\Arg($path)
+                                            new Node\Arg($path),
                                         ]
                                     ),
                                 )
                             ),
-                            new Node\Arg($content)
+                            new Node\Arg($content),
                         ],
-                     ),
-                     right: new Node\Expr\ConstFetch(
-                         name: new Node\Name('false')
-                     ),
-                 ),
-                 subNodes: [
+                    ),
+                    right: new Node\Expr\ConstFetch(
+                        name: new Node\Name('false')
+                    ),
+                ),
+                subNodes: [
                     'stmts' => [
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
@@ -174,25 +176,25 @@ final class Loader implements StepBuilderInterface
                                                         items: array_merge(
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                                                    value: compileValueWhenExpression($this->interpreter, $server['base_path']),
                                                                     key: new Node\Scalar\String_('%path%'),
-                                                                )
+                                                                ),
                                                             ],
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server["host"]),
-                                                                    key:  new Node\Scalar\String_('%server%'),
-                                                                )
+                                                                    value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                                    key: new Node\Scalar\String_('%server%'),
+                                                                ),
                                                             ]
                                                         ),
                                                         attributes: [
                                                             'kind' => Node\Expr\Array_::KIND_SHORT,
                                                         ]
                                                     )
-                                                )
+                                                ),
                                             ]
                                         )
-                                    )
+                                    ),
                                 ]
                             )
                         ),
@@ -205,29 +207,29 @@ final class Loader implements StepBuilderInterface
                                         new Node\Expr\Array_(
                                             items: array_merge(
                                                 [
-                                                new Node\Expr\ArrayItem(
-                                                    value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
-                                                    key: new Node\Scalar\String_('%path%'),
-                                                )
-                                            ],
+                                                    new Node\Expr\ArrayItem(
+                                                        value: compileValueWhenExpression($this->interpreter, $server['base_path']),
+                                                        key: new Node\Scalar\String_('%path%'),
+                                                    ),
+                                                ],
                                                 [
-                                                new Node\Expr\ArrayItem(
-                                                    value: compileValueWhenExpression($this->interpreter, $server["host"]),
-                                                    key:  new Node\Scalar\String_('%server%'),
-                                                )
-                                            ]
+                                                    new Node\Expr\ArrayItem(
+                                                        value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                        key: new Node\Scalar\String_('%server%'),
+                                                    ),
+                                                ]
                                             ),
                                             attributes: [
                                                 'kind' => Node\Expr\Array_::KIND_SHORT,
                                             ]
                                         )
-                                    )
+                                    ),
                                 ]
                             )
                         ),
                     ],
                 ],
-             ),
+            ),
         ];
     }
 
@@ -261,10 +263,10 @@ final class Loader implements StepBuilderInterface
                                             ),
                                             expr: new Node\Expr\Array_(
                                                 items: [
-                                                    ...$this->compileServersMapping()
+                                                    ...$this->compileServersMapping(),
                                                 ],
                                                 attributes: [
-                                                    'kind' => Node\Expr\Array_::KIND_SHORT
+                                                    'kind' => Node\Expr\Array_::KIND_SHORT,
                                                 ]
                                             )
                                         )
@@ -284,7 +286,7 @@ final class Loader implements StepBuilderInterface
                                         ),
                                         $this->servers,
                                         array_keys($this->servers),
-                                    )
+                                    ),
                                 ],
                             ],
                         ),
@@ -323,13 +325,13 @@ final class Loader implements StepBuilderInterface
                                                     args: [
                                                         new Node\Arg(
                                                             new Node\Expr\Variable('input'),
-                                                        )
+                                                        ),
                                                     ]
                                                 )
                                             ),
                                         ],
                                     ),
-                                    ...$this->compileCloseServers()
+                                    ...$this->compileCloseServers(),
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
                             ],
@@ -491,7 +493,7 @@ final class Loader implements StepBuilderInterface
                                                                                             args: [
                                                                                                 new Node\Arg(
                                                                                                     new Node\Expr\Variable('mode')
-                                                                                                )
+                                                                                                ),
                                                                                             ]
                                                                                         )
                                                                                     ),
@@ -552,7 +554,7 @@ final class Loader implements StepBuilderInterface
                                 ),
                                 dim: new Node\Scalar\LNumber($key),
                             ),
-                        )
+                        ),
                     ]
                 )
             );

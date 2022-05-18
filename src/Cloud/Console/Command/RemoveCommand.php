@@ -35,7 +35,7 @@ final class RemoveCommand extends Console\Command\Command
         if ($input->getOption('beta')) {
             $url = 'https://beta.gyroscops.com';
             $ssl = $input->getOption('ssl') ?? true;
-        } else if ($input->getOption('url')) {
+        } elseif ($input->getOption('url')) {
             $url = $input->getOption('url');
             $ssl = $input->getOption('ssl') ?? true;
         } else {
@@ -44,7 +44,7 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         $filename = $input->getArgument('config');
-        if ($filename !== null) {
+        if (null !== $filename) {
             $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
@@ -66,8 +66,9 @@ final class RemoveCommand extends Console\Command\Command
 
         try {
             $configuration = $service->normalize($configuration);
-        } catch (Config\Definition\Exception\InvalidTypeException | Config\Definition\Exception\InvalidConfigurationException $exception) {
+        } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
+
             return self::FAILURE;
         }
 
@@ -86,7 +87,7 @@ final class RemoveCommand extends Console\Command\Command
             $url,
             [
                 'verify_peer' => $ssl,
-                'auth_bearer' => $token
+                'auth_bearer' => $token,
             ]
         );
 
@@ -96,8 +97,8 @@ final class RemoveCommand extends Console\Command\Command
         $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
         $configPath = $input->getArgument('config');
-        $configDirectory = dirname($configPath);
-        if (file_exists($configDirectory . '/satellite.lock')) {
+        $configDirectory = \dirname($configPath);
+        if (file_exists($configDirectory.'/satellite.lock')) {
             throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 

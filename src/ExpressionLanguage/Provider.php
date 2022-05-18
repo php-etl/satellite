@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
@@ -13,7 +15,7 @@ final class Provider implements ExpressionFunctionProviderInterface
             new EnvAsFile('envAsFile'),
             new File('file'),
             new Base64Decode('base64Decode'),
-            new TemporaryFile('temporaryFile')
+            new TemporaryFile('temporaryFile'),
         ];
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Diff;
 
@@ -8,7 +10,8 @@ final class StepDiff
 {
     public function __construct(
         private DTO\PipelineId $pipelineId,
-    ) {}
+    ) {
+    }
 
     public function diff(DTO\Step $left, DTO\Step $right): DTO\CommandBatch
     {

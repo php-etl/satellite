@@ -12,7 +12,8 @@ final class AppendPipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Pipeline\AppendPipelineStepCommand $command): Cloud\Event\AppendedPipelineStep
     {
@@ -29,18 +30,12 @@ final class AppendPipelineStepCommandHandler
                     ))
             );
         } catch (Api\Exception\AppendPipelineStepPipelineCollectionBadRequestException $exception) {
-            throw new Cloud\AppendPipelineStepFailedException(
-                'Something went wrong while trying to append a pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.',
-                previous: $exception
-            );
+            throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
         } catch (Api\Exception\AppendPipelineStepPipelineCollectionUnprocessableEntityException $exception) {
-            throw new Cloud\AppendPipelineStepFailedException(
-                'Something went wrong while trying to append a pipeline step. It seems the data you sent was invalid, please check your input.',
-                previous: $exception
-            );
+            throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if ($result === null) {
+        if (null === $result) {
             // TODO: change the exception message, it doesn't give enough details on how to fix the issue
             throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step.');
         }

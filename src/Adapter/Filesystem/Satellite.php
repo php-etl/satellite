@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite\Adapter\Composer;
-use Kiboko\Contract\Packaging;
 use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
 final class Satellite implements SatelliteInterface

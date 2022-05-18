@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
@@ -11,30 +13,30 @@ final class EnvAsFile extends ExpressionFunction
         parent::__construct(
             $name,
             function (string $value): string {
-                $pattern = <<<PHP
-                    \$resource = \\tmpfile();
-                    if (\$resource === false) {
-                        throw new \\RuntimeException('Could not open temporary file.');
+                $pattern = <<<'PHP'
+                    $resource = \tmpfile();
+                    if ($resource === false) {
+                        throw new \RuntimeException('Could not open temporary file.');
                     }
 
-                    \\fwrite(\$resource, \\getenv(%s));
-                    \\fseek(\$resource, 0, \\SEEK_SET);
+                    \fwrite($resource, \getenv(%s));
+                    \fseek($resource, 0, \SEEK_SET);
 
-                    return \\stream_get_meta_data(\$resource)['uri'];
+                    return \stream_get_meta_data($resource)['uri'];
                     PHP;
 
                 return sprintf($pattern, $value);
             },
             function (string $value): string {
-                $resource = \tmpfile();
-                if ($resource === false) {
+                $resource = tmpfile();
+                if (false === $resource) {
                     throw new \RuntimeException('Could not open temporary file.');
                 }
 
-                \fwrite($resource, \getenv($value));
-                \fseek($resource, 0, \SEEK_SET);
+                fwrite($resource, getenv($value));
+                fseek($resource, 0, \SEEK_SET);
 
-                return \stream_get_meta_data($resource)['uri'];
+                return stream_get_meta_data($resource)['uri'];
             },
         );
     }

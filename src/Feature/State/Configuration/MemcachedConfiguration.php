@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\State\Configuration;
 
@@ -10,23 +12,24 @@ final class MemcachedConfiguration implements Config\Definition\ConfigurationInt
     {
         $builder = new Config\Definition\Builder\TreeBuilder('memcached');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->arrayNode('servers')
-                    ->fixXmlConfig('server')
-                    ->requiresAtLeastOneElement()
-                    ->cannotBeEmpty()
-                    ->ignoreExtraKeys()
-                    ->arrayPrototype()
-                        ->children()
-                            ->scalarNode('host')->isRequired()->end()
-                            ->scalarNode('port')->isRequired()->end()
-                            ->integerNode('timeout')->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end();
+            ->arrayNode('servers')
+            ->fixXmlConfig('server')
+            ->requiresAtLeastOneElement()
+            ->cannotBeEmpty()
+            ->ignoreExtraKeys()
+            ->arrayPrototype()
+            ->children()
+            ->scalarNode('host')->isRequired()->end()
+            ->scalarNode('port')->isRequired()->end()
+            ->integerNode('timeout')->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+        ;
 
         return $builder;
     }

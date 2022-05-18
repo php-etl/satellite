@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Event;
 
@@ -8,7 +10,8 @@ final class AddedPipelineComposerPSR4Autoload
         private string $id,
         private string $namespace,
         private array $paths,
-    ){}
+    ) {
+    }
 
     public function getId(): string
     {

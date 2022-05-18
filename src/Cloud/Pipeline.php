@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud;
 
@@ -6,7 +8,6 @@ use Gyroscops\Api\Client;
 use Gyroscops\Api\Model\PipelineRead;
 use Gyroscops\Api\Model\PipelineStep;
 use Gyroscops\Api\Model\Probe;
-use Kiboko\Component\Satellite\Cloud\Command;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
@@ -16,7 +17,8 @@ final class Pipeline implements PipelineInterface
 {
     public function __construct(
         private Context $context,
-    ) {}
+    ) {
+    }
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
@@ -38,7 +40,7 @@ final class Pipeline implements PipelineInterface
                         ),
                         $order,
                     );
-                }, $configuration['pipeline']['steps'], range(0, count($configuration['pipeline']['steps']) - 1))
+                }, $configuration['pipeline']['steps'], range(0, \count($configuration['pipeline']['steps']) - 1))
             ),
             new DTO\Autoload(
                 ...array_map(
@@ -60,7 +62,7 @@ final class Pipeline implements PipelineInterface
         $item = $client->getPipelineItem($id->asString());
 
         try {
-            assert($item instanceof PipelineRead);
+            \assert($item instanceof PipelineRead);
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
@@ -76,13 +78,13 @@ final class Pipeline implements PipelineInterface
         $collection = $client->getPipelineCollection(['code' => $code]);
 
         try {
-            assert(is_array($collection));
+            \assert(\is_array($collection));
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
         try {
-            assert(count($collection) === 1);
-            assert($collection[0] instanceof PipelineRead);
+            \assert(1 === \count($collection));
+            \assert($collection[0] instanceof PipelineRead);
         } catch (\AssertionError) {
             throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
         }
@@ -98,7 +100,7 @@ final class Pipeline implements PipelineInterface
         $steps = $client->apiPipelinesStepsGetSubresourcePipelineSubresource($model->getId());
 
         try {
-            assert(is_array($steps));
+            \assert(\is_array($steps));
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline steps.');
         }
@@ -119,7 +121,7 @@ final class Pipeline implements PipelineInterface
                         ),
                         $order
                     );
-                }, $steps, range(0, count($steps)))
+                }, $steps, range(0, \count($steps)))
             ),
             new DTO\Autoload(
                 ...array_map(
@@ -164,7 +166,7 @@ final class Pipeline implements PipelineInterface
         $commands = $diff->diff($actual->steps(), $desired->steps());
 
         // Check the changes in the list of autoloads
-        if (count($actual->autoload()) !== count($desired->autoload())) {
+        if (\count($actual->autoload()) !== \count($desired->autoload())) {
             // TODO: make diff of the autoload
         }
 

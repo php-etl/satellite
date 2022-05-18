@@ -55,7 +55,7 @@ final class Loader implements StepBuilderInterface
             args: [
                 new Node\Arg(
                     $this->service
-                )
+                ),
             ]
         );
     }

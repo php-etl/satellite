@@ -44,13 +44,13 @@ final class ComposerScripts
             if ($package instanceof Package\AliasPackage) {
                 continue;
             }
-            if ($package->getType() !== 'satellite-plugin'
-                && $package->getType() !== 'gyroscops-plugin'
-                && $package->getName() !== 'php-etl/satellite'
+            if ('satellite-plugin' !== $package->getType()
+                && 'gyroscops-plugin' !== $package->getType()
+                && 'php-etl/satellite' !== $package->getName()
             ) {
                 continue;
             }
-            if ($package->getType() === 'satellite-plugin') {
+            if ('satellite-plugin' === $package->getType()) {
                 $io->warning(strtr(
                     'The package %package% is using a deprecated type: "satellite-plugin", you may upgrade it to use the'
                         .' "gyroscops-plugin" type, the support for this type may disappear at any time.',

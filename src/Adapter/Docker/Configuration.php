@@ -13,15 +13,16 @@ final class Configuration implements AdapterConfigurationInterface
     {
         $builder = new TreeBuilder('docker');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('from')->end()
-                ->scalarNode('workdir')->end()
-                ->arrayNode('tags')
-                    ->scalarPrototype()->end()
-                ->end()
-            ->end();
+            ->scalarNode('from')->end()
+            ->scalarNode('workdir')->end()
+            ->arrayNode('tags')
+            ->scalarPrototype()->end()
+            ->end()
+            ->end()
+        ;
 
         return $builder;
     }

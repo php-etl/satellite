@@ -48,7 +48,7 @@ final class Extractor implements StepBuilderInterface
             args: [
                 new Node\Arg(
                     $this->service
-                )
+                ),
             ]
         );
     }

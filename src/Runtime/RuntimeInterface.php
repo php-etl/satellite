@@ -11,5 +11,6 @@ use Psr\Log\LoggerInterface;
 interface RuntimeInterface
 {
     public function prepare(FactoryInterface $service, SatelliteInterface $satellite, LoggerInterface $logger): void;
+
     public function getFilename(): string;
 }

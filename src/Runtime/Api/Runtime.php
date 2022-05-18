@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Api;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
-use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
@@ -22,13 +22,13 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         return $this->filename;
     }
 
-    public function prepare(Configurator\FactoryInterface $service,Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
+    public function prepare(Configurator\FactoryInterface $service, Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
         $repository = $service->compile($this->config);
 
         $satellite->withFile(
             new Packaging\File($this->filename, new Packaging\Asset\InMemory(
-                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build())
+                '<?php'.\PHP_EOL.(new PrettyPrinter\Standard())->prettyPrint($this->build())
             )),
         );
 
@@ -97,10 +97,10 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                             new Node\Expr\Variable('router'),
                                             null,
                                             new Node\Name('FastRoute\\RouteCollector')
-                                        )
+                                        ),
                                     ],
                                     'uses' => [
-                                        new Node\Expr\Variable('psr17Factory')
+                                        new Node\Expr\Variable('psr17Factory'),
                                     ],
                                     'stmts' => iterator_to_array($this->compileRoutes(
                                         new Node\Expr\Variable('router'),
@@ -133,7 +133,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                 [
                                                     new Node\Arg(
                                                         new Node\Scalar\String_($this->config['path'] ?? '/')
-                                                    )
+                                                    ),
                                                 ],
                                             ),
                                         ),
@@ -143,7 +143,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                 [
                                                     new Node\Arg(
                                                         new Node\Expr\Variable('fastRouteDispatcher')
-                                                    )
+                                                    ),
                                                 ]
                                             ),
                                         ),
@@ -154,7 +154,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                     ],
                                     [
-                                        'kind' => Node\Expr\Array_::KIND_SHORT
+                                        'kind' => Node\Expr\Array_::KIND_SHORT,
                                     ],
                                 ),
                             ),
@@ -177,7 +177,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                 [
                                     new Node\Arg(
                                         new Node\Expr\Variable('request')
-                                    )
+                                    ),
                                 ],
                             ),
                         ),

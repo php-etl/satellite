@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
@@ -137,7 +139,7 @@ final class Server implements StepBuilderInterface
                                 ),
                                 new Node\Arg(
                                     $this->timeout,
-                                )
+                                ),
                             ],
                         ),
                     ),
@@ -152,13 +154,13 @@ final class Server implements StepBuilderInterface
                             ),
                             new Node\Arg(
                                 $this->passifMode,
-                            )
+                            ),
                         ]
                     )
                 ),
                 new Node\Stmt\Return_(
                     expr: new Node\Expr\Variable('connection')
-                )
+                ),
             ]
         ))->getNode();
     }

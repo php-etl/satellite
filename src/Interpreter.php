@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
@@ -24,7 +26,7 @@ final class Interpreter
         foreach ($this->expressionFunctions as $functionOrProvider) {
             if ($functionOrProvider instanceof ExpressionFunctionProviderInterface) {
                 $context->registerProvider($functionOrProvider);
-            } else if ($functionOrProvider instanceof ExpressionFunction) {
+            } elseif ($functionOrProvider instanceof ExpressionFunction) {
                 $context->addFunction($functionOrProvider);
             }
         }

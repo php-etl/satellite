@@ -15,7 +15,7 @@ final class PipelineRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:pipeline';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Run the pipeline satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
@@ -30,9 +30,10 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
-        /** @var ClassLoader $autoload */
-        if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
+        /* @var ClassLoader $autoload */
+        if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled pipeline at the provided path');
+
             return 1;
         }
 
@@ -45,7 +46,7 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
-            \ProjectServiceContainer::class => 'container.php'
+            \ProjectServiceContainer::class => 'container.php',
         ]);
         $autoload->register();
 
@@ -101,6 +102,7 @@ final class PipelineRunCommand extends Console\Command\Command
         if ($time < 3600) {
             $minutes = floor($time / 60);
             $seconds = $time - (60 * $minutes);
+
             return sprintf('<fg=cyan>%smin</> <fg=cyan>%ss</>', number_format($minutes), number_format($seconds, 2));
         }
         $hours = floor($time / 3600);

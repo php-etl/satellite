@@ -11,7 +11,6 @@ use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\SatelliteToolbox;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
@@ -104,7 +103,7 @@ final class Service implements Configurator\FactoryInterface
     public function registerAdapters(Satellite\Adapter\FactoryInterface ...$adapters): self
     {
         foreach ($adapters as $adapter) {
-            /** @var Configurator\Adapter $attribute */
+            /* @var Configurator\Adapter $attribute */
             try {
                 foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
                     $this->addAdapter($attribute, $adapter);
@@ -157,7 +156,7 @@ final class Service implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -168,7 +167,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             return false;
         }
     }
@@ -178,13 +177,16 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('workflow', $config)) {
+        if (\array_key_exists('workflow', $config)) {
             return $this->compileWorkflow($config);
-        } elseif (array_key_exists('pipeline', $config)) {
+        }
+        if (\array_key_exists('pipeline', $config)) {
             return $this->compilePipeline($config);
-        } elseif (array_key_exists('http_hook', $config)) {
+        }
+        if (\array_key_exists('http_hook', $config)) {
             return $this->compileHook($config);
-        } elseif (array_key_exists('http_api', $config)) {
+        }
+        if (\array_key_exists('http_api', $config)) {
             return $this->compileApi($config);
         }
 
@@ -206,7 +208,7 @@ final class Service implements Configurator\FactoryInterface
         $repository->addFiles(
             new Packaging\File(
                 'main.php',
-                new Packaging\Asset\InMemory(<<<PHP
+                new Packaging\Asset\InMemory(<<<'PHP'
                     <?php
 
                     use Kiboko\Component\Runtime\Workflow\WorkflowRuntimeInterface;
@@ -216,16 +218,16 @@ final class Service implements Configurator\FactoryInterface
                         require __DIR__ . '/container.php';
                     }
 
-                    /** @var WorkflowRuntimeInterface \$runtime */
-                    \$runtime = require __DIR__ . '/runtime.php';
+                    /** @var WorkflowRuntimeInterface $runtime */
+                    $runtime = require __DIR__ . '/runtime.php';
                     
-                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime \$workflow */
-                    \$workflow = require __DIR__ . '/workflow.php';
+                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime $workflow */
+                    $workflow = require __DIR__ . '/workflow.php';
                     
                     chdir(__DIR__);
                     
-                    \$workflow(\$runtime);
-                    \$runtime->run();
+                    $workflow($runtime);
+                    $runtime->run();
                     PHP
                 )
             )
@@ -243,7 +245,7 @@ final class Service implements Configurator\FactoryInterface
         );
 
         foreach ($config['workflow']['jobs'] as $job) {
-            if (array_key_exists('pipeline', $job)) {
+            if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
 
@@ -288,12 +290,12 @@ final class Service implements Configurator\FactoryInterface
             'symfony/dependency-injection:^5.4',
         );
 
-        if (array_key_exists('expression_language', $config['pipeline'])
-            && is_array($config['pipeline']['expression_language'])
-            && count($config['pipeline']['expression_language'])
+        if (\array_key_exists('expression_language', $config['pipeline'])
+            && \is_array($config['pipeline']['expression_language'])
+            && \count($config['pipeline']['expression_language'])
         ) {
             foreach ($config['pipeline']['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider());
             }
         }
 
@@ -315,27 +317,27 @@ final class Service implements Configurator\FactoryInterface
             new Packaging\File(
                 'main.php',
                 new Packaging\Asset\InMemory(
-                    <<<PHP
-                    <?php
+                    <<<'PHP'
+                        <?php
 
-                    use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
+                        use Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface;
 
-                    require __DIR__ . '/vendor/autoload.php';
-                    if (file_exists(__DIR__ . '/container.php')) {
-                        require __DIR__ . '/container.php';
-                    }
+                        require __DIR__ . '/vendor/autoload.php';
+                        if (file_exists(__DIR__ . '/container.php')) {
+                            require __DIR__ . '/container.php';
+                        }
 
-                    /** @var PipelineRuntimeInterface \$runtime */
-                    \$runtime = require __DIR__ . '/runtime.php';
+                        /** @var PipelineRuntimeInterface $runtime */
+                        $runtime = require __DIR__ . '/runtime.php';
 
-                    /** @var callable(runtime: RuntimeInterface): RuntimeInterface \$pipeline */
-                    \$pipeline = require __DIR__ . '/pipeline.php';
+                        /** @var callable(runtime: RuntimeInterface): RuntimeInterface $pipeline */
+                        $pipeline = require __DIR__ . '/pipeline.php';
 
-                    chdir(__DIR__);
+                        chdir(__DIR__);
 
-                    \$pipeline(\$runtime);
-                    \$runtime->run();
-                    PHP
+                        $pipeline($runtime);
+                        $runtime->run();
+                        PHP
                 )
             )
         );

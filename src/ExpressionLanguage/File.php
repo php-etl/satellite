@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
@@ -11,32 +13,32 @@ final class File extends ExpressionFunction
         parent::__construct(
             $name,
             function (string $value): string {
-                $pattern = <<<PHP
+                $pattern = <<<'PHP'
                     (function () {
-                        \$resource = \\tmpfile();
-                        if (\$resource === false) {
-                            throw new \\RuntimeException('Could not open temporary file.');
+                        $resource = \tmpfile();
+                        if ($resource === false) {
+                            throw new \RuntimeException('Could not open temporary file.');
                         }
 
-                        \\fwrite(\$resource, %s);
-                        \\fseek(\$resource, 0, \\SEEK_SET);
+                        \fwrite($resource, %s);
+                        \fseek($resource, 0, \SEEK_SET);
 
-                        return \\stream_get_meta_data(\$resource)['uri'];
+                        return \stream_get_meta_data($resource)['uri'];
                     })();
                     PHP;
 
-                return \sprintf($pattern, $value);
+                return sprintf($pattern, $value);
             },
             function (string $value): string {
-                $resource = \tmpfile();
-                if ($resource === false) {
+                $resource = tmpfile();
+                if (false === $resource) {
                     throw new \RuntimeException('Could not open temporary file.');
                 }
 
-                \fwrite($resource, $value);
-                \fseek($resource, 0, \SEEK_SET);
+                fwrite($resource, $value);
+                fseek($resource, 0, \SEEK_SET);
 
-                return \stream_get_meta_data($resource)['uri'];
+                return stream_get_meta_data($resource)['uri'];
             },
         );
     }

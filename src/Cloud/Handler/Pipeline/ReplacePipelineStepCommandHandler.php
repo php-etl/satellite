@@ -12,7 +12,8 @@ final class ReplacePipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Pipeline\ReplacePipelineStepCommand $command): Cloud\Event\ReplacedPipelineStep
     {
@@ -30,18 +31,12 @@ final class ReplacePipelineStepCommandHandler
                     ))
             );
         } catch (Api\Exception\ReplacePipelineStepPipelineCollectionBadRequestException $exception) {
-            throw new Cloud\ReplacePipelineStepFailedException(
-                'Something went wrong while replacing a step from the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.',
-                previous: $exception
-            );
+            throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
         } catch (Api\Exception\ReplacePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
-            throw new Cloud\ReplacePipelineStepFailedException(
-                'Something went wrong while replacing a step from the pipeline. It seems the data you sent was invalid, please check your input.',
-                previous: $exception
-            );
+            throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if ($result === null) {
+        if (null === $result) {
             // TODO: change the exception message, it doesn't give enough details on how to fix the issue
             throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline.');
         }

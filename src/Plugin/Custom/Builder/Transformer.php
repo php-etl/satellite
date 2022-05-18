@@ -48,7 +48,7 @@ final class Transformer implements StepBuilderInterface
             args: [
                 new Node\Arg(
                     $this->service
-                )
+                ),
             ]
         );
     }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
@@ -71,12 +73,12 @@ final class Loader implements StepBuilderInterface
     {
         foreach ($this->putStatements as [$path, $content, $mode, $condition]) {
             foreach ($this->servers as $index => $server) {
-                if ($condition != null) {
+                if (null != $condition) {
                     yield new Node\Stmt\If_(
                         cond: $condition,
                         subNodes: [
                             'stmts' => [
-                                ...$this->getPutNode($index, $server, $path, $content, $mode)
+                                ...$this->getPutNode($index, $server, $path, $content, $mode),
                             ],
                         ]
                     );
@@ -154,7 +156,7 @@ final class Loader implements StepBuilderInterface
                                                     args: [
                                                         new Node\Arg(
                                                             new Node\Expr\Variable('input'),
-                                                        )
+                                                        ),
                                                     ]
                                                 )
                                             ),
@@ -198,12 +200,12 @@ final class Loader implements StepBuilderInterface
                                     new Node\Arg(
                                         value: new Node\Expr\BinaryOp\Concat(
                                             new Node\Expr\BinaryOp\Concat(
-                                                compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                                compileValueWhenExpression($this->interpreter, $server['base_path']),
                                                 new Node\Scalar\String_('/'),
                                             ),
                                             $path,
                                         )
-                                    )
+                                    ),
                                 ]
                             ),
                         ),
@@ -250,7 +252,7 @@ final class Loader implements StepBuilderInterface
                                             )
                                         ),
                                         new Node\Expr\BinaryOp\Concat(
-                                            compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                            compileValueWhenExpression($this->interpreter, $server['base_path']),
                                             new Node\Scalar\String_('/'),
                                         )
                                     ),
@@ -297,25 +299,25 @@ final class Loader implements StepBuilderInterface
                                                         items: array_merge(
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                                                    value: compileValueWhenExpression($this->interpreter, $server['base_path']),
                                                                     key: new Node\Scalar\String_('%path%'),
-                                                                )
+                                                                ),
                                                             ],
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server["host"]),
-                                                                    key:  new Node\Scalar\String_('%server%'),
-                                                                )
+                                                                    value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                                    key: new Node\Scalar\String_('%server%'),
+                                                                ),
                                                             ]
                                                         ),
                                                         attributes: [
                                                             'kind' => Node\Expr\Array_::KIND_SHORT,
                                                         ]
                                                     )
-                                                )
+                                                ),
                                             ]
                                         )
-                                    )
+                                    ),
                                 ]
                             )
                         ),
@@ -329,25 +331,25 @@ final class Loader implements StepBuilderInterface
                                             items: array_merge(
                                                 [
                                                     new Node\Expr\ArrayItem(
-                                                        value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                                        value: compileValueWhenExpression($this->interpreter, $server['base_path']),
                                                         key: new Node\Scalar\String_('%path%'),
-                                                    )
+                                                    ),
                                                 ],
                                                 [
                                                     new Node\Expr\ArrayItem(
-                                                        value: compileValueWhenExpression($this->interpreter, $server["host"]),
-                                                        key:  new Node\Scalar\String_('%server%'),
-                                                    )
+                                                        value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                        key: new Node\Scalar\String_('%server%'),
+                                                    ),
                                                 ]
                                             ),
                                             attributes: [
                                                 'kind' => Node\Expr\Array_::KIND_SHORT,
                                             ]
                                         )
-                                    )
+                                    ),
                                 ]
                             )
-                        )
+                        ),
                     ],
                 ],
             ),

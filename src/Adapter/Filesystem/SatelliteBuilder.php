@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\SatelliteBuilderInterface;
 use Kiboko\Contract\Packaging as PackagingContract;
 
@@ -91,7 +91,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     public function build(): Satellite\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
-            mkdir($this->workdir, 0775, true);
+            mkdir($this->workdir, 0o775, true);
         }
 
         $composer = new Satellite\Adapter\Composer($this->workdir);
@@ -100,9 +100,9 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $composer,
         );
 
-        if ($this->composerJsonFile !== null) {
+        if (null !== $this->composerJsonFile) {
             $satellite->withFile($this->composerJsonFile);
-            if ($this->composerLockFile !== null) {
+            if (null !== $this->composerLockFile) {
                 $satellite->withFile($this->composerLockFile);
             }
 

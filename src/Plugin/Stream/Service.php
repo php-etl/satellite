@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
-    name: "stream",
+    name: 'stream',
     steps: [
         new Configurator\Pipeline\StepLoader(),
     ],
@@ -68,28 +68,30 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('loader', $config)
-            && array_key_exists('destination', $config['loader'])
+        if (\array_key_exists('loader', $config)
+            && \array_key_exists('destination', $config['loader'])
         ) {
-            if ($config['loader']['destination'] === 'stderr') {
+            if ('stderr' === $config['loader']['destination']) {
                 return new Repository(new Builder\StderrLoader());
-            } elseif ($config['loader']['destination'] === 'stdout') {
+            }
+            if ('stdout' === $config['loader']['destination']) {
                 return new Repository(new Builder\StdoutLoader());
-            } elseif (array_key_exists('format', $config['loader'])
-                && $config['loader']['format'] === 'json'
+            }
+            if (\array_key_exists('format', $config['loader'])
+                && 'json' === $config['loader']['format']
             ) {
                 return new Repository(
                     new Builder\JSONStreamLoader(
                         $config['loader']['destination']
                     )
                 );
-            } else {
-                return new Repository(
+            }
+
+            return new Repository(
                     new Builder\DebugLoader(
                         $config['loader']['destination']
                     )
                 );
-            }
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');

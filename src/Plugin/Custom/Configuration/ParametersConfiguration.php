@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 
@@ -11,11 +13,12 @@ final class ParametersConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('parameters');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->arrayPrototype()
-                ->variablePrototype()->end()
-            ->end();
+            ->variablePrototype()->end()
+            ->end()
+        ;
 
         return $builder;
     }

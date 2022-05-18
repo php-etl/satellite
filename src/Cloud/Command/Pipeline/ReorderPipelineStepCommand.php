@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
@@ -8,7 +10,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
 
 final class ReorderPipelineStepCommand implements Command
 {
-    /** @var list<StepCode> $codes */
+    /** @var list<StepCode> */
     public array $codes;
 
     public function __construct(

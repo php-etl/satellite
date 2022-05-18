@@ -6,9 +6,8 @@ namespace Kiboko\Component\Satellite\Runtime\HttpHook;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-#[Configurator\Runtime(name: "http_hook")]
+#[Configurator\Runtime(name: 'http_hook')]
 final class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;

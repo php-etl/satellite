@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Factory;
 
-use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Feature\Logger;
+use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -52,16 +54,16 @@ final class GelfFactory implements Configurator\FactoryInterface
     {
         $builder = new Logger\Builder\Monolog\GelfBuilder();
 
-        if (array_key_exists('level', $config)) {
+        if (\array_key_exists('level', $config)) {
             $builder->withLevel($config['level']);
         }
 
-        if (array_key_exists('tcp', $config)) {
+        if (\array_key_exists('tcp', $config)) {
             $builder->withTCPTransport(
                 $config['tcp']['host'] ?? null,
                 $config['tcp']['port'] ?? null,
             );
-        } elseif (array_key_exists('amqp', $config)) {
+        } elseif (\array_key_exists('amqp', $config)) {
             $builder->withAMQPTransport(
                 $config['amqp']['queue'] ?? null,
                 $config['amqp']['channel'] ?? null,

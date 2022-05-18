@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\HttpHook;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
-use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
@@ -29,7 +29,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
         $satellite->withFile(
             new Packaging\File($this->filename, new Packaging\Asset\InMemory(
-                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
+                '<?php'.\PHP_EOL.(new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
         );
 
@@ -105,7 +105,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                                 [
                                                     new Node\Arg(
                                                         new Node\Scalar\String_($this->config['path'] ?? '/')
-                                                    )
+                                                    ),
                                                 ],
                                             ),
                                         ),
@@ -114,7 +114,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                     ],
                                     [
-                                        'kind' => Node\Expr\Array_::KIND_SHORT
+                                        'kind' => Node\Expr\Array_::KIND_SHORT,
                                     ],
                                 ),
                             ),
@@ -137,7 +137,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                                 [
                                     new Node\Arg(
                                         new Node\Expr\Variable('request')
-                                    )
+                                    ),
                                 ],
                             ),
                         ),
