@@ -125,7 +125,7 @@ final class Merge implements StepBuilderInterface
                                                         new Node\Stmt\Expression(
                                                             new Node\Expr\Assign(
                                                                 var: new Node\Expr\Variable('count'),
-                                                                expr: new Node\Scalar\LNumber(0)
+                                                                expr: new Node\Scalar\LNumber(1)
                                                             ),
                                                         ),
                                                         new Node\Stmt\Expression(
