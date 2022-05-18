@@ -17,7 +17,7 @@ jobs:
             -   uses: actions/checkout@v2
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '8.0'
+                    php-version: '8.1'
                     tools: composer:v2
                     coverage: pcov
             -   uses: actions/cache@v2
@@ -29,7 +29,7 @@ jobs:
             -   uses: php-actions/composer@v5
                 with:
                     args: --prefer-dist
-                    php_version: 8.0
+                    php_version: 8.1
 
             -   name: Run tests & generate Coverage
                 run: bin/phpunit --configuration=phpunit.xml tests --coverage-html var/coverage --whitelist=src
@@ -52,7 +52,7 @@ jobs:
             -   uses: php-actions/composer@v5
                 with:
                     args: --prefer-dist
-                    php_version: 8.0
+                    php_version: 8.1
 
             -   name: PHPStan
                 uses: php-actions/phpstan@v2
