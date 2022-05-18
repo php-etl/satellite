@@ -82,7 +82,7 @@ class Server implements Configurator\FactoryInterface
         }
 
         try {
-            return new Repository($builder);
+            return new SFTP\Factory\Repository\Repository($builder);
         } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException(
                 message: $exception->getMessage(),

@@ -6,6 +6,7 @@ use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Loader implements StepBuilderInterface
 {
@@ -196,10 +197,10 @@ final class Loader implements StepBuilderInterface
                                 args: [
                                     new Node\Arg(
                                         value: new Node\Expr\BinaryOp\Concat(
-                                            new Node\Scalar\Encapsed([
-                                                new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                                new Node\Scalar\EncapsedStringPart('/'),
-                                            ]),
+                                            new Node\Expr\BinaryOp\Concat(
+                                                compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                                new Node\Scalar\String_('/'),
+                                            ),
                                             $path,
                                         )
                                     )
@@ -248,10 +249,10 @@ final class Loader implements StepBuilderInterface
                                                 ]
                                             )
                                         ),
-                                        new Node\Scalar\Encapsed([
-                                            new Node\Scalar\EncapsedStringPart($server["base_path"]),
-                                            new Node\Scalar\EncapsedStringPart('/'),
-                                        ])
+                                        new Node\Expr\BinaryOp\Concat(
+                                            compileValueWhenExpression($this->interpreter, $server["base_path"]),
+                                            new Node\Scalar\String_('/'),
+                                        )
                                     ),
                                     $path,
                                 ),
@@ -296,13 +297,13 @@ final class Loader implements StepBuilderInterface
                                                         items: array_merge(
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value:  new Node\Scalar\String_($server["base_path"]),
+                                                                    value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
                                                                     key: new Node\Scalar\String_('%path%'),
                                                                 )
                                                             ],
                                                             [
                                                                 new Node\Expr\ArrayItem(
-                                                                    value: new Node\Scalar\String_($server["host"]),
+                                                                    value: compileValueWhenExpression($this->interpreter, $server["host"]),
                                                                     key:  new Node\Scalar\String_('%server%'),
                                                                 )
                                                             ]
@@ -328,13 +329,13 @@ final class Loader implements StepBuilderInterface
                                             items: array_merge(
                                                 [
                                                     new Node\Expr\ArrayItem(
-                                                        value:  new Node\Scalar\String_($server["base_path"]),
+                                                        value: compileValueWhenExpression($this->interpreter, $server["base_path"]),
                                                         key: new Node\Scalar\String_('%path%'),
                                                     )
                                                 ],
                                                 [
                                                     new Node\Expr\ArrayItem(
-                                                        value: new Node\Scalar\String_($server["host"]),
+                                                        value: compileValueWhenExpression($this->interpreter, $server["host"]),
                                                         key:  new Node\Scalar\String_('%server%'),
                                                     )
                                                 ]
