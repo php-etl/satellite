@@ -23,7 +23,6 @@ final class Service
     /** @var array<string, Configurator\FactoryInterface> */
     private array $pipelines = [];
 
-    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
     public function __construct()
     {
         $this->processor = new Processor();
@@ -90,7 +89,7 @@ final class Service
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
-        $this->plugins[$attribute->name] = $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $interpreter);
+        $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $interpreter);
         $applier->withPackages(...$attribute->dependencies);
 
         foreach ($attribute->steps as $step) {
@@ -120,7 +119,6 @@ final class Service
         return $this;
     }
 
-    /** @var callable(interpreter: ExpressionLanguage): Configurator\FactoryInterface ...$factories */
     public function registerFactories(callable ...$factories): self
     {
         foreach ($factories as $factory) {
