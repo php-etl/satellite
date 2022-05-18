@@ -7,7 +7,7 @@ jobs:
             -   uses: actions/checkout@v2
             -   name: Cs-Fixer
                 run: |
-                    wget -q https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
+                    wget -q https://cs.symfony.com/download/php-cs-fixer-v3.phar -O php-cs-fixer
                     chmod a+x php-cs-fixer
                     PHP_CS_FIXER_IGNORE_ENV=true ./php-cs-fixer fix src --dry-run
 
