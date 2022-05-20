@@ -30,7 +30,7 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
-        if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
+        if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled pipeline at the provided path');
 
             return 1;
@@ -46,7 +46,7 @@ final class PipelineRunCommand extends Console\Command\Command
         /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             \ProjectServiceContainer::class => 'container.php',
         ]);
         $autoload->register();
