@@ -62,7 +62,7 @@ final class ListCommand extends Console\Command\Command
         $client = Api\Client::create($psr18Client);
 
         $workspaces = $client->getWorkspaceCollection();
-        if ($workspaces === null) {
+        if (null === $workspaces) {
             $style->error('Your authentication may have expired, please run <info>cloud login</>.');
 
             return self::FAILURE;
