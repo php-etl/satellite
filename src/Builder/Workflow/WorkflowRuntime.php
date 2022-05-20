@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Builder\Workflow;
 
@@ -25,7 +27,7 @@ final class WorkflowRuntime implements Builder
                                 value: new Node\Expr\New_(
                                     class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
                                 )
-                            )
+                            ),
                         ],
                     ),
                 ),

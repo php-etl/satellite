@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
-use Kiboko\Contract\Configurator;
 
 final class Runtime implements Satellite\Runtime\RuntimeInterface
 {
@@ -29,7 +29,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
 
         $satellite->withFile(
             new Packaging\File($this->filename, new Packaging\Asset\InMemory(
-                '<?php' . PHP_EOL . (new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
+                '<?php'.\PHP_EOL.(new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
         );
 
@@ -51,20 +51,20 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
                                 type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Workflow\\Console'),
-                            )
+                            ),
                         ],
                         'stmts' => [
                             new Node\Stmt\Expression($builder->getNode()),
-                        ]
+                        ],
                     ]
                 ),
             ),
-//            new Node\Stmt\Expression(
-//                new Node\Expr\MethodCall(
-//                    var: $builder->getNode(),
-//                    name: 'run'
-//                ),
-//            )
+            //            new Node\Stmt\Expression(
+            //                new Node\Expr\MethodCall(
+            //                    var: $builder->getNode(),
+            //                    name: 'run'
+            //                ),
+            //            )
         ];
     }
 }

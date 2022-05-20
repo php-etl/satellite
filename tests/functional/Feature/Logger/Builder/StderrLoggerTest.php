@@ -7,7 +7,7 @@ use Kiboko\Component\Satellite\Feature\Logger\Builder;
 use PHPUnit\Framework\TestCase;
 use Vfs\FileSystem;
 
-final class StderrLoggerTest extends TestCase
+abstract class StderrLoggerTest extends TestCase
 {
     use PipelineBuilderAssertTrait;
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -7,7 +9,8 @@ final class ReferencedPipeline implements PipelineInterface
     public function __construct(
         private PipelineId $id,
         private Pipeline $decorated,
-    ) {}
+    ) {
+    }
 
     public function id(): PipelineId
     {

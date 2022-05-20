@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Tar;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator\Adapter;
 use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
 
-#[Adapter(name: "tar")]
+#[Adapter(name: 'tar')]
 final class Factory implements Satellite\Adapter\FactoryInterface
 {
     private Configuration $configuration;
@@ -28,8 +28,8 @@ final class Factory implements Satellite\Adapter\FactoryInterface
     {
         $builder = new SatelliteBuilder($this->outputPath);
 
-        if (array_key_exists('composer', $configuration)) {
-            if (array_key_exists('from_local', $configuration['composer']) && $configuration['composer']['from_local'] === true) {
+        if (\array_key_exists('composer', $configuration)) {
+            if (\array_key_exists('from_local', $configuration['composer']) && true === $configuration['composer']['from_local']) {
                 if (file_exists('composer.lock')) {
                     $builder->withComposerFile(new Packaging\Asset\LocalFile('composer.json'), new Packaging\Asset\LocalFile('composer.lock'));
                 } else {
@@ -40,13 +40,13 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 }
             }
 
-            if (array_key_exists('autoload', $configuration['composer']) && array_key_exists('psr4', $configuration['composer']['autoload'])) {
+            if (\array_key_exists('autoload', $configuration['composer']) && \array_key_exists('psr4', $configuration['composer']['autoload'])) {
                 foreach ($configuration['composer']['autoload']['psr4'] as $namespace => $autoload) {
                     $builder->withComposerPSR4Autoload($namespace, ...$autoload['paths']);
                 }
             }
 
-            if (array_key_exists('require', $configuration['composer'])) {
+            if (\array_key_exists('require', $configuration['composer'])) {
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }
         }

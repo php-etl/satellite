@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud;
 
@@ -12,7 +14,7 @@ final class Context
 
     public function __construct(?string $pathName = null)
     {
-        if ($pathName === null) {
+        if (null === $pathName) {
             $this->pathName = getcwd();
         } else {
             $this->pathName = $pathName;
@@ -23,20 +25,21 @@ final class Context
         }
 
         $content = false;
-        if (file_exists($this->pathName . '/.gyroscops.json')) {
-            $content = \file_get_contents($this->pathName . '/.gyroscops.json');
+        if (file_exists($this->pathName.'/.gyroscops.json')) {
+            $content = file_get_contents($this->pathName.'/.gyroscops.json');
         } else {
-            touch($this->pathName . '/.gyroscops.json');
-            chmod($this->pathName . '/.gyroscops.json', 0655);
+            touch($this->pathName.'/.gyroscops.json');
+            chmod($this->pathName.'/.gyroscops.json', 0o655);
         }
 
-        if ($content === false) {
+        if (false === $content) {
             $this->configuration = [];
+
             return;
         }
 
         try {
-            $this->configuration = \json_decode($content, associative: true, flags: \JSON_THROW_ON_ERROR);
+            $this->configuration = json_decode($content, associative: true, flags: \JSON_THROW_ON_ERROR);
         } catch (\JsonException $exception) {
             $this->configuration = [];
         }
@@ -44,9 +47,9 @@ final class Context
 
     public function dump(): void
     {
-        $content = \json_encode($this->configuration, flags: JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        $content = json_encode($this->configuration, flags: \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT);
 
-        \file_put_contents($this->pathName . '/.gyroscops.json', $content);
+        file_put_contents($this->pathName.'/.gyroscops.json', $content);
     }
 
     public function changeOrganization(OrganizationId $organization): void
@@ -57,7 +60,7 @@ final class Context
 
     public function organization(): OrganizationId
     {
-        if (!array_key_exists('organization', $this->configuration)) {
+        if (!\array_key_exists('organization', $this->configuration)) {
             throw new NoOrganizationSelectedException('Could not determine the current organization.');
         }
 
@@ -71,7 +74,7 @@ final class Context
 
     public function project(): ProjectId
     {
-        if (!array_key_exists('project', $this->configuration)) {
+        if (!\array_key_exists('project', $this->configuration)) {
             throw new NoProjectSelectedException('Could not determine the current project.');
         }
 

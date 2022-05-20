@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
@@ -86,7 +88,6 @@ final class Server implements StepBuilderInterface
         return $this;
     }
 
-
     public function withPrivateKeyAuthentication(Node\Expr $username, Node\Expr $publicKey, Node\Expr $privateKey, ?Node\Expr $privateKeyPassphrase = null): self
     {
         $this->username = $username;
@@ -112,7 +113,7 @@ final class Server implements StepBuilderInterface
                         ),
                         new Node\Arg(
                             $this->password,
-                        )
+                        ),
                     ],
                 ),
             );
@@ -157,7 +158,7 @@ final class Server implements StepBuilderInterface
                                 ),
                                 new Node\Arg(
                                     $this->port,
-                                )
+                                ),
                             ],
                         ),
                     ),

@@ -16,7 +16,7 @@ final class YamlFileLoader extends Config\Loader\FileLoader
 
     public function supports($resource, $type = null)
     {
-        return is_string($resource)
-            && preg_match('/ya?ml/i', pathinfo($resource, PATHINFO_EXTENSION));
+        return \is_string($resource)
+            && preg_match('/ya?ml/i', pathinfo($resource, \PATHINFO_EXTENSION));
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Configuration\Gelf;
 
@@ -11,16 +13,17 @@ final class TCPConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('tcp');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->scalarNode('host')
-                    ->info('The host to connect to.')
-                ->end()
-                ->scalarNode('port')
-                    ->info('Port on the host.')
-                ->end()
-            ->end();
+            ->scalarNode('host')
+            ->info('The host to connect to.')
+            ->end()
+            ->scalarNode('port')
+            ->info('Port on the host.')
+            ->end()
+            ->end()
+        ;
 
         return $builder;
     }

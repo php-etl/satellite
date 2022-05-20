@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching\Builder;
 
-use Kiboko\Contract\Bucket\ResultBucketInterface;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
@@ -21,21 +22,21 @@ final class Fork implements StepBuilderInterface
         $this->state = null;
     }
 
-    public function withLogger(Node\Expr $logger): Fork
+    public function withLogger(Node\Expr $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): Fork
+    public function withRejection(Node\Expr $rejection): self
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): Fork
+    public function withState(Node\Expr $state): self
     {
         $this->state = $state;
 
@@ -93,7 +94,7 @@ final class Fork implements StepBuilderInterface
                                                     var: new Node\Expr\Variable('results'),
                                                     expr: new Node\Expr\Array_(
                                                         attributes: [
-                                                            'kind' => Node\Expr\Array_::KIND_SHORT
+                                                            'kind' => Node\Expr\Array_::KIND_SHORT,
                                                         ]
                                                     ),
                                                 ),
@@ -116,7 +117,7 @@ final class Fork implements StepBuilderInterface
                                                 ],
                                             ),
                                         ]
-                                    )
+                                    ),
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Generator'),
                             ],

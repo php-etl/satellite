@@ -34,7 +34,7 @@ final class LoginCommand extends Console\Command\Command
         if ($input->getOption('beta')) {
             $url = 'https://beta.gyroscops.com';
             $ssl = $input->getOption('ssl') ?? true;
-        } else if ($input->getOption('url')) {
+        } elseif ($input->getOption('url')) {
             $url = $input->getOption('url');
             $ssl = $input->getOption('ssl') ?? true;
         } else {
@@ -90,6 +90,7 @@ final class LoginCommand extends Console\Command\Command
                 }
 
                 $style->error('Unable to retrieve the token after 3 retries.');
+
                 return Console\Command\Command::FAILURE;
             }
         }

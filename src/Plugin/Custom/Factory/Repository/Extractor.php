@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory\Repository;
 
-use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Plugin\Custom;
+use Kiboko\Contract\Configurator;
 
 final class Extractor implements Configurator\StepRepositoryInterface
 {

@@ -11,8 +11,8 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
-    name: "ftp",
-    dependencies: ["ext-ftp"],
+    name: 'ftp',
+    dependencies: ['ext-ftp'],
     steps: [
         new Configurator\Pipeline\StepLoader(),
     ],
@@ -69,16 +69,16 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('expression_language', $config)
-            && is_array($config['expression_language'])
-            && count($config['expression_language'])
+        if (\array_key_exists('expression_language', $config)
+            && \is_array($config['expression_language'])
+            && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider());
             }
         }
 
-        if (array_key_exists('loader', $config)) {
+        if (\array_key_exists('loader', $config)) {
             $loaderFactory = new Factory\Loader($this->interpreter);
 
             return $loaderFactory->compile($config);

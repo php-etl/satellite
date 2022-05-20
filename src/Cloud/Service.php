@@ -9,7 +9,6 @@ use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\SatelliteToolbox;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service
@@ -39,21 +38,22 @@ final class Service
                 new Satellite\Runtime\Workflow\Factory(),
             )
             ->registerFactories(
-                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Akeneo\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\CSV\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\FastMap\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Spreadsheet\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\SQL\Service($this->interpreter),
-                fn(ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Sylius\Service($this->interpreter)
-            );
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Akeneo\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\CSV\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\FastMap\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Spreadsheet\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\SQL\Service($this->interpreter),
+                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Sylius\Service($this->interpreter)
+            )
+        ;
     }
 
     private function addRuntime(Configurator\Runtime $attribute, Satellite\Runtime\FactoryInterface $runtime): self
@@ -83,11 +83,10 @@ final class Service
 
     /** @param Configurator\FactoryInterface $plugin */
     private function addPipeline(
-        Configurator\Pipeline         $attribute,
+        Configurator\Pipeline $attribute,
         Configurator\FactoryInterface $plugin,
-        ExpressionLanguage            $interpreter,
-    ): self
-    {
+        ExpressionLanguage $interpreter,
+    ): self {
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
@@ -153,7 +152,7 @@ final class Service
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -164,7 +163,7 @@ final class Service
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException | Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             return false;
         }
     }

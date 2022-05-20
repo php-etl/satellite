@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
@@ -12,5 +14,6 @@ final class MoveAfterPipelineStepCommand implements Command
         public PipelineId $pipeline,
         public StepCode $previous,
         public StepCode $current,
-    ) {}
+    ) {
+    }
 }

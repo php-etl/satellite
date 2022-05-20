@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Composer;
 
@@ -32,9 +34,9 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         /** @var Package $package */
         foreach ($this as $package) {
             $configuration = $package->getExtra();
-            if (array_key_exists('satellite', $configuration)) {
+            if (\array_key_exists('satellite', $configuration)) {
                 // Enter fallback mode.
-                if (!array_key_exists('class', $configuration['satellite'])) {
+                if (!\array_key_exists('class', $configuration['satellite'])) {
                     continue;
                 }
 
@@ -43,18 +45,18 @@ final class Accumulator implements \IteratorAggregate, \Stringable
                     PHP;
                 continue;
             }
-            if (!array_key_exists('gyroscops', $configuration)) {
+            if (!\array_key_exists('gyroscops', $configuration)) {
                 continue;
             }
-            if (!array_key_exists('plugins', $configuration['gyroscops'])) {
+            if (!\array_key_exists('plugins', $configuration['gyroscops'])) {
                 continue;
             }
 
-            if (is_string($configuration['gyroscops']['plugins'])) {
+            if (\is_string($configuration['gyroscops']['plugins'])) {
                 yield <<<PHP
                     new \\{$configuration['gyroscops']['plugins']}(\$context->interpreter())
                     PHP;
-            } else if (is_array($configuration['gyroscops']['plugins'])) {
+            } elseif (\is_array($configuration['gyroscops']['plugins'])) {
                 foreach ($configuration['gyroscops']['plugins'] as $plugin) {
                     yield <<<PHP
                         new \\{$plugin}(\$context->interpreter())
@@ -69,18 +71,18 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         /** @var Package $package */
         foreach ($this as $package) {
             $configuration = $package->getExtra();
-            if (!array_key_exists('gyroscops', $configuration)) {
+            if (!\array_key_exists('gyroscops', $configuration)) {
                 continue;
             }
-            if (!array_key_exists('adapters', $configuration['gyroscops'])) {
+            if (!\array_key_exists('adapters', $configuration['gyroscops'])) {
                 continue;
             }
 
-            if (is_string($configuration['gyroscops']['adapters'])) {
+            if (\is_string($configuration['gyroscops']['adapters'])) {
                 yield <<<PHP
                     new \\{$configuration['gyroscops']['adapters']}(\$context->workingDirectory())
                     PHP;
-            } else if (is_array($configuration['gyroscops']['adapters'])) {
+            } elseif (\is_array($configuration['gyroscops']['adapters'])) {
                 foreach ($configuration['gyroscops']['adapters'] as $adapter) {
                     yield <<<PHP
                         new \\{$adapter}(\$context->workingDirectory())
@@ -95,18 +97,18 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         /** @var Package $package */
         foreach ($this as $package) {
             $configuration = $package->getExtra();
-            if (!array_key_exists('gyroscops', $configuration)) {
+            if (!\array_key_exists('gyroscops', $configuration)) {
                 continue;
             }
-            if (!array_key_exists('runtimes', $configuration['gyroscops'])) {
+            if (!\array_key_exists('runtimes', $configuration['gyroscops'])) {
                 continue;
             }
 
-            if (is_string($configuration['gyroscops']['runtimes'])) {
+            if (\is_string($configuration['gyroscops']['runtimes'])) {
                 yield <<<PHP
                     new \\{$configuration['gyroscops']['runtimes']}()
                     PHP;
-            } else if (is_array($configuration['gyroscops']['runtimes'])) {
+            } elseif (\is_array($configuration['gyroscops']['runtimes'])) {
                 foreach ($configuration['gyroscops']['runtimes'] as $runtime) {
                     yield <<<PHP
                         new \\{$runtime}()
@@ -119,10 +121,10 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     public function __toString()
     {
         return sprintf(
-            <<<PHP
+            <<<'PHP'
                 <?php declare(strict_types=1);
-                use \\Kiboko\\Component\\Satellite\\RuntimeContextInterface;
-                return fn (RuntimeContextInterface \$context) => (new \Kiboko\Component\Satellite\Service())
+                use \Kiboko\Component\Satellite\RuntimeContextInterface;
+                return fn (RuntimeContextInterface $context) => (new \Kiboko\Component\Satellite\Service())
                     ->registerPlugins(
                         %s
                     )

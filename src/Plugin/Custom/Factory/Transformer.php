@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use Kiboko\Component\Satellite\Plugin\Custom;
+use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 use Symfony\Component\Config\Definition\Exception as Symfony;
-use Kiboko\Component\Satellite\Plugin\Custom;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Transformer implements Configurator\FactoryInterface
 {
@@ -69,33 +70,33 @@ class Transformer implements Configurator\FactoryInterface
 
         $container = new ContainerBuilder();
 
-        if (array_key_exists('parameters', $config)
-            && is_array($config['parameters'])
-            && count($config['parameters']) > 0
+        if (\array_key_exists('parameters', $config)
+            && \is_array($config['parameters'])
+            && \count($config['parameters']) > 0
         ) {
             foreach ($config['parameters'] as $identifier => $parameter) {
                 $container->setParameter($identifier, $parameter);
             }
         }
 
-        if (array_key_exists('services', $config)
-            && is_array($config['services'])
-            && count($config['services']) > 0
+        if (\array_key_exists('services', $config)
+            && \is_array($config['services'])
+            && \count($config['services']) > 0
         ) {
             foreach ($config['services'] as $identifier => $service) {
-                if (array_key_exists('class', $service)) {
+                if (\array_key_exists('class', $service)) {
                     $class = $service['class'];
                 }
 
                 $definition = $container->register($identifier, $class ?? null);
 
-                if (array_key_exists('arguments', $service)
-                    && is_array($service['arguments'])
-                    && count($service['arguments']) > 0
+                if (\array_key_exists('arguments', $service)
+                    && \is_array($service['arguments'])
+                    && \count($service['arguments']) > 0
                 ) {
                     foreach ($service['arguments'] as $key => $argument) {
-                        if (substr($argument, 0, 1) === '@'
-                            && substr($argument, 1, 1) !== '@'
+                        if ('@' === substr($argument, 0, 1)
+                            && '@' !== substr($argument, 1, 1)
                         ) {
                             $argument = new Reference(substr($argument, 1));
                         }
@@ -108,17 +109,17 @@ class Transformer implements Configurator\FactoryInterface
                     }
                 }
 
-                if (array_key_exists('calls', $service)
-                    && is_array($service['calls'])
-                    && count($service['calls']) > 0
+                if (\array_key_exists('calls', $service)
+                    && \is_array($service['calls'])
+                    && \count($service['calls']) > 0
                 ) {
                     foreach ($service['calls'] as $key => [$method, $arguments]) {
                         $definition->addMethodCall($method, array_map(function ($argument) {
                             if (preg_match('/^@[^@]/', $argument)) {
-                                return new Reference(\substr($argument, 1));
+                                return new Reference(substr($argument, 1));
                             }
                             if (preg_match('/^%[^%].*[^%]%$/', $argument)) {
-                                return new Parameter(\substr($argument, 1, -1));
+                                return new Parameter(substr($argument, 1, -1));
                             }
 
                             return $argument;
@@ -126,10 +127,10 @@ class Transformer implements Configurator\FactoryInterface
                     }
                 }
 
-                if (array_key_exists('factory', $service)
-                    && is_array($service['factory'])
-                    && array_key_exists('class', $service['factory'])
-                    && array_key_exists('method', $service['factory'])
+                if (\array_key_exists('factory', $service)
+                    && \is_array($service['factory'])
+                    && \array_key_exists('class', $service['factory'])
+                    && \array_key_exists('method', $service['factory'])
                 ) {
                     $definition->setFactory([$service['factory']['class'], $service['factory']['method']]);
                 }

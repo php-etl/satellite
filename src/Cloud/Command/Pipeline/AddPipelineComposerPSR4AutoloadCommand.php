@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
@@ -11,5 +13,6 @@ final class AddPipelineComposerPSR4AutoloadCommand implements Command
         public PipelineId $pipeline,
         public string $namespace,
         public array $paths
-    ) {}
+    ) {
+    }
 }

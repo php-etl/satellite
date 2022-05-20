@@ -22,22 +22,22 @@ final class StderrLogger implements Builder
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'params' => [
-                                        new Node\Param(
-                                            var: new Node\Expr\Variable(name: 'level'),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable(name: 'level'),
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable(name: 'message'),
+                                    ),
+                                    new Node\Param(
+                                        var: new Node\Expr\Variable(name: 'context'),
+                                        default: new Node\Expr\Array_(
+                                            attributes: [
+                                                'kind' => Node\Expr\Array_::KIND_SHORT,
+                                            ],
                                         ),
-                                        new Node\Param(
-                                            var: new Node\Expr\Variable(name: 'message'),
-                                        ),
-                                        new Node\Param(
-                                            var: new Node\Expr\Variable(name: 'context'),
-                                            default: new Node\Expr\Array_(
-                                                attributes: [
-                                                    'kind' => Node\Expr\Array_::KIND_SHORT,
-                                                ],
-                                            ),
-                                            type: new Node\Name(name: 'array'),
-                                        ),
-                                    ],
+                                        type: new Node\Name(name: 'array'),
+                                    ),
+                                ],
                                 'stmts' => [
                                     new Node\Stmt\Expression(
                                         new Node\Expr\FuncCall(

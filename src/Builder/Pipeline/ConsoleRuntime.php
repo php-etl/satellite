@@ -31,7 +31,7 @@ final class ConsoleRuntime implements Builder
                                             value: new Node\Expr\New_(
                                                 class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
                                             )
-                                        )
+                                        ),
                                     ],
                                 ),
                             ),

@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Runtime(name: "workflow")]
+#[Configurator\Runtime(name: 'workflow')]
 final class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
@@ -20,7 +20,7 @@ final class Factory implements Satellite\Runtime\FactoryInterface
     public function addFeature(string $name, Configurator\FactoryInterface $feature): self
     {
         $configuration = $feature->configuration();
-        assert($configuration instanceof Configurator\FeatureConfigurationInterface);
+        \assert($configuration instanceof Configurator\FeatureConfigurationInterface);
 
         $this->configuration->addFeature($name, $configuration);
 
@@ -30,7 +30,7 @@ final class Factory implements Satellite\Runtime\FactoryInterface
     public function addPlugin(string $name, Configurator\FactoryInterface $plugin): self
     {
         $configuration = $plugin->configuration();
-        assert($configuration instanceof Configurator\PluginConfigurationInterface);
+        \assert($configuration instanceof Configurator\PluginConfigurationInterface);
 
         $this->configuration->addPlugin($name, $configuration);
 

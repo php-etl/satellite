@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Console\Command\Project;
 
@@ -31,7 +33,7 @@ final class ListCommand extends Console\Command\Command
         if ($input->getOption('beta')) {
             $url = 'https://beta.gyroscops.com';
             $ssl = $input->getOption('ssl') ?? true;
-        } else if ($input->getOption('url')) {
+        } elseif ($input->getOption('url')) {
             $url = $input->getOption('url');
             $ssl = $input->getOption('ssl') ?? true;
         } else {
@@ -44,6 +46,7 @@ final class ListCommand extends Console\Command\Command
             $token = $auth->token($url);
         } catch (AccessDeniedException) {
             $style->error('Your credentials were not found, please run <info>cloud login</>.');
+
             return self::FAILURE;
         }
 
@@ -51,7 +54,7 @@ final class ListCommand extends Console\Command\Command
             $url,
             [
                 'verify_peer' => $ssl,
-                'auth_bearer' => $token
+                'auth_bearer' => $token,
             ]
         );
 
@@ -59,7 +62,7 @@ final class ListCommand extends Console\Command\Command
         $client = Api\Client::create($psr18Client);
 
         $projects = $client->getProjectCollection();
-        if ($projects === null) {
+        if (null === $projects) {
             $style->error('Your authentication may have expired, please run <info>cloud login</>.');
 
             return self::FAILURE;
@@ -84,7 +87,7 @@ final class ListCommand extends Console\Command\Command
                 fn (Api\Model\Project $project) => [
                     $project->getId(),
                     $project->getName(),
-                    ((string) $project->getId()) === $currentProject ? '*' : ''
+                    ((string) $project->getId()) === $currentProject ? '*' : '',
                 ],
                 $projects
             )

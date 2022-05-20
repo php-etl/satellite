@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Builder\Repository;
 
+use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
-use Kiboko\Component\Satellite;
 
 final class Pipeline implements Configurator\RepositoryInterface
 {

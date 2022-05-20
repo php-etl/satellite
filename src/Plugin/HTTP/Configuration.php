@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\HTTP;
 
@@ -11,35 +13,36 @@ final class Configuration implements PluginConfigurationInterface
     {
         $builder = new TreeBuilder('http');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->arrayNode('extractor')
-                    ->children()
-                        ->scalarNode('url')->end()
-                        ->enumNode('method')->values(['GET', 'DELETE'])->end()
-                        ->arrayNode('headers')
-                            ->arrayPrototype()
-                                ->useAttributeAsKey('name')
-                                ->children()
-                                    ->scalarNode('name')->end()
-                                    ->arrayNode('values')
-                                        ->scalarPrototype()->end()
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('loader')
-                    ->children()
-                        ->scalarNode('url')->end()
-                        ->enumNode('method')->values(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])->end()
-                        ->booleanNode('item_as_body')->end()
-                        ->enumNode('encoding')->values(['json'])->end()
-                    ->end()
-                ->end()
-            ->end();
+            ->arrayNode('extractor')
+            ->children()
+            ->scalarNode('url')->end()
+            ->enumNode('method')->values(['GET', 'DELETE'])->end()
+            ->arrayNode('headers')
+            ->arrayPrototype()
+            ->useAttributeAsKey('name')
+            ->children()
+            ->scalarNode('name')->end()
+            ->arrayNode('values')
+            ->scalarPrototype()->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+            ->arrayNode('loader')
+            ->children()
+            ->scalarNode('url')->end()
+            ->enumNode('method')->values(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])->end()
+            ->booleanNode('item_as_body')->end()
+            ->enumNode('encoding')->values(['json'])->end()
+            ->end()
+            ->end()
+            ->end()
+        ;
 
         return $builder;
     }

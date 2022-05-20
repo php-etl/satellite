@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Builder\Workflow;
 
@@ -20,7 +22,7 @@ final class PipelineBuilder implements Builder
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
                         type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\PipelineRuntimeInterface'),
-                    )
+                    ),
                 ],
                 'stmts' => [
                     new Node\Stmt\Expression(
@@ -28,8 +30,8 @@ final class PipelineBuilder implements Builder
                     ),
                     new Node\Stmt\Return_(
                         expr: new Node\Expr\Variable('runtime')
-                    )
-                ]
+                    ),
+                ],
             ]
         );
     }

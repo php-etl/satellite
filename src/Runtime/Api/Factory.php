@@ -6,9 +6,8 @@ namespace Kiboko\Component\Satellite\Runtime\Api;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-#[Configurator\Runtime(name: "api")]
+#[Configurator\Runtime(name: 'api')]
 final class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;

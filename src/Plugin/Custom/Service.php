@@ -12,7 +12,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
-    name: "custom",
+    name: 'custom',
     steps: [
         new Configurator\Pipeline\StepExtractor(),
         new Configurator\Pipeline\StepTransformer(),
@@ -71,23 +71,28 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('expression_language', $config)
-            && is_array($config['expression_language'])
-            && count($config['expression_language'])
+        if (\array_key_exists('expression_language', $config)
+            && \is_array($config['expression_language'])
+            && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider());
             }
         }
 
-        if (array_key_exists('extractor', $config)) {
+        if (\array_key_exists('extractor', $config)) {
             $extractorFactory = new Custom\Factory\Extractor($this->interpreter);
+
             return $extractorFactory->compile($config['extractor']);
-        } elseif (array_key_exists('transformer', $config)) {
+        }
+        if (\array_key_exists('transformer', $config)) {
             $transformerFactory = new Custom\Factory\Transformer($this->interpreter);
+
             return $transformerFactory->compile($config['transformer']);
-        } elseif (array_key_exists('loader', $config)) {
+        }
+        if (\array_key_exists('loader', $config)) {
             $loaderFactory = new Custom\Factory\Loader($this->interpreter);
+
             return $loaderFactory->compile($config['loader']);
         }
 

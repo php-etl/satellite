@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Configuration;
 
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
-use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class ElasticSearchConfiguration implements ConfigurationInterface
 {
@@ -15,33 +16,33 @@ final class ElasticSearchConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('elasticsearch');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->enumNode('level')
-                    ->info('The minimum logging level at which this handler will be triggered')
-                    ->values([
-                        LogLevel::DEBUG,
-                        LogLevel::INFO,
-                        LogLevel::NOTICE,
-                        LogLevel::WARNING,
-                        LogLevel::ERROR,
-                        LogLevel::CRITICAL,
-                        LogLevel::ALERT,
-                        LogLevel::EMERGENCY,
-                    ])
-                ->end()
-                ->arrayNode('hosts')
-                    ->scalarPrototype()->example('http://user:password@localhost:9200')
-                        ->validate()
-                            ->ifTrue(isExpression())
-                            ->then(asExpression())
-                        ->end()
-                    ->end()
-                ->end()
-                ->scalarNode('elastic_cloud_id')->end()
-                ->scalarNode('api_id')->end()
-                ->scalarNode('api_key')->end()
+            ->enumNode('level')
+            ->info('The minimum logging level at which this handler will be triggered')
+            ->values([
+                LogLevel::DEBUG,
+                LogLevel::INFO,
+                LogLevel::NOTICE,
+                LogLevel::WARNING,
+                LogLevel::ERROR,
+                LogLevel::CRITICAL,
+                LogLevel::ALERT,
+                LogLevel::EMERGENCY,
+            ])
+            ->end()
+            ->arrayNode('hosts')
+            ->scalarPrototype()->example('http://user:password@localhost:9200')
+            ->validate()
+            ->ifTrue(isExpression())
+            ->then(asExpression())
+            ->end()
+            ->end()
+            ->end()
+            ->scalarNode('elastic_cloud_id')->end()
+            ->scalarNode('api_id')->end()
+            ->scalarNode('api_key')->end()
 //                ->arrayNode('tls')
 //                    ->children()
 //                        ->scalarNode('cacert')
@@ -58,7 +59,8 @@ final class ElasticSearchConfiguration implements ConfigurationInterface
 //                        ->end()
 //                    ->end()
 //                ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }
