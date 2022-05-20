@@ -13,7 +13,7 @@ final class StdoutLoader implements StepBuilderInterface
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
-    public function __construct(private string $stream)
+    public function __construct()
     {
         $this->logger = null;
         $this->rejection = null;

@@ -67,15 +67,15 @@ final class ChangeCommand extends Console\Command\Command
 
         if ($input->getArgument('project-id')) {
             try {
-                $project = $client->getProjectItem($input->getArgument('project-id'));
-            } catch (Api\Exception\GetProjectItemNotFoundException) {
+                $workspace = $client->getWorkspaceItem($input->getArgument('project-id'));
+            } catch (Api\Exception\GetWorkspaceItemNotFoundException) {
                 $style->error(['The provided project identifier was not found.']);
                 $style->writeln(['Please double check your input or run <info>cloud project:list</> command.']);
 
                 return self::FAILURE;
             }
 
-            $context->changeProject(new Satellite\Cloud\DTO\ProjectId($project->getId()));
+            $context->changeProject(new Satellite\Cloud\DTO\ProjectId($workspace?->getId()));
             $context->dump();
 
             $style->success('The project has been successfully changed.');
@@ -83,9 +83,9 @@ final class ChangeCommand extends Console\Command\Command
             return self::SUCCESS;
         }
 
-        $projects = $client->apiOrganizationsProjectsGetSubresourceOrganizationSubresource($context->organization()->asString());
+        $workspaces = $client->apiOrganizationsWorkspacesGetSubresourceOrganizationSubresource($context->organization()->asString());
 
-        if (\count($projects) <= 0) {
+        if (\count($workspaces) <= 0) {
             $style->note('The current organization has ho projects declared');
             $style->writeln('You may want to declare a new project with <info>cloud project:create</>.');
 
@@ -93,8 +93,8 @@ final class ChangeCommand extends Console\Command\Command
         }
 
         $choices = [];
-        foreach ($projects as $project) {
-            $choices[$project->getId()] = $project->getName();
+        foreach ($workspaces as $workspace) {
+            $choices[$workspace?->getId()] = $workspace?->getName();
         }
 
         try {

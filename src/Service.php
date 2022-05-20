@@ -74,7 +74,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    /** @param Configurator\FactoryInterface $plugin */
+    /** @param Configurator\PipelinePluginInterface $plugin */
     private function addPipelinePlugin(
         Configurator\Pipeline $attribute,
         Configurator\PipelinePluginInterface $plugin,

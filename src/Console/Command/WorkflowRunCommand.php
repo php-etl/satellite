@@ -30,7 +30,6 @@ final class WorkflowRunCommand extends Console\Command\Command
 
         $style->writeln(sprintf('<fg=cyan>Running workflow in %s</>', $input->getArgument('path')));
 
-        /* @var ClassLoader $autoload */
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled workflow at the provided path');
 
@@ -44,8 +43,10 @@ final class WorkflowRunCommand extends Console\Command\Command
         $dotenv->usePutenv();
         $dotenv->loadEnv('.env');
 
+        /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
+            /* @phpstan-ignore-next-line */
             \ProjectServiceContainer::class => 'container.php',
         ]);
         $autoload->register();

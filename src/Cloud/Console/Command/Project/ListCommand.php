@@ -61,16 +61,16 @@ final class ListCommand extends Console\Command\Command
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
 
-        $projects = $client->getProjectCollection();
-        if (null === $projects) {
+        $workspaces = $client->getWorkspaceCollection();
+        if (null === $workspaces) {
             $style->error('Your authentication may have expired, please run <info>cloud login</>.');
 
             return self::FAILURE;
         }
 
         $choices = [];
-        foreach ($projects as $project) {
-            $choices[$project->getId()] = $project->getName();
+        foreach ($workspaces as $workspace) {
+            $choices[$workspace->getId()] = $workspace->getName();
         }
 
         $context = new Satellite\Cloud\Context();
@@ -84,12 +84,12 @@ final class ListCommand extends Console\Command\Command
         $style->table(
             ['id', 'name', 'current'],
             array_map(
-                fn (Api\Model\Project $project) => [
-                    $project->getId(),
-                    $project->getName(),
-                    ((string) $project->getId()) === $currentProject ? '*' : '',
+                fn (Api\Model\Workspace $workspace) => [
+                    $workspace->getId(),
+                    $workspace->getName(),
+                    $workspace->getId() === $currentProject ? '*' : '',
                 ],
-                $projects
+                $workspaces
             )
         );
 

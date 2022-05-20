@@ -103,7 +103,7 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         $pipeline = new Satellite\Cloud\Pipeline($context);
-        $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code']);
+        $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code'], $configuration['satellite']['pipeline']);
         foreach ($pipeline->remove($model->id()) as $command) {
             $bus->push($command);
         }
