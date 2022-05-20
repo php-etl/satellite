@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbb38b3e9b5e622326a3e02688cd4126",
+    "content-hash": "e67316844749516857a2b4c16c537ab8",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -763,12 +763,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "377d0411732e19e1a4574eaf48c811ed0127d93c"
+                "reference": "7f391d5e5e0dde8f465d2c8f69ed0de581149aa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/377d0411732e19e1a4574eaf48c811ed0127d93c",
-                "reference": "377d0411732e19e1a4574eaf48c811ed0127d93c",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/7f391d5e5e0dde8f465d2c8f69ed0de581149aa7",
+                "reference": "7f391d5e5e0dde8f465d2c8f69ed0de581149aa7",
                 "shasum": ""
             },
             "require": {
@@ -809,7 +809,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/main"
             },
-            "time": "2022-05-09T15:05:21+00:00"
+            "time": "2022-05-20T13:53:32+00:00"
         },
         {
             "name": "php-etl/packaging",
@@ -9128,7 +9128,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php-etl/gyroscops-api-client": 20,
         "composer/composer": 0
     },
     "prefer-stable": true,

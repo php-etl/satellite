@@ -51,6 +51,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             ->end()
         ;
 
+        /** @phpstan-ignore-next-line */
         $node = $builder->getRootNode()->arrayPrototype();
 
         $this

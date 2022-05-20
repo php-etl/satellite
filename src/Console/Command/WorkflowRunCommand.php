@@ -46,6 +46,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
         $autoload->addClassMap([
+            /** @phpstan-ignore-next-line */
             \ProjectServiceContainer::class => 'container.php',
         ]);
         $autoload->register();

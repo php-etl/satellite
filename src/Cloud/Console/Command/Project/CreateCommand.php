@@ -65,15 +65,15 @@ final class CreateCommand extends Console\Command\Command
 
         $context = new Satellite\Cloud\Context();
 
-        $project = new Api\Model\Project();
-        $project->setName($input->getArgument('name'));
-        $project->setOrganization($context->organization()->asString());
-        $project->setAuthorizations([]);
-        $project->setUsers([]);
+        $workspace = new Api\Model\Workspace();
+        $workspace->setName($input->getArgument('name'));
+        $workspace->setOrganization($context->organization()->asString());
+        $workspace->setAuthorizations([]);
+        $workspace->setUsers([]);
 
         try {
-            $client->postProjectCollection($project);
-        } catch (Api\Exception\PostProjectCollectionBadRequestException) {
+            $client->postWorkspaceCollection($workspace);
+        } catch (Api\Exception\PostWorkspaceCollectionBadRequestException) {
             $style->error('Something went wrong while creating the project.');
 
             return self::FAILURE;

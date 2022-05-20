@@ -51,6 +51,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             ->end()
         ;
 
+        /** @phpstan-ignore-next-line */
         $node = $builder->getRootNode()->arrayPrototype();
 
         $this
@@ -83,6 +84,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyPlugins(ArrayNodeDefinition $node): self
     {
         foreach ($this->plugins as $plugin) {
+            /** @phpstan-ignore-next-line */
             $node
                 ->children()
                 ->scalarNode('name')->end()
@@ -98,6 +100,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyFeatures(ArrayNodeDefinition $node): self
     {
         foreach ($this->features as $feature) {
+            /** @phpstan-ignore-next-line */
             $node->children()
                 ->scalarNode('name')->end()
                 ->scalarNode('code')->end()
