@@ -92,18 +92,18 @@ final class Configuration implements ConfigurationInterface
             ->validate()
             ->ifTrue(fn ($data) => \array_key_exists('satellites', $data) && \is_array($data['satellites']) && \count($data['satellites']) <= 0)
             ->then(function ($data) {
-                    unset($data['satellites']);
+                unset($data['satellites']);
 
-                    return $data;
-                })
+                return $data;
+            })
             ->end()
             ->validate()
             ->ifTrue(fn ($data) => \array_key_exists('version', $data) && \is_array($data['version']) && \count($data['version']) <= 0)
             ->then(function ($data) {
-                    unset($data['version']);
+                unset($data['version']);
 
-                    return $data;
-                })
+                return $data;
+            })
             ->end()
             ->children()
             ->arrayNode('satellites')->end()

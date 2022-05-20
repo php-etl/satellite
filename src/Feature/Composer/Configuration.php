@@ -25,19 +25,19 @@ final class Configuration implements FeatureConfigurationInterface
             ->arrayPrototype()
             ->beforeNormalization()
             ->always(function ($data) {
-                                        if (\array_key_exists('path', $data) && \array_key_exists('paths', $data)) {
-                                            throw new InvalidConfigurationException('You should either specify the "path" or the "paths" options.');
-                                        }
+                if (\array_key_exists('path', $data) && \array_key_exists('paths', $data)) {
+                    throw new InvalidConfigurationException('You should either specify the "path" or the "paths" options.');
+                }
 
-                                        if (\array_key_exists('paths', $data)) {
-                                            return $data;
-                                        }
+                if (\array_key_exists('paths', $data)) {
+                    return $data;
+                }
 
-                                        $data['paths'] = [$data['path']];
-                                        unset($data['path']);
+                $data['paths'] = [$data['path']];
+                unset($data['path']);
 
-                                        return $data;
-                                    })
+                return $data;
+            })
             ->end()
             ->children()
             ->scalarNode('namespace')->end()

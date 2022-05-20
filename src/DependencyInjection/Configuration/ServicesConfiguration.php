@@ -17,29 +17,29 @@ final class ServicesConfiguration implements ConfigurationInterface
         $builder->getRootNode()
             ->beforeNormalization()
             ->always(function ($data) {
-                    foreach ($data as $identifier => &$service) {
-                        if (null === $service) {
+                foreach ($data as $identifier => &$service) {
+                    if (null === $service) {
+                        $service['class'] = $identifier;
+                    } else {
+                        if (!\array_key_exists('class', $service)) {
                             $service['class'] = $identifier;
-                        } else {
-                            if (!\array_key_exists('class', $service)) {
-                                $service['class'] = $identifier;
-                            }
                         }
                     }
+                }
 
-                    return $data;
-                })
+                return $data;
+            })
             ->end()
             ->beforeNormalization()
             ->always(function ($data) {
-                    foreach ($data as &$service) {
-                        if (\array_key_exists('calls', $service)) {
-                            $service['calls'] = array_merge(...$service['calls']);
-                        }
+                foreach ($data as &$service) {
+                    if (\array_key_exists('calls', $service)) {
+                        $service['calls'] = array_merge(...$service['calls']);
                     }
+                }
 
-                    return $data;
-                })
+                return $data;
+            })
             ->end()
             ->arrayPrototype()
             ->children()
