@@ -9,14 +9,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class ParametersConfiguration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('parameters');
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->arrayPrototype()
-            ->variablePrototype()->end()
+                ->variablePrototype()->end()
             ->end()
         ;
 

@@ -84,29 +84,29 @@ final class Configuration implements ConfigurationInterface
             ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
             ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
             ->beforeNormalization()
-            ->always($this->mutuallyDependentFields('satellites', 'version'))
+                ->always($this->mutuallyDependentFields('satellites', 'version'))
             ->end()
             ->beforeNormalization()
-            ->always($this->mutuallyExclusiveFields('satellite', 'version'))
+                ->always($this->mutuallyExclusiveFields('satellite', 'version'))
             ->end()
             ->validate()
-            ->ifTrue(fn ($data) => \array_key_exists('satellites', $data) && \is_array($data['satellites']) && \count($data['satellites']) <= 0)
-            ->then(function ($data) {
-                unset($data['satellites']);
+                ->ifTrue(fn ($data) => \array_key_exists('satellites', $data) && \is_array($data['satellites']) && \count($data['satellites']) <= 0)
+                ->then(function ($data) {
+                    unset($data['satellites']);
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->validate()
-            ->ifTrue(fn ($data) => \array_key_exists('version', $data) && \is_array($data['version']) && \count($data['version']) <= 0)
-            ->then(function ($data) {
-                unset($data['version']);
+                ->ifTrue(fn ($data) => \array_key_exists('version', $data) && \is_array($data['version']) && \count($data['version']) <= 0)
+                ->then(function ($data) {
+                    unset($data['version']);
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->children()
-            ->arrayNode('satellites')->end()
+                ->arrayNode('satellites')->end()
             ->end()
         ;
 
@@ -132,16 +132,16 @@ final class Configuration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
-            ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-            ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
-            ->scalarNode('label')
-            ->isRequired()
-            ->end()
-            ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+                ->scalarNode('label')
+                    ->isRequired()
+                ->end()
+                ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end()
         ;
 
