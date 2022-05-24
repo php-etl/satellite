@@ -33,6 +33,7 @@ return (new PhpCsFixer\Config())
         'error_suppression' => true,
         'ereg_to_preg' => true,
         'dir_constant' => true,
+        'method_chaining_indentation' => false,
     ])
     ->setFinder($finder)
     ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line

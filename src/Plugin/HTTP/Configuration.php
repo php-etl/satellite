@@ -41,7 +41,8 @@ final class Configuration implements PluginConfigurationInterface
                         ->enumNode('encoding')->values(['json'])->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

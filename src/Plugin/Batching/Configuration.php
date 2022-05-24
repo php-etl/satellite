@@ -44,7 +44,8 @@ final class Configuration implements PluginConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }
