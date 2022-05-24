@@ -9,57 +9,57 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class ServicesConfiguration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('services');
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-            ->always(function ($data) {
-                foreach ($data as $identifier => &$service) {
-                    if (null === $service) {
-                        $service['class'] = $identifier;
-                    } else {
-                        if (!\array_key_exists('class', $service)) {
+                ->always(function ($data) {
+                    foreach ($data as $identifier => &$service) {
+                        if (null === $service) {
                             $service['class'] = $identifier;
+                        } else {
+                            if (!\array_key_exists('class', $service)) {
+                                $service['class'] = $identifier;
+                            }
                         }
                     }
-                }
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->beforeNormalization()
-            ->always(function ($data) {
-                foreach ($data as &$service) {
-                    if (\array_key_exists('calls', $service)) {
-                        $service['calls'] = array_merge(...$service['calls']);
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (\array_key_exists('calls', $service)) {
+                            $service['calls'] = array_merge(...$service['calls']);
+                        }
                     }
-                }
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->arrayPrototype()
-            ->children()
-            ->scalarNode('class')->isRequired()->end()
-            ->arrayNode('arguments')
-            ->useAttributeAsKey('key')
-            ->scalarPrototype()->end()
-            ->end()
-            ->arrayNode('factory')
-            ->children()
-            ->scalarNode('class')->isRequired()->end()
-            ->scalarNode('method')->isRequired()->end()
-            ->end()
-            ->end()
-            ->arrayNode('calls')
-            ->arrayPrototype()
-            ->variablePrototype()->end()
-            ->end()
-            ->end()
-            ->end()
+                ->children()
+                    ->scalarNode('class')->isRequired()->end()
+                    ->arrayNode('arguments')
+                        ->useAttributeAsKey('key')
+                        ->scalarPrototype()->end()
+                    ->end()
+                    ->arrayNode('factory')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->end()
+                            ->scalarNode('method')->isRequired()->end()
+                        ->end()
+                    ->end()
+                    ->arrayNode('calls')
+                        ->arrayPrototype()
+                            ->variablePrototype()->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

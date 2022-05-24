@@ -17,7 +17,7 @@ final class VersionConfiguration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->beforeNormalization()->castToArray()->end()
             ->enumPrototype()
-            ->values(['0.3'])
+                ->values(['0.3'])
             ->end()
         ;
 

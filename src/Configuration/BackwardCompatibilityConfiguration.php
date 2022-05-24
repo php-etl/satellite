@@ -56,13 +56,13 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-            ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-            ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
+                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
-            ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
+                ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
             ->end()
         ;
 
