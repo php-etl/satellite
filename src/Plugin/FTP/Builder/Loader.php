@@ -33,9 +33,9 @@ final class Loader implements StepBuilderInterface
         $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
-    public function addServerBasePath($key, Node\Expr $base_path): void
+    public function addServerBasePath(string $host, Node\Expr $base_path): void
     {
-        $this->serversMapping[$key] = $base_path;
+        $this->serversMapping[$host] = $base_path;
     }
 
     private function compileServersMapping(): array

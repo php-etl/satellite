@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\FTP;
+use Symfony\Component\ExpressionLanguage\Expression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Configurator\RepositoryInterface;
@@ -63,9 +64,12 @@ class Loader implements Configurator\FactoryInterface
         if (\array_key_exists('servers', $config['loader'])
             && \is_array($config['loader']['servers'])
         ) {
-            foreach ($config['loader']['servers'] as $key => $server) {
+            foreach ($config['loader']['servers'] as $server) {
                 $serverFactory = new FTP\Factory\Server($this->interpreter);
-                $builder->addServerBasePath($key, compileValueWhenExpression($this->interpreter, $server['base_path']));
+                $builder->addServerBasePath(
+                    $server['host'] instanceof Expression ? $this->interpreter->evaluate($server['host']) : $server['host'],
+                    compileValueWhenExpression($this->interpreter, $server['base_path'])
+                );
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();
