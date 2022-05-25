@@ -63,9 +63,9 @@ class Loader implements Configurator\FactoryInterface
         if (\array_key_exists('servers', $config['loader'])
             && \is_array($config['loader']['servers'])
         ) {
-            foreach ($config['loader']['servers'] as $server) {
+            foreach ($config['loader']['servers'] as $key => $server) {
                 $serverFactory = new FTP\Factory\Server($this->interpreter);
-                $builder->addServerBasePath($server['host'], compileValueWhenExpression($this->interpreter, $server['base_path']));
+                $builder->addServerBasePath($key, compileValueWhenExpression($this->interpreter, $server['base_path']));
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();
