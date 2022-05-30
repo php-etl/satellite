@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\FTP;
-use Symfony\Component\ExpressionLanguage\Expression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Configurator\RepositoryInterface;
