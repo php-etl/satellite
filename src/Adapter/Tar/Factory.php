@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Tar;
 
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite;
-use Kiboko\Contract\Configurator\Adapter;
-use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
+use Kiboko\Contract\Configurator;
 
-#[Adapter(name: 'tar')]
-final class Factory implements Satellite\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'tar')]
+final class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 
@@ -19,12 +17,12 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         $this->configuration = new Configuration();
     }
 
-    public function configuration(): AdapterConfigurationInterface
+    public function configuration(): Configurator\AdapterConfigurationInterface
     {
         return $this->configuration;
     }
 
-    public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
+    public function __invoke(array $configuration): Configurator\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($this->outputPath);
 

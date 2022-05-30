@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Tar;
 
 use Kiboko\Component\Packaging\TarArchive;
-use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
-final class Satellite implements SatelliteInterface
+final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags;

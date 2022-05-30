@@ -27,7 +27,7 @@
         "nikic/php-parser": "^4.10",
         "php-etl/packaging": "^0.1.0",
         "php-etl/satellite-toolbox": "*",
-        "php-etl/configurator-contracts": "^0.4.0",
+        "php-etl/configurator-contracts": "^0.5.0",
         "php-etl/pipeline-console-runtime": "^0.1.0",
         "php-etl/workflow-console-runtime": "^0.1.0",
         "symfony/http-client": "^6.0",
@@ -86,7 +86,7 @@
     "bin": ["bin/satellite"],
     "extra": {
         "branch-alias": {
-            "dev-main": "0.3.x-dev"
+            "dev-main": "0.4.x-dev"
         },
         "gyroscops": {
             "adapters": [
