@@ -72,7 +72,7 @@ class Server implements Configurator\FactoryInterface
             );
         }
 
-        $builder->withPassifMode(compileValueWhenExpression($this->interpreter, $config['passif_mode']));
+        $builder->withPassiveMode(compileValueWhenExpression($this->interpreter, $config['passif_mode']));
 
         try {
             return new FTP\Factory\Repository\Repository($builder);

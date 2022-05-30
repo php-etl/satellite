@@ -66,10 +66,7 @@ class Loader implements Configurator\FactoryInterface
         ) {
             foreach ($config['loader']['servers'] as $server) {
                 $serverFactory = new FTP\Factory\Server($this->interpreter);
-                $builder->addServerBasePath(
-                    $server['host'] instanceof Expression ? $this->interpreter->evaluate($server['host']) : $server['host'],
-                    compileValueWhenExpression($this->interpreter, $server['base_path'])
-                );
+                $builder->addServerBasePath(compileValueWhenExpression($this->interpreter, $server['base_path']));
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();
