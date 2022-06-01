@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter;
 
-use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 
 final class AdapterChoice
 {
@@ -13,7 +13,7 @@ final class AdapterChoice
     ) {
     }
 
-    public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
+    public function __invoke(array $configuration): Configurator\SatelliteBuilderInterface
     {
         $factory = null;
         foreach ($this->adapters as $alias => $adapter) {
