@@ -52,7 +52,7 @@ class ConfigLoader implements ConfigLoaderInterface
                 }
             }
 
-            foreach ($config['satellites'] as &$satellite) {
+            foreach ($config['satellites'] as $satellite) {
                 if (\array_key_exists('imports', $satellite)) {
                     $imports = $satellite['imports'];
                     unset($satellite['imports']);

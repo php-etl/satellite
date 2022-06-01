@@ -17,7 +17,7 @@ final class ServicesConfiguration implements ConfigurationInterface
         $builder->getRootNode()
             ->beforeNormalization()
                 ->always(function ($data) {
-                    foreach ($data as $identifier => &$service) {
+                    foreach ($data as $identifier => $service) {
                         if (null === $service) {
                             $service['class'] = $identifier;
                         } else {
@@ -32,7 +32,7 @@ final class ServicesConfiguration implements ConfigurationInterface
             ->end()
             ->beforeNormalization()
                 ->always(function ($data) {
-                    foreach ($data as &$service) {
+                    foreach ($data as $service) {
                         if (\array_key_exists('calls', $service)) {
                             $service['calls'] = array_merge(...$service['calls']);
                         }
