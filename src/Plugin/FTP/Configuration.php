@@ -37,7 +37,7 @@ final class Configuration implements PluginConfigurationInterface
                                     ->variableNode('port')
                                         ->defaultValue(21)
                                         ->validate()
-                                            ->ifTrue(fn ($data) => !str_starts_with($data, '@='))
+                                            ->ifTrue(fn ($data) => !\str_starts_with($data, '@='))
                                             ->then(fn ($data) => (int) $data)
                                         ->end()
                                         ->validate()
