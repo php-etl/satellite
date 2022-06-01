@@ -16,48 +16,48 @@ final class ServicesConfiguration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-            ->always(function ($data) {
-                foreach ($data as $identifier => &$service) {
-                    if (null === $service) {
-                        $service['class'] = $identifier;
-                    } else {
-                        if (!\array_key_exists('class', $service)) {
+                ->always(function ($data) {
+                    foreach ($data as $identifier => &$service) {
+                        if (null === $service) {
                             $service['class'] = $identifier;
+                        } else {
+                            if (!\array_key_exists('class', $service)) {
+                                $service['class'] = $identifier;
+                            }
                         }
                     }
-                }
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->beforeNormalization()
-            ->always(function ($data) {
-                foreach ($data as &$service) {
-                    if (\array_key_exists('calls', $service)) {
-                        $service['calls'] = array_merge(...$service['calls']);
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (\array_key_exists('calls', $service)) {
+                            $service['calls'] = array_merge(...$service['calls']);
+                        }
                     }
-                }
 
-                return $data;
-            })
+                    return $data;
+                })
             ->end()
             ->arrayPrototype()
-            ->children()
-            ->scalarNode('class')->isRequired()->end()
-            ->arrayNode('arguments')
-//                        ->useAttributeAsKey('key')
-            ->variablePrototype()->end()
-            ->end()
-            ->arrayNode('calls')
-            ->useAttributeAsKey('key')
-            ->arrayPrototype()
-            ->variablePrototype()->end()
-            ->end()
-            ->end()
-            ->booleanNode('public')
-            ->defaultFalse()
-            ->end()
-            ->end()
+                ->children()
+                    ->scalarNode('class')->isRequired()->end()
+                    ->arrayNode('arguments')
+    //                        ->useAttributeAsKey('key')
+                        ->variablePrototype()->end()
+                    ->end()
+                    ->arrayNode('calls')
+                        ->useAttributeAsKey('key')
+                        ->arrayPrototype()
+                            ->variablePrototype()->end()
+                        ->end()
+                    ->end()
+                    ->booleanNode('public')
+                        ->defaultFalse()
+                    ->end()
+                ->end()
             ->end()
         ;
 

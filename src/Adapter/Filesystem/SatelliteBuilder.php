@@ -38,7 +38,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): Configurator\SatelliteBuilderInterface
     {
         $this->composerAutoload['psr4'][$namespace] = $paths;
 
@@ -88,7 +88,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
             mkdir($this->workdir, 0o775, true);

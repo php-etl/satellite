@@ -128,7 +128,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $dockerfile = new Dockerfile\Dockerfile(
             new Dockerfile\Dockerfile\From($this->fromImage),

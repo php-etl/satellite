@@ -78,7 +78,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $satellite = new Satellite\Adapter\Tar\Satellite(
             $this->outputPath,
