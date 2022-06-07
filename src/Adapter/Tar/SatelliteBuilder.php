@@ -6,9 +6,10 @@ namespace Kiboko\Component\Satellite\Adapter\Tar;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
     private iterable $composerRequire;
@@ -77,7 +78,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $satellite = new Satellite\Adapter\Tar\Satellite(
             $this->outputPath,

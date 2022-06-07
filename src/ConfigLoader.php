@@ -108,6 +108,8 @@ class ConfigLoader implements ConfigLoaderInterface
                     }
                 }
             }
+
+            unset($satellite);
         }
 
         yield $config;

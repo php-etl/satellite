@@ -7,9 +7,10 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Dockerfile;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     private string $fromImage;
     private string $workdir;
@@ -127,7 +128,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $dockerfile = new Dockerfile\Dockerfile(
             new Dockerfile\Dockerfile\From($this->fromImage),

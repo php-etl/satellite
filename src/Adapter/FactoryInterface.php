@@ -2,14 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Adapter;
+trigger_deprecation('php-etl/satellite', '0.4', 'The "%s" interface is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\Adapter\\FactoryInterface', \Kiboko\Contract\Configurator\Adapter\FactoryInterface::class);
 
-use Kiboko\Component\Satellite\SatelliteBuilderInterface;
-use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
-
-interface FactoryInterface
-{
-    public function configuration(): AdapterConfigurationInterface;
-
-    public function __invoke(array $configuration): SatelliteBuilderInterface;
-}
+/*
+ * @deprecated since Satellite 0.4, use Kiboko\Contract\Configurator\Adapter\FactoryInterface instead.
+ */
+class_alias(\Kiboko\Contract\Configurator\Adapter\FactoryInterface::class, 'Kiboko\\Component\\Satellite\\Adapter\\FactoryInterface');

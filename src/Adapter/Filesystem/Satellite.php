@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Satellite\Adapter\Composer;
-use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
-final class Satellite implements SatelliteInterface
+final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;

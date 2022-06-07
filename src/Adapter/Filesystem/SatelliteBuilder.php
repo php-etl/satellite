@@ -6,10 +6,10 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
-use Kiboko\Component\Satellite\SatelliteBuilderInterface;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
     private iterable $composerRequire;
@@ -38,7 +38,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): Configurator\SatelliteBuilderInterface
     {
         $this->composerAutoload['psr4'][$namespace] = $paths;
 
@@ -88,7 +88,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
             mkdir($this->workdir, 0o775, true);

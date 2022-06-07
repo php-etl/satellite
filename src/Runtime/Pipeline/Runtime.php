@@ -25,7 +25,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
         return $this->filename;
     }
 
-    public function prepare(Configurator\FactoryInterface $service, Satellite\SatelliteInterface $satellite, LoggerInterface $logger): void
+    public function prepare(Configurator\FactoryInterface $service, Configurator\SatelliteInterface $satellite, LoggerInterface $logger): void
     {
         $repository = $service->compile($this->config);
 
