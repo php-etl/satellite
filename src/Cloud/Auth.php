@@ -20,7 +20,7 @@ final class Auth
         }
 
         if (!file_exists($this->pathName)
-            && !mkdir($this->pathName, 0o700, true)
+            && !mkdir($this->pathName, 0700, true)
             && !is_dir($this->pathName)
         ) {
             throw new \RuntimeException(sprintf('Directory "%s" can not be created', $this->pathName));
@@ -31,7 +31,7 @@ final class Auth
             $content = file_get_contents($this->pathName.'/auth.json');
         } else {
             touch($this->pathName.'/auth.json');
-            chmod($this->pathName.'/auth.json', 0o700);
+            chmod($this->pathName.'/auth.json', 0700);
         }
         if (false === $content) {
             $this->configuration = [];
