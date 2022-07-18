@@ -9,6 +9,7 @@ final class Credentials
     public function __construct(
         public string $username,
         public string $password,
+        public string $workspace,
     ) {
     }
 
@@ -17,6 +18,7 @@ final class Credentials
         return [
             'login' => $this->username,
             'password' => '**SECRET**',
+            'workspace' => $this->workspace,
         ];
     }
 }

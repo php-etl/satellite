@@ -19,6 +19,7 @@ final class LoginCommand extends Console\Command\Command
     {
         $this->setDescription('Authenticate to the Gyroscops API.');
         $this->addArgument('username', mode: Console\Input\InputArgument::OPTIONAL);
+        $this->addArgument('workspace', mode: Console\Input\InputArgument::OPTIONAL);
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
@@ -70,14 +71,22 @@ final class LoginCommand extends Console\Command\Command
         }
 
         $retries = 3;
+        $workspace = $input->getArgument('workspace') ?? $style->ask('Workspace:');
         $username = $input->getArgument('username') ?? $style->ask('Username:');
 
         while (true) {
             try {
                 $password = $style->askHidden('Password:');
-                $token = $auth->authenticateWithCredentials($client, new Satellite\Cloud\Credentials($username, $password));
+                $token = $auth->authenticateWithCredentials(
+                    $client,
+                    new Satellite\Cloud\Credentials(
+                        $username,
+                        $password,
+                        $workspace
+                    )
+                );
 
-                $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password));
+                $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password, $workspace));
                 $auth->persistToken($url, $token);
                 $auth->flush();
 

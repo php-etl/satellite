@@ -29,7 +29,7 @@ final class Context
             $content = file_get_contents($this->pathName.'/.gyroscops.json');
         } else {
             touch($this->pathName.'/.gyroscops.json');
-            chmod($this->pathName.'/.gyroscops.json', 0o655);
+            chmod($this->pathName.'/.gyroscops.json', 0655);
         }
 
         if (false === $content) {
