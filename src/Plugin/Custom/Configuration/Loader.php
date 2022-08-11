@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 
+use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

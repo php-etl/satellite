@@ -49,7 +49,7 @@ final class Loader implements StepBuilderInterface
     {
         return new Node\Expr\MethodCall(
             var: new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('ProjectServiceContainer')
+                class: new Node\Name\FullyQualified('ProjectLoaderServiceContainer')
             ),
             name: new Node\Identifier('get'),
             args: [

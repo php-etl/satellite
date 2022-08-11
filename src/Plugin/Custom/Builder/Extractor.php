@@ -42,7 +42,7 @@ final class Extractor implements StepBuilderInterface
     {
         return new Node\Expr\MethodCall(
             var: new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('ProjectServiceContainer')
+                class: new Node\Name\FullyQualified('ProjectExtractorServiceContainer')
             ),
             name: new Node\Identifier('get'),
             args: [

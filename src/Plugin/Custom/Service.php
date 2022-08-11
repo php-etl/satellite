@@ -81,19 +81,13 @@ final class Service implements Configurator\PipelinePluginInterface
         }
 
         if (\array_key_exists('extractor', $config)) {
-            $extractorFactory = new Custom\Factory\Extractor($this->interpreter);
-
-            return $extractorFactory->compile($config['extractor']);
+            return (new Custom\Factory\Extractor($this->interpreter))->compile($config['extractor']);
         }
         if (\array_key_exists('transformer', $config)) {
-            $transformerFactory = new Custom\Factory\Transformer($this->interpreter);
-
-            return $transformerFactory->compile($config['transformer']);
+            return (new Custom\Factory\Transformer($this->interpreter))->compile($config['transformer']);
         }
         if (\array_key_exists('loader', $config)) {
-            $loaderFactory = new Custom\Factory\Loader($this->interpreter);
-
-            return $loaderFactory->compile($config['loader']);
+            return (new Custom\Factory\Loader($this->interpreter))->compile($config['loader']);
         }
 
         throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');

@@ -244,6 +244,29 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    <<<PHP
+                        <?php
+
+                        if (file_exists(__DIR__ . '/ProjectExtractorServiceContainer.php')) {
+                            require __DIR__ . '/ProjectExtractorServiceContainer.php';
+                        }
+                        
+                        if (file_exists(__DIR__ . '/ProjectTransformerServiceContainer.php')) {
+                            require __DIR__ . '/ProjectTransformerServiceContainer.php';
+                        }
+                        
+                        if (file_exists(__DIR__ . '/ProjectLoaderServiceContainer.php')) {
+                            require __DIR__ . '/ProjectLoaderServiceContainer.php';
+                        }
+                        PHP
+                )
+            )
+        );
+
         foreach ($config['workflow']['jobs'] as $job) {
             if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
@@ -349,6 +372,29 @@ final class Service implements Configurator\FactoryInterface
                     new Node\Stmt\Return_(
                         (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
                     )
+                )
+            )
+        );
+
+        $repository->addFiles(
+            new Packaging\File(
+                'container.php',
+                new Packaging\Asset\InMemory(
+                    <<<'PHP'
+                        <?php
+
+                        if (file_exists(__DIR__ . '/ProjectExtractorServiceContainer.php')) {
+                            require __DIR__ . '/ProjectExtractorServiceContainer.php';
+                        }
+                        
+                        if (file_exists(__DIR__ . '/ProjectTransformerServiceContainer.php')) {
+                            require __DIR__ . '/ProjectTransformerServiceContainer.php';
+                        }
+                        
+                        if (file_exists(__DIR__ . '/ProjectLoaderServiceContainer.php')) {
+                            require __DIR__ . '/ProjectLoaderServiceContainer.php';
+                        }
+                        PHP
                 )
             )
         );

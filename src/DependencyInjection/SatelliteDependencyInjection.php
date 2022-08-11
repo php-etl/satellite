@@ -16,9 +16,9 @@ final class SatelliteDependencyInjection
         $container = new ContainerBuilder();
 
         if (\array_key_exists('parameters', $config)
-           && \is_array($config['parameters'])
-           && \count($config['parameters']) > 0
-       ) {
+            && \is_array($config['parameters'])
+            && \count($config['parameters']) > 0
+        ) {
             foreach ($config['parameters'] as $identifier => $parameter) {
                 $container->setParameter($identifier, $parameter);
             }
@@ -27,9 +27,9 @@ final class SatelliteDependencyInjection
         $container->register('logger', LoggerInterface::class);
 
         if (\array_key_exists('services', $config)
-           && \is_array($config['services'])
-           && \count($config['services']) > 0
-       ) {
+            && \is_array($config['services'])
+            && \count($config['services']) > 0
+        ) {
             foreach ($config['services'] as $identifier => $service) {
                 if (\array_key_exists('class', $service)) {
                     $class = $service['class'];
@@ -38,21 +38,15 @@ final class SatelliteDependencyInjection
                 $definition = $container->register($identifier, $class ?? null);
 
                 if (\array_key_exists('arguments', $service)
-                   && \is_array($service['arguments'])
-                   && \count($service['arguments']) > 0
-               ) {
+                    && \is_array($service['arguments'])
+                    && \count($service['arguments']) > 0
+                ) {
                     foreach ($service['arguments'] as $key => $argument) {
                         if (\is_string($argument)) {
                             if (str_starts_with($argument, '@')
-                               && '@' !== substr($argument, 1, 1)
-                           ) {
+                                && '@' !== substr($argument, 1, 1)
+                            ) {
                                 $argument = new Reference(substr($argument, 1));
-                            }
-
-                            if (is_numeric($key)) {
-                                $definition->addArgument($argument);
-                            } else {
-                                $definition->setArgument($key, $argument);
                             }
                         }
 
@@ -63,13 +57,15 @@ final class SatelliteDependencyInjection
                         if (\is_array($argument)) {
                             $definition->addArgument($argument);
                         }
+
+                        $definition->setArgument($key, $argument);
                     }
                 }
 
                 if (\array_key_exists('calls', $service)
-                   && \is_array($service['calls'])
-                   && \count($service['calls']) > 0
-               ) {
+                    && \is_array($service['calls'])
+                    && \count($service['calls']) > 0
+                ) {
                     foreach ($service['calls'] as $key => $arguments) {
                         $definition->addMethodCall($key, array_map(function ($argument) {
                             if (preg_match('/^@[^@]/', $argument)) {
@@ -82,6 +78,13 @@ final class SatelliteDependencyInjection
                             return $argument;
                         }, $arguments));
                     }
+                }
+
+                if (\array_key_exists('factory', $service)
+                    && \is_array($service['factory'])
+                    && \count($service['factory']) > 0
+                ) {
+                    $definition->setFactory([$service['factory']['class'], $service['factory']['method']]);
                 }
 
                 $definition->setPublic($service['public']);
