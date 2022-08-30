@@ -16,7 +16,7 @@ final class ServicesConfiguration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-            ->always(function ($data) {
+                ->always(function ($data) {
                     foreach ($data as $identifier => &$service) {
                         if (null === $service) {
                             $service['class'] = $identifier;
@@ -45,7 +45,6 @@ final class ServicesConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('class')->isRequired()->end()
                     ->arrayNode('arguments')
-            //                        ->useAttributeAsKey('key')
                         ->variablePrototype()->end()
                     ->end()
                     ->arrayNode('factory')
