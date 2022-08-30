@@ -50,6 +50,21 @@ final class SatelliteDependencyInjection
                             }
                         }
 
+                        if (\is_array($argument)) {
+                            $array = [];
+                            foreach ($argument as $item) {
+                                if (str_starts_with($item, '@')
+                                    && '@' !== substr($item, 1, 1)
+                                ) {
+                                    $item = new Reference(substr($item, 1));
+                                }
+
+                                $array[] = $item;
+                            }
+
+                            $argument = $array;
+                        }
+
                         $definition->addArgument($argument);
                     }
                 }
