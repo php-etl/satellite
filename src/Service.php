@@ -248,19 +248,15 @@ final class Service implements Configurator\FactoryInterface
             new Packaging\File(
                 'container.php',
                 new Packaging\Asset\InMemory(
-                    <<<PHP
+                    <<<'PHP'
                         <?php
 
-                        if (file_exists(__DIR__ . '/ProjectExtractorServiceContainer.php')) {
-                            require __DIR__ . '/ProjectExtractorServiceContainer.php';
-                        }
-                        
-                        if (file_exists(__DIR__ . '/ProjectTransformerServiceContainer.php')) {
-                            require __DIR__ . '/ProjectTransformerServiceContainer.php';
-                        }
-                        
-                        if (file_exists(__DIR__ . '/ProjectLoaderServiceContainer.php')) {
-                            require __DIR__ . '/ProjectLoaderServiceContainer.php';
+                        $files = scandir(__DIR__);
+
+                        foreach ($files as $file) {
+                            if (str_starts_with($file, 'ProjectServiceContainer')) {
+                                require __DIR__ . '/' . $file;
+                            }
                         }
                         PHP
                 )
@@ -383,16 +379,12 @@ final class Service implements Configurator\FactoryInterface
                     <<<'PHP'
                         <?php
 
-                        if (file_exists(__DIR__ . '/ProjectExtractorServiceContainer.php')) {
-                            require __DIR__ . '/ProjectExtractorServiceContainer.php';
-                        }
-                        
-                        if (file_exists(__DIR__ . '/ProjectTransformerServiceContainer.php')) {
-                            require __DIR__ . '/ProjectTransformerServiceContainer.php';
-                        }
-                        
-                        if (file_exists(__DIR__ . '/ProjectLoaderServiceContainer.php')) {
-                            require __DIR__ . '/ProjectLoaderServiceContainer.php';
+                        $files = scandir(__DIR__);
+
+                        foreach ($files as $file) {
+                            if (str_starts_with($file, 'ProjectServiceContainer')) {
+                                require __DIR__ . '/' . $file;
+                            }
                         }
                         PHP
                 )

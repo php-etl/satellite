@@ -9,6 +9,7 @@ use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Custom;
 use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
+use Symfony\Component\String\ByteString;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -64,6 +65,8 @@ class Transformer implements Configurator\FactoryInterface
      */
     public function compile(array $config): Repository\Transformer
     {
+        $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
+
         $builder = new Custom\Builder\Transformer(compileValueWhenExpression($this->interpreter, $config['use']));
 
         $container = (new SatelliteDependencyInjection())($config);
@@ -73,9 +76,9 @@ class Transformer implements Configurator\FactoryInterface
         $dumper = new PhpDumper($container);
         $repository->addFiles(
             new Packaging\File(
-                'ProjectTransformerServiceContainer.php',
+                sprintf('%s.php', $containerName),
                 new Packaging\Asset\InMemory(
-                    $dumper->dump(['class' => 'ProjectTransformerServiceContainer'])
+                    $dumper->dump(['class' => $containerName])
                 )
             ),
         );
