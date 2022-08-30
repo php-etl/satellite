@@ -31,7 +31,7 @@ final class ServicesConfiguration implements ConfigurationInterface
                 })
             ->end()
             ->beforeNormalization()
-            ->always(function ($data) {
+                ->always(function ($data) {
                     foreach ($data as &$service) {
                         if (\array_key_exists('calls', $service)) {
                             $service['calls'] = array_merge(...$service['calls']);

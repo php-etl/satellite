@@ -50,15 +50,7 @@ final class SatelliteDependencyInjection
                             }
                         }
 
-                        if (\is_int($argument)) {
-                            $definition->addArgument($argument);
-                        }
-
-                        if (\is_array($argument)) {
-                            $definition->addArgument($argument);
-                        }
-
-                        $definition->setArgument($key, $argument);
+                        $definition->addArgument($argument);
                     }
                 }
 
