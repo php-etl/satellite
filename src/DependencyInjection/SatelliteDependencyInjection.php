@@ -98,7 +98,7 @@ final class SatelliteDependencyInjection
             }
         }
 
-//        $container->compile();
+        $container->compile();
 
         return $container;
     }
