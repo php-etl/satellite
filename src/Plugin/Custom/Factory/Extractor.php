@@ -78,7 +78,7 @@ class Extractor implements Configurator\FactoryInterface
             new Packaging\File(
                 sprintf('%s.php', $containerName),
                 new Packaging\Asset\InMemory(
-                    $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated\\'])
+                    $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated'])
                 )
             ),
         );
