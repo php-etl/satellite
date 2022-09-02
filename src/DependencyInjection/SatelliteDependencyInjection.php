@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class SatelliteDependencyInjection
 {
@@ -42,30 +43,13 @@ final class SatelliteDependencyInjection
                     && \count($service['arguments']) > 0
                 ) {
                     foreach ($service['arguments'] as $key => $argument) {
-                        if (\is_string($argument)) {
-                            if (str_starts_with($argument, '@')
-                                && '@' !== substr($argument, 1, 1)
-                            ) {
-                                $argument = new Reference(substr($argument, 1));
-                            }
+                        $argument = $this->resolveArgument($argument);
+
+                        if (is_numeric($key)) {
+                            $definition->addArgument($argument);
+                        } else {
+                            $definition->setArgument($key, $argument);
                         }
-
-                        if (\is_array($argument)) {
-                            $array = [];
-                            foreach ($argument as $item) {
-                                if (str_starts_with($item, '@')
-                                    && '@' !== substr($item, 1, 1)
-                                ) {
-                                    $item = new Reference(substr($item, 1));
-                                }
-
-                                $array[] = $item;
-                            }
-
-                            $argument = $array;
-                        }
-
-                        $definition->addArgument($argument);
                     }
                 }
 
@@ -101,5 +85,20 @@ final class SatelliteDependencyInjection
         $container->compile();
 
         return $container;
+    }
+
+    private function resolveArgument(mixed $argument): mixed
+    {
+        if (\is_string($argument) && str_starts_with($argument, '@')) {
+            $argument = new Reference(substr($argument, 1));
+        } elseif (\is_string($argument) && str_starts_with($argument, '@=')) {
+            $argument = new Expression(substr($argument, 2));
+        } elseif (\is_array($argument)) {
+            foreach ($argument as $k => $v) {
+                $argument[$k] = $this->resolveArgument($v);
+            }
+        }
+
+        return $argument;
     }
 }
