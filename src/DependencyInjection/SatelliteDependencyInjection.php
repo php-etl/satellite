@@ -89,14 +89,21 @@ final class SatelliteDependencyInjection
 
     private function resolveArgument(mixed $argument): mixed
     {
+        if (\is_string($argument) && str_starts_with($argument, '@=')) {
+            return new Expression(substr($argument, 2));
+        }
+
         if (\is_string($argument) && str_starts_with($argument, '@')) {
-            $argument = new Reference(substr($argument, 1));
-        } elseif (\is_string($argument) && str_starts_with($argument, '@=')) {
-            $argument = new Expression(substr($argument, 2));
-        } elseif (\is_array($argument)) {
-            foreach ($argument as $k => $v) {
-                $argument[$k] = $this->resolveArgument($v);
+            return new Reference(substr($argument, 1));
+        }
+
+        if (\is_array($argument)) {
+            foreach ($argument as &$value) {
+                $value = $this->resolveArgument($value);
             }
+            unset($value);
+
+            return $argument;
         }
 
         return $argument;
