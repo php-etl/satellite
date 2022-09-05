@@ -30,7 +30,9 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private iterable $files;
     /** @var array<string, list<string>> */
     private array $composerAutoload = [
-        'psr4' => [],
+        'psr4' => [
+            'GyroscopsGenerated\\' => './'
+        ],
     ];
 
     public function __construct(string $fromImage)

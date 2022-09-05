@@ -16,7 +16,7 @@ final class ParametersConfiguration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->arrayPrototype()
-            ->variablePrototype()->end()
+                ->variablePrototype()->end()
             ->end()
         ;
 

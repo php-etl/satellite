@@ -22,7 +22,11 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function __construct(private string $outputPath)
     {
-        $this->composerAutoload = [];
+        $this->composerAutoload = [
+            'psr4' => [
+                'GyroscopsGenerated\\' => './'
+            ]
+        ];
         $this->composerRequire = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
