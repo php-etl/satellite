@@ -116,11 +116,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             $composer->minimumStability('dev');
 
             $composer->autoload($this->composerAutoload);
-            $composer->autoload([
-                'classmap' => [
-                    "../"
-                ]
-            ]);
         }
 
         $satellite->dependsOn(...$this->composerRequire);
