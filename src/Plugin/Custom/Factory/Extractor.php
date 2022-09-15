@@ -67,7 +67,10 @@ class Extractor implements Configurator\FactoryInterface
     {
         $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
 
-        $builder = new Custom\Builder\Extractor(compileValueWhenExpression($this->interpreter, $config['use']), $containerName);
+        $builder = new Custom\Builder\Extractor(
+            compileValueWhenExpression($this->interpreter, $config['use']),
+            sprintf('GyroscopsGenerated\\%s', $containerName),
+        );
 
         $container = (new SatelliteDependencyInjection())($config);
 

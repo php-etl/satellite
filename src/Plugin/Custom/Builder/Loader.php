@@ -13,7 +13,7 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $rejection;
     private ?Node\Expr $state;
 
-    public function __construct(private Node\Expr $service, private string $containerName)
+    public function __construct(private Node\Expr $service, private string $containerNamespace)
     {
     }
 
@@ -49,7 +49,7 @@ final class Loader implements StepBuilderInterface
     {
         return new Node\Expr\MethodCall(
             var: new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('GyroscopsGenerated\\' . $this->containerName)
+                class: new Node\Name\FullyQualified($this->containerNamespace)
             ),
             name: new Node\Identifier('get'),
             args: [
