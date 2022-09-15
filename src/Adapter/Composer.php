@@ -141,4 +141,38 @@ final class Composer
             $url,
         );
     }
+
+    public function addComposerRepository(string $name, string $url): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            sprintf('repositories.%s', $name),
+            'composer',
+            $url,
+        );
+    }
+
+    public function addVCSRepository(string $name, string $url): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            sprintf('repositories.%s', $name),
+            'vcs',
+            $url,
+        );
+    }
+
+    public function addAuthenticationToken(string $url, string $token): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            $url,
+            'token',
+            $token
+        );
+    }
 }

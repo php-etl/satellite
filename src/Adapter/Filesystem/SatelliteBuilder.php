@@ -14,6 +14,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     /** @var iterable<string> */
     private iterable $composerRequire;
     private array $composerAutoload;
+    private array $authenticationTokens;
+    private array $repositories;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
@@ -29,6 +31,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             ]
         ];
         $this->composerRequire = [];
+        $this->authenticationTokens = [];
+        $this->repositories = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
         $this->paths = [];
@@ -92,10 +96,29 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
+    public function withRepositories(string $name, string $type, string $url): self
+    {
+        $this->repositories[$name] = [
+            'type' => $type,
+            'url' => $url,
+        ];
+
+        return $this;
+    }
+
+    public function withAuthenticationToken(string $domain, string $auth): self
+    {
+        $this->authenticationTokens[$domain] = $auth;
+
+        return $this;
+    }
+
     public function build(): Configurator\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
-            mkdir($this->workdir, 0o775, true);
+            if (!mkdir($concurrentDirectory = $this->workdir, 0o775, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
         }
 
         $composer = new Satellite\Adapter\Composer($this->workdir);
@@ -116,6 +139,28 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             $composer->minimumStability('dev');
 
             $composer->autoload($this->composerAutoload);
+        }
+
+        if (count($this->repositories) > 0) {
+            foreach ($this->authenticationTokens as $key => $item) {
+                if ($item['type'] === 'composer') {
+                    $composer->addComposerRepository($key, $item['url']);
+                }
+
+                if ($item['type'] === 'vcs') {
+                    $composer->addVCSRepository($key, $item['url']);
+                }
+
+                if ($item['type'] === 'github') {
+                    $composer->addGithubRepository($key, $item['url']);
+                }
+            }
+        }
+
+        if (count($this->authenticationTokens) > 0) {
+            foreach ($this->authenticationTokens as $key => $item) {
+                $composer->addAuthenticationToken($key, $item);
+            }
         }
 
         $satellite->dependsOn(...$this->composerRequire);
