@@ -16,6 +16,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private string $workdir;
     /** @var iterable<string> */
     private iterable $composerRequire;
+    private iterable $repositories;
+    private iterable $authenticationTokens;
     /** @var iterable<string> */
     private iterable $entrypoint;
     /** @var iterable<string> */
@@ -40,6 +42,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         $this->fromImage = $fromImage;
         $this->workdir = '/var/www/html/';
         $this->composerRequire = [];
+        $this->repositories = [];
+        $this->authenticationTokens = [];
         $this->entrypoint = [];
         $this->command = [];
         $this->tags = [];
@@ -123,6 +127,23 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
+    public function withComposerDirectories(string $name, string $type, string $url): self
+    {
+        $this->repositories[$name] = [
+            'type' => $type,
+            'url' => $url,
+        ];
+
+        return $this;
+    }
+
+    public function withComposerAuthenticationToken(string $url, string $auth): self
+    {
+        $this->authenticationTokens[$url] = $auth;
+
+        return $this;
+    }
+
     public function withTags(string ...$tags): self
     {
         $this->tags = $tags;
@@ -178,6 +199,28 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
         if (\count($this->command) > 0) {
             $dockerfile->push(new Dockerfile\Dockerfile\Cmd(...$this->command));
+        }
+
+        if (\count($this->repositories) > 0) {
+            foreach ($this->repositories as $name => $repository) {
+                if ($repository['type'] === 'github') {
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddGithubRepository($name, $repository['url']));
+                }
+
+                if ($repository['type'] === 'vcs'){
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository($name, $repository['url']));
+                }
+
+                if ($repository['type'] === 'composer'){
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddComposerRepository($name, $repository['url']));
+                }
+            }
+        }
+
+        if (\count($this->authenticationTokens) > 0) {
+            foreach ($this->authenticationTokens as $url => $token) {
+                $dockerfile->push(new Dockerfile\PHP\ComposerAuthenticationToken($url, $token));
+            }
         }
 
         $satellite = new Satellite\Adapter\Docker\Satellite(

@@ -142,24 +142,24 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         }
 
         if (count($this->repositories) > 0) {
-            foreach ($this->authenticationTokens as $key => $item) {
-                if ($item['type'] === 'composer') {
-                    $composer->addComposerRepository($key, $item['url']);
+            foreach ($this->repositories as $name => $repository) {
+                if ($repository['type'] === 'composer') {
+                    $composer->addComposerRepository($name, $repository['url']);
                 }
 
-                if ($item['type'] === 'vcs') {
-                    $composer->addVCSRepository($key, $item['url']);
+                if ($repository['type'] === 'vcs') {
+                    $composer->addVCSRepository($name, $repository['url']);
                 }
 
-                if ($item['type'] === 'github') {
-                    $composer->addGithubRepository($key, $item['url']);
+                if ($repository['type'] === 'github') {
+                    $composer->addGithubRepository($name, $repository['url']);
                 }
             }
         }
 
         if (count($this->authenticationTokens) > 0) {
-            foreach ($this->authenticationTokens as $key => $item) {
-                $composer->addAuthenticationToken($key, $item);
+            foreach ($this->authenticationTokens as $url => $token) {
+                $composer->addAuthenticationToken($url, $token);
             }
         }
 
