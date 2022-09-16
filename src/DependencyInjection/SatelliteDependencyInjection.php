@@ -59,6 +59,9 @@ final class SatelliteDependencyInjection
                 ) {
                     foreach ($service['calls'] as $key => $arguments) {
                         $definition->addMethodCall($key, array_map(function ($argument) {
+                            if (preg_match('/^@=[^@=]/', $argument)) {
+                                return new Expression(substr($argument, 2));
+                            }
                             if (preg_match('/^@[^@]/', $argument)) {
                                 return new Reference(substr($argument, 1));
                             }
