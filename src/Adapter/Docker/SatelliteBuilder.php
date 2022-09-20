@@ -127,7 +127,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerDirectories(string $name, string $type, string $url): self
+    public function withComposerRepositories(string $name, string $type, string $url): self
     {
         $this->repositories[$name] = [
             'type' => $type,
@@ -189,10 +189,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             }
         }
 
-        if (\count($this->composerRequire) > 0) {
-            $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
-        }
-
         if (\count($this->entrypoint) > 0) {
             $dockerfile->push(new Dockerfile\Dockerfile\Entrypoint(...$this->entrypoint));
         }
@@ -221,6 +217,10 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             foreach ($this->authenticationTokens as $url => $token) {
                 $dockerfile->push(new Dockerfile\PHP\ComposerAuthenticationToken($url, $token));
             }
+        }
+
+        if (\count($this->composerRequire) > 0) {
+            $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
         }
 
         $satellite = new Satellite\Adapter\Docker\Satellite(
