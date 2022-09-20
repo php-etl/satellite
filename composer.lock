@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "c8264248d1ce0bce94165883e49144d1240d5d00"
+                "reference": "3fb9a3694391fab91c3da129389586f5e2fce082"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/c8264248d1ce0bce94165883e49144d1240d5d00",
-                "reference": "c8264248d1ce0bce94165883e49144d1240d5d00",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/3fb9a3694391fab91c3da129389586f5e2fce082",
+                "reference": "3fb9a3694391fab91c3da129389586f5e2fce082",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +758,7 @@
                 "issues": "https://github.com/php-etl/dockerfile/issues",
                 "source": "https://github.com/php-etl/dockerfile/tree/main"
             },
-            "time": "2022-09-16T07:05:30+00:00"
+            "time": "2022-09-20T13:06:31+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
