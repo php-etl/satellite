@@ -75,9 +75,9 @@ final class Factory implements Configurator\Adapter\FactoryInterface
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }
 
-            if (\array_key_exists('directories', $configuration['composer']) && count($configuration['composer']['directories']) > 0) {
-                foreach ($configuration['composer']['directories'] as $repository) {
-                    $builder->withComposerDirectories($repository['name'], $repository['type'], $repository['url']);
+            if (\array_key_exists('repositories', $configuration['composer']) && count($configuration['composer']['repositories']) > 0) {
+                foreach ($configuration['composer']['repositories'] as $repository) {
+                    $builder->withComposerRepositories($repository['name'], $repository['type'], $repository['url']);
                 }
             }
 
