@@ -33,7 +33,7 @@
         "symfony/http-client": "^6.0",
         "nyholm/psr7": "^1.5",
         "psr/http-client": "^1.0",
-        "php-etl/gyroscops-api-client": "^0.1.0",
+        "php-etl/gyroscops-api-client": "dev-feature/update-client",
         "react/promise": "^2.9",
         "php-etl/dockerfile": "^0.1.0",
         "symfony/dotenv": "^6.0"
