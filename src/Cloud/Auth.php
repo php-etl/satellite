@@ -66,7 +66,9 @@ final class Auth
         $data->setPassword($credentials->password);
 
         $token = $client->postCredentialsItem($data);
-        if (!$token instanceof Api\Model\Token) {
+        try {
+            \assert($token instanceof Api\Model\Token);
+        } catch (\AssertionError) {
             throw new AccessDeniedException('Could not authenticate with the provided credentials.');
         }
 
