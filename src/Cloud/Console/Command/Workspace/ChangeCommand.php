@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite\Cloud\Console\Command\Project;
+namespace Kiboko\Component\Satellite\Cloud\Console\Command\Workspace;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite;
@@ -11,9 +11,9 @@ use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
-final class CreateCommand extends Console\Command\Command
+final class ChangeCommand extends Console\Command\Command
 {
-    protected static $defaultName = 'project:create';
+    protected static $defaultName = 'workspace:change';
 
     protected function configure(): void
     {
@@ -22,7 +22,7 @@ final class CreateCommand extends Console\Command\Command
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
 
-        $this->addArgument('name', mode: Console\Input\InputArgument::REQUIRED, description: 'Project name');
+        $this->addArgument('workspace-id', mode: Console\Input\InputArgument::OPTIONAL, description: 'Workspace identifier');
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -65,21 +65,51 @@ final class CreateCommand extends Console\Command\Command
 
         $context = new Satellite\Cloud\Context();
 
-        $workspace = new Api\Model\Workspace();
-        $workspace->setName($input->getArgument('name'));
-        $workspace->setOrganization($context->organization()->asString());
-        $workspace->setAuthorizations([]);
-        $workspace->setUsers([]);
+        if ($input->getArgument('workspace-id')) {
+            try {
+                $workspace = $client->getWorkspaceItem($input->getArgument('workspace-id'));
+            } catch (Api\Exception\GetWorkspaceItemNotFoundException) {
+                $style->error(['The provided workspace identifier was not found.']);
+                $style->writeln(['Please double check your input or run <info>cloud workspace:list</> command.']);
 
-        try {
-            $client->postWorkspaceCollection($workspace);
-        } catch (Api\Exception\PostWorkspaceCollectionBadRequestException) {
-            $style->error('Something went wrong while creating the project.');
+                return self::FAILURE;
+            }
+
+            $context->changeWorkspace(new Satellite\Cloud\DTO\WorkspaceId($workspace?->getId()));
+            $context->dump();
+
+            $style->success('The workspace has been successfully changed.');
+
+            return self::SUCCESS;
+        }
+
+        $workspaces = $client->apiOrganizationsWorkspacesGetSubresourceOrganizationSubresource($context->organization()->asString());
+
+        if (\count($workspaces) <= 0) {
+            $style->note('The current organization has no workspaces declared');
+            $style->writeln('You may want to declare a new workspace with <info>cloud workspace:create</>.');
 
             return self::FAILURE;
         }
 
-        $style->success('The project has been successfully created.');
+        $choices = [];
+        foreach ($workspaces as $workspace) {
+            $choices[$workspace?->getId()] = $workspace?->getName();
+        }
+
+        try {
+            $currentWorkspace = $context->workspace()->asString();
+        } catch (Satellite\Cloud\NoWorkspaceSelectedException) {
+            $currentWorkspace = null;
+        }
+
+        $choice = $style->choice('Choose your workspace:', $choices, $currentWorkspace);
+
+        $context->changeWorkspace(new Satellite\Cloud\DTO\WorkspaceId($choice));
+
+        $context->dump();
+
+        $style->success('The workspace has been successfully changed.');
 
         return self::SUCCESS;
     }

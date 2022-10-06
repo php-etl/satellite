@@ -766,12 +766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "cb5b1d93c2df85b596664251d1bf1a1d4fffd3a8"
+                "reference": "7031808c77a6a7122d72943e19f14c14e435a99a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/cb5b1d93c2df85b596664251d1bf1a1d4fffd3a8",
-                "reference": "cb5b1d93c2df85b596664251d1bf1a1d4fffd3a8",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/7031808c77a6a7122d72943e19f14c14e435a99a",
+                "reference": "7031808c77a6a7122d72943e19f14c14e435a99a",
                 "shasum": ""
             },
             "require": {
@@ -779,6 +779,7 @@
                 "php": "^8.0"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.11",
                 "jane-php/open-api-3": "^7.2"
             },
             "type": "library",
@@ -811,7 +812,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/feature/update-client"
             },
-            "time": "2022-10-05T15:15:24+00:00"
+            "time": "2022-10-06T08:12:48+00:00"
         },
         {
             "name": "php-etl/packaging",

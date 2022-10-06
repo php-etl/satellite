@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
-use Kiboko\Component\Satellite\Cloud\DTO\ProjectId;
+use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
 
 final class Context
 {
@@ -67,17 +67,17 @@ final class Context
         return new OrganizationId($this->configuration['organization']);
     }
 
-    public function changeProject(ProjectId $project): void
+    public function changeWorkspace(WorkspaceId $project): void
     {
         $this->configuration['project'] = $project->asString();
     }
 
-    public function project(): ProjectId
+    public function workspace(): WorkspaceId
     {
         if (!\array_key_exists('project', $this->configuration)) {
-            throw new NoProjectSelectedException('Could not determine the current project.');
+            throw new NoWorkspaceSelectedException('Could not determine the current project.');
         }
 
-        return new ProjectId($this->configuration['project']);
+        return new WorkspaceId($this->configuration['project']);
     }
 }

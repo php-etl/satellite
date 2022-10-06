@@ -146,7 +146,7 @@ final class Pipeline implements PipelineInterface
                 $pipeline->steps(),
                 $pipeline->autoload(),
                 $this->context->organization(),
-                $this->context->project(),
+                $this->context->workspace(),
             )
         );
     }

@@ -10,12 +10,12 @@ use Kiboko\Component\Satellite\Cloud\DTO;
 final class DeclarePipelineCommand implements Command
 {
     public function __construct(
-        public string $code,
-        public string $label,
-        public DTO\StepList $steps,
-        public DTO\Autoload $autoload,
+        public string             $code,
+        public string             $label,
+        public DTO\StepList       $steps,
+        public DTO\Autoload       $autoload,
         public DTO\OrganizationId $organizationId,
-        public DTO\ProjectId $project,
+        public DTO\WorkspaceId    $project,
     ) {
     }
 }
