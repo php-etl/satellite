@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26c19bad81a42ebaba34779bcca315d8",
+    "content-hash": "d2ff2b22bc53d2750502bd12b6fc20cf",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -762,16 +762,16 @@
         },
         {
             "name": "php-etl/gyroscops-api-client",
-            "version": "dev-feature/update-client",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "7031808c77a6a7122d72943e19f14c14e435a99a"
+                "reference": "a3a4e65dc571f338a6abd46f51b36ac6dcdfde76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/7031808c77a6a7122d72943e19f14c14e435a99a",
-                "reference": "7031808c77a6a7122d72943e19f14c14e435a99a",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/a3a4e65dc571f338a6abd46f51b36ac6dcdfde76",
+                "reference": "a3a4e65dc571f338a6abd46f51b36ac6dcdfde76",
                 "shasum": ""
             },
             "require": {
@@ -782,6 +782,7 @@
                 "friendsofphp/php-cs-fixer": "^3.11",
                 "jane-php/open-api-3": "^7.2"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -810,9 +811,9 @@
             "description": "This package provides Jane-PHP generated API models and client based on the OpenAPI specification.",
             "support": {
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
-                "source": "https://github.com/php-etl/gyroscops-api-client/tree/feature/update-client"
+                "source": "https://github.com/php-etl/gyroscops-api-client/tree/main"
             },
-            "time": "2022-10-06T08:12:48+00:00"
+            "time": "2022-10-06T15:27:15+00:00"
         },
         {
             "name": "php-etl/packaging",
@@ -9136,7 +9137,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php-etl/gyroscops-api-client": 20,
         "composer/composer": 0
     },
     "prefer-stable": true,
