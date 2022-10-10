@@ -37,7 +37,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
             new Cloud\DTO\StepList(),
             new Cloud\DTO\Autoload(),
             new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
-            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+            new Cloud\DTO\WorkspaceId('65f9d659-a42d-4111-a90b-135574f4f752'),
         );
 
         $event = $handler($command);
@@ -64,7 +64,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
             new Cloud\DTO\StepList(),
             new Cloud\DTO\Autoload(),
             new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
-            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+            new Cloud\DTO\WorkspaceId('65f9d659-a42d-4111-a90b-135574f4f752'),
         );
 
         $handler($command);
@@ -91,7 +91,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
             new Cloud\DTO\StepList(),
             new Cloud\DTO\Autoload(),
             new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
-            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+            new Cloud\DTO\WorkspaceId('65f9d659-a42d-4111-a90b-135574f4f752'),
         );
 
         $handler($command);
@@ -118,7 +118,7 @@ class DeclarePipelineCommandHandlerTest extends TestCase
             new Cloud\DTO\StepList(),
             new Cloud\DTO\Autoload(),
             new Cloud\DTO\OrganizationId('d9cf1074-9f34-4387-92b0-689c8b9aefe1'),
-            new Cloud\DTO\ProjectId('65f9d659-a42d-4111-a90b-135574f4f752'),
+            new Cloud\DTO\WorkspaceId('65f9d659-a42d-4111-a90b-135574f4f752'),
         );
 
         $handler($command);

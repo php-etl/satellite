@@ -15,7 +15,7 @@ final class DeclarePipelineCommand implements Command
         public DTO\StepList $steps,
         public DTO\Autoload $autoload,
         public DTO\OrganizationId $organizationId,
-        public DTO\ProjectId $project,
+        public DTO\WorkspaceId $project,
     ) {
     }
 }

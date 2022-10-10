@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-final class ProjectId implements \Stringable
+final class WorkspaceId implements \Stringable
 {
     public function __construct(
         private string $reference,

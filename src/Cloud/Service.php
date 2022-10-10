@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\MissingAttributeException;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use function Kiboko\Component\Satellite\expectAttributes;
 
 final class Service
 {
     private Processor $processor;
     private Satellite\Configuration $configuration;
     private ExpressionLanguage $interpreter;
+    /** @var array<string, Satellite\Adapter\FactoryInterface> */
+    private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
     private array $runtimes = [];
     /** @var array<string, Configurator\FactoryInterface> */

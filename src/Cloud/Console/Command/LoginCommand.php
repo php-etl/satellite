@@ -70,12 +70,18 @@ final class LoginCommand extends Console\Command\Command
         }
 
         $retries = 3;
-        $username = $input->getArgument('username') ?? $style->ask('Username:');
+        $username = $input->getArgument('username') ?? $style->ask('Username');
 
         while (true) {
             try {
-                $password = $style->askHidden('Password:');
-                $token = $auth->authenticateWithCredentials($client, new Satellite\Cloud\Credentials($username, $password));
+                $password = $style->askHidden('Password');
+                $token = $auth->authenticateWithCredentials(
+                    $client,
+                    new Satellite\Cloud\Credentials(
+                        $username,
+                        $password,
+                    )
+                );
 
                 $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password));
                 $auth->persistToken($url, $token);

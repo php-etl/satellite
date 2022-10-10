@@ -96,7 +96,7 @@ final class Pipeline implements PipelineInterface
     {
         // Todo : update with the new endpoint, need to update the client
         /** @phpstan-ignore-next-line */
-        $steps = $client->apiPipelinesStepsGetSubresourcePipelineSubresource($model->getId());
+        $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
 
         try {
             \assert(\is_array($steps));
@@ -146,7 +146,7 @@ final class Pipeline implements PipelineInterface
                 $pipeline->steps(),
                 $pipeline->autoload(),
                 $this->context->organization(),
-                $this->context->project(),
+                $this->context->workspace(),
             )
         );
     }

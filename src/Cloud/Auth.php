@@ -80,10 +80,11 @@ final class Auth
         if (!\array_key_exists($url, $this->configuration)) {
             $this->configuration[$url] = [];
         }
-        $this->configuration[$url] += [
+
+        $this->configuration[$url] = array_merge($this->configuration[$url], [
             'login' => $credentials->username,
             'password' => $credentials->password,
-        ];
+        ]);
     }
 
     public function persistToken(string $url, string $token): void
@@ -91,10 +92,11 @@ final class Auth
         if (!\array_key_exists($url, $this->configuration)) {
             $this->configuration[$url] = [];
         }
-        $this->configuration[$url] += [
+
+        $this->configuration[$url] = array_merge($this->configuration[$url], [
             'token' => $token,
             'date' => (new \DateTimeImmutable())->format(\DateTimeImmutable::RFC3339_EXTENDED),
-        ];
+        ]);
     }
 
     public function token(string $url): string
@@ -125,7 +127,7 @@ final class Auth
 
         return new Credentials(
             $this->configuration[$url]['login'],
-            $this->configuration[$url]['password']
+            $this->configuration[$url]['password'],
         );
     }
 }
