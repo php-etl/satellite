@@ -21,7 +21,7 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $runtime) use ($extractor, $rejection, $state) {
+        $this->steps[] = function (Node\Expr $runtime) use ($extractor, $rejection, $state) {
             return new Node\Expr\MethodCall(
                 var: $runtime,
                 name: new Node\Identifier('extract'),
@@ -31,7 +31,7 @@ final class Pipeline implements Builder
                     new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
-        });
+        };
 
         return $this;
     }
@@ -41,7 +41,7 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $runtime) use ($transformer, $rejection, $state) {
+        $this->steps[] = function (Node\Expr $runtime) use ($transformer, $rejection, $state) {
             return new Node\Expr\MethodCall(
                 var: $runtime,
                 name: new Node\Identifier('transform'),
@@ -51,7 +51,7 @@ final class Pipeline implements Builder
                     new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
-        });
+        };
 
         return $this;
     }
@@ -61,7 +61,7 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        array_push($this->steps, function (Node\Expr $runtime) use ($loader, $rejection, $state) {
+        $this->steps[] = function (Node\Expr $runtime) use ($loader, $rejection, $state) {
             return new Node\Expr\MethodCall(
                 var: $runtime,
                 name: new Node\Identifier('load'),
@@ -71,7 +71,7 @@ final class Pipeline implements Builder
                     new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
                 ]
             );
-        });
+        };
 
         return $this;
     }

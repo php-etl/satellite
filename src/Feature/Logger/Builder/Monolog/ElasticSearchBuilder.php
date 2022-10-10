@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {
@@ -24,7 +25,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         $this->index = null;
         $this->hosts = [];
         $this->formatters = [];
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function withLevel(string $level): self
@@ -78,14 +79,14 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
             ),
         ];
 
-        if ($this->level !== null) {
+        if (null !== $this->level) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\String_($this->level),
                 name: new Node\Identifier('level'),
             );
         }
 
-        if ($this->index !== null) {
+        if (null !== $this->index) {
             $arguments[] = new Node\Arg(
                 value: new Node\Expr\Array_(
                     items: [
@@ -95,7 +96,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
                         ),
                     ],
                     attributes: [
-                        'kind' => Node\Expr\Array_::KIND_SHORT
+                        'kind' => Node\Expr\Array_::KIND_SHORT,
                     ]
                 ),
                 name: new Node\Identifier('options'),

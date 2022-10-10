@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Tar;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
     private iterable $composerRequire;
@@ -21,7 +22,11 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function __construct(private string $outputPath)
     {
-        $this->composerAutoload = [];
+        $this->composerAutoload = [
+            'psr4' => [
+                'GyroscopsGenerated\\' => './'
+            ]
+        ];
         $this->composerRequire = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
@@ -30,7 +35,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function withComposerPSR4Autoload(string $namespace, string ...$paths): self
     {
-        if (!array_key_exists('psr4', $this->composerAutoload)) {
+        if (!\array_key_exists('psr4', $this->composerAutoload)) {
             $this->composerAutoload['psr4'] = [];
         }
         $this->composerAutoload['psr4'][$namespace] = $paths;
@@ -77,17 +82,17 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $satellite = new Satellite\Adapter\Tar\Satellite(
             $this->outputPath,
             ...$this->files
         );
 
-        if ($this->composerJsonFile !== null) {
+        if (null !== $this->composerJsonFile) {
             $satellite->withFile($this->composerJsonFile);
 
-            if ($this->composerLockFile !== null) {
+            if (null !== $this->composerLockFile) {
                 $satellite->withFile($this->composerLockFile);
             }
         }

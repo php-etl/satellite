@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Tar;
 
 use Kiboko\Component\Packaging\TarArchive;
-use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 
-final class Satellite implements SatelliteInterface
+final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags;
@@ -52,11 +52,11 @@ final class Satellite implements SatelliteInterface
     ): void {
         $archive = new TarArchive(...$this->files);
 
-        mkdir(dirname($this->outputPath), 0755, true);
+        mkdir(\dirname($this->outputPath), 0o755, true);
 
-        $stream = \gzopen($this->outputPath, 'wb');
-        assert($stream !== false, new \ErrorException(error_get_last()['message'], filename: error_get_last()['file'], line: error_get_last()['line'],));
+        $stream = gzopen($this->outputPath, 'wb');
+        \assert(false !== $stream, new \ErrorException(error_get_last()['message'], filename: error_get_last()['file'], line: error_get_last()['line']));
         stream_copy_to_stream($archive->asResource(), $stream);
-        \gzclose($stream);
+        gzclose($stream);
     }
 }

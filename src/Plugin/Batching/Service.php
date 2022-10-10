@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
+// FIXME: hidden dependency to php-etl/fast-map
 use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node\Expr\Variable;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -14,13 +17,12 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
 #[Configurator\Pipeline(
-    name: "batch",
+    name: 'batch',
     steps: [
-        "merge" => "loader",
-        "fork" => "loader",
+        new Configurator\Pipeline\StepTransformer('merge'),
+        new Configurator\Pipeline\StepTransformer('fork'),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface
@@ -34,7 +36,7 @@ final class Service implements Configurator\PipelinePluginInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -75,19 +77,21 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('expression_language', $config)
-            && is_array($config['expression_language'])
-            && count($config['expression_language'])
+        if (\array_key_exists('expression_language', $config)
+            && \is_array($config['expression_language'])
+            && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider());
             }
         }
 
-        if (array_key_exists('merge', $config)) {
+        if (\array_key_exists('merge', $config)) {
             $builder = new Merge($config['merge']['size']);
+
             return new Repository($builder);
-        } elseif (array_key_exists('fork', $config)) {
+        }
+        if (\array_key_exists('fork', $config)) {
             $builder = new Fork(
                 $config['fork']['foreach'] instanceof Expression ?
                     compileExpression($this->interpreter, $config['fork']['foreach'], 'item', 'key') :

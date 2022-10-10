@@ -13,12 +13,13 @@ final class VersionConfiguration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('version');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $treeBuilder->getRootNode()
             ->beforeNormalization()->castToArray()->end()
             ->enumPrototype()
                 ->values(['0.3'])
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }

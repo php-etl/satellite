@@ -1,21 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Rejection\Builder;
 
 use PhpParser\Builder;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 
 final class RabbitMQBuilder implements Builder
 {
-    public ?Node\Expr $user = null;
-    public ?Node\Expr $password = null;
-    public ?Node\Expr $exchange = null;
+    private ?Node\Expr $user = null;
+    private ?Node\Expr $password = null;
+    private ?Node\Expr $exchange = null;
 
     public function __construct(
-        public Node\Expr $host,
-        public Node\Expr $port,
-        public Node\Expr $vhost,
-        public Node\Expr $topic,
+        private Node\Expr $stepUuid,
+        private Node\Expr $host,
+        private Node\Expr $port,
+        private Node\Expr $vhost,
+        private Node\Expr $topic,
     ) {
     }
 
@@ -43,33 +47,35 @@ final class RabbitMQBuilder implements Builder
             new Node\Arg($this->host, name: new Node\Identifier('host')),
             new Node\Arg($this->vhost, name: new Node\Identifier('vhost')),
             new Node\Arg($this->topic, name: new Node\Identifier('topic')),
+            new Node\Arg($this->stepUuid, name: new Node\Identifier('stepUuid')),
         ];
 
-        if ($this->user !== null) {
+        if (null !== $this->exchange) {
+            $args[] = new Node\Arg($this->exchange, name: new Node\Identifier('exchange'));
+        }
+
+        if (null !== $this->port) {
+            $args[] = new Node\Arg($this->port, name: new Node\Identifier('port'));
+        }
+
+        if (null !== $this->user) {
             array_push(
                 $args,
                 new Node\Arg($this->user, name: new Node\Identifier('user')),
                 new Node\Arg($this->password, name: new Node\Identifier('password')),
             );
-        }
 
-        if ($this->exchange !== null) {
-            array_push(
-                $args,
-                new Node\Arg($this->exchange, name: new Node\Identifier('exchange')),
+            return new Node\Expr\StaticCall(
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+                name: new Identifier('withAuthentication'),
+                args: $args,
             );
         }
 
-        if ($this->port !== null) {
-            array_push(
-                $args,
-                new Node\Arg($this->port, name: new Node\Identifier('port')),
+        return new Node\Expr\StaticCall(
+                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+                name: new Identifier('withoutAuthentication'),
+                args: $args,
             );
-        }
-
-        return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
-            args: $args
-        );
     }
 }

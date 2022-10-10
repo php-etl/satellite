@@ -6,7 +6,6 @@ namespace Kiboko\Component\Satellite;
 
 use Kiboko\Component\Satellite\Configuration\BackwardCompatibilityConfiguration;
 use Kiboko\Component\Satellite\Configuration\VersionConfiguration;
-use Kiboko\Component\Satellite\Feature;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -80,7 +79,7 @@ final class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('etl');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
             ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
@@ -91,45 +90,36 @@ final class Configuration implements ConfigurationInterface
                 ->always($this->mutuallyExclusiveFields('satellite', 'version'))
             ->end()
             ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('satellites', $data) && is_array($data['satellites']) && count($data['satellites']) <= 0)
+                ->ifTrue(fn ($data) => \array_key_exists('satellites', $data) && \is_array($data['satellites']) && \count($data['satellites']) <= 0)
                 ->then(function ($data) {
                     unset($data['satellites']);
+
                     return $data;
                 })
             ->end()
             ->validate()
-                ->ifTrue(fn ($data) => array_key_exists('version', $data) && is_array($data['version']) && count($data['version']) <= 0)
+                ->ifTrue(fn ($data) => \array_key_exists('version', $data) && \is_array($data['version']) && \count($data['version']) <= 0)
                 ->then(function ($data) {
                     unset($data['version']);
+
                     return $data;
                 })
             ->end()
             ->children()
                 ->arrayNode('satellites')->end()
-            ->end();
+            ->end()
+        ;
 
         $root = $builder->getRootNode();
 
         if (!$root instanceof ArrayNodeDefinition) {
-            throw new \RuntimeException(strtr(
-                'Expected an instance of %expected%, but got %actual%.',
-                [
-                    '%expected%' => ArrayNodeDefinition::class,
-                    '%actual%' => get_debug_type($root),
-                ]
-            ));
+            throw new \RuntimeException(strtr('Expected an instance of %expected%, but got %actual%.', ['%expected%' => ArrayNodeDefinition::class, '%actual%' => get_debug_type($root)]));
         }
 
         $children = $root->find('satellites');
 
         if (!$children instanceof ArrayNodeDefinition) {
-            throw new \RuntimeException(strtr(
-                'Expected an instance of %expected%, but got %actual%.',
-                [
-                    '%expected%' => ArrayNodeDefinition::class,
-                    '%actual%' => get_debug_type($root),
-                ]
-            ));
+            throw new \RuntimeException(strtr('Expected an instance of %expected%, but got %actual%.', ['%expected%' => ArrayNodeDefinition::class, '%actual%' => get_debug_type($root)]));
         }
 
         $this->buildSatelliteTree($children->arrayPrototype());
@@ -139,7 +129,7 @@ final class Configuration implements ConfigurationInterface
 
     private function buildSatelliteTree(ArrayNodeDefinition $node): void
     {
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
                 ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
@@ -152,7 +142,8 @@ final class Configuration implements ConfigurationInterface
                     ->isRequired()
                 ->end()
                 ->append((new Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
-            ->end();
+            ->end()
+        ;
 
         foreach ($this->adapters as $config) {
             $node->append($config->getConfigTreeBuilder()->getRootNode());
@@ -168,18 +159,15 @@ final class Configuration implements ConfigurationInterface
         return function (array $value) use ($exclusions) {
             $fields = [];
             foreach ($exclusions as $exclusion) {
-                if (array_key_exists($exclusion, $value)) {
+                if (\array_key_exists($exclusion, $value)) {
                     $fields[] = $exclusion;
                 }
 
-                if (count($fields) < 2) {
+                if (\count($fields) < 2) {
                     continue;
                 }
 
-                throw new \InvalidArgumentException(sprintf(
-                    'Your configuration should either contain the "%s" or the "%s" field, not both.',
-                    ...$fields,
-                ));
+                throw new \InvalidArgumentException(sprintf('Your configuration should either contain the "%s" or the "%s" field, not both.', ...$fields));
             }
 
             return $value;
@@ -189,17 +177,13 @@ final class Configuration implements ConfigurationInterface
     private function mutuallyDependentFields(string $field, string ...$dependencies): \Closure
     {
         return function (array $value) use ($field, $dependencies) {
-            if (!array_key_exists($field, $value)) {
+            if (!\array_key_exists($field, $value)) {
                 return $value;
             }
 
             foreach ($dependencies as $dependency) {
-                if (!array_key_exists($dependency, $value)) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Your configuration should contain the "%s" field if the "%s" field is present.',
-                        $dependency,
-                        $field,
-                    ));
+                if (!\array_key_exists($dependency, $value)) {
+                    throw new \InvalidArgumentException(sprintf('Your configuration should contain the "%s" field if the "%s" field is present.', $dependency, $field));
                 }
             }
 

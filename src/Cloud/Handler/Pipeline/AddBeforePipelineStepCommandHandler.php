@@ -12,7 +12,8 @@ final class AddBeforePipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {
@@ -29,18 +30,12 @@ final class AddBeforePipelineStepCommandHandler
                     ))
             );
         } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionBadRequestException $exception) {
-            throw new Cloud\AddBeforePipelineStepFailedException(
-                'Something went wrong while trying to add a new step before an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.',
-                previous: $exception
-            );
+            throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
         } catch (Api\Exception\AddBeforePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
-            throw new Cloud\AddBeforePipelineStepFailedException(
-                'Something went wrong while trying to add a new step before an existing pipeline step. It seems the data you sent was invalid, please check your input.',
-                previous: $exception
-            );
+            throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if ($result === null) {
+        if (null === $result) {
             // TODO: change the exception message, it doesn't give enough details on how to fix the issue
             throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step.');
         }

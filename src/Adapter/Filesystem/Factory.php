@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
-use Kiboko\Contract\Configurator\Adapter;
-use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
+use Kiboko\Contract\Configurator;
 
-#[Adapter(name: "filesystem")]
-final class Factory implements Satellite\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'filesystem')]
+final class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 
@@ -19,17 +17,17 @@ final class Factory implements Satellite\Adapter\FactoryInterface
         $this->configuration = new Configuration();
     }
 
-    public function configuration(): AdapterConfigurationInterface
+    public function configuration(): Configurator\AdapterConfigurationInterface
     {
         return $this->configuration;
     }
 
-    public function __invoke(array $configuration): Satellite\SatelliteBuilderInterface
+    public function __invoke(array $configuration): Configurator\SatelliteBuilderInterface
     {
         $builder = new SatelliteBuilder($configuration['filesystem']['path']);
 
-        if (array_key_exists('composer', $configuration)) {
-            if (array_key_exists('from_local', $configuration['composer']) && $configuration['composer']['from_local'] === true) {
+        if (\array_key_exists('composer', $configuration)) {
+            if (\array_key_exists('from_local', $configuration['composer']) && true === $configuration['composer']['from_local']) {
                 if (file_exists('composer.lock')) {
                     $builder->withComposerFile(
                         new Packaging\Asset\LocalFile('composer.json'),
@@ -45,14 +43,26 @@ final class Factory implements Satellite\Adapter\FactoryInterface
                 }
             }
 
-            if (array_key_exists('autoload', $configuration['composer']) && array_key_exists('psr4', $configuration['composer']['autoload'])) {
+            if (\array_key_exists('autoload', $configuration['composer']) && \array_key_exists('psr4', $configuration['composer']['autoload'])) {
                 foreach ($configuration['composer']['autoload']['psr4'] as $namespace => $autoload) {
                     $builder->withComposerPSR4Autoload($namespace, ...$autoload['paths']);
                 }
             }
 
-            if (array_key_exists('require', $configuration['composer'])) {
+            if (\array_key_exists('require', $configuration['composer'])) {
                 $builder->withComposerRequire(...$configuration['composer']['require']);
+            }
+
+            if (\array_key_exists('repositories', $configuration['composer']) && count($configuration['composer']['repositories']) > 0) {
+                foreach ($configuration['composer']['repositories'] as $repository) {
+                    $builder->withRepositories($repository['name'], $repository['type'], $repository['url']);
+                }
+            }
+
+            if (\array_key_exists('auth', $configuration['composer']) && count($configuration['composer']['auth']) > 0) {
+                foreach ($configuration['composer']['auth'] as $auth) {
+                    $builder->withAuthenticationToken($auth['url'], $auth['token']);
+                }
             }
         }
 

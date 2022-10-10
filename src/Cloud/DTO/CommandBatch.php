@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -20,7 +22,7 @@ final class CommandBatch implements \Countable, \IteratorAggregate
 
     public function count(): int
     {
-        return count($this->commands);
+        return \count($this->commands);
     }
 
     public function push(object ...$commands): self

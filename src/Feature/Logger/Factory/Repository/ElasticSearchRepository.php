@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Factory\Repository;
 
-use Kiboko\Contract\Configurator;
 use Kiboko\Component\Satellite\Feature\Logger;
+use Kiboko\Contract\Configurator;
 
 final class ElasticSearchRepository implements Configurator\RepositoryInterface
 {

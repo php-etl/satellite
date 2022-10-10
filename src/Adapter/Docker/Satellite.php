@@ -6,12 +6,12 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Dockerfile;
 use Kiboko\Component\Packaging\TarArchive;
-use Kiboko\Component\Satellite\SatelliteInterface;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
-final class Satellite implements SatelliteInterface
+final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags;
@@ -68,14 +68,14 @@ final class Satellite implements SatelliteInterface
         };
 
         $process = new Process([
-            'docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags))
+            'docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags)),
         ]);
 
         $process->setInput($archive->asResource());
 
         $process->setTimeout(300);
 
-        $process->run(function ($type, $buffer) use ($logger) {
+        $process->run(function ($type, $buffer) use ($logger): void {
             if (Process::ERR === $type) {
                 $logger->info($buffer);
             } else {
@@ -83,7 +83,7 @@ final class Satellite implements SatelliteInterface
             }
         });
 
-        if ($process->getExitCode() !== 0) {
+        if (0 !== $process->getExitCode()) {
             throw new \RuntimeException('Process exited unexpectedly.');
         }
     }

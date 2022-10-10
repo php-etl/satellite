@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\HTTP;
 
@@ -7,11 +9,11 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements PluginConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('http');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('extractor')
@@ -39,7 +41,8 @@ final class Configuration implements PluginConfigurationInterface
                         ->enumNode('encoding')->values(['json'])->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

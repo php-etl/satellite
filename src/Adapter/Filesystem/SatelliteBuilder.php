@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\SatelliteBuilderInterface;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
     private iterable $composerRequire;
     private array $composerAutoload;
+    private array $authenticationTokens;
+    private array $repositories;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
@@ -23,8 +25,14 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function __construct(private string $workdir)
     {
-        $this->composerAutoload = [];
+        $this->composerAutoload = [
+            'psr4' => [
+                'GyroscopsGenerated\\' => './'
+            ]
+        ];
         $this->composerRequire = [];
+        $this->authenticationTokens = [];
+        $this->repositories = [];
         $this->composerJsonFile = null;
         $this->composerLockFile = null;
         $this->paths = [];
@@ -38,7 +46,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface
+    public function withComposerPSR4Autoload(string $namespace, string ...$paths): Configurator\SatelliteBuilderInterface
     {
         $this->composerAutoload['psr4'][$namespace] = $paths;
 
@@ -88,10 +96,29 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function withRepositories(string $name, string $type, string $url): self
+    {
+        $this->repositories[$name] = [
+            'type' => $type,
+            'url' => $url,
+        ];
+
+        return $this;
+    }
+
+    public function withAuthenticationToken(string $domain, string $auth): self
+    {
+        $this->authenticationTokens[$domain] = $auth;
+
+        return $this;
+    }
+
+    public function build(): Configurator\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
-            mkdir($this->workdir, 0775, true);
+            if (!mkdir($concurrentDirectory = $this->workdir, 0o775, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
         }
 
         $composer = new Satellite\Adapter\Composer($this->workdir);
@@ -100,24 +127,40 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $composer,
         );
 
-        if ($this->composerJsonFile !== null) {
+        if (null !== $this->composerJsonFile) {
             $satellite->withFile($this->composerJsonFile);
-            if ($this->composerLockFile !== null) {
+            if (null !== $this->composerLockFile) {
                 $satellite->withFile($this->composerLockFile);
             }
-
-            // FIXME: finish the Sylius API client migration
-            $composer->addGithubRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client');
 
             $composer->install();
         } else {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
 
-            // FIXME: finish the Sylius API client migration
-            $composer->addGithubRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client');
-
             $composer->autoload($this->composerAutoload);
+        }
+
+        if (count($this->repositories) > 0) {
+            foreach ($this->repositories as $name => $repository) {
+                if ($repository['type'] === 'composer') {
+                    $composer->addComposerRepository($name, $repository['url']);
+                }
+
+                if ($repository['type'] === 'vcs') {
+                    $composer->addVCSRepository($name, $repository['url']);
+                }
+
+                if ($repository['type'] === 'github') {
+                    $composer->addGithubRepository($name, $repository['url']);
+                }
+            }
+        }
+
+        if (count($this->authenticationTokens) > 0) {
+            foreach ($this->authenticationTokens as $url => $token) {
+                $composer->addAuthenticationToken($url, $token);
+            }
         }
 
         $satellite->dependsOn(...$this->composerRequire);

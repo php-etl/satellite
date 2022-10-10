@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Builder;
 
-use Kiboko\Contract\Pipeline\PipelineInterface;
 use PhpParser\Builder;
 use PhpParser\Node;
 
@@ -36,7 +35,7 @@ final class Workflow implements Builder
                                         right: new Node\Scalar\Encapsed(
                                             parts: [
                                                 new Node\Scalar\EncapsedStringPart('/'),
-                                                new Node\Scalar\EncapsedStringPart($pipelineFilename)
+                                                new Node\Scalar\EncapsedStringPart($pipelineFilename),
                                             ],
                                         ),
                                     ),

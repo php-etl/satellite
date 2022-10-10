@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Pipeline;
 
 use Kiboko\Component\Satellite\Builder\Pipeline;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Logger;
 use Kiboko\Component\Satellite\Feature\Rejection;
 use Kiboko\Component\Satellite\Feature\State;
@@ -19,18 +22,18 @@ final class Extractor implements StepInterface
         private ?string $key,
         ?ExpressionLanguage $interpreter = null,
     ) {
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
-        if ($this->key !== null
-            && (!array_key_exists($this->plugin, $config) || !array_key_exists($this->key, $config[$this->plugin]))
+        if (null !== $this->key
+            && (!\array_key_exists($this->plugin, $config) || !\array_key_exists($this->key, $config[$this->plugin]))
         ) {
             return;
         }
 
-        if (array_key_exists('logger', $config)) {
+        if (\array_key_exists('logger', $config)) {
             $service = new Logger\Service($this->interpreter);
 
             $compiled = $service->compile($config['logger']);
@@ -42,7 +45,7 @@ final class Extractor implements StepInterface
             );
         }
 
-        if (array_key_exists('rejection', $config)) {
+        if (\array_key_exists('rejection', $config)) {
             $service = new Rejection\Service($this->interpreter);
 
             $compiled = $service->compile($config['rejection']);
@@ -54,7 +57,7 @@ final class Extractor implements StepInterface
             );
         }
 
-        if (array_key_exists('state', $config)) {
+        if (\array_key_exists('state', $config)) {
             $service = new State\Service($this->interpreter);
 
             $compiled = $service->compile($config['state']);

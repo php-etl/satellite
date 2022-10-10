@@ -58,21 +58,21 @@ final class SyslogBuilder implements MonologBuilderInterface
             ),
         ];
 
-        if ($this->level !== null) {
+        if (null !== $this->level) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\String_($this->level),
                 name: new Node\Identifier('level'),
             );
         }
 
-        if ($this->facility !== null) {
+        if (null !== $this->facility) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\LNumber($this->facility),
                 name: new Node\Identifier('facility'),
             );
         }
 
-        if ($this->logopts !== null) {
+        if (null !== $this->logopts) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\LNumber($this->logopts),
                 name: new Node\Identifier('logopts'),

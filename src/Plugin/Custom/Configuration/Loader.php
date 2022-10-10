@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Loader implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('loader');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->append((new ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
@@ -32,7 +33,8 @@ final class Loader implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

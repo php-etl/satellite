@@ -1,12 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud;
 
-use Gyroscops\Api\Client;
-use Gyroscops\Api\Model\PipelineRead;
-use Gyroscops\Api\Model\PipelineStep;
-use Gyroscops\Api\Model\Probe;
-use Kiboko\Component\Satellite\Cloud\Command;
+use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
@@ -16,7 +14,8 @@ final class Pipeline implements PipelineInterface
 {
     public function __construct(
         private Context $context,
-    ) {}
+    ) {
+    }
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
@@ -38,7 +37,7 @@ final class Pipeline implements PipelineInterface
                         ),
                         $order,
                     );
-                }, $configuration['pipeline']['steps'], range(0, count($configuration['pipeline']['steps']) - 1))
+                }, $configuration['pipeline']['steps'], range(0, \count($configuration['pipeline']['steps']) - 1))
             ),
             new DTO\Autoload(
                 ...array_map(
@@ -55,50 +54,52 @@ final class Pipeline implements PipelineInterface
         );
     }
 
-    public static function fromApiWithId(Client $client, PipelineId $id): DTO\ReferencedPipeline
+    public static function fromApiWithId(Api\Client $client, PipelineId $id, array $configuration): DTO\ReferencedPipeline
     {
         $item = $client->getPipelineItem($id->asString());
 
         try {
-            assert($item instanceof PipelineRead);
+            \assert($item instanceof Api\Model\PipelineRead);
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
 
         return new ReferencedPipeline(
             new PipelineId($item->getId()),
-            self::fromApiModel($client, $item)
+            self::fromApiModel($client, $item, $configuration)
         );
     }
 
-    public static function fromApiWithCode(Client $client, string $code): DTO\ReferencedPipeline
+    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): DTO\ReferencedPipeline
     {
         $collection = $client->getPipelineCollection(['code' => $code]);
 
         try {
-            assert(is_array($collection));
+            \assert(\is_array($collection));
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
         try {
-            assert(count($collection) === 1);
-            assert($collection[0] instanceof PipelineRead);
+            \assert(1 === \count($collection));
+            \assert($collection[0] instanceof Api\Model\PipelineRead);
         } catch (\AssertionError) {
             throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
         }
 
         return new ReferencedPipeline(
             new PipelineId($collection[0]->getId()),
-            self::fromApiModel($client, $collection[0])
+            self::fromApiModel($client, $collection[0], $configuration)
         );
     }
 
-    private static function fromApiModel(Client $client, PipelineRead $model): DTO\Pipeline
+    private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Pipeline
     {
-        $steps = $client->apiPipelinesStepsGetSubresourcePipelineSubresource($model->getId());
+        // Todo : update with the new endpoint, need to update the client
+        /** @phpstan-ignore-next-line */
+        $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
 
         try {
-            assert(is_array($steps));
+            \assert(\is_array($steps));
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the pipeline steps.');
         }
@@ -107,7 +108,7 @@ final class Pipeline implements PipelineInterface
             $model->getLabel(),
             $model->getCode(),
             new DTO\StepList(
-                ...array_map(function (PipelineStep $step, int $order) use ($client) {
+                ...array_map(function (Api\Model\PipelineStep $step, int $order) use ($client) {
                     $probes = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($step->getId());
 
                     return new DTO\Step(
@@ -115,11 +116,11 @@ final class Pipeline implements PipelineInterface
                         new StepCode($step->getCode()),
                         $step->getConfiguration(),
                         new ProbeList(
-                            ...array_map(fn (Probe $probe) => new DTO\Probe($probe->getLabel(), $probe->getCode(), $probe->getOrder()), $probes)
+                            ...array_map(fn (Api\Model\PipelineStepProbe $probe) => new DTO\Probe($probe->getLabel(), $probe->getCode(), $probe->getOrder()), $probes)
                         ),
                         $order
                     );
-                }, $steps, range(0, count($steps)))
+                }, $steps, range(0, \count($steps)))
             ),
             new DTO\Autoload(
                 ...array_map(
@@ -145,7 +146,7 @@ final class Pipeline implements PipelineInterface
                 $pipeline->steps(),
                 $pipeline->autoload(),
                 $this->context->organization(),
-                $this->context->project(),
+                $this->context->workspace(),
             )
         );
     }
@@ -164,7 +165,7 @@ final class Pipeline implements PipelineInterface
         $commands = $diff->diff($actual->steps(), $desired->steps());
 
         // Check the changes in the list of autoloads
-        if (count($actual->autoload()) !== count($desired->autoload())) {
+        if (\count($actual->autoload()) !== \count($desired->autoload())) {
             // TODO: make diff of the autoload
         }
 

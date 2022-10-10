@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 
 use Kiboko\Contract\Configurator\AdapterConfigurationInterface;
-use Kiboko\Contract\Configurator\Adapter;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements AdapterConfigurationInterface
@@ -14,7 +13,7 @@ final class Configuration implements AdapterConfigurationInterface
     {
         $builder = new TreeBuilder('filesystem');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('path')->end()
@@ -26,7 +25,8 @@ final class Configuration implements AdapterConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

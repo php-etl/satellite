@@ -25,9 +25,9 @@ $app->addCommands([
     new Kiboko\Component\Satellite\Cloud\Console\Command\Organization\ListCommand(),
     new Kiboko\Component\Satellite\Cloud\Console\Command\Organization\ChangeCommand(),
 
-    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\ListCommand(),
-    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\ChangeCommand(),
-    new Kiboko\Component\Satellite\Cloud\Console\Command\Project\CreateCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Workspace\ListCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Workspace\ChangeCommand(),
+    new Kiboko\Component\Satellite\Cloud\Console\Command\Workspace\CreateCommand(),
 ]);
 
 $app->run(new Input\ArgvInput(), new Output\ConsoleOutput());

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -17,6 +19,7 @@ final class StepList implements \Countable, \IteratorAggregate
     {
         $steps = $this->steps;
         usort($steps, fn (Step $left, Step $right) => $left->order <=> $right->order);
+
         return new \ArrayIterator($steps);
     }
 
@@ -24,6 +27,7 @@ final class StepList implements \Countable, \IteratorAggregate
     {
         $steps = $this->steps;
         usort($steps, fn (Step $left, Step $right) => $left->order <=> $right->order);
+
         return array_map(fn (Step $step) => $step->code->asString(), $steps);
     }
 

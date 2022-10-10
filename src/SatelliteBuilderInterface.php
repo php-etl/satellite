@@ -2,30 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kiboko\Component\Satellite;
+trigger_deprecation('php-etl/satellite', '0.4', 'The "%s" interface is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\SatelliteBuilderInterface', \Kiboko\Contract\Configurator\SatelliteBuilderInterface::class);
 
-use Kiboko\Contract\Packaging;
-
-interface SatelliteBuilderInterface
-{
-    public function withComposerPSR4Autoload(string $namespace, string ...$paths): SatelliteBuilderInterface;
-
-    public function withComposerRequire(string ...$package): SatelliteBuilderInterface;
-
-    public function withComposerFile(
-        Packaging\FileInterface|Packaging\AssetInterface $composerJsonFile,
-        null|Packaging\FileInterface|Packaging\AssetInterface $composerLockFile = null
-    ): SatelliteBuilderInterface;
-
-    public function withFile(
-        Packaging\FileInterface|Packaging\AssetInterface $source,
-        ?string $destinationPath = null
-    ): SatelliteBuilderInterface;
-
-    public function withDirectory(
-        Packaging\DirectoryInterface $source,
-        ?string $destinationPath = null
-    ): SatelliteBuilderInterface;
-
-    public function build(): SatelliteInterface;
-}
+/*
+ * @deprecated since Satellite 0.4, use Kiboko\Contract\Configurator\SatelliteBuilderInterface instead.
+ */
+class_alias(\Kiboko\Contract\Configurator\SatelliteBuilderInterface::class, 'Kiboko\\Component\\Satellite\\SatelliteBuilderInterface');

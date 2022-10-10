@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP\Builder;
 
@@ -13,7 +15,7 @@ final class Server implements StepBuilderInterface
     private ?Node\Expr $state;
     private ?Node\Expr $username;
     private ?Node\Expr $password;
-    private ?Node\Expr $passifMode;
+    private ?Node\Expr $passiveMode;
     private ?Node\Expr $basePath;
 
     public function __construct(
@@ -26,7 +28,7 @@ final class Server implements StepBuilderInterface
         $this->state = null;
         $this->username = null;
         $this->password = null;
-        $this->passifMode = null;
+        $this->passiveMode = null;
         $this->basePath = null;
     }
 
@@ -75,9 +77,9 @@ final class Server implements StepBuilderInterface
         return $this;
     }
 
-    public function withPassifMode(Node\Expr $passifMode): self
+    public function withPassiveMode(Node\Expr $passiveMode): self
     {
-        $this->passifMode = $passifMode;
+        $this->passiveMode = $passiveMode;
 
         return $this;
     }
@@ -137,7 +139,7 @@ final class Server implements StepBuilderInterface
                                 ),
                                 new Node\Arg(
                                     $this->timeout,
-                                )
+                                ),
                             ],
                         ),
                     ),
@@ -151,14 +153,14 @@ final class Server implements StepBuilderInterface
                                 value: new Node\Expr\Variable('connection')
                             ),
                             new Node\Arg(
-                                $this->passifMode,
-                            )
+                                $this->passiveMode,
+                            ),
                         ]
                     )
                 ),
                 new Node\Stmt\Return_(
                     expr: new Node\Expr\Variable('connection')
-                )
+                ),
             ]
         ))->getNode();
     }

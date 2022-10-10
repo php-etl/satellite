@@ -46,23 +46,24 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     {
         $builder = new TreeBuilder('workflow');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
-                ->arrayNode('expression_language')
-                    ->scalarPrototype()->end()
-                ->end()
-                ->scalarNode('name')->end()
-                ->arrayNode('jobs')
-                    ->arrayPrototype()
-                        ->children()
-                            ->scalarNode('name')->end()
-                            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
-                        ->end()
-                    ->end()
-                ->end()
-            ->end();
+            ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
+            ->arrayNode('expression_language')
+            ->scalarPrototype()->end()
+            ->end()
+            ->scalarNode('name')->end()
+            ->arrayNode('jobs')
+            ->arrayPrototype()
+            ->children()
+            ->scalarNode('name')->end()
+            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+        ;
 
         return $builder;
     }

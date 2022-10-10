@@ -1,35 +1,45 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Custom\Factory;
 
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use Kiboko\Component\Satellite\Plugin\Custom;
+use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\Satellite\Plugin\Custom\Configuration;
 use Symfony\Component\Config\Definition\Exception as Symfony;
-use Kiboko\Component\Satellite\Plugin\Custom;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+use Symfony\Component\String\ByteString;
 
 class Extractor implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
+    private ExpressionLanguage $interpreter;
 
-    public function __construct(private ExpressionLanguage $interpreter)
-    {
+    public function __construct(
+        ?ExpressionLanguage $interpreter = null
+    ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
+
     public function configuration(): ConfigurationInterface
     {
         return $this->configuration;
     }
+
+    /**
+     * @throws Configurator\ConfigurationExceptionInterface
+     */
     public function normalize(array $config): array
     {
         try {
@@ -38,97 +48,40 @@ class Extractor implements Configurator\FactoryInterface
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
+
     public function validate(array $config): bool
     {
         try {
-            if ($this->normalize($config)) {
-                return true;
-            }
-        } catch (\Exception $exception) {
-            throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
+            $this->processor->processConfiguration($this->configuration, $config);
+
+            return true;
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+            return false;
         }
-        return false;
     }
 
+    /**
+     * @throws Configurator\ConfigurationExceptionInterface
+     */
     public function compile(array $config): Repository\Extractor
     {
-        $builder = new Custom\Builder\Extractor(compileValueWhenExpression($this->interpreter, $config['use']));
+        $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
 
-        $container = new ContainerBuilder();
+        $builder = new Custom\Builder\Extractor(
+            compileValueWhenExpression($this->interpreter, $config['use']),
+            sprintf('GyroscopsGenerated\\%s', $containerName),
+        );
 
-        if (array_key_exists('parameters', $config)
-            && is_array($config['parameters'])
-            && count($config['parameters']) > 0
-        ) {
-            foreach ($config['parameters'] as $identifier => $parameter) {
-                $container->setParameter($identifier, $parameter);
-            }
-        }
-
-        if (array_key_exists('services', $config)
-            && is_array($config['services'])
-            && count($config['services']) > 0
-        ) {
-            foreach ($config['services'] as $identifier => $service) {
-                if (array_key_exists('class', $service)) {
-                    $class = $service['class'];
-                }
-
-                $definition = $container->register($identifier, $class ?? null);
-
-                if (array_key_exists('arguments', $service)
-                    && is_array($service['arguments'])
-                    && count($service['arguments']) > 0
-                ) {
-                    foreach ($service['arguments'] as $key => $argument) {
-                        if (substr($argument, 0, 1) === '@'
-                            && substr($argument, 1, 1) !== '@'
-                        ) {
-                            $argument = new Reference(substr($argument, 1));
-                        }
-
-                        if (is_numeric($key)) {
-                            $definition->addArgument($argument);
-                        } else {
-                            $definition->setArgument($key, $argument);
-                        }
-                    }
-                }
-
-                if (array_key_exists('calls', $service)
-                    && is_array($service['calls'])
-                    && count($service['calls']) > 0
-                ) {
-                    foreach ($service['calls'] as $method => $items) {
-                        $arguments = [];
-
-                        foreach ($items as $argument) {
-                            if (substr($argument, 0, 1) === '@'
-                                && substr($argument, 1, 1) !== '@'
-                            ) {
-                                $argument = new Reference(substr($argument, 1));
-                            }
-
-                            $arguments[] = $argument;
-                        }
-
-                        $definition->addMethodCall($method, $arguments);
-                    }
-                }
-            }
-        }
-
-        $container->getDefinition($config['use'])->setPublic(true);
+        $container = (new SatelliteDependencyInjection())($config);
 
         $repository = new Repository\Extractor($builder);
 
-        $container->compile();
         $dumper = new PhpDumper($container);
         $repository->addFiles(
             new Packaging\File(
-                'container.php',
+                sprintf('%s.php', $containerName),
                 new Packaging\Asset\InMemory(
-                    $dumper->dump()
+                    $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated'])
                 )
             ),
         );

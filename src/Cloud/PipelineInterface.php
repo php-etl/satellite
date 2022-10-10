@@ -11,8 +11,9 @@ interface PipelineInterface
 {
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline;
 
-    public static function fromApiWithId(Client $client, PipelineId $id): DTO\ReferencedPipeline;
-    public static function fromApiWithCode(Client $client, string $code): DTO\ReferencedPipeline;
+    public static function fromApiWithId(Client $client, PipelineId $id, array $configuration): DTO\ReferencedPipeline;
+
+    public static function fromApiWithCode(Client $client, string $code, array $configuration): DTO\ReferencedPipeline;
 
     public function create(DTO\PipelineInterface $pipeline): DTO\CommandBatch;
 

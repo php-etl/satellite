@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
@@ -13,7 +15,7 @@ final class Repository implements Configurator\StepRepositoryInterface
     {
     }
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Repository
+    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {
         return $this;
     }
@@ -23,7 +25,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function addPackages(string ...$packages): Repository
+    public function addPackages(string ...$packages): self
     {
         return $this;
     }
@@ -38,7 +40,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return $this->builder;
     }
 
-    public function merge(Configurator\RepositoryInterface $friend): Repository
+    public function merge(Configurator\RepositoryInterface $friend): self
     {
         return $this;
     }

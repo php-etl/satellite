@@ -39,7 +39,7 @@ final class MonologLogger implements Builder
             args: [
                 new Node\Arg(
                     new Node\Scalar\String_($this->channel)
-                )
+                ),
             ]
         );
 
@@ -51,7 +51,7 @@ final class MonologLogger implements Builder
                     new Node\Expr\Array_(
                         items: array_map(fn (Node $handler) => new Node\Expr\ArrayItem(value: $handler), $this->handlers),
                         attributes: [
-                            'kind' => Node\Expr\Array_::KIND_SHORT
+                            'kind' => Node\Expr\Array_::KIND_SHORT,
                         ]
                     ),
                 ),

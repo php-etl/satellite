@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Dockerfile;
-use Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
+use Kiboko\Component\Satellite;
+use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging as PackagingContract;
 
-final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
+final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     private string $fromImage;
     private string $workdir;
     /** @var iterable<string> */
     private iterable $composerRequire;
+    private iterable $repositories;
+    private iterable $authenticationTokens;
     /** @var iterable<string> */
     private iterable $entrypoint;
     /** @var iterable<string> */
@@ -28,14 +31,19 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
     /** @var \AppendIterator<string,PackagingContract\FileInterface> */
     private iterable $files;
     /** @var array<string, list<string>> */
-    private array $composerAutoload;
+    private array $composerAutoload = [
+        'psr4' => [
+            'GyroscopsGenerated\\' => './'
+        ],
+    ];
 
     public function __construct(string $fromImage)
     {
-        $this->composerAutoload = [];
         $this->fromImage = $fromImage;
         $this->workdir = '/var/www/html/';
         $this->composerRequire = [];
+        $this->repositories = [];
+        $this->authenticationTokens = [];
         $this->entrypoint = [];
         $this->command = [];
         $this->tags = [];
@@ -54,7 +62,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
 
     public function withComposerPSR4Autoload(string $namespace, string ...$paths): self
     {
-        if (!array_key_exists('psr4', $this->composerAutoload)) {
+        if (!\array_key_exists('psr4', $this->composerAutoload)) {
             $this->composerAutoload['psr4'] = [];
         }
         $this->composerAutoload['psr4'][$namespace] = $paths;
@@ -119,6 +127,23 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
+    public function withComposerRepositories(string $name, string $type, string $url): self
+    {
+        $this->repositories[$name] = [
+            'type' => $type,
+            'url' => $url,
+        ];
+
+        return $this;
+    }
+
+    public function withComposerAuthenticationToken(string $url, string $auth): self
+    {
+        $this->authenticationTokens[$url] = $auth;
+
+        return $this;
+    }
+
     public function withTags(string ...$tags): self
     {
         $this->tags = $tags;
@@ -126,7 +151,7 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
         return $this;
     }
 
-    public function build(): Satellite\SatelliteInterface
+    public function build(): Configurator\SatelliteInterface
     {
         $dockerfile = new Dockerfile\Dockerfile(
             new Dockerfile\Dockerfile\From($this->fromImage),
@@ -137,13 +162,13 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $dockerfile->push(new Dockerfile\Dockerfile\Copy($from, $to));
         }
 
-        if ($this->composerJsonFile !== null) {
+        if (null !== $this->composerJsonFile) {
             $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.json'));
             $this->files->append(new \ArrayIterator([
                 new Packaging\File('composer.json', $this->composerJsonFile),
             ]));
 
-            if ($this->composerLockFile !== null) {
+            if (null !== $this->composerLockFile) {
                 $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.lock'));
                 $this->files->append(new \ArrayIterator([
                     new Packaging\File('composer.lock', $this->composerLockFile),
@@ -156,23 +181,46 @@ final class SatelliteBuilder implements Satellite\SatelliteBuilderInterface
             $dockerfile->push(new Dockerfile\PHP\Composer());
             $dockerfile->push(new Dockerfile\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Dockerfile\PHP\ComposerMinimumStability('dev'));
-            $dockerfile->push(new Dockerfile\PHP\ComposerAutoload($this->composerAutoload));
+            if (\array_key_exists('psr4', $this->composerAutoload)
+                && \is_array($this->composerAutoload['psr4'])
+                && \count($this->composerAutoload['psr4']) > 0
+            ) {
+                $dockerfile->push(new Dockerfile\PHP\ComposerAutoload($this->composerAutoload));
+            }
         }
 
-        // FIXME: finish the Sylius API client migration
-        $dockerfile->push(new Dockerfile\PHP\ComposerConfigForceHttps());
-        $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository('sylius-api-php-client', 'https://github.com/gplanchat/sylius-api-php-client'));
-
-        if (count($this->composerRequire) > 0) {
-            $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
-        }
-
-        if (count($this->entrypoint) > 0) {
+        if (\count($this->entrypoint) > 0) {
             $dockerfile->push(new Dockerfile\Dockerfile\Entrypoint(...$this->entrypoint));
         }
 
-        if (count($this->command) > 0) {
+        if (\count($this->command) > 0) {
             $dockerfile->push(new Dockerfile\Dockerfile\Cmd(...$this->command));
+        }
+
+        if (\count($this->repositories) > 0) {
+            foreach ($this->repositories as $name => $repository) {
+                if ($repository['type'] === 'github') {
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddGithubRepository($name, $repository['url']));
+                }
+
+                if ($repository['type'] === 'vcs'){
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository($name, $repository['url']));
+                }
+
+                if ($repository['type'] === 'composer'){
+                    $dockerfile->push(new Dockerfile\PHP\ComposerAddComposerRepository($name, $repository['url']));
+                }
+            }
+        }
+
+        if (\count($this->authenticationTokens) > 0) {
+            foreach ($this->authenticationTokens as $url => $token) {
+                $dockerfile->push(new Dockerfile\PHP\ComposerAuthenticationToken($url, $token));
+            }
+        }
+
+        if (\count($this->composerRequire) > 0) {
+            $dockerfile->push(new Dockerfile\PHP\ComposerRequire(...$this->composerRequire));
         }
 
         $satellite = new Satellite\Adapter\Docker\Satellite(

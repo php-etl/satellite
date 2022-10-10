@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Kiboko\Component\Satellite\Cloud\Console\Command\Project;
+declare(strict_types=1);
+
+namespace Kiboko\Component\Satellite\Cloud\Console\Command\Workspace;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite;
@@ -9,9 +11,9 @@ use Symfony\Component\Console;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
-final class ListCommand extends Console\Command\Command
+final class CreateCommand extends Console\Command\Command
 {
-    protected static $defaultName = 'project:list';
+    protected static $defaultName = 'workspace:create';
 
     protected function configure(): void
     {
@@ -19,6 +21,8 @@ final class ListCommand extends Console\Command\Command
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
+
+        $this->addArgument('name', mode: Console\Input\InputArgument::REQUIRED, description: 'Workspace name');
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -31,7 +35,7 @@ final class ListCommand extends Console\Command\Command
         if ($input->getOption('beta')) {
             $url = 'https://beta.gyroscops.com';
             $ssl = $input->getOption('ssl') ?? true;
-        } else if ($input->getOption('url')) {
+        } elseif ($input->getOption('url')) {
             $url = $input->getOption('url');
             $ssl = $input->getOption('ssl') ?? true;
         } else {
@@ -44,6 +48,7 @@ final class ListCommand extends Console\Command\Command
             $token = $auth->token($url);
         } catch (AccessDeniedException) {
             $style->error('Your credentials were not found, please run <info>cloud login</>.');
+
             return self::FAILURE;
         }
 
@@ -51,44 +56,32 @@ final class ListCommand extends Console\Command\Command
             $url,
             [
                 'verify_peer' => $ssl,
-                'auth_bearer' => $token
+                'auth_bearer' => $token,
             ]
         );
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
 
-        $projects = $client->getProjectCollection();
-        if ($projects === null) {
-            $style->error('Your authentication may have expired, please run <info>cloud login</>.');
+        $context = new Satellite\Cloud\Context();
+
+        $workspace = new Api\Model\Workspace();
+        $workspace->setName($input->getArgument('name'));
+        $workspace->setOrganization(sprintf('/authentication/organization/%s', $context->organization()->asString()));
+
+        // Todo : Manage authorization and users to set to the workspace
+        $workspace->setAuthorizations([]);
+        $workspace->setUsers([]);
+
+        try {
+            $client->postWorkspaceCollection($workspace);
+        } catch (Api\Exception\PostWorkspaceCollectionBadRequestException) {
+            $style->error('Something went wrong while creating the workspace.');
 
             return self::FAILURE;
         }
 
-        $choices = [];
-        foreach ($projects as $project) {
-            $choices[$project->getId()] = $project->getName();
-        }
-
-        $context = new Satellite\Cloud\Context();
-
-        try {
-            $currentProject = $context->project()->asString();
-        } catch (Satellite\Cloud\NoProjectSelectedException) {
-            $currentProject = null;
-        }
-
-        $style->table(
-            ['id', 'name', 'current'],
-            array_map(
-                fn (Api\Model\Project $project) => [
-                    $project->getId(),
-                    $project->getName(),
-                    ((string) $project->getId()) === $currentProject ? '*' : ''
-                ],
-                $projects
-            )
-        );
+        $style->success('The workspace has been successfully created.');
 
         return self::SUCCESS;
     }

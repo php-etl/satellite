@@ -9,14 +9,15 @@ use Kiboko\Component\Runtime\Workflow\Console as WorkflowConsoleRuntime;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
 final class WorkflowRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:workflow';
 
-    protected function configure()
+    protected function configure(): void
     {
-        $this->setDescription('Run the workflow.');
+        $this->setDescription('Run the workflow satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -29,16 +30,25 @@ final class WorkflowRunCommand extends Console\Command\Command
 
         $style->writeln(sprintf('<fg=cyan>Running workflow in %s</>', $input->getArgument('path')));
 
-        /** @var ClassLoader $autoload */
-        if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
+        if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled workflow at the provided path');
+
             return 1;
         }
 
         $cwd = getcwd();
         chdir($input->getArgument('path'));
 
+        $dotenv = new Dotenv();
+        $dotenv->usePutenv();
+        $dotenv->loadEnv('.env');
+
+        /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
+        $autoload->addClassMap([
+            /* @phpstan-ignore-next-line */
+            \ProjectServiceContainer::class => 'container.php',
+        ]);
         $autoload->register();
 
         $runtime = new WorkflowConsoleRuntime(
@@ -89,6 +99,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         if ($time < 3600) {
             $minutes = floor($time / 60);
             $seconds = $time - (60 * $minutes);
+
             return sprintf('<fg=cyan>%smin</> <fg=cyan>%ss</>', number_format($minutes), number_format($seconds, 2));
         }
         $hours = floor($time / 3600);

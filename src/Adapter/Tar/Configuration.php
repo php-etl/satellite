@@ -13,11 +13,12 @@ final class Configuration implements AdapterConfigurationInterface
     {
         $builder = new TreeBuilder('tar');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('output')->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

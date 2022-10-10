@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\State;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Configurator\Feature;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-#[Feature(name: "state")]
+#[Feature(name: 'state')]
 final class Service implements Configurator\PipelineFeatureInterface
 {
     private Processor $processor;
@@ -20,7 +23,7 @@ final class Service implements Configurator\PipelineFeatureInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -60,8 +63,7 @@ final class Service implements Configurator\PipelineFeatureInterface
     public function compile(array $config): Repository
     {
         $builder = new Builder\State();
-        $repository = new Repository($builder);
 
-        return $repository;
+        return new Repository($builder);
     }
 }

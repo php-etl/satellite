@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching\Builder;
 
-use Kiboko\Contract\Bucket\ResultBucketInterface;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 
@@ -16,21 +17,21 @@ final class Merge implements StepBuilderInterface
     {
     }
 
-    public function withLogger(Node\Expr $logger): Merge
+    public function withLogger(Node\Expr $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function withRejection(Node\Expr $rejection): Merge
+    public function withRejection(Node\Expr $rejection): self
     {
         $this->rejection = $rejection;
 
         return $this;
     }
 
-    public function withState(Node\Expr $state): Merge
+    public function withState(Node\Expr $state): self
     {
         $this->state = $state;
 
@@ -53,7 +54,7 @@ final class Merge implements StepBuilderInterface
                             props: [
                                 new Node\Stmt\PropertyProperty(
                                     name: 'storage'
-                                )
+                                ),
                             ],
                             type: new Node\Name('iterable')
                         ),
@@ -125,7 +126,19 @@ final class Merge implements StepBuilderInterface
                                                         new Node\Stmt\Expression(
                                                             new Node\Expr\Assign(
                                                                 var: new Node\Expr\Variable('count'),
-                                                                expr: new Node\Scalar\LNumber(0)
+                                                                expr: new Node\Scalar\LNumber(1)
+                                                            ),
+                                                        ),
+                                                        new Node\Stmt\Expression(
+                                                            expr: new Node\Expr\Assign(
+                                                                var: new Node\Expr\ArrayDimFetch(
+                                                                    var: new Node\Expr\PropertyFetch(
+                                                                        var: new Node\Expr\Variable('this'),
+                                                                        name: new Node\Identifier('storage'),
+                                                                    ),
+                                                                    dim: null,
+                                                                ),
+                                                                expr: new Node\Expr\Variable('line'),
                                                             ),
                                                         ),
                                                         new Node\Stmt\Expression(
@@ -140,7 +153,7 @@ final class Merge implements StepBuilderInterface
                                                                                     var: new Node\Expr\Variable('this'),
                                                                                     name: new Node\Identifier('storage'),
                                                                                 ),
-                                                                            )
+                                                                            ),
                                                                         ],
                                                                     ),
                                                                 ),
@@ -208,10 +221,10 @@ final class Merge implements StepBuilderInterface
                                                         var: new Node\Expr\Variable('this'),
                                                         name: new Node\Identifier('storage'),
                                                     ),
-                                                )
+                                                ),
                                             ],
                                         )
-                                    )
+                                    ),
                                 ],
                                 'returnType' => new Node\Name\FullyQualified('Kiboko\\Contract\\Bucket\\ResultBucketInterface'),
                             ],

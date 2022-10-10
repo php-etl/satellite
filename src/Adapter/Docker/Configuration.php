@@ -9,11 +9,11 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements AdapterConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('docker');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->scalarNode('from')->end()
@@ -21,7 +21,8 @@ final class Configuration implements AdapterConfigurationInterface
                 ->arrayNode('tags')
                     ->scalarPrototype()->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

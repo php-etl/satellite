@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -11,10 +12,10 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
-    name: "sftp",
-    dependencies: ["ext-ssh2"],
+    name: 'sftp',
+    dependencies: ['ext-ssh2'],
     steps: [
-        "loader" => "loader",
+        new Configurator\Pipeline\StepLoader(),
     ],
 )]
 final class Service implements Configurator\PipelinePluginInterface
@@ -28,7 +29,7 @@ final class Service implements Configurator\PipelinePluginInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -69,16 +70,16 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
-        if (array_key_exists('expression_language', $config)
-            && is_array($config['expression_language'])
-            && count($config['expression_language'])
+        if (\array_key_exists('expression_language', $config)
+            && \is_array($config['expression_language'])
+            && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider);
+                $this->interpreter->registerProvider(new $provider());
             }
         }
 
-        if (array_key_exists('loader', $config)) {
+        if (\array_key_exists('loader', $config)) {
             $loaderFactory = new Factory\Loader($this->interpreter);
 
             $loaderCompilation = $loaderFactory->compile($config);

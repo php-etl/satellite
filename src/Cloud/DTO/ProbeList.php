@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -17,6 +19,7 @@ final class ProbeList
     {
         $probes = $this->probes;
         usort($probes, fn (Probe $left, Probe $right) => $left->order <=> $right->order);
+
         return new \ArrayIterator($probes);
     }
 

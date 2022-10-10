@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
@@ -13,6 +15,7 @@ final class DeclarePipelineCommand implements Command
         public DTO\StepList $steps,
         public DTO\Autoload $autoload,
         public DTO\OrganizationId $organizationId,
-        public DTO\ProjectId $project,
-    ) {}
+        public DTO\WorkspaceId $project,
+    ) {
+    }
 }

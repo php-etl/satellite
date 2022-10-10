@@ -14,7 +14,7 @@ final class BuildCommand extends Console\Command\Command
 {
     protected static $defaultName = 'build';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Build the satellite.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
@@ -29,7 +29,7 @@ final class BuildCommand extends Console\Command\Command
         );
 
         $filename = $input->getArgument('config');
-        if ($filename !== null) {
+        if (null !== $filename) {
             $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
@@ -47,13 +47,13 @@ final class BuildCommand extends Console\Command\Command
             }
         }
 
-        for ($directory = getcwd(); $directory !== '/'; $directory = dirname($directory)) {
-            if (file_exists($directory . '/.gyro.php')) {
+        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+            if (file_exists($directory.'/.gyro.php')) {
                 break;
             }
         }
 
-        if (!file_exists($directory . '/.gyro.php')) {
+        if (!file_exists($directory.'/.gyro.php')) {
             throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
         }
 
@@ -62,19 +62,20 @@ final class BuildCommand extends Console\Command\Command
             new Satellite\ExpressionLanguage\ExpressionLanguage(),
         );
 
-        $factory = require $directory . '/.gyro.php';
+        $factory = require $directory.'/.gyro.php';
         $service = $factory($context);
 
         try {
             $configuration = $service->normalize($configuration);
         } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
             $style->error($exception->getMessage());
+
             return 255;
         }
 
-        \chdir(\dirname($filename));
+        chdir(\dirname($filename));
 
-        if (array_key_exists('satellite', $configuration)) {
+        if (\array_key_exists('satellite', $configuration)) {
             $output->writeln([
                 '',
                 '',
@@ -86,21 +87,21 @@ final class BuildCommand extends Console\Command\Command
                 $service,
                 $service->adapterChoice(),
                 new class() extends Log\AbstractLogger {
-                    public function log($level, $message, array $context = array())
+                    public function log($level, $message, array $context = []): void
                     {
-                        $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                        fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                        $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                        fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
                     }
                 },
             );
 
             $factory($configuration['satellite']);
-        } elseif (array_key_exists('satellites', $configuration)) {
+        } elseif (\array_key_exists('satellites', $configuration)) {
             foreach ($configuration['satellites'] as $satellite) {
                 $output->writeln([
                     '',
                     '',
-                    '<info>Building Satellite <info>'. $satellite['label'],
+                    '<info>Building Satellite <info>'.$satellite['label'],
                     '============',
                 ]);
 
@@ -110,12 +111,13 @@ final class BuildCommand extends Console\Command\Command
                     new class($output) extends Log\AbstractLogger {
                         public function __construct(
                             private Console\Output\OutputInterface $output,
-                        ) {}
+                        ) {
+                        }
 
-                        public function log($level, $message, array $context = array())
+                        public function log($level, $message, array $context = []): void
                         {
-                            $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                            $this->output->writeln($prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                            $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                            $this->output->writeln($prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
                         }
                     },
                 );

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
@@ -9,7 +11,8 @@ final class Pipeline implements PipelineInterface
         private string $code,
         private StepList $steps,
         private Autoload $autoload,
-    ) {}
+    ) {
+    }
 
     public function code(): string
     {

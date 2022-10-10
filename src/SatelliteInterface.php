@@ -1,23 +1,10 @@
 <?php
 
-namespace Kiboko\Component\Satellite;
+declare(strict_types=1);
 
-use Kiboko\Contract\Packaging;
-use Psr\Log\LoggerInterface;
+trigger_deprecation('php-etl/satellite', '0.4', 'The "%s" interface is deprecated, use "%s" instead.', 'Kiboko\\Component\\Satellite\\SatelliteInterface', \Kiboko\Contract\Configurator\SatelliteInterface::class);
 
-interface SatelliteInterface
-{
-    public function dependsOn(string ...$dependencies): self;
-
-    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self;
-
-    public function build(LoggerInterface $logger): void;
-
-//    public function start(LoggerInterface $logger, NetworkInterface $network): void;
-
-//    public function send(\JsonSerializable $payload): DeferredInterface;
-
-//    public function stop(): void;
-
-//    public function poll(LoggerInterface $logger): void;
-}
+/*
+ * @deprecated since Satellite 0.4, use Kiboko\Contract\Configurator\SatelliteInterface instead.
+ */
+class_alias(\Kiboko\Contract\Configurator\SatelliteInterface::class, 'Kiboko\\Component\\Satellite\\SatelliteInterface');

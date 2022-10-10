@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud;
 
@@ -20,22 +22,14 @@ final class CommandBus
     public static function withStandardHandlers(Client $client): self
     {
         return new self([
-            Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\RemovePipelineCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddAfterPipelineStepCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\AddAfterPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class
-                => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\RemovePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\AddAfterPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddAfterPipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
         ]);
     }
 
@@ -47,18 +41,18 @@ final class CommandBus
         return $deferred->promise();
     }
 
-    public function execute()
+    public function execute(): void
     {
         $commands = $this->commands;
         $this->commands = [];
 
         /**
-         * @var object $command
+         * @var object   $command
          * @var Deferred $deferred
          */
         foreach ($commands as [$command, $deferred]) {
             try {
-                $commandClass = get_class($command);
+                $commandClass = $command::class;
                 $handler = $this->handlers[$commandClass] ?? throw new \RuntimeException(sprintf('No handler for %s command', $commandClass));
 
                 $deferred->resolve($handler($command));

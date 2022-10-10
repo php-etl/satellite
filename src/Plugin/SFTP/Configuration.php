@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\SFTP;
 
-use Kiboko\Contract\Configurator\PluginConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
+use Kiboko\Contract\Configurator\PluginConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements PluginConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('sftp');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('expression_language')
@@ -124,7 +124,8 @@ final class Configuration implements PluginConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

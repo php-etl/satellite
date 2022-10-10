@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Diff;
 
@@ -9,7 +11,8 @@ final class StepListDiff
 {
     public function __construct(
         private DTO\PipelineId $pipelineId,
-    ) {}
+    ) {
+    }
 
     public function diff(DTO\StepList $left, DTO\StepList $right): DTO\CommandBatch
     {
@@ -20,11 +23,11 @@ final class StepListDiff
 
         foreach ($rightPositions as $desiredPosition => $code) {
             // If the $right code does not exist in the $left list, then the step must be added
-            if (array_search($code, $leftPositions, true) !== false) {
+            if (false !== array_search($code, $leftPositions, true)) {
                 continue;
             }
 
-            if ($desiredPosition === 0) {
+            if (0 === $desiredPosition) {
                 $commands->push(new Pipeline\PrependPipelineStepCommand($this->pipelineId, $right->get($code)));
             } else {
                 $commands->push(new Pipeline\AddAfterPipelineStepCommand($this->pipelineId, new DTO\StepCode($rightPositions[$desiredPosition - 1]), $right->get($code)));
@@ -36,7 +39,7 @@ final class StepListDiff
         foreach ($leftPositions as $currentPosition => $code) {
             // If the $left code does not exist in the $right list, then the step must be removed
             if (($desiredPosition = array_search($code, $rightPositions, true)) === false) {
-                $offset++;
+                ++$offset;
                 $commands->push(new Pipeline\RemovePipelineStepCommand($this->pipelineId, new DTO\StepCode($code)));
                 continue;
             }
@@ -46,7 +49,7 @@ final class StepListDiff
             }
         }
 
-        if ($needsReorder === true) {
+        if (true === $needsReorder) {
             $commands->push(new Pipeline\ReorderPipelineStepCommand(
                 $this->pipelineId,
                 ...array_map(fn (string $code) => new DTO\StepCode($code), $rightPositions)

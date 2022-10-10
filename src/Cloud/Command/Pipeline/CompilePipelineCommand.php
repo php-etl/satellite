@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 
@@ -9,5 +11,6 @@ final class CompilePipelineCommand implements Command
 {
     public function __construct(
         public PipelineId $pipeline
-    ) {}
+    ) {
+    }
 }

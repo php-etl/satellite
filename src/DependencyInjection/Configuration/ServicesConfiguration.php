@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\DependencyInjection\Configuration;
 
@@ -11,15 +13,15 @@ final class ServicesConfiguration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('services');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
                 ->always(function ($data) {
                     foreach ($data as $identifier => &$service) {
-                        if (is_null($service)) {
+                        if (null === $service) {
                             $service['class'] = $identifier;
                         } else {
-                            if (!array_key_exists('class', $service)) {
+                            if (!\array_key_exists('class', $service)) {
                                 $service['class'] = $identifier;
                             }
                         }
@@ -31,8 +33,8 @@ final class ServicesConfiguration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always(function ($data) {
                     foreach ($data as &$service) {
-                        if (array_key_exists('calls', $service)) {
-                            $service["calls"] = array_merge(...$service["calls"]);
+                        if (\array_key_exists('calls', $service)) {
+                            $service['calls'] = array_merge(...$service['calls']);
                         }
                     }
 
@@ -43,8 +45,13 @@ final class ServicesConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('class')->isRequired()->end()
                     ->arrayNode('arguments')
-//                        ->useAttributeAsKey('key')
                         ->variablePrototype()->end()
+                    ->end()
+                    ->arrayNode('factory')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->end()
+                            ->scalarNode('method')->isRequired()->end()
+                        ->end()
                     ->end()
                     ->arrayNode('calls')
                         ->useAttributeAsKey('key')
@@ -56,7 +63,8 @@ final class ServicesConfiguration implements ConfigurationInterface
                         ->defaultFalse()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

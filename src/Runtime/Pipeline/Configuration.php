@@ -33,29 +33,31 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     {
         $builder = new TreeBuilder('steps');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->requiresAtLeastOneElement()
             ->cannotBeEmpty()
             ->isRequired()
             ->fixXmlConfig('step')
             ->validate()
-                ->ifTrue(function ($value) {
-                    return 1 <= array_reduce(
+            ->ifTrue(function ($value) {
+                return 1 <= array_reduce(
                         array_keys($this->plugins),
-                        fn (int $count, string $plugin)
-                            => array_key_exists($plugin, $value) ? $count + 1 : $count,
+                        fn (int $count, string $plugin) => \array_key_exists($plugin, $value) ? $count + 1 : $count,
                         0
                     );
-                })
-                ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
-            ->end();
+            })
+            ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
+            ->end()
+        ;
 
+        /** @phpstan-ignore-next-line */
         $node = $builder->getRootNode()->arrayPrototype();
 
         $this
             ->applyPlugins($node)
-            ->applyFeatures($node);
+            ->applyFeatures($node)
+        ;
 
         return $builder;
     }
@@ -64,16 +66,17 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     {
         $builder = new TreeBuilder('pipeline');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-                ->arrayNode('expression_language')
-                    ->scalarPrototype()->end()
-                ->end()
-                ->scalarNode('name')->end()
-                ->scalarNode('code')->end()
-                ->append($this->getStepsTreeBuilder()->getRootNode())
-            ->end();
+            ->arrayNode('expression_language')
+            ->scalarPrototype()->end()
+            ->end()
+            ->scalarNode('name')->end()
+            ->scalarNode('code')->end()
+            ->append($this->getStepsTreeBuilder()->getRootNode())
+            ->end()
+        ;
 
         return $builder;
     }
@@ -81,12 +84,14 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyPlugins(ArrayNodeDefinition $node): self
     {
         foreach ($this->plugins as $plugin) {
+            /* @phpstan-ignore-next-line */
             $node
                 ->children()
-                    ->scalarNode('name')->end()
-                    ->scalarNode('code')->end()
+                ->scalarNode('name')->end()
+                ->scalarNode('code')->end()
                 ->end()
-                ->append($plugin->getConfigTreeBuilder()->getRootNode());
+                ->append($plugin->getConfigTreeBuilder()->getRootNode())
+            ;
         }
 
         return $this;
@@ -95,11 +100,13 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private function applyFeatures(ArrayNodeDefinition $node): self
     {
         foreach ($this->features as $feature) {
+            /* @phpstan-ignore-next-line */
             $node->children()
                 ->scalarNode('name')->end()
-                    ->scalarNode('code')->end()
+                ->scalarNode('code')->end()
                 ->end()
-                ->append($feature->getConfigTreeBuilder()->getRootNode());
+                ->append($feature->getConfigTreeBuilder()->getRootNode())
+            ;
         }
 
         return $this;

@@ -6,9 +6,8 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-#[Configurator\Runtime(name: "workflow")]
+#[Configurator\Runtime(name: 'workflow')]
 final class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
@@ -20,19 +19,25 @@ final class Factory implements Satellite\Runtime\FactoryInterface
 
     public function addFeature(string $name, Configurator\FactoryInterface $feature): self
     {
-        $this->configuration->addFeature($name, $feature->configuration());
+        $configuration = $feature->configuration();
+        \assert($configuration instanceof Configurator\FeatureConfigurationInterface);
+
+        $this->configuration->addFeature($name, $configuration);
 
         return $this;
     }
 
     public function addPlugin(string $name, Configurator\FactoryInterface $plugin): self
     {
-        $this->configuration->addPlugin($name, $plugin->configuration());
+        $configuration = $plugin->configuration();
+        \assert($configuration instanceof Configurator\PluginConfigurationInterface);
+
+        $this->configuration->addPlugin($name, $configuration);
 
         return $this;
     }
 
-    public function configuration(): ConfigurationInterface
+    public function configuration(): Configurator\RuntimeConfigurationInterface
     {
         return $this->configuration;
     }

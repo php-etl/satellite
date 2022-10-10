@@ -6,21 +6,18 @@ namespace Kiboko\Component\Satellite\Console\Command;
 
 use Composer\Autoload\ClassLoader;
 use Kiboko\Component\Runtime\Pipeline\Console as PipelineConsoleRuntime;
-use Kiboko\Component\State\StateOutput\PipelineStep;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
 final class PipelineRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:pipeline';
 
-    /** @var list<PipelineStep> */
-    private array $steps = [];
-
-    protected function configure()
+    protected function configure(): void
     {
-        $this->setDescription('Run the satellite.');
+        $this->setDescription('Run the pipeline satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -31,18 +28,27 @@ final class PipelineRunCommand extends Console\Command\Command
             $output,
         );
 
-        $style->writeln(sprintf('<fg=cyan>Running satellite in %s</>', $input->getArgument('path')));
+        $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
-        /** @var ClassLoader $autoload */
-        if (!file_exists($input->getArgument('path') . '/vendor/autoload.php')) {
-            $style->error('There is no compiled satellite at the provided path');
+        if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
+            $style->error('There is no compiled pipeline at the provided path');
+
             return 1;
         }
 
         $cwd = getcwd();
         chdir($input->getArgument('path'));
 
+        $dotenv = new Dotenv();
+        $dotenv->usePutenv();
+        $dotenv->loadEnv('.env');
+
+        /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
+        $autoload->addClassMap([
+            /* @phpstan-ignore-next-line */
+            \ProjectServiceContainer::class => 'container.php',
+        ]);
         $autoload->register();
 
         $runtime = new PipelineConsoleRuntime(
@@ -97,6 +103,7 @@ final class PipelineRunCommand extends Console\Command\Command
         if ($time < 3600) {
             $minutes = floor($time / 60);
             $seconds = $time - (60 * $minutes);
+
             return sprintf('<fg=cyan>%smin</> <fg=cyan>%ss</>', number_format($minutes), number_format($seconds, 2));
         }
         $hours = floor($time / 3600);

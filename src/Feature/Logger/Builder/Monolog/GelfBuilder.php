@@ -66,14 +66,14 @@ final class GelfBuilder implements MonologBuilderInterface
     {
         $arguments = [];
 
-        if ($this->level !== null) {
+        if (null !== $this->level) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\String_($this->level),
                 name: new Node\Identifier('level'),
             );
         }
 
-        if ($this->level !== null) {
+        if (null !== $this->level) {
             $arguments[] = new Node\Arg(
                 value: new Node\Expr\New_(
                     class: new Node\Name\FullyQualified('Gelf\\Publisher'),
@@ -108,7 +108,7 @@ final class GelfBuilder implements MonologBuilderInterface
 
     private function buildTransport(): Node\Expr
     {
-        if ($this->transport === 'amqp') {
+        if ('amqp' === $this->transport) {
             return $this->buildAMQPTransport();
         }
 
@@ -119,14 +119,14 @@ final class GelfBuilder implements MonologBuilderInterface
     {
         $arguments = [];
 
-        if ($this->host !== null) {
+        if (null !== $this->host) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\String_($this->host),
                 name: new Node\Identifier('host'),
             );
         }
 
-        if ($this->port !== null) {
+        if (null !== $this->port) {
             $arguments[] = new Node\Arg(
                 value: new Node\Scalar\LNumber($this->port),
                 name: new Node\Identifier('port'),
@@ -143,38 +143,38 @@ final class GelfBuilder implements MonologBuilderInterface
     {
         $arguments = [];
 
-        if ($this->host !== null) {
+        if (null !== $this->host) {
             $arguments[] = new Node\Expr\ArrayItem(
                 value: new Node\Scalar\String_($this->host),
                 key: new Node\Scalar\String_('host'),
             );
         }
 
-        if ($this->port !== null) {
+        if (null !== $this->port) {
             $arguments[] = new Node\Expr\ArrayItem(
                 value: new Node\Scalar\LNumber($this->port),
                 key: new Node\Scalar\String_('port'),
             );
         }
 
-        if ($this->vhost !== null) {
+        if (null !== $this->vhost) {
             $arguments[] = new Node\Expr\ArrayItem(
                 value: new Node\Scalar\String_($this->vhost),
                 key: new Node\Scalar\String_('vhost'),
             );
         }
 
-        if ($this->timeout !== null) {
+        if (null !== $this->timeout) {
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, \PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('read_timeout'),
             );
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, \PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('write_timeout'),
             );
             $arguments[] = new Node\Expr\ArrayItem(
-                value: new Node\Scalar\LNumber($this->timeout),
+                value: new Node\Scalar\LNumber((int) round($this->timeout, 0, \PHP_ROUND_HALF_UP)),
                 key: new Node\Scalar\String_('connect_timeout'),
             );
         }
@@ -199,7 +199,7 @@ final class GelfBuilder implements MonologBuilderInterface
                                                             'kind' => Node\Expr\Array_::KIND_SHORT,
                                                         ]
                                                     )
-                                                )
+                                                ),
                                             ]
                                         )
                                     ),

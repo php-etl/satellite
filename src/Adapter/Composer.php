@@ -12,18 +12,18 @@ final class Composer
 {
     public function __construct(private string $workdir, private ?LoggerInterface $logger = null)
     {
-        $this->logger = $this->logger ?? new class() extends AbstractLogger {
-            public function log($level, $message, array $context = array())
+        $this->logger ??= new class() extends AbstractLogger {
+            public function log($level, $message, array $context = []): void
             {
-                $prefix = sprintf(PHP_EOL . "[%s] ", strtoupper($level));
-                fwrite(STDERR, $prefix . str_replace(PHP_EOL, $prefix, rtrim($message, PHP_EOL)));
+                $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
             }
         };
     }
 
     private function execute(Process $process): void
     {
-        $process->run(function ($type, $buffer) {
+        $process->run(function ($type, $buffer): void {
             if (Process::ERR === $type) {
                 $this->logger->info($buffer);
             } else {
@@ -31,7 +31,7 @@ final class Composer
             }
         });
 
-        if ($process->getExitCode() !== 0) {
+        if (0 !== $process->getExitCode()) {
             throw new \RuntimeException(sprintf('Process exited unexpectedly. %s', $process->getCommandLine()));
         }
     }
@@ -139,6 +139,40 @@ final class Composer
             sprintf('repositories.%s', $name),
             'github',
             $url,
+        );
+    }
+
+    public function addComposerRepository(string $name, string $url): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            sprintf('repositories.%s', $name),
+            'composer',
+            $url,
+        );
+    }
+
+    public function addVCSRepository(string $name, string $url): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            sprintf('repositories.%s', $name),
+            'vcs',
+            $url,
+        );
+    }
+
+    public function addAuthenticationToken(string $url, string $token): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            $url,
+            'token',
+            $token
         );
     }
 }

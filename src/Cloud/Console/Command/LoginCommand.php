@@ -34,7 +34,7 @@ final class LoginCommand extends Console\Command\Command
         if ($input->getOption('beta')) {
             $url = 'https://beta.gyroscops.com';
             $ssl = $input->getOption('ssl') ?? true;
-        } else if ($input->getOption('url')) {
+        } elseif ($input->getOption('url')) {
             $url = $input->getOption('url');
             $ssl = $input->getOption('ssl') ?? true;
         } else {
@@ -70,12 +70,18 @@ final class LoginCommand extends Console\Command\Command
         }
 
         $retries = 3;
-        $username = $input->getArgument('username') ?? $style->ask('Username:');
+        $username = $input->getArgument('username') ?? $style->ask('Username');
 
         while (true) {
             try {
-                $password = $style->askHidden('Password:');
-                $token = $auth->authenticateWithCredentials($client, new Satellite\Cloud\Credentials($username, $password));
+                $password = $style->askHidden('Password');
+                $token = $auth->authenticateWithCredentials(
+                    $client,
+                    new Satellite\Cloud\Credentials(
+                        $username,
+                        $password,
+                    )
+                );
 
                 $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password));
                 $auth->persistToken($url, $token);
@@ -90,6 +96,7 @@ final class LoginCommand extends Console\Command\Command
                 }
 
                 $style->error('Unable to retrieve the token after 3 retries.');
+
                 return Console\Command\Command::FAILURE;
             }
         }

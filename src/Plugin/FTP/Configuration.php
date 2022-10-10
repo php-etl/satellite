@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\FTP;
 
-use Kiboko\Contract\Configurator\PluginConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
+use Kiboko\Contract\Configurator\PluginConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements PluginConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('ftp');
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
                 ->arrayNode('expression_language')
@@ -34,10 +34,12 @@ final class Configuration implements PluginConfigurationInterface
                                             ->then(asExpression())
                                         ->end()
                                     ->end()
-                                    ->integerNode('port')
-                                        ->min(1)
-                                        ->max(65535)
+                                    ->variableNode('port')
                                         ->defaultValue(21)
+                                        ->validate()
+                                            ->ifTrue(fn ($data) => !\str_starts_with($data, '@='))
+                                            ->then(fn ($data) => (int) $data)
+                                        ->end()
                                         ->validate()
                                             ->ifTrue(isExpression())
                                             ->then(asExpression())
@@ -118,7 +120,8 @@ final class Configuration implements PluginConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
 
         return $builder;
     }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Rejection\Builder;
 
@@ -12,7 +14,7 @@ final class Rejection implements Builder
     ) {
     }
 
-    public function withRejection(Node\Expr $rejection)
+    public function withRejection(Node\Expr $rejection): void
     {
         $this->rejection = $rejection;
     }
@@ -26,6 +28,6 @@ final class Rejection implements Builder
 
     public function getNode(): Node\Expr
     {
-        return $this->rejection === null ? self::nullRejection() : $this->rejection;
+        return null === $this->rejection ? self::nullRejection() : $this->rejection;
     }
 }

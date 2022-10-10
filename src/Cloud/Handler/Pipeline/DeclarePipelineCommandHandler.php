@@ -14,7 +14,8 @@ final class DeclarePipelineCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Pipeline\DeclarePipelineCommand $command): Cloud\Event\PipelineDeclared
     {
@@ -24,7 +25,7 @@ final class DeclarePipelineCommandHandler
                 (new Api\Model\PipelineDeclarePipelineCommandInput())
                     ->setLabel($command->label)
                     ->setCode($command->code)
-                    ->setProject((string) $command->project)
+                    ->setWorkspace((string) $command->project)
                     ->setOrganization((string) $command->organizationId)
                     ->setSteps($command->steps->map(
                         fn (Step $step) => (new Api\Model\StepInput())
@@ -42,18 +43,12 @@ final class DeclarePipelineCommandHandler
                     ))
             );
         } catch (Api\Exception\DeclarePipelinePipelineCollectionBadRequestException $exception) {
-            throw new Cloud\DeclarePipelineFailedException(
-                'Something went wrong while declaring the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.',
-                previous: $exception
-            );
+            throw new Cloud\DeclarePipelineFailedException('Something went wrong while declaring the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
         } catch (Api\Exception\DeclarePipelinePipelineCollectionUnprocessableEntityException $exception) {
-            throw new Cloud\DeclarePipelineFailedException(
-                'Something went wrong while declaring the pipeline. It seems the data you sent was invalid, please check your input.',
-                previous: $exception
-            );
+            throw new Cloud\DeclarePipelineFailedException('Something went wrong while declaring the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if ($result === null) {
+        if (null === $result) {
             // TODO: change the exception message, it doesn't give enough details on how to fix the issue
             throw new Cloud\DeclarePipelineFailedException('Something went wrong while declaring the pipeline.');
         }

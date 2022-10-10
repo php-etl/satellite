@@ -13,27 +13,28 @@ final class TemporaryFile extends ExpressionFunction
         parent::__construct(
             $name,
             function (string $value): string {
-                $pattern = <<<PHP
-                    (function (\$data) {
-                        if (!is_string(\$data)) {
+                $pattern = <<<'PHP'
+                    (function ($data) {
+                        if (!is_string($data)) {
                             return null;
                         }
-                        \$stream = fopen('php://temp', 'r+');
-                        fwrite(\$stream, \$data);
-                        fseek(\$stream, 0, SEEK_SET);
-                        return \$stream;
+                        $stream = fopen('php://temp', 'r+');
+                        fwrite($stream, $data);
+                        fseek($stream, 0, SEEK_SET);
+                        return $stream;
                     })(%s);
                     PHP;
 
-                return \sprintf($pattern, $value);
+                return sprintf($pattern, $value);
             },
             function ($content) {
-                if (!is_string($content)) {
+                if (!\is_string($content)) {
                     return null;
                 }
                 $stream = fopen('php://temp', 'r+');
                 fwrite($stream, $content);
-                fseek($stream, 0, SEEK_SET);
+                fseek($stream, 0, \SEEK_SET);
+
                 return $stream;
             },
         );

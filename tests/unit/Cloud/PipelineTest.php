@@ -15,7 +15,7 @@ class PipelineTest extends TestCase
     {
         $this->context = new Satellite\Cloud\Context();
         $this->context->changeOrganization(new Satellite\Cloud\DTO\OrganizationId('5624f073-4085-42ee-b33b-e8869c3f2f51'));
-        $this->context->changeProject(new Satellite\Cloud\DTO\ProjectId('577d9281-88ad-45be-8e12-307adf5e787c'));
+        $this->context->changeWorkspace(new Satellite\Cloud\DTO\WorkspaceId('577d9281-88ad-45be-8e12-307adf5e787c'));
     }
 
     public function testCreate(): void

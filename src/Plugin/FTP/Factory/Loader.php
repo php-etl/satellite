@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kiboko\Component\Satellite\Plugin\FTP\Factory;
 
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use Kiboko\Component\Satellite\Plugin\FTP;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
-use Symfony\Component\Config\Definition\Exception as Symfony;
 use Kiboko\Contract\Configurator\RepositoryInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Kiboko\Component\Satellite\Plugin\FTP;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Loader implements Configurator\FactoryInterface
 {
@@ -22,7 +25,7 @@ class Loader implements Configurator\FactoryInterface
     ) {
         $this->processor = new Processor();
         $this->configuration = new FTP\Configuration();
-        $this->interpreter = $interpreter ?? new ExpressionLanguage();
+        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -57,12 +60,12 @@ class Loader implements Configurator\FactoryInterface
     {
         $builder = new FTP\Builder\Loader($this->interpreter);
 
-        if (array_key_exists('servers', $config['loader'])
-            && is_array($config['loader']['servers'])
+        if (\array_key_exists('servers', $config['loader'])
+            && \is_array($config['loader']['servers'])
         ) {
             foreach ($config['loader']['servers'] as $server) {
                 $serverFactory = new FTP\Factory\Server($this->interpreter);
-                $builder->addServerBasePath($server['host'], compileValueWhenExpression($this->interpreter, $server['base_path']));
+                $builder->addServerBasePath(compileValueWhenExpression($this->interpreter, $server['base_path']));
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();
@@ -71,15 +74,15 @@ class Loader implements Configurator\FactoryInterface
             }
         }
 
-        if (array_key_exists('put', $config['loader'])
-            && is_array($config['loader']['put'])
+        if (\array_key_exists('put', $config['loader'])
+            && \is_array($config['loader']['put'])
         ) {
             foreach ($config['loader']['put'] as $put) {
                 $builder->withPut(
-                    compileValueWhenExpression($this->interpreter, $put["path"]),
-                    compileValueWhenExpression($this->interpreter, $put["content"]),
-                    array_key_exists('mode', $put) ? compileValueWhenExpression($this->interpreter, $put["mode"]) : null,
-                    array_key_exists('if', $put) ? compileValueWhenExpression($this->interpreter, $put["if"]) : null,
+                    compileValueWhenExpression($this->interpreter, $put['path']),
+                    compileValueWhenExpression($this->interpreter, $put['content']),
+                    \array_key_exists('mode', $put) ? compileValueWhenExpression($this->interpreter, $put['mode']) : null,
+                    \array_key_exists('if', $put) ? compileValueWhenExpression($this->interpreter, $put['if']) : null,
                 );
             }
         }
@@ -87,10 +90,7 @@ class Loader implements Configurator\FactoryInterface
         try {
             return new FTP\Factory\Repository\Repository($builder);
         } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
-            throw new Configurator\InvalidConfigurationException(
-                message: $exception->getMessage(),
-                previous: $exception
-            );
+            throw new Configurator\InvalidConfigurationException(message: $exception->getMessage(), previous: $exception);
         }
     }
 }
