@@ -11,7 +11,7 @@ final class DeclarePipelineCommand implements Command
 {
     public function __construct(
         public string $code,
-        public string  $label,
+        public string $label,
         public DTO\StepList $steps,
         public DTO\Autoload $autoload,
         public DTO\OrganizationId $organizationId,
