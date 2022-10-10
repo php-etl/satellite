@@ -23,7 +23,7 @@ final class AdapterChoice
         }
 
         try {
-            assert($factory instanceof FactoryInterface);
+            assert($factory instanceof \Kiboko\Contract\Configurator\Adapter\FactoryInterface);
         } catch (\AssertionError $exception) {
             throw new \RuntimeException('No compatible adapter was found for your satellite configuration.', previous: $exception);
         }
