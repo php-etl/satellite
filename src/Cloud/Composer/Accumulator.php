@@ -41,7 +41,7 @@ final class Accumulator implements \IteratorAggregate, \Stringable
                 }
 
                 yield <<<PHP
-                    new \\{$configuration['satellite']['class']}(\$context->interpreter())
+                    new \\{$configuration['satellite']['class']}()
                     PHP;
                 continue;
             }
@@ -54,12 +54,12 @@ final class Accumulator implements \IteratorAggregate, \Stringable
 
             if (\is_string($configuration['gyroscops']['plugins'])) {
                 yield <<<PHP
-                    new \\{$configuration['gyroscops']['plugins']}(\$context->interpreter())
+                    new \\{$configuration['gyroscops']['plugins']}()
                     PHP;
             } elseif (\is_array($configuration['gyroscops']['plugins'])) {
                 foreach ($configuration['gyroscops']['plugins'] as $plugin) {
                     yield <<<PHP
-                        new \\{$plugin}(\$context->interpreter())
+                        new \\{$plugin}()
                         PHP;
                 }
             }
