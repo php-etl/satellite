@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Kiboko\Component\Satellite;
-use Kiboko\Component\Satellite\MissingAttributeException;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use function Kiboko\Component\Satellite\expectAttributes;
 
 final class Service
 {
-    private Processor $processor;
+    private Satellite\Cloud\Processor\CustomProcessor $processor;
     private Satellite\Configuration $configuration;
     private ExpressionLanguage $interpreter;
     /** @var array<string, Satellite\Adapter\FactoryInterface> */
@@ -29,34 +26,9 @@ final class Service
 
     public function __construct()
     {
-        $this->processor = new Processor();
+        $this->processor = new Satellite\Cloud\Processor\CustomProcessor();
         $this->configuration = new Satellite\Configuration();
         $this->interpreter = new Satellite\ExpressionLanguage\ExpressionLanguage();
-
-        $this
-            ->registerRuntimes(
-                new Satellite\Runtime\Api\Factory(),
-                new Satellite\Runtime\HttpHook\Factory(),
-                new Satellite\Runtime\Pipeline\Factory(),
-                new Satellite\Runtime\Workflow\Factory(),
-            )
-            ->registerFactories(
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Logger\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\State\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Feature\Rejection\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Custom\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Stream\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\SFTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\FTP\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new Satellite\Plugin\Batching\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Akeneo\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\CSV\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\FastMap\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Spreadsheet\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\SQL\Service($this->interpreter),
-                fn (ExpressionLanguage $interpreter) => new \Kiboko\Plugin\Sylius\Service($this->interpreter)
-            )
-        ;
     }
 
     private function addRuntime(Configurator\Runtime $attribute, Satellite\Runtime\FactoryInterface $runtime): self

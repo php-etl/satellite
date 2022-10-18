@@ -114,10 +114,12 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "Kiboko\\Component\\Satellite\\ComposerScripts::postInstall"
+            "Kiboko\\Component\\Satellite\\ComposerScripts::postInstall",
+            "Kiboko\\Component\\Satellite\\Cloud\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
-            "Kiboko\\Component\\Satellite\\ComposerScripts::postUpdate"
+            "Kiboko\\Component\\Satellite\\ComposerScripts::postUpdate",
+            "Kiboko\\Component\\Satellite\\Cloud\\ComposerScripts::postUpdate"
         ]
     }
 }
