@@ -10,12 +10,9 @@ use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
 final class AddAfterPipelineStepCommandHandler
 {
-    private Cloud\Transformer\ConfigTransformerInterface $transformer;
-
     public function __construct(
         private Api\Client $client,
     ) {
-        $this->transformer = new Cloud\Transformer\ConfigTransformer();
     }
 
     public function __invoke(Cloud\Command\Pipeline\AddAfterPipelineStepCommand $command): Cloud\Event\AddedAfterPipelineStep
@@ -27,7 +24,7 @@ final class AddAfterPipelineStepCommandHandler
                     ->setPrevious((string) $command->previous)
                     ->setLabel($command->step->label)
                     ->setCode((string) $command->step->code)
-                    ->setConfiguration($this->transformer->transform($command->step->config))
+                    ->setConfiguration($command->step->config)
                     ->setProbes($command->step->probes->map(
                         fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
                     ))

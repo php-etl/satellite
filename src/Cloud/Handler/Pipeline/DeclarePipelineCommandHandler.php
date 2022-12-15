@@ -12,12 +12,9 @@ use Kiboko\Component\Satellite\Cloud\DTO\Step;
 
 final class DeclarePipelineCommandHandler
 {
-    private Cloud\Transformer\ConfigTransformerInterface $transformer;
-
     public function __construct(
         private Api\Client $client,
     ) {
-        $this->transformer = new Cloud\Transformer\ConfigTransformer();
     }
 
     public function __invoke(Cloud\Command\Pipeline\DeclarePipelineCommand $command): Cloud\Event\PipelineDeclared
@@ -34,7 +31,7 @@ final class DeclarePipelineCommandHandler
                         fn (Step $step) => (new Api\Model\StepInput())
                             ->setCode((string) $step->code)
                             ->setLabel($step->label)
-                            ->setConfig($this->transformer->transform($step->config))
+                            ->setConfig($step->config)
                             ->setProbes($step->probes->map(
                                 fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label))
                             )
