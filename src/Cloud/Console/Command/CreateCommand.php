@@ -62,7 +62,23 @@ final class CreateCommand extends Console\Command\Command
             }
         }
 
-        $service = new Satellite\Cloud\Service();
+        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+            if (file_exists($directory.'/.gyro.php')) {
+                break;
+            }
+        }
+
+        if (!file_exists($directory.'/.gyro.php')) {
+            throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
+        }
+
+        $context = new Satellite\Cloud\Console\CloudContext(
+            'php://fd/3',
+            new Satellite\ExpressionLanguage\ExpressionLanguage(),
+        );
+
+        $factory = require $directory.'/.gyro.php';
+        $service = $factory($context);
 
         try {
             $configuration = $service->normalize($configuration);
@@ -74,6 +90,7 @@ final class CreateCommand extends Console\Command\Command
 
         $auth = new Satellite\Cloud\Auth();
         $context = new Satellite\Cloud\Context();
+
         try {
             $token = $auth->token($url);
         } catch (Satellite\Cloud\AccessDeniedException) {
