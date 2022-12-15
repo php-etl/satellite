@@ -79,7 +79,7 @@ final class ComposerScripts
             if (isset($package->getExtra()['satellite']['class'])) {
                 $io->warning(strtr(
                     'The package %package% is using a deprecated configuration: extras.satellite.class, you may upgrade'
-                        .' it to use the extraroscops.plugins, extra.gyroscops.adapters or extra.gyroscops.runtimes'
+                        .' it to use the extra.gyroscops.plugins, extra.gyroscops.adapters or extra.gyroscops.runtimes'
                         .' parameters in your composer.json file. The support for this type may disappear at any time.',
                     [
                         '%package%' => $package->getName(),
