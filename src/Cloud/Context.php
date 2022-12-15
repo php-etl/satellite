@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud;
 use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
 use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
 
-final class Context implements CloudContextInterface
+final class Context
 {
     private string $pathName;
     private array $configuration;
