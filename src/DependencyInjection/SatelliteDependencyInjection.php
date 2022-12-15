@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\DependencyInjection;
 
-use Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider;
-use Kiboko\Component\Satellite\ExpressionLanguage\Provider;
-use Kiboko\Component\StringExpressionLanguage\StringExpressionLanguageProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
@@ -15,12 +12,18 @@ use Symfony\Component\ExpressionLanguage\Expression;
 
 final class SatelliteDependencyInjection
 {
+    public function __construct(private array $providers = [])
+    {
+    }
+
     public function __invoke(array $config): ContainerBuilder
     {
         $container = new ContainerBuilder();
-        $container->addExpressionLanguageProvider(new Provider());
-        $container->addExpressionLanguageProvider(new StringExpressionLanguageProvider());
-        $container->addExpressionLanguageProvider(new ArrayExpressionLanguageProvider());
+        if (count($this->providers) > 0) {
+            foreach ($this->providers as $provider) {
+                $container->addExpressionLanguageProvider(new $provider());
+            }
+        }
 
         if (\array_key_exists('parameters', $config)
             && \is_array($config['parameters'])
