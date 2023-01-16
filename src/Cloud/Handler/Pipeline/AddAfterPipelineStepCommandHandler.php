@@ -11,7 +11,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 final class AddAfterPipelineStepCommandHandler
 {
     public function __construct(
-        private Api\Client $client
+        private Api\Client $client,
     ) {
     }
 

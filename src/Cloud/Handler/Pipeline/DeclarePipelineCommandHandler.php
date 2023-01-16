@@ -13,7 +13,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\Step;
 final class DeclarePipelineCommandHandler
 {
     public function __construct(
-        private Api\Client $client
+        private Api\Client $client,
     ) {
     }
 
