@@ -19,10 +19,8 @@ final class SatelliteDependencyInjection
     public function __invoke(array $config): ContainerBuilder
     {
         $container = new ContainerBuilder();
-        if (count($this->providers) > 0) {
-            foreach ($this->providers as $provider) {
-                $container->addExpressionLanguageProvider(new $provider());
-            }
+        foreach ($this->providers as $provider) {
+            $container->addExpressionLanguageProvider(new $provider());
         }
 
         if (\array_key_exists('parameters', $config)

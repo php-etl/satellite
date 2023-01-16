@@ -27,8 +27,7 @@ class Extractor implements Configurator\FactoryInterface
     public function __construct(
         ?ExpressionLanguage $interpreter = null,
         private array $providers = [],
-    )
-    {
+    ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
         $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
