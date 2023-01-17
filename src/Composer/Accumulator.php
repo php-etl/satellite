@@ -124,7 +124,6 @@ final class Accumulator implements \IteratorAggregate, \Stringable
             <<<'PHP'
                 <?php declare(strict_types=1);
                 use \Kiboko\Component\Satellite\RuntimeContextInterface;
-                use \Kiboko\Component\Satellite\Cloud\CloudContextInterface;
                 return fn (RuntimeContextInterface $context) => (new \Kiboko\Component\Satellite\Service())
                     ->registerPlugins(
                         %s
