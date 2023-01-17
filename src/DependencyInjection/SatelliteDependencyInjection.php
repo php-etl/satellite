@@ -9,12 +9,24 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 final class SatelliteDependencyInjection
 {
+    private readonly array $providers;
+    public function __construct(
+        ExpressionFunctionProviderInterface ...$providers,
+    ){
+        $this->providers = $providers;
+    }
+
     public function __invoke(array $config): ContainerBuilder
     {
         $container = new ContainerBuilder();
+
+        foreach ($this->providers as $provider) {
+            $container->addExpressionLanguageProvider($provider);
+        }
 
         if (\array_key_exists('parameters', $config)
             && \is_array($config['parameters'])

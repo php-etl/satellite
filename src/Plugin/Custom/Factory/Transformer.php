@@ -25,7 +25,8 @@ class Transformer implements Configurator\FactoryInterface
     private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        ?ExpressionLanguage $interpreter = null,
+        private array $providers = [],
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
@@ -72,7 +73,7 @@ class Transformer implements Configurator\FactoryInterface
             sprintf('GyroscopsGenerated\\%s', $containerName),
         );
 
-        $container = (new SatelliteDependencyInjection())($config);
+        $container = (new SatelliteDependencyInjection(...$this->providers))($config);
 
         $repository = new Repository\Transformer($builder);
 
