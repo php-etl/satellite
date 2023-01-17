@@ -73,7 +73,7 @@ class Extractor implements Configurator\FactoryInterface
             sprintf('GyroscopsGenerated\\%s', $containerName),
         );
 
-        $container = (new SatelliteDependencyInjection($this->providers))($config);
+        $container = (new SatelliteDependencyInjection(...$this->providers))($config);
 
         $repository = new Repository\Extractor($builder);
 
