@@ -72,7 +72,7 @@ final class RemoveCommand extends Console\Command\Command
             throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
         }
 
-        $context = new Satellite\Cloud\Console\CloudContext(
+        $context = new Satellite\Console\RuntimeContext(
             $input->getOption('output') ?? 'php://fd/3',
             new Satellite\ExpressionLanguage\ExpressionLanguage(),
         );
