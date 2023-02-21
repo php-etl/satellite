@@ -21,7 +21,7 @@ final class PipelineRunCommand extends Console\Command\Command
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new Console\Style\SymfonyStyle(
             $input,
@@ -41,7 +41,9 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $dotenv = new Dotenv();
         $dotenv->usePutenv();
-        $dotenv->loadEnv('.env');
+        if (\file_exists($file = \dirname($cwd).'/.env')) {
+            $dotenv->loadEnv($file);
+        }
 
         /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
