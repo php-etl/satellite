@@ -259,6 +259,22 @@ final class Service implements Configurator\FactoryInterface
                 );
 
                 $workflow->addPipeline($pipelineFilename);
+            } elseif (array_key_exists('action', $job)) {
+                $action = $this->compileActionJob($job);
+                $actionFilename = sprintf('%s.php', uniqid('action'));
+
+                $repository->addFiles(
+                    new Packaging\File(
+                        $actionFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Workflow\PipelineBuilder($action->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
+
+                $workflow->addAction($actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -295,6 +311,24 @@ final class Service implements Configurator\FactoryInterface
                 $this->interpreter->registerProvider(new $provider());
             }
         }
+
+        foreach ($config['pipeline']['steps'] as $step) {
+            $plugins = array_intersect_key($this->plugins, $step);
+            foreach ($plugins as $plugin) {
+                $plugin->appendTo($step, $repository);
+            }
+        }
+
+        return $repository;
+    }
+
+    private function compileActionJob(array $config): Satellite\Builder\Repository\Pipeline
+    {
+        $pipeline = new Satellite\Builder\Pipeline(
+            new Node\Expr\Variable('runtime'),
+        );
+
+        $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         foreach ($config['pipeline']['steps'] as $step) {
             $plugins = array_intersect_key($this->plugins, $step);

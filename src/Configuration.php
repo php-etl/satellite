@@ -10,6 +10,8 @@ use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyDependentFields;
+use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyExclusiveFields;
 
 final class Configuration implements ConfigurationInterface
 {
@@ -84,10 +86,10 @@ final class Configuration implements ConfigurationInterface
             ->append((new VersionConfiguration())->getConfigTreeBuilder()->getRootNode())
             ->append($this->backwardCompatibilityConfiguration->getConfigTreeBuilder()->getRootNode())
             ->beforeNormalization()
-                ->always($this->mutuallyDependentFields('satellites', 'version'))
+                ->always(mutuallyDependentFields('satellites', 'version'))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields('satellite', 'version'))
+                ->always(mutuallyExclusiveFields('satellite', 'version'))
             ->end()
             ->validate()
                 ->ifTrue(fn ($data) => \array_key_exists('satellites', $data) && \is_array($data['satellites']) && \count($data['satellites']) <= 0)
@@ -132,10 +134,10 @@ final class Configuration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $node
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
+                ->always(mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
+                ->always(mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->scalarNode('label')
@@ -152,42 +154,5 @@ final class Configuration implements ConfigurationInterface
         foreach ($this->runtimes as $config) {
             $node->append($config->getConfigTreeBuilder()->getRootNode());
         }
-    }
-
-    private function mutuallyExclusiveFields(string ...$exclusions): \Closure
-    {
-        return function (array $value) use ($exclusions) {
-            $fields = [];
-            foreach ($exclusions as $exclusion) {
-                if (\array_key_exists($exclusion, $value)) {
-                    $fields[] = $exclusion;
-                }
-
-                if (\count($fields) < 2) {
-                    continue;
-                }
-
-                throw new \InvalidArgumentException(sprintf('Your configuration should either contain the "%s" or the "%s" field, not both.', ...$fields));
-            }
-
-            return $value;
-        };
-    }
-
-    private function mutuallyDependentFields(string $field, string ...$dependencies): \Closure
-    {
-        return function (array $value) use ($field, $dependencies) {
-            if (!\array_key_exists($field, $value)) {
-                return $value;
-            }
-
-            foreach ($dependencies as $dependency) {
-                if (!\array_key_exists($dependency, $value)) {
-                    throw new \InvalidArgumentException(sprintf('Your configuration should contain the "%s" field if the "%s" field is present.', $dependency, $field));
-                }
-            }
-
-            return $value;
-        };
     }
 }

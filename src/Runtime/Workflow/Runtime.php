@@ -54,17 +54,11 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                             ),
                         ],
                         'stmts' => [
-                            new Node\Stmt\Expression($builder->getNode()),
+                           $builder->getNode(),
                         ],
                     ]
                 ),
             ),
-            //            new Node\Stmt\Expression(
-            //                new Node\Expr\MethodCall(
-            //                    var: $builder->getNode(),
-            //                    name: 'run'
-            //                ),
-            //            )
         ];
     }
 }

@@ -10,16 +10,13 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements Configurator\RuntimeConfigurationInterface
 {
-    /** @var array<string, Configurator\PluginConfigurationInterface> */
-    private iterable $plugins = [];
-    /** @var array<string, Configurator\FeatureConfigurationInterface> */
-    private iterable $features = [];
-
     private readonly Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
+    private Satellite\Action\Configuration $actionConfiguration;
 
     public function __construct()
     {
         $this->pipelineConfiguration = new Satellite\Runtime\Pipeline\Configuration();
+        $this->actionConfiguration = new Satellite\Action\Configuration();
     }
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
@@ -49,19 +46,20 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-            ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
-            ->arrayNode('expression_language')
-            ->scalarPrototype()->end()
-            ->end()
-            ->scalarNode('name')->end()
-            ->arrayNode('jobs')
-            ->arrayPrototype()
-            ->children()
-            ->scalarNode('name')->end()
-            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
-            ->end()
-            ->end()
-            ->end()
+                ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->scalarNode('name')->end()
+                ->arrayNode('jobs')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->end()
+                            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
+                            ->append($this->actionConfiguration->getConfigTreeBuilder()->getRootNode())
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
