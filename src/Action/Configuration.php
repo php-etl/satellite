@@ -28,7 +28,7 @@ final class Configuration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         foreach ($this->plugins as $plugin) {
             /* @phpstan-ignore-next-line */
-            $node ->append($plugin->getConfigTreeBuilder()->getRootNode());
+            $node->append($plugin->getConfigTreeBuilder()->getRootNode());
         }
 
         return $builder;

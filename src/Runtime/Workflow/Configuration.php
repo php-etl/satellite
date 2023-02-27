@@ -39,6 +39,16 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         return $this;
     }
 
+    public function addAction(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    {
+        $this->actionConfiguration->addPlugin(
+            $name,
+            $plugin
+        );
+
+        return $this;
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('workflow');

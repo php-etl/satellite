@@ -17,6 +17,12 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
     private array $adapters = [];
     /** @var array<string, Configurator\RuntimeConfigurationInterface> */
     private array $runtimes = [];
+    /** @var array<string, Configurator\PluginConfigurationInterface> */
+    private array $plugins = [];
+    /** @var array<string, Configurator\FeatureConfigurationInterface> */
+    private array $features = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private array $actions = [];
 
     public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
@@ -28,6 +34,27 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
     public function addRuntime(string $name, Configurator\RuntimeConfigurationInterface $runtime): self
     {
         $this->runtimes[$name] = $runtime;
+
+        return $this;
+    }
+
+    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    {
+        $this->plugins[$name] = $plugin;
+
+        return $this;
+    }
+
+    public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
+    {
+        $this->features[$name] = $feature;
+
+        return $this;
+    }
+
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actions[$name] = $action;
 
         return $this;
     }

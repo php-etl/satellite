@@ -23,6 +23,8 @@ final class Configuration implements ConfigurationInterface
     private array $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private array $features = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private array $actions = [];
     private readonly BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
@@ -49,6 +51,9 @@ final class Configuration implements ConfigurationInterface
         foreach ($this->plugins as $name => $plugin) {
             $runtime->addPlugin($name, $plugin);
         }
+        foreach ($this->actions as $name => $action) {
+            $runtime->addAction($name, $action);
+        }
 
         return $this;
     }
@@ -72,6 +77,18 @@ final class Configuration implements ConfigurationInterface
 
         foreach ($this->runtimes as $runtime) {
             $runtime->addFeature($name, $feature);
+        }
+
+        return $this;
+    }
+
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actions[$name] = $action;
+        $this->backwardCompatibilityConfiguration->addAction($name, $action);
+
+        foreach ($this->runtimes as $runtime) {
+            $runtime->addAction($name, $action);
         }
 
         return $this;
