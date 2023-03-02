@@ -77,12 +77,14 @@ final class Service implements Configurator\PipelinePluginInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
+        $interpreter = clone $this->interpreter;
+
         if (\array_key_exists('expression_language', $config)
             && \is_array($config['expression_language'])
             && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider());
+                $interpreter->registerProvider(new $provider());
             }
         }
 
@@ -94,9 +96,9 @@ final class Service implements Configurator\PipelinePluginInterface
         if (\array_key_exists('fork', $config)) {
             $builder = new Fork(
                 $config['fork']['foreach'] instanceof Expression ?
-                    compileExpression($this->interpreter, $config['fork']['foreach'], 'item', 'key') :
+                    compileExpression($interpreter, $config['fork']['foreach'], 'item', 'key') :
                     (new PropertyPathBuilder(new PropertyPath($config['fork']['foreach']), new Variable('input')))->getNode(),
-                compileExpression($this->interpreter, $config['fork']['do'], 'item', 'key'),
+                compileExpression($interpreter, $config['fork']['do'], 'item', 'key'),
             );
 
             return new Repository($builder);
