@@ -62,7 +62,23 @@ final class UpdateCommand extends Console\Command\Command
             }
         }
 
-        $service = new Satellite\Cloud\Service();
+        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+            if (file_exists($directory.'/.gyro.php')) {
+                break;
+            }
+        }
+
+        if (!file_exists($directory.'/.gyro.php')) {
+            throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
+        }
+
+        $context = new Satellite\Console\RuntimeContext(
+            $input->getOption('output') ?? 'php://fd/3',
+            new Satellite\ExpressionLanguage\ExpressionLanguage(),
+        );
+
+        $factory = require $directory.'/.gyro.php';
+        $service = $factory($context);
 
         try {
             $configuration = $service->normalize($configuration);
