@@ -14,6 +14,8 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private iterable $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private iterable $features = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private iterable $actions = [];
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
@@ -25,6 +27,13 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
     {
         $this->features[$name] = $feature;
+
+        return $this;
+    }
+
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actions[$name] = $action;
 
         return $this;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Runtime\Api;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Runtime\FactoryInterface;
 use Kiboko\Contract\Configurator;
 
 #[Configurator\Runtime(name: 'api')]
@@ -27,6 +28,16 @@ final readonly class Factory implements Satellite\Runtime\FactoryInterface
     public function addPlugin(string $name, Configurator\FactoryInterface $plugin): self
     {
         $this->configuration->addPlugin($name, $plugin->configuration());
+
+        return $this;
+    }
+
+    public function addAction(string $name, Configurator\FactoryInterface $action): self
+    {
+        $configuration = $action->configuration();
+        \assert($configuration instanceof Configurator\ActionConfigurationInterface);
+
+        $this->configuration->addAction($name, $configuration);
 
         return $this;
     }

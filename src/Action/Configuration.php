@@ -10,25 +10,25 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    /** @var array<string, Configurator\PluginConfigurationInterface> */
-    private iterable $plugins = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private iterable $actions = [];
 
-    public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
     {
-        $this->plugins[$name] = $plugin;
+        $this->actions[$name] = $action;
 
         return $this;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('actions');
+        $builder = new TreeBuilder('action');
         $node = $builder->getRootNode();
 
         /* @phpstan-ignore-next-line */
-        foreach ($this->plugins as $plugin) {
+        foreach ($this->actions as $action) {
             /* @phpstan-ignore-next-line */
-            $node->append($plugin->getConfigTreeBuilder()->getRootNode());
+            $node->append($action->getConfigTreeBuilder()->getRootNode());
         }
 
         return $builder;

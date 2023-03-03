@@ -39,11 +39,11 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         return $this;
     }
 
-    public function addAction(string $name, Configurator\PluginConfigurationInterface $plugin): self
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
     {
-        $this->actionConfiguration->addPlugin(
+        $this->actionConfiguration->addAction(
             $name,
-            $plugin
+            $action
         );
 
         return $this;

@@ -14,5 +14,7 @@ interface FactoryInterface
 
     public function addPlugin(string $name, Configurator\FactoryInterface $plugin): self;
 
+    public function addAction(string $name, Configurator\FactoryInterface $action): self;
+
     public function __invoke(array $configuration): RuntimeInterface;
 }

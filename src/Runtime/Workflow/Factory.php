@@ -37,6 +37,16 @@ final readonly class Factory implements Satellite\Runtime\FactoryInterface
         return $this;
     }
 
+    public function addAction(string $name, Configurator\FactoryInterface $action): self
+    {
+        $configuration = $action->configuration();
+        \assert($configuration instanceof Configurator\ActionConfigurationInterface);
+
+        $this->configuration->addAction($name, $configuration);
+
+        return $this;
+    }
+
     public function configuration(): Configurator\RuntimeConfigurationInterface
     {
         return $this->configuration;

@@ -7,7 +7,8 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Contract\Configurator\Adapter\FactoryInterface;
+use Kiboko\Contract\Configurator\Action;
+use Kiboko\Contract\Configurator\PipelineActionInterface;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -29,6 +30,8 @@ final class Service implements Configurator\FactoryInterface
     private array $pipelines = [];
     /** @var array<string, Satellite\Pipeline\ConfigurationApplier> */
     private array $plugins = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $actions = [];
 
     public function __construct(?ExpressionLanguage $expressionLanguage = null)
     {
@@ -60,6 +63,9 @@ final class Service implements Configurator\FactoryInterface
         }
         foreach ($this->pipelines as $name => $plugin) {
             $runtime->addPlugin($name, $plugin);
+        }
+        foreach ($this->actions as $name => $action) {
+            $runtime->addAction($name, $action);
         }
 
         return $this;
@@ -95,6 +101,24 @@ final class Service implements Configurator\FactoryInterface
             if ($step instanceof Configurator\Pipeline\StepLoader) {
                 $applier->withLoader($step->name);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Action $attribute
+     * @param PipelineActionInterface $action
+     * @return Service
+     */
+    private function addAction(
+        Configurator\Action $attribute,
+        Configurator\PipelineActionInterface $action,
+    ): self {
+        $this->actions[$attribute->name] = $action;
+
+        foreach ($this->runtimes as $name => $runtime) {
+            $runtime->addAction($name, $action);
         }
 
         return $this;
@@ -138,6 +162,18 @@ final class Service implements Configurator\FactoryInterface
             /** @var Configurator\Pipeline $attribute */
             foreach (extractAttributes($plugin, Configurator\Pipeline::class) as $attribute) {
                 $this->addPipelinePlugin($attribute, $plugin);
+            }
+        }
+
+        return $this;
+    }
+
+    public function registerActions(Configurator\PipelineActionInterface ...$actions): self
+    {
+        foreach ($actions as $action) {
+            /** @var Configurator\Action $attribute */
+            foreach (extractAttributes($action, Configurator\Action::class) as $attribute) {
+                $this->addAction($attribute, $action);
             }
         }
 
@@ -268,13 +304,13 @@ final class Service implements Configurator\FactoryInterface
                         $actionFilename,
                         new Packaging\Asset\AST(
                             new Node\Stmt\Return_(
-                                (new Satellite\Builder\Workflow\PipelineBuilder($action->getBuilder()))->getNode()
+                                (new Satellite\Builder\Workflow\ActionBuilder($action->getBuilder()))->getNode()
                             )
                         )
                     )
                 );
 
-                $workflow->addAction($actionFilename);
+//                $workflow->addAction($actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
