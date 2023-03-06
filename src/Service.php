@@ -310,7 +310,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-//                $workflow->addAction($actionFilename);
+                $workflow->addAction($actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -366,10 +366,10 @@ final class Service implements Configurator\FactoryInterface
 
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
-        foreach ($config['pipeline']['steps'] as $step) {
-            $plugins = array_intersect_key($this->plugins, $step);
+        foreach ($config['action'] as $action) {
+            $plugins = array_intersect_key($this->plugins, $action);
             foreach ($plugins as $plugin) {
-                $plugin->appendTo($step, $repository);
+                $plugin->appendTo($action, $repository);
             }
         }
 

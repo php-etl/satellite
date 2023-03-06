@@ -9,7 +9,7 @@ use PhpParser\Node;
 
 final class Workflow implements Builder
 {
-    private array $pipelines = [];
+    private array $jobs = [];
 
     public function __construct(
         private readonly Node\Expr $runtime
@@ -52,8 +52,8 @@ final class Workflow implements Builder
     {
         $workflow = $this->runtime;
 
-        foreach ($this->pipelines as $pipeline) {
-            $workflow = $pipeline($workflow);
+        foreach ($this->jobs as $job) {
+            $workflow = $job($workflow);
         }
 
         return $workflow;

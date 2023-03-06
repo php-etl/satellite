@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
@@ -54,7 +55,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                             ),
                         ],
                         'stmts' => [
-                           $builder->getNode(),
+                           new Node\Stmt\Return_(expr: $builder->getNode()),
                         ],
                     ]
                 ),
