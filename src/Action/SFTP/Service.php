@@ -10,7 +10,10 @@ use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-#[Configurator\Action(name: 'sftp')]
+#[Configurator\Action(
+    name: 'sftp',
+    dependencies: ['ext-ssh2'],
+)]
 final class Service implements Configurator\PipelineActionInterface
 {
     private Processor $processor;
@@ -63,12 +66,14 @@ final class Service implements Configurator\PipelineActionInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
+        $interpreter = clone $this->interpreter;
+
         if (\array_key_exists('expression_language', $config)
             && \is_array($config['expression_language'])
             && \count($config['expression_language'])
         ) {
             foreach ($config['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider());
+                $interpreter->registerProvider(new $provider());
             }
         }
 
