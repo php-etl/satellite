@@ -62,7 +62,7 @@ final class GelfBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         $arguments = [];
 

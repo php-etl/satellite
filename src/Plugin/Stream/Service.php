@@ -88,10 +88,10 @@ final class Service implements Configurator\PipelinePluginInterface
             }
 
             return new Repository(
-                    new Builder\DebugLoader(
-                        $config['loader']['destination']
-                    )
-                );
+                new Builder\DebugLoader(
+                    $config['loader']['destination']
+                )
+            );
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');

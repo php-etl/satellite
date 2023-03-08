@@ -14,9 +14,10 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 final class SatelliteDependencyInjection
 {
     private readonly array $providers;
+
     public function __construct(
         ExpressionFunctionProviderInterface ...$providers,
-    ){
+    ) {
         $this->providers = $providers;
     }
 

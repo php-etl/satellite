@@ -19,9 +19,9 @@ final class AppendPipelineStepCommandHandler
     {
         try {
             /** @var \stdClass $result */
-            $result = $this->client->appendPipelineStepPipelineCollection(
+            $result = $this->client->appendPipelineStepPipelineItem(
+                $command->pipeline->asString(),
                 (new Api\Model\PipelineAppendPipelineStepCommandInput())
-                    ->setPipeline((string) $command->pipeline)
                     ->setCode((string) $command->step->code)
                     ->setLabel($command->step->label)
                     ->setConfiguration($command->step->config)
@@ -29,9 +29,9 @@ final class AppendPipelineStepCommandHandler
                         fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
                     ))
             );
-        } catch (Api\Exception\AppendPipelineStepPipelineCollectionBadRequestException $exception) {
+        } catch (Api\Exception\AppendPipelineStepPipelineItemBadRequestException $exception) {
             throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
-        } catch (Api\Exception\AppendPipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+        } catch (Api\Exception\AppendPipelineStepPipelineItemUnprocessableEntityException $exception) {
             throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 

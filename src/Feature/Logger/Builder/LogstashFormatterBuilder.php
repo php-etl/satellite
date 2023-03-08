@@ -13,7 +13,7 @@ final class LogstashFormatterBuilder implements Builder
     {
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
             class: new Node\Name\FullyQualified('Monolog\\Formatter\\LogstashFormatter'),

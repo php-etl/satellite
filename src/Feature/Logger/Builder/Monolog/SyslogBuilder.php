@@ -49,7 +49,7 @@ final class SyslogBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         $arguments = [
             new Node\Arg(

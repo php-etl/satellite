@@ -103,7 +103,6 @@ final class Pipeline implements PipelineInterface
     private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Pipeline
     {
         // Todo : update with the new endpoint, need to update the client
-        /** @phpstan-ignore-next-line */
         $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
 
         try {

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Rejection\Configuration;
 
+use Symfony\Component\Config;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
-use Symfony\Component\Config;
 
 final class RabbitMQConfiguration implements Config\Definition\ConfigurationInterface
 {

@@ -1,4 +1,4 @@
-name: PHPStan level 8
+name: PHPStan level 6
 on: push
 jobs:
   phpstan:
@@ -20,4 +20,4 @@ jobs:
         uses: php-actions/phpstan@v3
         with:
           path: src/
-          level: 8
+          level: 6

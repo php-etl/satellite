@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {

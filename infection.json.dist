@@ -1,4 +1,5 @@
 {
+	"$schema": "https://raw.githubusercontent.com/infection/infection/0.26.18/resources/schema.json",
     "source": {
         "directories": [
             "src"
@@ -11,9 +12,6 @@
         "json": "infection-log.json",
         "perMutator": "per-mutator.md",
         "github": true,
-        "badge": {
-            "branch": "master"
-        }
     },
     "phpUnit": {
         "configDir": "."
@@ -22,5 +20,4 @@
         "@default": true
     },
     "testFramework":"phpunit",
-    "testFrameworkOptions": "-vvv"
 }

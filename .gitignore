@@ -1,3 +1,8 @@
 /.env
 /vendor/
 /generated
+bin/
+.gyro.php
+.gyroscops.json
+.phpunit.result.cache
+.php-cs-fixer.cache

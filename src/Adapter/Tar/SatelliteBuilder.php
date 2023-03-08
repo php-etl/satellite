@@ -15,17 +15,17 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private iterable $composerRequire;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
-    /** @var \AppendIterator<string,PackagingContract\FileInterface> */
+    /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
     private iterable $files;
-    /** @var array<string, list<string>> */
+    /** @var array<string, array<string, string>> */
     private array $composerAutoload;
 
     public function __construct(private string $outputPath)
     {
         $this->composerAutoload = [
             'psr4' => [
-                'GyroscopsGenerated\\' => './'
-            ]
+                'GyroscopsGenerated\\' => './',
+            ],
         ];
         $this->composerRequire = [];
         $this->composerJsonFile = null;

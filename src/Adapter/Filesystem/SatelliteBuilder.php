@@ -20,15 +20,15 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var \AppendIterator<string,PackagingContract\FileInterface> */
+    /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
     private iterable $files;
 
     public function __construct(private string $workdir)
     {
         $this->composerAutoload = [
             'psr4' => [
-                'GyroscopsGenerated\\' => './'
-            ]
+                'GyroscopsGenerated\\' => './',
+            ],
         ];
         $this->composerRequire = [];
         $this->authenticationTokens = [];
@@ -141,23 +141,23 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             $composer->autoload($this->composerAutoload);
         }
 
-        if (count($this->repositories) > 0) {
+        if (\count($this->repositories) > 0) {
             foreach ($this->repositories as $name => $repository) {
-                if ($repository['type'] === 'composer') {
+                if ('composer' === $repository['type']) {
                     $composer->addComposerRepository($name, $repository['url']);
                 }
 
-                if ($repository['type'] === 'vcs') {
+                if ('vcs' === $repository['type']) {
                     $composer->addVCSRepository($name, $repository['url']);
                 }
 
-                if ($repository['type'] === 'github') {
+                if ('github' === $repository['type']) {
                     $composer->addGithubRepository($name, $repository['url']);
                 }
             }
         }
 
-        if (count($this->authenticationTokens) > 0) {
+        if (\count($this->authenticationTokens) > 0) {
             foreach ($this->authenticationTokens as $url => $token) {
                 $composer->addAuthenticationToken($url, $token);
             }

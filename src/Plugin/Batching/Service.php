@@ -9,7 +9,6 @@ use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node\Expr\Variable;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -17,6 +16,8 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
 #[Configurator\Pipeline(
     name: 'batch',

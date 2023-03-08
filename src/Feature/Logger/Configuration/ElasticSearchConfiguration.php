@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Feature\Logger\Configuration;
 
-use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
-use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class ElasticSearchConfiguration implements ConfigurationInterface
 {

@@ -4,31 +4,31 @@ jobs:
     infection:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '8.1'
+                    php-version: '8.2'
                     tools: composer:v2
                     coverage: pcov
-            -   uses: actions/cache@v2
+            -   uses: actions/cache@v3
                 with:
                     path: '**/vendor'
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
-            -   uses: php-actions/composer@v5
+            -   uses: php-actions/composer@v6
                 with:
                     args: --prefer-dist
-                    php_version: 8.1
+                    php_version: '8.2'
 
             -   name: Infection
                 run: |
-                    wget -q https://github.com/infection/infection/releases/download/0.20.0/infection.phar
-                    wget -q https://github.com/infection/infection/releases/download/0.20.0/infection.phar.asc
+                    wget -q https://github.com/infection/infection/releases/download/0.26.18/infection.phar
+                    wget -q https://github.com/infection/infection/releases/download/0.26.18/infection.phar.asc
                     chmod +x infection.phar
                     ./infection.phar
 
             -   name: Store infection log
-                uses: actions/upload-artifact@v2
+                uses: actions/upload-artifact@v3
                 with:
                     path: infection.log

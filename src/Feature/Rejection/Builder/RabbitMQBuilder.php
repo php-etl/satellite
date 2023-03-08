@@ -41,7 +41,7 @@ final class RabbitMQBuilder implements Builder
         return $this;
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         $args = [
             new Node\Arg($this->host, name: new Node\Identifier('host')),
@@ -73,9 +73,9 @@ final class RabbitMQBuilder implements Builder
         }
 
         return new Node\Expr\StaticCall(
-                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
-                name: new Identifier('withoutAuthentication'),
-                args: $args,
-            );
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+            name: new Identifier('withoutAuthentication'),
+            args: $args,
+        );
     }
 }

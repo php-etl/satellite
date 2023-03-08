@@ -108,7 +108,7 @@ final class UpdateCommand extends Console\Command\Command
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create(httpClient: $psr18Client, additionalNormalizers: [
-            new Satellite\Cloud\Normalizer\ExpressionNormalizer()
+            new Satellite\Cloud\Normalizer\ExpressionNormalizer(),
         ]);
 
         $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);

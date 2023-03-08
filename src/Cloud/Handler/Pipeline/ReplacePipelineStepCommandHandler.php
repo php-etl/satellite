@@ -19,10 +19,9 @@ final class ReplacePipelineStepCommandHandler
     {
         try {
             /** @var \stdClass $result */
-            $result = $this->client->replacePipelineStepPipelineCollection(
+            $result = $this->client->replacePipelineStepPipelineItem(
+                $command->pipeline->asString(),
                 (new Api\Model\PipelineReplacePipelineStepCommandInput())
-                    ->setFormer((string) $command->former)
-                    ->setPipeline((string) $command->pipeline)
                     ->setCode((string) $command->step->code)
                     ->setLabel($command->step->label)
                     ->setConfiguration($command->step->config)
@@ -30,9 +29,9 @@ final class ReplacePipelineStepCommandHandler
                         fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label),
                     ))
             );
-        } catch (Api\Exception\ReplacePipelineStepPipelineCollectionBadRequestException $exception) {
+        } catch (Api\Exception\ReplacePipelineStepPipelineItemBadRequestException $exception) {
             throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
-        } catch (Api\Exception\ReplacePipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+        } catch (Api\Exception\ReplacePipelineStepPipelineItemUnprocessableEntityException $exception) {
             throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 

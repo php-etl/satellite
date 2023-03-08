@@ -75,13 +75,13 @@ final class Factory implements Configurator\Adapter\FactoryInterface
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }
 
-            if (\array_key_exists('repositories', $configuration['composer']) && count($configuration['composer']['repositories']) > 0) {
+            if (\array_key_exists('repositories', $configuration['composer']) && \count($configuration['composer']['repositories']) > 0) {
                 foreach ($configuration['composer']['repositories'] as $repository) {
                     $builder->withComposerRepositories($repository['name'], $repository['type'], $repository['url']);
                 }
             }
 
-            if (\array_key_exists('auth', $configuration['composer']) && count($configuration['composer']['auth']) > 0) {
+            if (\array_key_exists('auth', $configuration['composer']) && \count($configuration['composer']['auth']) > 0) {
                 foreach ($configuration['composer']['auth'] as $auth) {
                     $builder->withComposerAuthenticationToken($auth['url'], $auth['token']);
                 }

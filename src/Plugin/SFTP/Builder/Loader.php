@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Plugin\SFTP\Builder;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Loader implements StepBuilderInterface
 {

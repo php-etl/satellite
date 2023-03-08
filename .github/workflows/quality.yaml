@@ -4,7 +4,12 @@ jobs:
     cs-fixer:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.2'
+                    tools: composer:v2
+                    coverage: none
             -   name: Cs-Fixer
                 run: |
                     wget -q https://cs.symfony.com/download/php-cs-fixer-v3.phar -O php-cs-fixer
@@ -14,48 +19,48 @@ jobs:
     phpunit:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '8.1'
+                    php-version: '8.2'
                     tools: composer:v2
                     coverage: pcov
-            -   uses: actions/cache@v2
+            -   uses: actions/cache@v3
                 with:
                     path: '**/vendor'
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
-            -   uses: php-actions/composer@v5
+            -   uses: php-actions/composer@v6
                 with:
                     args: --prefer-dist
-                    php_version: 8.1
+                    php_version: '8.2'
 
             -   name: Run tests & generate Coverage
-                run: bin/phpunit --configuration=phpunit.xml tests --coverage-html var/coverage --whitelist=src
+                run: bin/phpunit --configuration=phpunit.xml tests --coverage-html var/coverage
 
             -   name: Store coverage files
-                uses: actions/upload-artifact@v2
+                uses: actions/upload-artifact@v3
                 with:
                     path: var/coverage
 
     phpstan:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
-            -   uses: actions/cache@v2
+            -   uses: actions/checkout@v3
+            -   uses: actions/cache@v3
                 with:
                     path: '**/vendor'
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
-            -   uses: php-actions/composer@v5
+            -   uses: php-actions/composer@v6
                 with:
                     args: --prefer-dist
-                    php_version: 8.1
+                    php_version: '8.2'
 
             -   name: PHPStan
-                uses: php-actions/phpstan@v2
+                uses: php-actions/phpstan@v3
                 with:
                     path: src/
-                    args: --level=4
+                    level: 3

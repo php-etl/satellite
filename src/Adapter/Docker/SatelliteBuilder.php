@@ -28,12 +28,12 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
     /** @var iterable<array<string, string>> */
     private iterable $paths;
-    /** @var \AppendIterator<string,PackagingContract\FileInterface> */
+    /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
     private iterable $files;
-    /** @var array<string, list<string>> */
+    /** @var array<string, array<string, string>> */
     private array $composerAutoload = [
         'psr4' => [
-            'GyroscopsGenerated\\' => './'
+            'GyroscopsGenerated\\' => './',
         ],
     ];
 
@@ -199,15 +199,15 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
         if (\count($this->repositories) > 0) {
             foreach ($this->repositories as $name => $repository) {
-                if ($repository['type'] === 'github') {
+                if ('github' === $repository['type']) {
                     $dockerfile->push(new Dockerfile\PHP\ComposerAddGithubRepository($name, $repository['url']));
                 }
 
-                if ($repository['type'] === 'vcs'){
+                if ('vcs' === $repository['type']) {
                     $dockerfile->push(new Dockerfile\PHP\ComposerAddVcsRepository($name, $repository['url']));
                 }
 
-                if ($repository['type'] === 'composer'){
+                if ('composer' === $repository['type']) {
                     $dockerfile->push(new Dockerfile\PHP\ComposerAddComposerRepository($name, $repository['url']));
                 }
             }

@@ -16,6 +16,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\String\ByteString;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Extractor implements Configurator\FactoryInterface

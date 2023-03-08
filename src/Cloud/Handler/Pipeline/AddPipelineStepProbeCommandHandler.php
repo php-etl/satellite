@@ -18,19 +18,18 @@ final class AddPipelineStepProbeCommandHandler
     {
         try {
             /** @var \stdClass $result */
-            $result = $this->client->addPipelineStepProbePipelineCollection(
+            $result = $this->client->addPipelineStepProbePipelineItem(
+                $command->pipeline->asString(),
                 (new Api\Model\PipelineAddPipelineStepProbCommandInput())
-                    ->setId((string) $command->pipeline)
-                    ->setCode((string) $command->stepCode)
                     ->setProbe(
                         (new Api\Model\Probe())
                             ->setCode($command->probe->code)
                             ->setLabel($command->probe->label)
                     ),
             );
-        } catch (Api\Exception\AddPipelineStepProbePipelineCollectionBadRequestException $exception) {
+        } catch (Api\Exception\AddPipelineStepProbePipelineItemBadRequestException $exception) {
             throw new Cloud\AddPipelineStepProbeFailedException('Something went wrong while trying to add a probe into an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
-        } catch (Api\Exception\AddPipelineStepProbePipelineCollectionUnprocessableEntityException $exception) {
+        } catch (Api\Exception\AddPipelineStepProbePipelineItemUnprocessableEntityException $exception) {
             throw new Cloud\AddPipelineStepProbeFailedException('Something went wrong while trying to add a probe into an existing pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
