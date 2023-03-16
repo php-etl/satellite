@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Action\SFTP;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
+use Kiboko\Component\Satellite\Plugin\SFTP\Factory\Repository\Repository;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -75,6 +76,15 @@ final class Service implements Configurator\PipelineActionInterface
             foreach ($config['expression_language'] as $provider) {
                 $interpreter->registerProvider(new $provider());
             }
+        }
+
+        if (\array_key_exists('execute', $config)) {
+            $actionFactory = new Factory\Action($this->interpreter);
+
+            $action = $actionFactory->compile($config);
+            $actionBuilder = $action->getBuilder();
+
+            return new Repository($actionBuilder);
         }
 
         throw new \RuntimeException('No suitable build with the provided configuration.');
