@@ -60,8 +60,8 @@ class Action implements Configurator\FactoryInterface
     {
         $builder = new SFTP\Builder\Action($this->interpreter);
 
-        if (\array_key_exists('server', $config['execution'])) {
-            $server = $config['execution']['server'];
+        if (\array_key_exists('server', $config)) {
+            $server = $config['server'];
 
             $serverFactory = new Server($this->interpreter);
 
@@ -71,8 +71,8 @@ class Action implements Configurator\FactoryInterface
             $builder->withServer($server, $serverBuilder->getNode());
         }
 
-        if (\array_key_exists('put', $config['execution'])) {
-            $destination = $config['execution']['put'];
+        if (\array_key_exists('path', $config)) {
+            $destination = $config['path'];
 
             $builder->withPut(
                 compileValueWhenExpression($this->interpreter, $destination['path']),

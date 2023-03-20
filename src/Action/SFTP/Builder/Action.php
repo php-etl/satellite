@@ -96,33 +96,11 @@ final class Action implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
+                        new Node\Name\FullyQualified('Kiboko\Contract\Action\ActionInterface'),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('__construct'),
-                            subNodes: [
-                                'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'stmts' => array_map(
-                                    fn ($server, $index) => new Node\Stmt\Expression(
-                                        new Node\Expr\Assign(
-                                            new Node\Expr\ArrayDimFetch(
-                                                new Node\Expr\PropertyFetch(
-                                                    new Node\Expr\Variable('this'),
-                                                    new Node\Identifier('servers')
-                                                ),
-                                                new Node\Scalar\LNumber($index),
-                                            ),
-                                            $server[0]
-                                        )
-                                    ),
-                                    $this->servers,
-                                    array_keys($this->servers),
-                                ),
-                            ],
-                        ),
-                        new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('load'),
+                            name: new Node\Identifier('execute'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'stmts' => [
@@ -168,7 +146,7 @@ final class Action implements StepBuilderInterface
                                         ),
                                     ),
                                 ],
-                                'returnType' => new Node\Name\FullyQualified('Generator'),
+                                'returnType' => new Node\Name('void'),
                             ],
                         ),
                     ],

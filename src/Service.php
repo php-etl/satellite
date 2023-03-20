@@ -32,6 +32,8 @@ final class Service implements Configurator\FactoryInterface
     private array $plugins = [];
     /** @var array<string, Configurator\FactoryInterface> */
     private array $actions = [];
+    /** @var array<string, Satellite\Action\ConfigurationApplier> */
+    private array $actionPlugins = [];
 
     public function __construct(?ExpressionLanguage $expressionLanguage = null)
     {
@@ -115,11 +117,13 @@ final class Service implements Configurator\FactoryInterface
         Configurator\Action $attribute,
         Configurator\PipelineActionInterface $action,
     ): self {
+        $this->configuration->addAction($attribute->name, $action->configuration());
         $this->actions[$attribute->name] = $action;
 
-        foreach ($this->runtimes as $name => $runtime) {
-            $runtime->addAction($name, $action);
-        }
+        $this->actionPlugins[$attribute->name] = $applier = new Satellite\Action\ConfigurationApplier($attribute->name, $action, $action->interpreter());
+        $applier->withPackages(...$attribute->dependencies);
+
+        $applier->withAction($attribute->name);
 
         return $this;
     }
@@ -358,19 +362,17 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileActionJob(array $config): Satellite\Builder\Repository\Pipeline
+    private function compileActionJob(array $config): Satellite\Builder\Repository\Action
     {
-        $pipeline = new Satellite\Builder\Pipeline(
+        $action = new Satellite\Builder\Action(
             new Node\Expr\Variable('runtime'),
         );
 
-        $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
+        $repository = new Satellite\Builder\Repository\Action($action);
 
-        foreach ($config['action'] as $action) {
-            $plugins = array_intersect_key($this->plugins, $action);
-            foreach ($plugins as $plugin) {
-                $plugin->appendTo($action, $repository);
-            }
+        $actions = array_intersect_key($this->actionPlugins, $config['action']);
+        foreach ($actions as $action) {
+            $action->appendTo($config['action'], $repository);
         }
 
         return $repository;
