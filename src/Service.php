@@ -66,9 +66,6 @@ final class Service implements Configurator\FactoryInterface
         foreach ($this->pipelines as $name => $plugin) {
             $runtime->addPlugin($name, $plugin);
         }
-        foreach ($this->actions as $name => $action) {
-            $runtime->addAction($name, $action);
-        }
 
         return $this;
     }
@@ -123,7 +120,7 @@ final class Service implements Configurator\FactoryInterface
         $this->actionPlugins[$attribute->name] = $applier = new Satellite\Action\ConfigurationApplier($attribute->name, $action, $action->interpreter());
         $applier->withPackages(...$attribute->dependencies);
 
-        $applier->withAction($attribute->name);
+        $applier->withAction();
 
         return $this;
     }

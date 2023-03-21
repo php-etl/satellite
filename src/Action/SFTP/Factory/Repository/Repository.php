@@ -8,9 +8,9 @@ use Kiboko\Component\Satellite\Action\SFTP\Builder;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
-final class Repository implements Configurator\StepRepositoryInterface
+final class Repository implements Configurator\RepositoryInterface
 {
-    public function __construct(private Builder\Action|Builder\Server $builder)
+    public function __construct(private Builder\Action $builder)
     {
     }
 
@@ -34,7 +34,7 @@ final class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Builder\Action|Builder\Server
+    public function getBuilder(): Builder\Action
     {
         return $this->builder;
     }

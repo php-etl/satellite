@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;

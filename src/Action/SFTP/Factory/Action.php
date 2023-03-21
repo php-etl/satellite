@@ -58,29 +58,14 @@ class Action implements Configurator\FactoryInterface
 
     public function compile(array $config): Repository
     {
-        $builder = new SFTP\Builder\Action($this->interpreter);
-
-        if (\array_key_exists('server', $config)) {
-            $server = $config['server'];
-
-            $serverFactory = new Server($this->interpreter);
-
-            $loader = $serverFactory->compile($server);
-            $serverBuilder = $loader->getBuilder();
-
-            $builder->withServer($server, $serverBuilder->getNode());
-        }
-
-        if (\array_key_exists('path', $config)) {
-            $destination = $config['path'];
-
-            $builder->withPut(
-                compileValueWhenExpression($this->interpreter, $destination['path']),
-                compileValueWhenExpression($this->interpreter, $destination['content']),
-                \array_key_exists('mode', $destination) ? compileValueWhenExpression($this->interpreter, $destination['mode']) : null,
-                \array_key_exists('if', $destination) ? compileValueWhenExpression($this->interpreter, $destination['if']) : null,
-            );
-        }
+        $builder = new SFTP\Builder\Action(
+            compileValueWhenExpression($this->interpreter, $config['server']['host']),
+            compileValueWhenExpression($this->interpreter, $config['server']['port']),
+            compileValueWhenExpression($this->interpreter, $config['server']['username']),
+            compileValueWhenExpression($this->interpreter, $config['server']['password']),
+            compileValueWhenExpression($this->interpreter, $config['file']),
+            compileValueWhenExpression($this->interpreter, $config['destination']['path']),
+        );
 
         try {
             return new Repository($builder);
