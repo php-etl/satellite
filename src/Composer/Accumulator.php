@@ -117,6 +117,43 @@ final class Accumulator implements \IteratorAggregate, \Stringable
         }
     }
 
+    public function formatActionInstance(): \Generator
+    {
+        /** @var Package $package */
+        foreach ($this as $package) {
+            $configuration = $package->getExtra();
+            if (\array_key_exists('satellite', $configuration)) {
+                // Enter fallback mode.
+                if (!\array_key_exists('class', $configuration['satellite'])) {
+                    continue;
+                }
+
+                yield <<<PHP
+                    new \\{$configuration['satellite']['class']}(\$context->interpreter())
+                    PHP;
+                continue;
+            }
+            if (!\array_key_exists('gyroscops', $configuration)) {
+                continue;
+            }
+            if (!\array_key_exists('actions', $configuration['gyroscops'])) {
+                continue;
+            }
+
+            if (\is_string($configuration['gyroscops']['actions'])) {
+                yield <<<PHP
+                    new \\{$configuration['gyroscops']['actions']}(\$context->interpreter())
+                    PHP;
+            } elseif (\is_array($configuration['gyroscops']['actions'])) {
+                foreach ($configuration['gyroscops']['actions'] as $plugin) {
+                    yield <<<PHP
+                        new \\{$plugin}(\$context->interpreter())
+                        PHP;
+                }
+            }
+        }
+    }
+
     public function __toString()
     {
         return sprintf(
@@ -132,11 +169,15 @@ final class Accumulator implements \IteratorAggregate, \Stringable
                     )
                     ->registerRuntimes(
                         %s
+                    )
+                    ->registerActions(
+                        %s
                     );
                 PHP,
             implode(",\n".str_pad('', 8), iterator_to_array($this->formatPluginInstance())),
             implode(",\n".str_pad('', 8), iterator_to_array($this->formatAdapterInstance())),
             implode(",\n".str_pad('', 8), iterator_to_array($this->formatRuntimeInstance())),
+            implode(",\n".str_pad('', 8), iterator_to_array($this->formatActionInstance())),
         );
     }
 }
