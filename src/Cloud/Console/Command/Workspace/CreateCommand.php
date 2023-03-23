@@ -63,7 +63,7 @@ final class CreateCommand extends Console\Command\Command
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
 
-        $context = new Satellite\Cloud\Context();
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
 
         $workspace = new Api\Model\Workspace();
         $workspace->setName($input->getArgument('name'));

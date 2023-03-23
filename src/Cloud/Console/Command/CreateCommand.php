@@ -89,7 +89,6 @@ final class CreateCommand extends Console\Command\Command
         }
 
         $auth = new Satellite\Cloud\Auth();
-        $context = new Satellite\Cloud\Context();
 
         try {
             $token = $auth->token($url);
@@ -121,6 +120,7 @@ final class CreateCommand extends Console\Command\Command
             throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
         $pipeline = new Satellite\Cloud\Pipeline($context);
         if (!\array_key_exists('version', $configuration)) {
             foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {

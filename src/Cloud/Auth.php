@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api;
+use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
+use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
 
 final class Auth
 {
@@ -64,6 +66,14 @@ final class Auth
         $data = new Api\Model\Credentials();
         $data->setUsername($credentials->username);
         $data->setPassword($credentials->password);
+        if (!$credentials->workspace || $credentials->workspace->isNil()) {
+            throw new NoWorkspaceSelectedException('Please use "cloud workspace:change" to select the workspace you are working on.');
+        }
+        $data->setWorkspace($credentials->workspace->asString());
+        if (!$credentials->organization || $credentials->organization->isNil()) {
+            throw new NoOrganizationSelectedException('Please use "cloud organization:change" to select the organization you are working on.');
+        }
+        $data->setOrganization($credentials->organization->asString());
 
         $token = $client->postCredentialsItem($data);
         try {
@@ -75,6 +85,52 @@ final class Auth
         return $token->getToken();
     }
 
+    public function changeOrganization(
+        Api\Client $client,
+        OrganizationId $organization
+    ): string {
+        $data = new \stdClass();
+        $data->organization = $organization->asString();
+
+        $token = $client->putAuthenticationToken($data);
+
+        return $token->token;
+    }
+
+    public function changeWorkspace(
+        Api\Client $client,
+        WorkspaceId $workspace
+    ): string {
+        $data = new \stdClass();
+        $data->workspace = $workspace->asString();
+
+        $token = $client->putAuthenticationToken($data);
+
+        return $token->token;
+    }
+
+    public function persistOrganization(string $url, OrganizationId $organization): void
+    {
+        if (!\array_key_exists($url, $this->configuration)) {
+            $this->configuration[$url] = [];
+        }
+
+        $this->configuration[$url] = array_merge($this->configuration[$url], [
+            'organization' => $organization->asString(),
+        ]);
+    }
+
+    public function persistWorkspace(string $url, WorkspaceId $workspace): void
+    {
+        if (!\array_key_exists($url, $this->configuration)) {
+            $this->configuration[$url] = [];
+        }
+
+        $this->configuration[$url] = array_merge($this->configuration[$url], [
+            'workspace' => $workspace->asString(),
+        ]);
+    }
+
     public function persistCredentials(string $url, Credentials $credentials): void
     {
         if (!\array_key_exists($url, $this->configuration)) {
@@ -84,6 +140,8 @@ final class Auth
         $this->configuration[$url] = array_merge($this->configuration[$url], [
             'login' => $credentials->username,
             'password' => $credentials->password,
+            'organization' => $credentials->organization->asString() ?? $this->configuration[$url]['organization'],
+            'workspace' => $credentials->workspace->asString() ?? $this->configuration[$url]['workspace'],
         ]);
     }
 
@@ -128,6 +186,12 @@ final class Auth
         return new Credentials(
             $this->configuration[$url]['login'],
             $this->configuration[$url]['password'],
+            organization: array_key_exists('organization', $this->configuration[$url]) && $this->configuration[$url]['organization'] !== null ?
+                new OrganizationId($this->configuration[$url]['organization']) :
+                null,
+            workspace: array_key_exists('workspace', $this->configuration[$url]) && $this->configuration[$url]['workspace'] !== null ?
+                new WorkspaceId($this->configuration[$url]['workspace']) :
+                null,
         );
     }
 }

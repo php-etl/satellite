@@ -62,8 +62,7 @@ final class ChangeCommand extends Console\Command\Command
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
-
-        $context = new Satellite\Cloud\Context();
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
 
         if ($input->getArgument('workspace-id')) {
             try {
@@ -75,8 +74,8 @@ final class ChangeCommand extends Console\Command\Command
                 return self::FAILURE;
             }
 
-            $context->changeWorkspace(new Satellite\Cloud\DTO\WorkspaceId($workspace?->getId()));
-            $context->dump();
+            $workspace = new Satellite\Cloud\DTO\WorkspaceId($workspace->getId());
+            $context->changeWorkspace($workspace);
 
             $style->success('The workspace has been successfully changed.');
 
@@ -85,7 +84,7 @@ final class ChangeCommand extends Console\Command\Command
 
         $workspaces = $client->apiOrganizationsWorkspacesGetSubresourceOrganizationSubresource($context->organization()->asString());
 
-        if (\count($workspaces) <= 0) {
+        if ($workspaces === null || \count($workspaces) <= 0) {
             $style->note('The current organization has no workspaces declared');
             $style->writeln('You may want to declare a new workspace with <info>cloud workspace:create</>.');
 
@@ -97,17 +96,12 @@ final class ChangeCommand extends Console\Command\Command
             $choices[$workspace?->getId()] = $workspace?->getName();
         }
 
-        try {
-            $currentWorkspace = $context->workspace()->asString();
-        } catch (Satellite\Cloud\NoWorkspaceSelectedException) {
-            $currentWorkspace = null;
-        }
+        $currentWorkspace = $context->workspace();
 
-        $choice = $style->choice('Choose your workspace:', $choices, $currentWorkspace);
+        $choice = $style->choice('Choose your workspace:', $choices, $currentWorkspace->asString());
 
-        $context->changeWorkspace(new Satellite\Cloud\DTO\WorkspaceId($choice));
-
-        $context->dump();
+        $workspace = new Satellite\Cloud\DTO\WorkspaceId($choice);
+        $context->changeWorkspace($workspace);
 
         $style->success('The workspace has been successfully changed.');
 

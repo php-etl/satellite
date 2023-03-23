@@ -73,7 +73,7 @@ final class ListCommand extends Console\Command\Command
             $choices[$workspace->getId()] = $workspace->getName();
         }
 
-        $context = new Satellite\Cloud\Context();
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
 
         try {
             $currentWorkspace = $context->workspace()->asString();

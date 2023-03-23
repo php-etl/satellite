@@ -63,7 +63,7 @@ final class ListCommand extends Console\Command\Command
 
         $organizations = $client->getOrganizationCollection();
 
-        $context = new Satellite\Cloud\Context();
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
 
         try {
             $currentOrganization = $context->organization()->asString();

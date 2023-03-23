@@ -25,13 +25,11 @@ final class DeclarePipelineCommandHandler
                 (new Api\Model\PipelineDeclarePipelineCommandInput())
                     ->setLabel($command->label)
                     ->setCode($command->code)
-                    ->setWorkspace((string) $command->project)
-                    ->setOrganization((string) $command->organizationId)
                     ->setSteps($command->steps->map(
                         fn (Step $step) => (new Api\Model\StepInput())
                             ->setCode((string) $step->code)
                             ->setLabel($step->label)
-                            ->setConfig($step->config)
+                            ->setConfiguration($step->config)
                             ->setProbes($step->probes->map(
                                 fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label))
                             )

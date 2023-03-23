@@ -27,11 +27,11 @@ satellite:
               type: category
               method: all
             client:
-              api_url: 'http://localhost:8080'
-              client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
-              secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
-              username: 'kiboko_2145'
-              password: 62d0f1090
+              api_url: '@=env("AKENEO_URL")'
+              client_id: '@=env("AKENEO_CLIENT_ID")'
+              secret: '@=env("AKENEO_CLIENT_SECRET")'
+              username: '@=env("AKENEO_USERNAME")'
+              password: '@=env("AKENEO_PASSWORD")'
 #          logger:
 #            channel: pipeline
 #            destinations:
@@ -60,11 +60,11 @@ satellite:
               type: product
               method: all
             client:
-              api_url: 'http://localhost:8080'
-              client_id: '5_5dxapwm2rs4kkso8wgwk08o88gg0wc0owkgsgg0gkcwos4o0wo'
-              secret: 34n14k1ajy800g0ocww8w8cwckogoc844ggwcs8gkg8w4k4888
-              username: 'kiboko_2145'
-              password: 62d0f1090
+              api_url: '@=env("AKENEO_URL")'
+              client_id: '@=env("AKENEO_CLIENT_ID")'
+              secret: '@=env("AKENEO_CLIENT_SECRET")'
+              username: '@=env("AKENEO_USERNAME")'
+              password: '@=env("AKENEO_PASSWORD")'
 #          logger:
 #            channel: pipeline
 #            destinations:

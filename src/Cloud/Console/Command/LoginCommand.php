@@ -57,6 +57,7 @@ final class LoginCommand extends Console\Command\Command
             $credentials = $auth->credentials($url);
 
             $token = $auth->authenticateWithCredentials($client, $credentials);
+            $auth->persistCredentials($url, $credentials);
             $auth->persistToken($url, $token);
             $auth->flush();
 
@@ -75,15 +76,13 @@ final class LoginCommand extends Console\Command\Command
         while (true) {
             try {
                 $password = $style->askHidden('Password');
-                $token = $auth->authenticateWithCredentials(
-                    $client,
-                    new Satellite\Cloud\Credentials(
-                        $username,
-                        $password,
-                    )
+                $credentials = new Satellite\Cloud\Credentials(
+                    $username,
+                    $password,
                 );
 
-                $auth->persistCredentials($url, new Satellite\Cloud\Credentials($username, $password));
+                $token = $auth->authenticateWithCredentials($client, $credentials);
+                $auth->persistCredentials($url, $credentials);
                 $auth->persistToken($url, $token);
                 $auth->flush();
 

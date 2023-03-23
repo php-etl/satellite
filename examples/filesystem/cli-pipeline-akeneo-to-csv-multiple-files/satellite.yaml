@@ -23,11 +23,11 @@ satellite:
           type: category
           method: all
         client:
-          api_url: 'http://demo.akeneo.com/'
-          client_id: 5_1yq9g82il7usk44ks4cw0048ogos84wcgsskscg48g88sk8wgk
-          secret: 5mva179pbig4g8gck80cskwscko4wwkgokcg8gg4o0sc8sgk8w
-          username: kiboko_5112
-          password: b2ed66240
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
     - fastmap:
         map:
           - field: '[code]'

@@ -89,7 +89,6 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         $auth = new Satellite\Cloud\Auth();
-        $context = new Satellite\Cloud\Context();
         try {
             $token = $auth->token($url);
         } catch (Satellite\Cloud\AccessDeniedException) {
@@ -120,6 +119,7 @@ final class RemoveCommand extends Console\Command\Command
             throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }
 
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
         $pipeline = new Satellite\Cloud\Pipeline($context);
         $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code'], $configuration['satellite']['pipeline']);
         foreach ($pipeline->remove($model->id()) as $command) {

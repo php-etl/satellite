@@ -22,11 +22,11 @@ attribute:
             type: attribute
             method: all
           client:
-            api_url: 'https://demo.akeneo.com'
-            client_id: '1234567890'
-            secret: qwertyuiop
-            username: '%env(USERNAME)%'
-            password: lkjhgfdsa
+            api_url: '@=env("AKENEO_URL")'
+            client_id: '@=env("AKENEO_CLIENT_ID")'
+            secret: '@=env("AKENEO_CLIENT_SECRET")'
+            username: '@=env("AKENEO_USERNAME")'
+            password: '@=env("AKENEO_PASSWORD")'
         logger:
           channel: pipeline
           destinations:
@@ -73,11 +73,11 @@ category:
             type: category
             method: all
           client:
-            api_url: 'https://demo.akeneo.com'
-            client_id: '1234567890'
-            secret: qwertyuiop
-            username: '%env(USERNAME)%'
-            password: lkjhgfdsa
+            api_url: '@=env("AKENEO_URL")'
+            client_id: '@=env("AKENEO_CLIENT_ID")'
+            secret: '@=env("AKENEO_CLIENT_SECRET")'
+            username: '@=env("AKENEO_USERNAME")'
+            password: '@=env("AKENEO_PASSWORD")'
         logger:
           channel: pipeline
           destinations:

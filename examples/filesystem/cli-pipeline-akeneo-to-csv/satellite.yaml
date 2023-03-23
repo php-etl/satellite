@@ -106,11 +106,11 @@ satellite:
                   - field: '[options]'
                     expression: 'join(lookup, ",")'
         client:
-          api_url: 'http://localhost:8080'
-          client_id: '1_3clz4rzonukgsgoscoc488w0c4k0so48o0owc0k0sc40wso08g'
-          secret: '9tw5v88wl1s8s4ws8wsgk08gwkoo484cwc4k00wwkwosgwow4'
-          username: 'proximis_3328'
-          password: '93b66a306'
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
       logger:
         channel: pipeline
         destinations:

@@ -28,11 +28,11 @@ satellite:
             - { field: enabled, operator: '=', value: true }
             - { field: completeness, operator: '=', value: 100, scope: ecommerce }
         client:
-          api_url: 'https://unlock-hippopotamus.demo.cloud.akeneo.com'
-          client_id: '5_2hogwrsqgj40owc8c8sw0swwwos80ccgkck84kok8kwkwswowk'
-          secret: '2pjdo95m1i0w8sw0wowowgcs4wgk8g0g4co4gw0wc88w8osk8'
-          username: 'sylius_3225'
-          password: 'ad6893ba0'
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
       logger:
         channel: pipeline
         destinations:
@@ -118,11 +118,11 @@ satellite:
           type: products
           method: create
         client:
-          api_url: 'http://localhost'
-          client_id: '414yc7d9mnk044ko4wswgw80o8ssw80gssos488kk8ogss40ko'
-          secret: '4k8ee6n44m4gkkg0coc8o4w4coscw0w4cg0wg8sc0wsk0sw8gs'
-          username: 'api'
-          password: 'sylius-api'
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
       logger:
         channel: pipeline
         destinations:

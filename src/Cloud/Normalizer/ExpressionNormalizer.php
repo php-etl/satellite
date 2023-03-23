@@ -16,6 +16,6 @@ class ExpressionNormalizer implements NormalizerInterface
 
     public function supportsNormalization(mixed $data, string $format = null): bool
     {
-        return is_a($data, Expression::class);
+        return $data instanceof Expression;
     }
 }

@@ -20,11 +20,11 @@ satellite:
               type: product
               method: all
           client:
-              api_url: 'http://localhost:8080'
-              client_id: '1_1pfmqgqw53r4w4g0kscoc0wckkkco8swcoowk484840wco4koo'
-              secret: '11oo1el7nrn4o408kgokoccoswg4wgc4440w8w8sgsko84wssg'
-              username: 'proximis_7215'
-              password: '00e666b44'
+          api_url: '@=env("AKENEO_URL")'
+          client_id: '@=env("AKENEO_CLIENT_ID")'
+          secret: '@=env("AKENEO_CLIENT_SECRET")'
+          username: '@=env("AKENEO_USERNAME")'
+          password: '@=env("AKENEO_PASSWORD")'
         logger:
           channel: pipeline
           destinations:

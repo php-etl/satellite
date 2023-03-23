@@ -81,7 +81,10 @@
         }
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "bin": ["bin/satellite"],
     "extra": {

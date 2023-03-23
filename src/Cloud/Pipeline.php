@@ -9,6 +9,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
 use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 final class Pipeline implements PipelineInterface
 {
@@ -19,14 +20,21 @@ final class Pipeline implements PipelineInterface
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
+        $random = bin2hex(random_bytes(4));
         return new DTO\Pipeline(
-            $configuration['pipeline']['name'],
-            $configuration['pipeline']['code'],
+            $configuration['pipeline']['name'] ?? sprintf('Pipeline %s', $random),
+            $configuration['pipeline']['code'] ?? sprintf('pipeline_%s', $random),
             new DTO\StepList(
                 ...array_map(function (array $stepConfig, int $order) {
-                    $name = $stepConfig['name'];
-                    $code = $stepConfig['code'];
+                    $name = $stepConfig['name'] ?? sprintf('step%d', $order);
+                    $code = $stepConfig['code'] ?? sprintf('step%d', $order);
                     unset($stepConfig['name'], $stepConfig['code']);
+
+                    array_walk_recursive($stepConfig, function (&$value) {
+                        if ($value instanceof Expression) {
+                            $value = '@='.$value;
+                        }
+                    });
 
                     return new DTO\Step(
                         $name,

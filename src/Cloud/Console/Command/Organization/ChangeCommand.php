@@ -62,8 +62,7 @@ final class ChangeCommand extends Console\Command\Command
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create($psr18Client);
-
-        $context = new Satellite\Cloud\Context();
+        $context = new Satellite\Cloud\Context($client, $auth, $url);
 
         if ($input->getArgument('organization-id')) {
             try {
@@ -75,8 +74,8 @@ final class ChangeCommand extends Console\Command\Command
                 return self::FAILURE;
             }
 
-            $context->changeOrganization(new Satellite\Cloud\DTO\OrganizationId($organization->getId()));
-            $context->dump();
+            $organization = new Satellite\Cloud\DTO\OrganizationId($organization->getId());
+            $context->changeOrganization($organization);
 
             $style->success('The organization has been successfully changed.');
 
@@ -90,17 +89,12 @@ final class ChangeCommand extends Console\Command\Command
             $choices[$organization->getId()] = $organization->getName();
         }
 
-        try {
-            $currentOrganization = $context->organization()->asString();
-        } catch (Satellite\Cloud\NoOrganizationSelectedException) {
-            $currentOrganization = null;
-        }
+        $currentOrganization = $context->organization();
 
-        $choice = $style->choice('Choose your organization:', $choices, $currentOrganization);
+        $choice = $style->choice('Choose your organization:', $choices, $currentOrganization->asString());
 
-        $context->changeOrganization(new Satellite\Cloud\DTO\OrganizationId($choice));
-
-        $context->dump();
+        $organization = new Satellite\Cloud\DTO\OrganizationId($choice);
+        $context->changeOrganization($organization);
 
         $style->success('The organization has been successfully changed.');
 

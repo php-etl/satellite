@@ -11,6 +11,11 @@ final class WorkspaceId implements \Stringable
     ) {
     }
 
+    public function isNil(): bool
+    {
+        return $this->reference === '00000000-0000-0000-0000-000000000000';
+    }
+
     public function asString(): string
     {
         return $this->reference;
