@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c9b4ed1e0d46bf344ef485e948cf5e6",
+    "content-hash": "48c7239209dce854952cf1debb2c8039",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -507,12 +507,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/bucket.git",
-                "reference": "7d207325fb1d2bbdd6979ad89930fab856344b69"
+                "reference": "33ed93266ede7355661c98f1edf02108bbee14fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/bucket/zipball/7d207325fb1d2bbdd6979ad89930fab856344b69",
-                "reference": "7d207325fb1d2bbdd6979ad89930fab856344b69",
+                "url": "https://api.github.com/repos/php-etl/bucket/zipball/33ed93266ede7355661c98f1edf02108bbee14fe",
+                "reference": "33ed93266ede7355661c98f1edf02108bbee14fe",
                 "shasum": ""
             },
             "require": {
@@ -562,7 +562,7 @@
                 "issues": "https://github.com/php-etl/bucket/issues",
                 "source": "https://github.com/php-etl/bucket/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-20T15:24:15+00:00"
+            "time": "2023-03-22T10:50:05+00:00"
         },
         {
             "name": "php-etl/bucket-contracts",
@@ -570,12 +570,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/bucket-contracts.git",
-                "reference": "81c029f14993fd246ec7f8b68c6ac95791dcd6ba"
+                "reference": "87a0aaa851a9af6a7d18e5ba96dcf31a296c2f9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/bucket-contracts/zipball/81c029f14993fd246ec7f8b68c6ac95791dcd6ba",
-                "reference": "81c029f14993fd246ec7f8b68c6ac95791dcd6ba",
+                "url": "https://api.github.com/repos/php-etl/bucket-contracts/zipball/87a0aaa851a9af6a7d18e5ba96dcf31a296c2f9f",
+                "reference": "87a0aaa851a9af6a7d18e5ba96dcf31a296c2f9f",
                 "shasum": ""
             },
             "require": {
@@ -619,7 +619,7 @@
                 "issues": "https://github.com/php-etl/bucket-contracts/issues",
                 "source": "https://github.com/php-etl/bucket-contracts/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-20T15:10:20+00:00"
+            "time": "2023-03-22T10:48:11+00:00"
         },
         {
             "name": "php-etl/configurator-contracts",
@@ -627,12 +627,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "f6f8eca44e7c5c46ffd36455853b6bf3a926b659"
+                "reference": "acfdaaa50b9cfe7dc4bb4400653eeac0fe19752c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/f6f8eca44e7c5c46ffd36455853b6bf3a926b659",
-                "reference": "f6f8eca44e7c5c46ffd36455853b6bf3a926b659",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/acfdaaa50b9cfe7dc4bb4400653eeac0fe19752c",
+                "reference": "acfdaaa50b9cfe7dc4bb4400653eeac0fe19752c",
                 "shasum": ""
             },
             "require": {
@@ -641,7 +641,7 @@
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "psr/log": "^1.0||^2.0||^3.0",
                 "symfony/config": "^5.2 || ^6.0",
-                "symfony/expression-language": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -681,7 +681,7 @@
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
                 "source": "https://github.com/php-etl/configurator-contracts/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:39:01+00:00"
+            "time": "2023-03-23T08:41:53+00:00"
         },
         {
             "name": "php-etl/console-state",
@@ -689,18 +689,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/console-state.git",
-                "reference": "1891b8aae34ab1c9728bf01ac85e95b0ad143c3d"
+                "reference": "c3a52f60ddaeef209b5e8e4665c1a366290f6165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/console-state/zipball/1891b8aae34ab1c9728bf01ac85e95b0ad143c3d",
-                "reference": "1891b8aae34ab1c9728bf01ac85e95b0ad143c3d",
+                "url": "https://api.github.com/repos/php-etl/console-state/zipball/c3a52f60ddaeef209b5e8e4665c1a366290f6165",
+                "reference": "c3a52f60ddaeef209b5e8e4665c1a366290f6165",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/pipeline-contracts": "^0.4",
-                "symfony/console": "^5.2"
+                "php-etl/pipeline-contracts": "^0.4@dev",
+                "symfony/console": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -740,7 +740,7 @@
                 "issues": "https://github.com/php-etl/console-state/issues",
                 "source": "https://github.com/php-etl/console-state/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:51:03+00:00"
+            "time": "2023-03-23T08:50:32+00:00"
         },
         {
             "name": "php-etl/dockerfile",
@@ -748,12 +748,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "f628026bbb1c4fd29fd9cea4ff13c70de9254879"
+                "reference": "8331e1fd6071b0034a1b63d4d8a9c1dfbba28322"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/f628026bbb1c4fd29fd9cea4ff13c70de9254879",
-                "reference": "f628026bbb1c4fd29fd9cea4ff13c70de9254879",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/8331e1fd6071b0034a1b63d4d8a9c1dfbba28322",
+                "reference": "8331e1fd6071b0034a1b63d4d8a9c1dfbba28322",
                 "shasum": ""
             },
             "require": {
@@ -793,7 +793,7 @@
                 "issues": "https://github.com/php-etl/dockerfile/issues",
                 "source": "https://github.com/php-etl/dockerfile/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:36:29+00:00"
+            "time": "2023-03-22T13:34:17+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -801,12 +801,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "61fe0c46ba0fb5890bd46b366d33828efe7e3404"
+                "reference": "70b97b2b47496ddb9fd8507d33711c1abe43321b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/61fe0c46ba0fb5890bd46b366d33828efe7e3404",
-                "reference": "61fe0c46ba0fb5890bd46b366d33828efe7e3404",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/70b97b2b47496ddb9fd8507d33711c1abe43321b",
+                "reference": "70b97b2b47496ddb9fd8507d33711c1abe43321b",
                 "shasum": ""
             },
             "require": {
@@ -852,7 +852,7 @@
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
                 "source": "https://github.com/php-etl/gyroscops-api-client/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T10:38:32+00:00"
+            "time": "2023-03-22T14:27:13+00:00"
         },
         {
             "name": "php-etl/packaging",
@@ -860,12 +860,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/packaging.git",
-                "reference": "11e762eda67dbababfafac1b7353cdd693b5516f"
+                "reference": "79fea9eb25e097f4d0e150c575863f30f84f4a1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/packaging/zipball/11e762eda67dbababfafac1b7353cdd693b5516f",
-                "reference": "11e762eda67dbababfafac1b7353cdd693b5516f",
+                "url": "https://api.github.com/repos/php-etl/packaging/zipball/79fea9eb25e097f4d0e150c575863f30f84f4a1c",
+                "reference": "79fea9eb25e097f4d0e150c575863f30f84f4a1c",
                 "shasum": ""
             },
             "require": {
@@ -914,7 +914,7 @@
                 "issues": "https://github.com/php-etl/packaging/issues",
                 "source": "https://github.com/php-etl/packaging/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:55:20+00:00"
+            "time": "2023-03-22T16:17:59+00:00"
         },
         {
             "name": "php-etl/packaging-contracts",
@@ -922,12 +922,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/packaging-contracts.git",
-                "reference": "76a009ae6792f346694a67bf5794ba941612332e"
+                "reference": "a66a064ea2e46c0bbd666cfbd39393e082f244a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/packaging-contracts/zipball/76a009ae6792f346694a67bf5794ba941612332e",
-                "reference": "76a009ae6792f346694a67bf5794ba941612332e",
+                "url": "https://api.github.com/repos/php-etl/packaging-contracts/zipball/a66a064ea2e46c0bbd666cfbd39393e082f244a9",
+                "reference": "a66a064ea2e46c0bbd666cfbd39393e082f244a9",
                 "shasum": ""
             },
             "require": {
@@ -972,7 +972,7 @@
                 "issues": "https://github.com/php-etl/packaging-contracts/issues",
                 "source": "https://github.com/php-etl/packaging-contracts/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:26:59+00:00"
+            "time": "2023-03-22T16:24:48+00:00"
         },
         {
             "name": "php-etl/pipeline",
@@ -980,12 +980,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline.git",
-                "reference": "eb0cc00a396868385807e0c832c55393c03a277d"
+                "reference": "b51189e591756de990a9eded651949ada304d7f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/eb0cc00a396868385807e0c832c55393c03a277d",
-                "reference": "eb0cc00a396868385807e0c832c55393c03a277d",
+                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/b51189e591756de990a9eded651949ada304d7f9",
+                "reference": "b51189e591756de990a9eded651949ada304d7f9",
                 "shasum": ""
             },
             "require": {
@@ -1039,7 +1039,7 @@
                 "issues": "https://github.com/php-etl/pipeline/issues",
                 "source": "https://github.com/php-etl/pipeline/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:55:13+00:00"
+            "time": "2023-03-22T16:28:13+00:00"
         },
         {
             "name": "php-etl/pipeline-console-runtime",
@@ -1047,19 +1047,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-console-runtime.git",
-                "reference": "e32c5a9548359e9113e1b92af57c02ac913770f8"
+                "reference": "c3b78539ebc76a8bf4b9883520f78448890d4344"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/e32c5a9548359e9113e1b92af57c02ac913770f8",
-                "reference": "e32c5a9548359e9113e1b92af57c02ac913770f8",
+                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/c3b78539ebc76a8bf4b9883520f78448890d4344",
+                "reference": "c3b78539ebc76a8bf4b9883520f78448890d4344",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
                 "php-etl/console-state": "^0.2@dev",
                 "php-etl/pipeline-contracts": "^0.4@dev",
-                "symfony/console": "^5.2"
+                "symfony/console": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -1099,7 +1099,7 @@
                 "issues": "https://github.com/php-etl/pipeline-console-runtime/issues",
                 "source": "https://github.com/php-etl/pipeline-console-runtime/tree/feature/qualityflow-imprrvments"
             },
-            "time": "2023-03-21T14:50:46+00:00"
+            "time": "2023-03-23T08:51:17+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",
@@ -1107,12 +1107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "59107fc3a4e7e5260624cb9b46d92ff9b0fa1ae8"
+                "reference": "55e1849bfb92591caf86c85aac09c948e2ff44c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/59107fc3a4e7e5260624cb9b46d92ff9b0fa1ae8",
-                "reference": "59107fc3a4e7e5260624cb9b46d92ff9b0fa1ae8",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/55e1849bfb92591caf86c85aac09c948e2ff44c4",
+                "reference": "55e1849bfb92591caf86c85aac09c948e2ff44c4",
                 "shasum": ""
             },
             "require": {
@@ -1157,7 +1157,7 @@
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
                 "source": "https://github.com/php-etl/pipeline-contracts/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:47:02+00:00"
+            "time": "2023-03-23T08:22:24+00:00"
         },
         {
             "name": "php-etl/satellite-toolbox",
@@ -1165,12 +1165,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "bf002f1ab4f7440a991943ca9e12106080bee80d"
+                "reference": "073060f63c820b39f9955caf1c775c2e67fd5e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/bf002f1ab4f7440a991943ca9e12106080bee80d",
-                "reference": "bf002f1ab4f7440a991943ca9e12106080bee80d",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/073060f63c820b39f9955caf1c775c2e67fd5e7d",
+                "reference": "073060f63c820b39f9955caf1c775c2e67fd5e7d",
                 "shasum": ""
             },
             "require": {
@@ -1226,7 +1226,7 @@
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:55:57+00:00"
+            "time": "2023-03-23T08:51:43+00:00"
         },
         {
             "name": "php-etl/workflow-console-runtime",
@@ -1234,12 +1234,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/workflow-console-runtime.git",
-                "reference": "031469756f5c3911dbda89cf377779a09a525dd3"
+                "reference": "2ae516b2b92a64a2877282b49f837cf8f916ec74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/031469756f5c3911dbda89cf377779a09a525dd3",
-                "reference": "031469756f5c3911dbda89cf377779a09a525dd3",
+                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/2ae516b2b92a64a2877282b49f837cf8f916ec74",
+                "reference": "2ae516b2b92a64a2877282b49f837cf8f916ec74",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                 "php-etl/pipeline": "^0.5@dev",
                 "php-etl/pipeline-console-runtime": "^0.2@dev",
                 "php-etl/pipeline-contracts": "^0.4@dev",
-                "symfony/console": "^5.2"
+                "symfony/console": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -1288,7 +1288,7 @@
                 "issues": "https://github.com/php-etl/workflow-console-runtime/issues",
                 "source": "https://github.com/php-etl/workflow-console-runtime/tree/feature/qualityflow-imrovments"
             },
-            "time": "2023-03-21T14:50:30+00:00"
+            "time": "2023-03-23T08:52:36+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -1855,22 +1855,27 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.2",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
-                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Psr\\Container\\": "src/"
@@ -1897,9 +1902,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.2"
+                "source": "https://github.com/php-fig/container/tree/2.0.2"
             },
-            "time": "2021-11-05T16:50:12+00:00"
+            "time": "2021-11-05T16:47:00+00:00"
         },
         {
             "name": "psr/http-client",
@@ -2444,46 +2449,43 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.4.21",
+            "version": "v6.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "c77433ddc6cdc689caf48065d9ea22ca0853fbd9"
+                "reference": "cbad09eb8925b6ad4fb721c7a179344dc4a19d45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/c77433ddc6cdc689caf48065d9ea22ca0853fbd9",
-                "reference": "c77433ddc6cdc689caf48065d9ea22ca0853fbd9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/cbad09eb8925b6ad4fb721c7a179344dc4a19d45",
+                "reference": "cbad09eb8925b6ad4fb721c7a179344dc4a19d45",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
+                "php": ">=8.1",
                 "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/polyfill-mbstring": "~1.0",
-                "symfony/polyfill-php73": "^1.9",
-                "symfony/polyfill-php80": "^1.16",
                 "symfony/service-contracts": "^1.1|^2|^3",
-                "symfony/string": "^5.1|^6.0"
+                "symfony/string": "^5.4|^6.0"
             },
             "conflict": {
-                "psr/log": ">=3",
-                "symfony/dependency-injection": "<4.4",
-                "symfony/dotenv": "<5.1",
-                "symfony/event-dispatcher": "<4.4",
-                "symfony/lock": "<4.4",
-                "symfony/process": "<4.4"
+                "symfony/dependency-injection": "<5.4",
+                "symfony/dotenv": "<5.4",
+                "symfony/event-dispatcher": "<5.4",
+                "symfony/lock": "<5.4",
+                "symfony/process": "<5.4"
             },
             "provide": {
-                "psr/log-implementation": "1.0|2.0"
+                "psr/log-implementation": "1.0|2.0|3.0"
             },
             "require-dev": {
-                "psr/log": "^1|^2",
-                "symfony/config": "^4.4|^5.0|^6.0",
-                "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/event-dispatcher": "^4.4|^5.0|^6.0",
-                "symfony/lock": "^4.4|^5.0|^6.0",
-                "symfony/process": "^4.4|^5.0|^6.0",
-                "symfony/var-dumper": "^4.4|^5.0|^6.0"
+                "psr/log": "^1|^2|^3",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/event-dispatcher": "^5.4|^6.0",
+                "symfony/lock": "^5.4|^6.0",
+                "symfony/process": "^5.4|^6.0",
+                "symfony/var-dumper": "^5.4|^6.0"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
@@ -2523,7 +2525,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.4.21"
+                "source": "https://github.com/symfony/console/tree/v6.2.7"
             },
             "funding": [
                 {
@@ -2539,45 +2541,44 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-25T16:59:41+00:00"
+            "time": "2023-02-25T17:00:03+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.4.21",
+            "version": "v6.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "5bc403d96622cf0091abd92c939eadecd4d07f94"
+                "reference": "359806e1adebd1c43e18e5ea22acd14bef7fcf8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/5bc403d96622cf0091abd92c939eadecd4d07f94",
-                "reference": "5bc403d96622cf0091abd92c939eadecd4d07f94",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/359806e1adebd1c43e18e5ea22acd14bef7fcf8c",
+                "reference": "359806e1adebd1c43e18e5ea22acd14bef7fcf8c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "psr/container": "^1.1.1",
+                "php": ">=8.0.2",
+                "psr/container": "^1.1|^2.0",
                 "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-php80": "^1.16",
                 "symfony/polyfill-php81": "^1.22",
-                "symfony/service-contracts": "^1.1.6|^2"
+                "symfony/service-contracts": "^1.1.6|^2.0|^3.0"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2",
-                "symfony/config": "<5.3",
-                "symfony/finder": "<4.4",
-                "symfony/proxy-manager-bridge": "<4.4",
-                "symfony/yaml": "<4.4.26"
+                "symfony/config": "<5.4",
+                "symfony/finder": "<5.4",
+                "symfony/proxy-manager-bridge": "<5.4",
+                "symfony/yaml": "<5.4"
             },
             "provide": {
-                "psr/container-implementation": "1.0",
-                "symfony/service-implementation": "1.0|2.0"
+                "psr/container-implementation": "1.1|2.0",
+                "symfony/service-implementation": "1.1|2.0|3.0"
             },
             "require-dev": {
-                "symfony/config": "^5.3|^6.0",
-                "symfony/expression-language": "^4.4|^5.0|^6.0",
-                "symfony/yaml": "^4.4.26|^5.0|^6.0"
+                "symfony/config": "^5.4|^6.0",
+                "symfony/expression-language": "^5.4|^6.0",
+                "symfony/yaml": "^5.4|^6.0"
             },
             "suggest": {
                 "symfony/config": "",
@@ -2612,7 +2613,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/v5.4.21"
+                "source": "https://github.com/symfony/dependency-injection/tree/v6.0.20"
             },
             "funding": [
                 {
@@ -2628,7 +2629,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-16T09:33:00+00:00"
+            "time": "2023-01-30T15:41:07+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3703,21 +3704,20 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.4.21",
+            "version": "v6.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d4ce417ebcb0b7d090b4c178ed6d3accc518e8bd"
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d4ce417ebcb0b7d090b4c178ed6d3accc518e8bd",
-                "reference": "d4ce417ebcb0b7d090b4c178ed6d3accc518e8bd",
+                "url": "https://api.github.com/repos/symfony/process/zipball/680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.16"
+                "php": ">=8.1"
             },
             "type": "library",
             "autoload": {
@@ -3745,7 +3745,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v5.4.21"
+                "source": "https://github.com/symfony/process/tree/v6.2.7"
             },
             "funding": [
                 {
@@ -3761,7 +3761,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-21T19:46:44+00:00"
+            "time": "2023-02-24T10:42:00+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -3866,22 +3866,21 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v2.5.2",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "4b426aac47d6427cc1a1d0f7e2ac724627f5966c"
+                "reference": "a8c9cedf55f314f3a186041d19537303766df09a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/4b426aac47d6427cc1a1d0f7e2ac724627f5966c",
-                "reference": "4b426aac47d6427cc1a1d0f7e2ac724627f5966c",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/a8c9cedf55f314f3a186041d19537303766df09a",
+                "reference": "a8c9cedf55f314f3a186041d19537303766df09a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "psr/container": "^1.1",
-                "symfony/deprecation-contracts": "^2.1|^3"
+                "php": ">=8.1",
+                "psr/container": "^2.0"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2"
@@ -3892,7 +3891,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.5-dev"
+                    "dev-main": "3.3-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -3902,7 +3901,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Contracts\\Service\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3929,7 +3931,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v2.5.2"
+                "source": "https://github.com/symfony/service-contracts/tree/v3.2.1"
             },
             "funding": [
                 {
@@ -3945,7 +3947,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-30T19:17:29+00:00"
+            "time": "2023-03-01T10:32:47+00:00"
         },
         {
             "name": "symfony/string",
@@ -4109,28 +4111,27 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.4.21",
+            "version": "v6.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "3713e20d93e46e681e51605d213027e48dab3469"
+                "reference": "e8e6a1d59e050525f27a1f530aa9703423cb7f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/3713e20d93e46e681e51605d213027e48dab3469",
-                "reference": "3713e20d93e46e681e51605d213027e48dab3469",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e8e6a1d59e050525f27a1f530aa9703423cb7f57",
+                "reference": "e8e6a1d59e050525f27a1f530aa9703423cb7f57",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
+                "php": ">=8.1",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
-                "symfony/console": "<5.3"
+                "symfony/console": "<5.4"
             },
             "require-dev": {
-                "symfony/console": "^5.3|^6.0"
+                "symfony/console": "^5.4|^6.0"
             },
             "suggest": {
                 "symfony/console": "For validating YAML files using the lint command"
@@ -4164,7 +4165,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.21"
+                "source": "https://github.com/symfony/yaml/tree/v6.2.7"
             },
             "funding": [
                 {
@@ -4180,7 +4181,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-21T19:46:44+00:00"
+            "time": "2023-02-16T09:57:23+00:00"
         }
     ],
     "packages-dev": [
@@ -6134,18 +6135,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-expression-language.git",
-                "reference": "5f6c8077c5ff57d624cd312f696a3730e4a8d52a"
+                "reference": "79dbd2911bd7a8a2cc9dbd73a092c55abc68a1b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-expression-language/zipball/5f6c8077c5ff57d624cd312f696a3730e4a8d52a",
-                "reference": "5f6c8077c5ff57d624cd312f696a3730e4a8d52a",
+                "url": "https://api.github.com/repos/php-etl/akeneo-expression-language/zipball/79dbd2911bd7a8a2cc9dbd73a092c55abc68a1b7",
+                "reference": "79dbd2911bd7a8a2cc9dbd73a092c55abc68a1b7",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "symfony/expression-language": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -6187,7 +6188,7 @@
                 "issues": "https://github.com/php-etl/akeneo-expression-language/issues",
                 "source": "https://github.com/php-etl/akeneo-expression-language/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:51:10+00:00"
+            "time": "2023-03-23T08:49:06+00:00"
         },
         {
             "name": "php-etl/akeneo-plugin",
@@ -6195,12 +6196,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "687f863a116a2c8c4e1a1cdbb26b003f3431a013"
+                "reference": "f190ac037f89d7b112042221d54536d598c22369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/687f863a116a2c8c4e1a1cdbb26b003f3431a013",
-                "reference": "687f863a116a2c8c4e1a1cdbb26b003f3431a013",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/f190ac037f89d7b112042221d54536d598c22369",
+                "reference": "f190ac037f89d7b112042221d54536d598c22369",
                 "shasum": ""
             },
             "require": {
@@ -6211,8 +6212,8 @@
                 "php-etl/fast-map-plugin": "^0.8@dev",
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
-                "symfony/config": "^5.2",
-                "symfony/expression-language": "^5.2"
+                "symfony/config": "^5.2 || ^6.0",
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "akeneo/api-php-client-ee": "^4.0",
@@ -6233,7 +6234,7 @@
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^9.5 || ^10.0",
                 "rector/rector": "^0.15",
-                "symfony/yaml": "^5.2"
+                "symfony/yaml": "^5.2 || ^6.0"
             },
             "type": "gyroscops-plugin",
             "extra": {
@@ -6267,7 +6268,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:51:02+00:00"
+            "time": "2023-03-23T08:48:26+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
@@ -6275,18 +6276,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/array-expression-language.git",
-                "reference": "65c257d4d5f77985e322e2e8d95174bb4b0f7fe0"
+                "reference": "2c5f2c83916ea6ec75627593ab159c4b1a6f42d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/65c257d4d5f77985e322e2e8d95174bb4b0f7fe0",
-                "reference": "65c257d4d5f77985e322e2e8d95174bb4b0f7fe0",
+                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/2c5f2c83916ea6ec75627593ab159c4b1a6f42d7",
+                "reference": "2c5f2c83916ea6ec75627593ab159c4b1a6f42d7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
-                "symfony/expression-language": "^5.2",
-                "symfony/property-access": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0",
+                "symfony/property-access": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -6322,7 +6323,7 @@
                 "issues": "https://github.com/php-etl/array-expression-language/issues",
                 "source": "https://github.com/php-etl/array-expression-language/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T11:11:13+00:00"
+            "time": "2023-03-23T08:49:32+00:00"
         },
         {
             "name": "php-etl/csv-plugin",
@@ -6330,12 +6331,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "95426a20498058d1cfe0cd5cb3873345dcfca102"
+                "reference": "90235f7535fac3c941a3c28e66883a716f74e4ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/95426a20498058d1cfe0cd5cb3873345dcfca102",
-                "reference": "95426a20498058d1cfe0cd5cb3873345dcfca102",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/90235f7535fac3c941a3c28e66883a716f74e4ea",
+                "reference": "90235f7535fac3c941a3c28e66883a716f74e4ea",
                 "shasum": ""
             },
             "require": {
@@ -6346,7 +6347,7 @@
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
                 "symfony/config": "^5.2",
-                "symfony/expression-language": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop",
@@ -6390,7 +6391,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:36:37+00:00"
+            "time": "2023-03-23T08:48:38+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -6398,12 +6399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map.git",
-                "reference": "e4fe48889b51ecf1d55527c0649122b27d2cb939"
+                "reference": "e237aeb8155a43980c66e6baf68aaf38b8b5eac5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/e4fe48889b51ecf1d55527c0649122b27d2cb939",
-                "reference": "e4fe48889b51ecf1d55527c0649122b27d2cb939",
+                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/e237aeb8155a43980c66e6baf68aaf38b8b5eac5",
+                "reference": "e237aeb8155a43980c66e6baf68aaf38b8b5eac5",
                 "shasum": ""
             },
             "require": {
@@ -6462,7 +6463,7 @@
                 "issues": "https://github.com/php-etl/fast-map/issues",
                 "source": "https://github.com/php-etl/fast-map/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:55:34+00:00"
+            "time": "2023-03-22T13:39:26+00:00"
         },
         {
             "name": "php-etl/fast-map-config",
@@ -6470,12 +6471,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-config.git",
-                "reference": "f9f52861a2a4ad9e9db412002a1e0675bcb29799"
+                "reference": "ecdcd52252a1c3a559ed376fc6d7c4ed96ea5436"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/f9f52861a2a4ad9e9db412002a1e0675bcb29799",
-                "reference": "f9f52861a2a4ad9e9db412002a1e0675bcb29799",
+                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/ecdcd52252a1c3a559ed376fc6d7c4ed96ea5436",
+                "reference": "ecdcd52252a1c3a559ed376fc6d7c4ed96ea5436",
                 "shasum": ""
             },
             "require": {
@@ -6483,8 +6484,8 @@
                 "php-etl/fast-map": "^0.4@dev",
                 "php-etl/mapping-contracts": "^0.3@dev",
                 "php-etl/metadata": "^0.3@dev",
-                "symfony/expression-language": "^5.2",
-                "symfony/property-access": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0",
+                "symfony/property-access": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -6526,7 +6527,7 @@
                 "issues": "https://github.com/php-etl/fast-map-config/issues",
                 "source": "https://github.com/php-etl/fast-map-config/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:50:55+00:00"
+            "time": "2023-03-23T08:53:23+00:00"
         },
         {
             "name": "php-etl/fast-map-plugin",
@@ -6534,12 +6535,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "e0425635811dc298a214c092d136d4a31d89fa35"
+                "reference": "266f332e45b314b5bf5c23a3c2b2ec6bbf84e2cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/e0425635811dc298a214c092d136d4a31d89fa35",
-                "reference": "e0425635811dc298a214c092d136d4a31d89fa35",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/266f332e45b314b5bf5c23a3c2b2ec6bbf84e2cd",
+                "reference": "266f332e45b314b5bf5c23a3c2b2ec6bbf84e2cd",
                 "shasum": ""
             },
             "require": {
@@ -6550,7 +6551,7 @@
                 "php-etl/fast-map-config": "^0.5@dev",
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
-                "symfony/config": "^5.2"
+                "symfony/config": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop",
@@ -6598,7 +6599,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:50:51+00:00"
+            "time": "2023-03-23T08:47:52+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -6606,19 +6607,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/mapping-contracts.git",
-                "reference": "3036809ea422ae0007014a6345cf37506176223f"
+                "reference": "c582de2cb092431d4665ea15588f965b173bcb57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/mapping-contracts/zipball/3036809ea422ae0007014a6345cf37506176223f",
-                "reference": "3036809ea422ae0007014a6345cf37506176223f",
+                "url": "https://api.github.com/repos/php-etl/mapping-contracts/zipball/c582de2cb092431d4665ea15588f965b173bcb57",
+                "reference": "c582de2cb092431d4665ea15588f965b173bcb57",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
                 "php-etl/metadata-contracts": "^0.2@dev",
-                "symfony/property-access": "^5.2"
+                "symfony/property-access": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -6656,7 +6657,7 @@
                 "issues": "https://github.com/php-etl/mapping-contracts/issues",
                 "source": "https://github.com/php-etl/mapping-contracts/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-20T09:57:29+00:00"
+            "time": "2023-03-23T08:42:11+00:00"
         },
         {
             "name": "php-etl/metadata",
@@ -6664,12 +6665,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/metadata.git",
-                "reference": "4c5dec1ecce49993ded17987360293515ec582e1"
+                "reference": "6e1bcc4c1d987558b82cacbf10559c9345fac666"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/metadata/zipball/4c5dec1ecce49993ded17987360293515ec582e1",
-                "reference": "4c5dec1ecce49993ded17987360293515ec582e1",
+                "url": "https://api.github.com/repos/php-etl/metadata/zipball/6e1bcc4c1d987558b82cacbf10559c9345fac666",
+                "reference": "6e1bcc4c1d987558b82cacbf10559c9345fac666",
                 "shasum": ""
             },
             "require": {
@@ -6720,7 +6721,7 @@
                 "issues": "https://github.com/php-etl/metadata/issues",
                 "source": "https://github.com/php-etl/metadata/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:55:27+00:00"
+            "time": "2023-03-22T16:07:54+00:00"
         },
         {
             "name": "php-etl/metadata-contracts",
@@ -6840,12 +6841,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "313d6a2219db259252de678cdc35f99f29217423"
+                "reference": "987d92f074638d403e2bb696bf2e5b6226b9c5c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/313d6a2219db259252de678cdc35f99f29217423",
-                "reference": "313d6a2219db259252de678cdc35f99f29217423",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/987d92f074638d403e2bb696bf2e5b6226b9c5c8",
+                "reference": "987d92f074638d403e2bb696bf2e5b6226b9c5c8",
                 "shasum": ""
             },
             "require": {
@@ -6855,7 +6856,7 @@
                 "php-etl/configurator-contracts": "^0.6@dev",
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
-                "symfony/config": "^5.2"
+                "symfony/config": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "adlawson/vfs": "dev-develop",
@@ -6901,7 +6902,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T14:50:37+00:00"
+            "time": "2023-03-23T08:45:34+00:00"
         },
         {
             "name": "php-etl/sql-plugin",
@@ -6909,12 +6910,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "f784a4df5299ff79d2dc3f0be8f7c1c35de25d18"
+                "reference": "444adf9b1d2282ed4017d47512076ce7804e30db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/f784a4df5299ff79d2dc3f0be8f7c1c35de25d18",
-                "reference": "f784a4df5299ff79d2dc3f0be8f7c1c35de25d18",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/444adf9b1d2282ed4017d47512076ce7804e30db",
+                "reference": "444adf9b1d2282ed4017d47512076ce7804e30db",
                 "shasum": ""
             },
             "require": {
@@ -6924,8 +6925,8 @@
                 "php-etl/fast-map-plugin": "^0.8@dev",
                 "php-etl/packaging": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
-                "symfony/config": "^5.2",
-                "symfony/expression-language": "^5.2"
+                "symfony/config": "^5.2 || ^6.0",
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "adlawson/vfs": "^0.12.1",
@@ -6970,7 +6971,7 @@
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
                 "source": "https://github.com/php-etl/sql-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:49:26+00:00"
+            "time": "2023-03-23T08:44:13+00:00"
         },
         {
             "name": "php-etl/string-expression-language",
@@ -6978,17 +6979,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/string-expression-language.git",
-                "reference": "67cccd0026c00465f6f2549c55bb6ea1079b3a0f"
+                "reference": "c8550eea13732ddb45e3217ed34e7ec53d815cae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/67cccd0026c00465f6f2549c55bb6ea1079b3a0f",
-                "reference": "67cccd0026c00465f6f2549c55bb6ea1079b3a0f",
+                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/c8550eea13732ddb45e3217ed34e7ec53d815cae",
+                "reference": "c8550eea13732ddb45e3217ed34e7ec53d815cae",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "symfony/expression-language": "^5.2"
+                "symfony/expression-language": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -7023,7 +7024,7 @@
                 "issues": "https://github.com/php-etl/string-expression-language/issues",
                 "source": "https://github.com/php-etl/string-expression-language/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-20T15:15:45+00:00"
+            "time": "2023-03-23T08:52:10+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -7031,12 +7032,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "82c16e3b81891af2972e89380c729245cb542a38"
+                "reference": "4ae44269cbe93a00a17ef560b1b86baf154fe410"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/82c16e3b81891af2972e89380c729245cb542a38",
-                "reference": "82c16e3b81891af2972e89380c729245cb542a38",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/4ae44269cbe93a00a17ef560b1b86baf154fe410",
+                "reference": "4ae44269cbe93a00a17ef560b1b86baf154fe410",
                 "shasum": ""
             },
             "require": {
@@ -7047,7 +7048,7 @@
                 "php-etl/fast-map-plugin": "^0.8@dev",
                 "php-etl/packaging-contracts": "^0.2@dev",
                 "php-etl/satellite-toolbox": "^0.4@dev",
-                "symfony/config": "^5.2"
+                "symfony/config": "^5.2 || ^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -7064,7 +7065,7 @@
                 "phpunit/phpunit": "^9.5 || ^10.0",
                 "rector/rector": "^0.15",
                 "symfony/http-client": "^6.2",
-                "symfony/yaml": "^5.2"
+                "symfony/yaml": "^5.2 || ^6.0"
             },
             "type": "gyroscops-plugin",
             "extra": {
@@ -7097,7 +7098,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/feature/qualityflow-improvments"
             },
-            "time": "2023-03-21T13:49:10+00:00"
+            "time": "2023-03-23T08:43:34+00:00"
         },
         {
             "name": "php-http/mock-client",
@@ -8117,16 +8118,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.15.21",
+            "version": "0.15.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "1cee8cc5d6d836e1bf9a3006d7b062adde3a6022"
+                "reference": "f4984ebd62b3613002869b0ddd6868261d62819e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/1cee8cc5d6d836e1bf9a3006d7b062adde3a6022",
-                "reference": "1cee8cc5d6d836e1bf9a3006d7b062adde3a6022",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f4984ebd62b3613002869b0ddd6868261d62819e",
+                "reference": "f4984ebd62b3613002869b0ddd6868261d62819e",
                 "shasum": ""
             },
             "require": {
@@ -8166,7 +8167,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.15.21"
+                "source": "https://github.com/rectorphp/rector/tree/0.15.23"
             },
             "funding": [
                 {
@@ -8174,7 +8175,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-06T11:44:29+00:00"
+            "time": "2023-03-22T15:22:45+00:00"
         },
         {
             "name": "sanmai/later",
