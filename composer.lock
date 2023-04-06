@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ea4ecd6384a18f402af9e88c0757650",
+    "content-hash": "a1e84f62503d20d3818bbf7a6ee74517",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -731,27 +731,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "96ea3a64dc21c5ee78a815ef0b107493d87e077d"
+                "reference": "a8011fab7af398848ebb4068698e53eb2b7a21c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/96ea3a64dc21c5ee78a815ef0b107493d87e077d",
-                "reference": "96ea3a64dc21c5ee78a815ef0b107493d87e077d",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/a8011fab7af398848ebb4068698e53eb2b7a21c0",
+                "reference": "a8011fab7af398848ebb4068698e53eb2b7a21c0",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/packaging-contracts": "^0.3",
+                "php-etl/packaging-contracts": "0.3.0",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.0",
                 "symfony/expression-language": "^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
-                "infection/infection": "^0.26.18",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.0",
                 "rector/rector": "^0.15"
             },
             "type": "library",
@@ -784,7 +782,7 @@
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
                 "source": "https://github.com/php-etl/configurator-contracts/tree/v0.7.0"
             },
-            "time": "2023-04-03T13:59:28+00:00"
+            "time": "2023-04-06T10:24:39+00:00"
         },
         {
             "name": "php-etl/console-state",
@@ -792,17 +790,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/console-state.git",
-                "reference": "e59c1a9a67425093c3527a7470bca3e1940a7ccb"
+                "reference": "728df463440861d787e4f159eb45215b859e731e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/console-state/zipball/e59c1a9a67425093c3527a7470bca3e1940a7ccb",
-                "reference": "e59c1a9a67425093c3527a7470bca3e1940a7ccb",
+                "url": "https://api.github.com/repos/php-etl/console-state/zipball/728df463440861d787e4f159eb45215b859e731e",
+                "reference": "728df463440861d787e4f159eb45215b859e731e",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/pipeline-contracts": "^0.4.0",
+                "php-etl/pipeline-contracts": "0.4.0",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -842,7 +840,7 @@
                 "issues": "https://github.com/php-etl/console-state/issues",
                 "source": "https://github.com/php-etl/console-state/tree/v0.2.0"
             },
-            "time": "2023-04-05T07:43:22+00:00"
+            "time": "2023-04-06T12:58:19+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -905,18 +903,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/packaging.git",
-                "reference": "3e142e0958a0258eb711cb78b91d532e5492185b"
+                "reference": "494f356cca9169e83b4f98c0bb38f2a93f217348"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/packaging/zipball/3e142e0958a0258eb711cb78b91d532e5492185b",
-                "reference": "3e142e0958a0258eb711cb78b91d532e5492185b",
+                "url": "https://api.github.com/repos/php-etl/packaging/zipball/494f356cca9169e83b4f98c0bb38f2a93f217348",
+                "reference": "494f356cca9169e83b4f98c0bb38f2a93f217348",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/packaging-contracts": "^0.3.0",
+                "php-etl/packaging-contracts": "0.3.0",
                 "phpunit/phpunit": "^10.0"
             },
             "require-dev": {
@@ -955,7 +953,7 @@
                 "issues": "https://github.com/php-etl/packaging/issues",
                 "source": "https://github.com/php-etl/packaging/tree/v0.3.0"
             },
-            "time": "2023-04-04T09:47:57+00:00"
+            "time": "2023-04-06T10:28:06+00:00"
         },
         {
             "name": "php-etl/packaging-contracts",
@@ -1018,18 +1016,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-console-runtime.git",
-                "reference": "29cbb72bee290e081801fff9f93add11cf56e1dc"
+                "reference": "327bb8af909393df58d7233701c4ce50bc09e9d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/29cbb72bee290e081801fff9f93add11cf56e1dc",
-                "reference": "29cbb72bee290e081801fff9f93add11cf56e1dc",
+                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/327bb8af909393df58d7233701c4ce50bc09e9d5",
+                "reference": "327bb8af909393df58d7233701c4ce50bc09e9d5",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/console-state": "^0.2",
-                "php-etl/pipeline-contracts": "^0.4",
+                "php-etl/console-state": "*",
+                "php-etl/pipeline-contracts": "0.4.0",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -1067,7 +1065,7 @@
                 "issues": "https://github.com/php-etl/pipeline-console-runtime/issues",
                 "source": "https://github.com/php-etl/pipeline-console-runtime/tree/v0.2.0"
             },
-            "time": "2023-04-05T09:40:30+00:00"
+            "time": "2023-04-06T13:01:55+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",
@@ -1075,17 +1073,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "5fe30e55ac4af2ea23a15adba2ed349eb55db124"
+                "reference": "47e1e32aedb425c4624c1f6d9acf5ae839287fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/5fe30e55ac4af2ea23a15adba2ed349eb55db124",
-                "reference": "5fe30e55ac4af2ea23a15adba2ed349eb55db124",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/47e1e32aedb425c4624c1f6d9acf5ae839287fdf",
+                "reference": "47e1e32aedb425c4624c1f6d9acf5ae839287fdf",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/bucket-contracts": "^0.2"
+                "php-etl/bucket-contracts": "0.2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -1122,7 +1120,7 @@
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
                 "source": "https://github.com/php-etl/pipeline-contracts/tree/v0.4.0"
             },
-            "time": "2023-04-03T13:09:59+00:00"
+            "time": "2023-04-06T10:08:37+00:00"
         },
         {
             "name": "php-etl/satellite-toolbox",
@@ -1130,25 +1128,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "41daaef04b99848f9ae2625698cc1665a1045f40"
+                "reference": "491f1011a88a949c470ea95e5a24e22458c1867f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/41daaef04b99848f9ae2625698cc1665a1045f40",
-                "reference": "41daaef04b99848f9ae2625698cc1665a1045f40",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/491f1011a88a949c470ea95e5a24e22458c1867f",
+                "reference": "491f1011a88a949c470ea95e5a24e22458c1867f",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "^0.7.0",
+                "php-etl/configurator-contracts": "0.7.0",
                 "symfony/expression-language": "^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "infection/infection": "^0.26.18",
                 "mikey179/vfsstream": "^1.6",
-                "php-etl/phpunit-extension": "^0.5.0",
+                "php-etl/phpunit-extension": "*",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^10.0",
@@ -1188,7 +1186,7 @@
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/v0.5.0"
             },
-            "time": "2023-04-04T11:53:09+00:00"
+            "time": "2023-04-06T12:23:06+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -5576,6 +5574,97 @@
             "time": "2022-05-02T15:47:09+00:00"
         },
         {
+            "name": "doctrine/inflector",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/inflector.git",
+                "reference": "d9d313a36c872fd6ee06d9a6cbcf713eaa40f024"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/d9d313a36c872fd6ee06d9a6cbcf713eaa40f024",
+                "reference": "d9d313a36c872fd6ee06d9a6cbcf713eaa40f024",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^10",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-strict-rules": "^1.3",
+                "phpunit/phpunit": "^8.5 || ^9.5",
+                "vimeo/psalm": "^4.25"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.",
+            "homepage": "https://www.doctrine-project.org/projects/inflector.html",
+            "keywords": [
+                "inflection",
+                "inflector",
+                "lowercase",
+                "manipulation",
+                "php",
+                "plural",
+                "singular",
+                "strings",
+                "uppercase",
+                "words"
+            ],
+            "support": {
+                "issues": "https://github.com/doctrine/inflector/issues",
+                "source": "https://github.com/doctrine/inflector/tree/2.0.6"
+            },
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Finflector",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-10-20T09:10:12+00:00"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.5.0",
             "source": {
@@ -6240,6 +6329,154 @@
             "time": "2022-04-13T08:02:27+00:00"
         },
         {
+            "name": "laminas/laminas-diactoros",
+            "version": "2.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-diactoros.git",
+                "reference": "6028af6c3b5ced4d063a680d2483cce67578b902"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/6028af6c3b5ced4d063a680d2483cce67578b902",
+                "reference": "6028af6c3b5ced4d063a680d2483cce67578b902",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "conflict": {
+                "zendframework/zend-diactoros": "*"
+            },
+            "provide": {
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-gd": "*",
+                "ext-libxml": "*",
+                "http-interop/http-factory-tests": "^0.9.0",
+                "laminas/laminas-coding-standard": "^2.4.0",
+                "php-http/psr7-integration-tests": "^1.2",
+                "phpunit/phpunit": "^9.5.27",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "vimeo/psalm": "^5.4"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "config-provider": "Laminas\\Diactoros\\ConfigProvider",
+                    "module": "Laminas\\Diactoros"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php",
+                    "src/functions/create_uploaded_file.legacy.php",
+                    "src/functions/marshal_headers_from_sapi.legacy.php",
+                    "src/functions/marshal_method_from_sapi.legacy.php",
+                    "src/functions/marshal_protocol_version_from_sapi.legacy.php",
+                    "src/functions/marshal_uri_from_sapi.legacy.php",
+                    "src/functions/normalize_server.legacy.php",
+                    "src/functions/normalize_uploaded_files.legacy.php",
+                    "src/functions/parse_cookie_header.legacy.php"
+                ],
+                "psr-4": {
+                    "Laminas\\Diactoros\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "PSR HTTP Message implementations",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "http",
+                "laminas",
+                "psr",
+                "psr-17",
+                "psr-7"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-diactoros/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-diactoros/issues",
+                "rss": "https://github.com/laminas/laminas-diactoros/releases.atom",
+                "source": "https://github.com/laminas/laminas-diactoros"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2022-12-20T12:22:40+00:00"
+        },
+        {
+            "name": "mikey179/vfsstream",
+            "version": "v1.6.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bovigo/vfsStream.git",
+                "reference": "17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bovigo/vfsStream/zipball/17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f",
+                "reference": "17d16a85e6c26ce1f3e2fa9ceeacdc2855db1e9f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "org\\bovigo\\vfs\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Frank Kleine",
+                    "homepage": "http://frankkleine.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Virtual file system to mock the real file system in unit tests.",
+            "homepage": "http://vfs.bovigo.org/",
+            "support": {
+                "issues": "https://github.com/bovigo/vfsStream/issues",
+                "source": "https://github.com/bovigo/vfsStream/tree/master",
+                "wiki": "https://github.com/bovigo/vfsStream/wiki"
+            },
+            "time": "2022-02-23T02:02:42+00:00"
+        },
+        {
             "name": "ondram/ci-detector",
             "version": "4.1.0",
             "source": {
@@ -6316,6 +6553,1066 @@
                 "source": "https://github.com/OndraM/ci-detector/tree/4.1.0"
             },
             "time": "2021-04-14T09:16:52+00:00"
+        },
+        {
+            "name": "php-etl/akeneo-expression-language",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/akeneo-expression-language.git",
+                "reference": "e0a72c37af7c88b2108a86b7fe696f09afd906dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/akeneo-expression-language/zipball/e0a72c37af7c88b2108a86b7fe696f09afd906dc",
+                "reference": "e0a72c37af7c88b2108a86b7fe696f09afd906dc",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "symfony/expression-language": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\ExpressionLanguage\\Akeneo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements functions for manupulating Akeneo API data in ExpressionLanguage",
+            "support": {
+                "issues": "https://github.com/php-etl/akeneo-expression-language/issues",
+                "source": "https://github.com/php-etl/akeneo-expression-language/tree/0.3.0"
+            },
+            "time": "2023-04-04T07:12:38+00:00"
+        },
+        {
+            "name": "php-etl/akeneo-plugin",
+            "version": "v0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/akeneo-plugin.git",
+                "reference": "a908427df74fd7f54623d45270dfe0c45910244a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/a908427df74fd7f54623d45270dfe0c45910244a",
+                "reference": "a908427df74fd7f54623d45270dfe0c45910244a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "^4.13.2",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/fast-map-plugin": "*",
+                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0",
+                "symfony/expression-language": "^6.0"
+            },
+            "require-dev": {
+                "akeneo/api-php-client-ee": "^4.0",
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "guzzlehttp/psr7": "^2.0",
+                "infection/infection": "^0.26.18",
+                "johnkary/phpunit-speedtrap": "*",
+                "laminas/laminas-diactoros": "^2.6",
+                "mikey179/vfsstream": "^1.6",
+                "mybuilder/phpunit-accelerator": "*",
+                "php-etl/bucket": "*",
+                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/pipeline-contracts": "0.4.0",
+                "php-http/curl-client": "^2.0",
+                "php-http/message": "^1.11",
+                "php-http/mock-client": "^1.4@dev",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15",
+                "symfony/yaml": "^6.0"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.6.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Akeneo\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\Akeneo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Adapters for the Akeneo API client",
+            "support": {
+                "issues": "https://github.com/php-etl/akeneo-plugin/issues",
+                "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.6.0"
+            },
+            "time": "2023-04-06T13:03:28+00:00"
+        },
+        {
+            "name": "php-etl/array-expression-language",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/array-expression-language.git",
+                "reference": "6684d2e0fcf95aaba3addfdd989b66260545fd59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/6684d2e0fcf95aaba3addfdd989b66260545fd59",
+                "reference": "6684d2e0fcf95aaba3addfdd989b66260545fd59",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/expression-language": "^6.0",
+                "symfony/property-access": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\ArrayExpressionLanguage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements functions for manipulating array data in ExpressionLanguage",
+            "support": {
+                "issues": "https://github.com/php-etl/array-expression-language/issues",
+                "source": "https://github.com/php-etl/array-expression-language/tree/v0.2.0"
+            },
+            "time": "2023-04-03T15:31:20+00:00"
+        },
+        {
+            "name": "php-etl/csv-plugin",
+            "version": "v0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/csv-plugin.git",
+                "reference": "856473c7eca8c9a0fe5905c24973b967dbe9bb62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/856473c7eca8c9a0fe5905c24973b967dbe9bb62",
+                "reference": "856473c7eca8c9a0fe5905c24973b967dbe9bb62",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0",
+                "symfony/expression-language": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "mikey179/vfsstream": "^1.6",
+                "php-etl/csv-flow": "*",
+                "php-etl/phpunit-extension": "*",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.6.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\CSV\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\CSV\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Plugins for CSV Extractor and Loader",
+            "support": {
+                "issues": "https://github.com/php-etl/csv-plugin/issues",
+                "source": "https://github.com/php-etl/csv-plugin/tree/v0.6.0"
+            },
+            "time": "2023-04-06T12:31:04+00:00"
+        },
+        {
+            "name": "php-etl/fast-map",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/fast-map.git",
+                "reference": "2b3db46d02202ff983fff51e522d67da9cf441e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/2b3db46d02202ff983fff51e522d67da9cf441e7",
+                "reference": "2b3db46d02202ff983fff51e522d67da9cf441e7",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/inflector": "^2.0",
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/mapping-contracts": "0.4.0",
+                "php-etl/metadata": "*",
+                "php-etl/metadata-contracts": "0.2.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/cache": "^6.0",
+                "symfony/expression-language": "^6.0",
+                "symfony/property-access": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "mikey179/vfsstream": "^1.6",
+                "php-etl/phpspec-extension": "0.4.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\FastMap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements a compiled data mapping library",
+            "support": {
+                "issues": "https://github.com/php-etl/fast-map/issues",
+                "source": "https://github.com/php-etl/fast-map/tree/v0.5.0"
+            },
+            "time": "2023-04-06T10:23:27+00:00"
+        },
+        {
+            "name": "php-etl/fast-map-config",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/fast-map-config.git",
+                "reference": "af728ca3dbc18003c0be07f8af7f0c2084260105"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/af728ca3dbc18003c0be07f8af7f0c2084260105",
+                "reference": "af728ca3dbc18003c0be07f8af7f0c2084260105",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "php-etl/fast-map": "*",
+                "php-etl/mapping-contracts": "0.4.0",
+                "php-etl/metadata": "*",
+                "symfony/expression-language": "^6.0",
+                "symfony/property-access": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\FastMapConfig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements the Extract-Transform-Load pattern asynchronously in PHP with the help of iterators and generators",
+            "support": {
+                "issues": "https://github.com/php-etl/fast-map-config/issues",
+                "source": "https://github.com/php-etl/fast-map-config/tree/v0.5.0"
+            },
+            "time": "2023-04-06T12:40:56+00:00"
+        },
+        {
+            "name": "php-etl/fast-map-plugin",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/fast-map-plugin.git",
+                "reference": "9a12e356a34859e433ec869988ef27e08a45ddc7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/9a12e356a34859e433ec869988ef27e08a45ddc7",
+                "reference": "9a12e356a34859e433ec869988ef27e08a45ddc7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/fast-map-config": "*",
+                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "php-etl/bucket": "*",
+                "php-etl/phpunit-extension": "*",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.8.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\FastMap\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\FastMap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Adapters for the Fast Map mapping library",
+            "support": {
+                "issues": "https://github.com/php-etl/fast-map-plugin/issues",
+                "source": "https://github.com/php-etl/fast-map-plugin/tree/v0.8.0"
+            },
+            "time": "2023-04-06T12:48:09+00:00"
+        },
+        {
+            "name": "php-etl/mapping-contracts",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/mapping-contracts.git",
+                "reference": "965d756220a23be391609891da887db7b13c45aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/mapping-contracts/zipball/965d756220a23be391609891da887db7b13c45aa",
+                "reference": "965d756220a23be391609891da887db7b13c45aa",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/metadata-contracts": "0.2.0",
+                "symfony/property-access": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.10",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Contract\\Mapping\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Contracts for building compiled data mappers",
+            "support": {
+                "issues": "https://github.com/php-etl/mapping-contracts/issues",
+                "source": "https://github.com/php-etl/mapping-contracts/tree/v0.4.0"
+            },
+            "time": "2023-04-06T11:59:27+00:00"
+        },
+        {
+            "name": "php-etl/metadata",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/metadata.git",
+                "reference": "161dc4eabd8d8239ec145628834e461726351f82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/metadata/zipball/161dc4eabd8d8239ec145628834e461726351f82",
+                "reference": "161dc4eabd8d8239ec145628834e461726351f82",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/inflector": "^2.0",
+                "nikic/php-parser": "^4.9@dev",
+                "php": "^8.2",
+                "php-etl/metadata-contracts": "0.2.0",
+                "phpactor/docblock": "^0.3.0@dev"
+            },
+            "require-dev": {
+                "friends-of-phpspec/phpspec-code-coverage": "^6.0",
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "php-etl/phpspec-extension": "*",
+                "phpspec/phpspec": "^7.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Metadata\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Describe data structures, to auto-configure and handle data transformation and data manipulation.",
+            "support": {
+                "issues": "https://github.com/php-etl/metadata/issues",
+                "source": "https://github.com/php-etl/metadata/tree/v0.4.0"
+            },
+            "time": "2023-04-06T12:09:29+00:00"
+        },
+        {
+            "name": "php-etl/metadata-contracts",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/metadata-contracts.git",
+                "reference": "aa0196e8ea6d0372c4abe58f2d950bd65f834a27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/metadata-contracts/zipball/aa0196e8ea6d0372c4abe58f2d950bd65f834a27",
+                "reference": "aa0196e8ea6d0372c4abe58f2d950bd65f834a27",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Contract\\Metadata\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "https://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Interfaces for the Metadata package whose role is to describe data structures.",
+            "support": {
+                "issues": "https://github.com/php-etl/metadata-contracts/issues",
+                "source": "https://github.com/php-etl/metadata-contracts/tree/v0.2.0"
+            },
+            "time": "2023-03-02T21:55:04+00:00"
+        },
+        {
+            "name": "php-etl/phpunit-extension",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/phpunit-extension.git",
+                "reference": "9d0a83164e9eb2893dc0366634d1515802038aa9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/9d0a83164e9eb2893dc0366634d1515802038aa9",
+                "reference": "9d0a83164e9eb2893dc0366634d1515802038aa9",
+                "shasum": ""
+            },
+            "require": {
+                "fakerphp/faker": "^1.19",
+                "laminas/laminas-diactoros": "^2.6",
+                "mikey179/vfsstream": "^1.6",
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/pipeline-contracts": "0.4.0",
+                "php-http/message": "^1.11",
+                "php-http/mock-client": "^1.4@dev",
+                "phpunit/phpunit": "^10.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "phpstan/phpstan": "^1.10",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\PHPUnitExtension\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Extension for testing FastMap and ETL components with PHPUnit testing framework",
+            "support": {
+                "issues": "https://github.com/php-etl/phpunit-extension/issues",
+                "source": "https://github.com/php-etl/phpunit-extension/tree/v0.5.0"
+            },
+            "time": "2023-04-06T11:59:57+00:00"
+        },
+        {
+            "name": "php-etl/spreadsheet-plugin",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/spreadsheet-plugin.git",
+                "reference": "fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a",
+                "reference": "fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/phpunit-extension": "*",
+                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/spreadsheet-flow": "*",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15",
+                "symfony/yaml": "^6.0"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.5.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Spreadsheet\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\Spreadsheet\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Plugin for XLS Extractor and Loader",
+            "support": {
+                "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
+                "source": "https://github.com/php-etl/spreadsheet-plugin/tree/v0.5.0"
+            },
+            "time": "2023-04-06T13:21:37+00:00"
+        },
+        {
+            "name": "php-etl/sql-plugin",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/sql-plugin.git",
+                "reference": "0f63e051fb4345dbfae3f8e363a4254c75e003d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/0f63e051fb4345dbfae3f8e363a4254c75e003d6",
+                "reference": "0f63e051fb4345dbfae3f8e363a4254c75e003d6",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/fast-map-plugin": "*",
+                "php-etl/packaging": "*",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0",
+                "symfony/expression-language": "^6.0"
+            },
+            "require-dev": {
+                "ext-pdo": "*",
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "mikey179/vfsstream": "^1.6",
+                "php-etl/phpunit-extension": "*",
+                "php-etl/sql-flow": "*",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.4.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\SQL\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\SQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This plugin allows you to perform SQL queries in the ETL pipelines",
+            "support": {
+                "issues": "https://github.com/php-etl/sql-plugin/issues",
+                "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.0"
+            },
+            "time": "2023-04-06T13:44:14+00:00"
+        },
+        {
+            "name": "php-etl/string-expression-language",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/string-expression-language.git",
+                "reference": "195d0012545776f5bd9f75037373faf21b0046e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/195d0012545776f5bd9f75037373faf21b0046e3",
+                "reference": "195d0012545776f5bd9f75037373faf21b0046e3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "symfony/expression-language": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\StringExpressionLanguage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements functions for manipulating string data in ExpressionLanguage",
+            "support": {
+                "issues": "https://github.com/php-etl/string-expression-language/issues",
+                "source": "https://github.com/php-etl/string-expression-language/tree/v0.3.0"
+            },
+            "time": "2023-04-03T15:39:40+00:00"
+        },
+        {
+            "name": "php-etl/sylius-plugin",
+            "version": "v0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/sylius-plugin.git",
+                "reference": "96b9a91f878047d814e91555ce033170aaf4cb71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/96b9a91f878047d814e91555ce033170aaf4cb71",
+                "reference": "96b9a91f878047d814e91555ce033170aaf4cb71",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nikic/php-parser": "^4.10",
+                "php": "^8.2",
+                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/fast-map-plugin": "*",
+                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/satellite-toolbox": "*",
+                "symfony/config": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "laminas/laminas-diactoros": "^2.6",
+                "php-etl/bucket": "*",
+                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/phpunit-extension": "*",
+                "php-etl/sylius-api-php-client": "^2.1@dev",
+                "php-http/mock-client": "^1.4@dev",
+                "phpunit/php-invoker": "*",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15",
+                "symfony/http-client": "^6.2",
+                "symfony/yaml": "^6.0"
+            },
+            "type": "gyroscops-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.7.x-dev"
+                },
+                "gyroscops": {
+                    "plugins": [
+                        "Kiboko\\Plugin\\Sylius\\Service"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Plugin\\Sylius\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "Adapters for the Sylius API client",
+            "support": {
+                "issues": "https://github.com/php-etl/sylius-plugin/issues",
+                "source": "https://github.com/php-etl/sylius-plugin/tree/v0.7.0"
+            },
+            "time": "2023-04-06T12:54:22+00:00"
+        },
+        {
+            "name": "php-http/mock-client",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/mock-client.git",
+                "reference": "a797c2a9122cccafcce14773b8a24d2808a9ab44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/mock-client/zipball/a797c2a9122cccafcce14773b8a24d2808a9ab44",
+                "reference": "a797c2a9122cccafcce14773b8a24d2808a9ab44",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "php-http/client-common": "^2.0",
+                "php-http/discovery": "^1.0",
+                "php-http/httplug": "^2.0",
+                "php-http/message-factory": "^1.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "symfony/polyfill-php80": "^1.17"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "1.0",
+                "php-http/client-implementation": "1.0",
+                "psr/http-client-implementation": "1.0"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "^5.1 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Mock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl"
+                }
+            ],
+            "description": "Mock HTTP client",
+            "homepage": "http://httplug.io",
+            "keywords": [
+                "client",
+                "http",
+                "mock",
+                "psr7"
+            ],
+            "support": {
+                "issues": "https://github.com/php-http/mock-client/issues",
+                "source": "https://github.com/php-http/mock-client/tree/1.5.0"
+            },
+            "time": "2021-08-25T07:01:14+00:00"
+        },
+        {
+            "name": "phpactor/docblock",
+            "version": "0.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpactor/docblock.git",
+                "reference": "a5567feab7b36938d6a1018a60efc5a7c4fd696c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpactor/docblock/zipball/a5567feab7b36938d6a1018a60efc5a7c4fd696c",
+                "reference": "a5567feab7b36938d6a1018a60efc5a7c4fd696c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.0",
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "~0.12.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Phpactor\\Docblock\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Leech",
+                    "email": "daniel@dantleech.com"
+                }
+            ],
+            "description": "Simple Docblock Parser",
+            "support": {
+                "issues": "https://github.com/phpactor/docblock/issues",
+                "source": "https://github.com/phpactor/docblock/tree/0.3.6"
+            },
+            "abandoned": true,
+            "time": "2022-03-08T11:46:42+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6687,16 +7984,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.17.1",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "d3753fcb3abc6f78f5de6f72153d4b9c99c72dee"
+                "reference": "882eabc9b6a12e25c27091a261397f9c8792e722"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/d3753fcb3abc6f78f5de6f72153d4b9c99c72dee",
-                "reference": "d3753fcb3abc6f78f5de6f72153d4b9c99c72dee",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/882eabc9b6a12e25c27091a261397f9c8792e722",
+                "reference": "882eabc9b6a12e25c27091a261397f9c8792e722",
                 "shasum": ""
             },
             "require": {
@@ -6726,9 +8023,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.17.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.18.0"
             },
-            "time": "2023-04-04T11:11:22+00:00"
+            "time": "2023-04-06T07:26:43+00:00"
         },
         {
             "name": "phpstan/phpstan",
@@ -7251,6 +8548,175 @@
                 }
             ],
             "time": "2023-02-16T09:57:23+00:00"
+        },
+        {
+            "name": "symfony/property-access",
+            "version": "v6.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-access.git",
+                "reference": "2ad1e0a07b8cab3e09905659d14f3b248e916374"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/2ad1e0a07b8cab3e09905659d14f3b248e916374",
+                "reference": "2ad1e0a07b8cab3e09905659d14f3b248e916374",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/deprecation-contracts": "^2.1|^3",
+                "symfony/property-info": "^5.4|^6.0"
+            },
+            "require-dev": {
+                "symfony/cache": "^5.4|^6.0"
+            },
+            "suggest": {
+                "psr/cache-implementation": "To cache access methods."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyAccess\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides functions to read and write from/to an object or array using a simple string notation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "access",
+                "array",
+                "extraction",
+                "index",
+                "injection",
+                "object",
+                "property",
+                "property-path",
+                "reflection"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/property-access/tree/v6.2.8"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-03-14T15:00:05+00:00"
+        },
+        {
+            "name": "symfony/property-info",
+            "version": "v6.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-info.git",
+                "reference": "400a019b7c05030599fd15f02b3d4ce287631732"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/400a019b7c05030599fd15f02b3d4ce287631732",
+                "reference": "400a019b7c05030599fd15f02b3d4ce287631732",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/string": "^5.4|^6.0"
+            },
+            "conflict": {
+                "phpdocumentor/reflection-docblock": "<5.2",
+                "phpdocumentor/type-resolver": "<1.5.1",
+                "symfony/dependency-injection": "<5.4"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.10.4|^2",
+                "phpdocumentor/reflection-docblock": "^5.2",
+                "phpstan/phpdoc-parser": "^1.0",
+                "symfony/cache": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/serializer": "^5.4|^6.0"
+            },
+            "suggest": {
+                "phpdocumentor/reflection-docblock": "To use the PHPDoc",
+                "psr/cache-implementation": "To cache results",
+                "symfony/doctrine-bridge": "To use Doctrine metadata",
+                "symfony/serializer": "To use Serializer metadata"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyInfo\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kévin Dunglas",
+                    "email": "dunglas@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Extracts information about PHP class' properties using metadata of popular sources",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "doctrine",
+                "phpdoc",
+                "property",
+                "symfony",
+                "type",
+                "validator"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/property-info/tree/v6.2.8"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-03-14T15:00:05+00:00"
         },
         {
             "name": "thecodingmachine/safe",
