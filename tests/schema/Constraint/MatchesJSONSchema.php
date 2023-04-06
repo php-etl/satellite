@@ -13,7 +13,7 @@ final class MatchesJSONSchema extends Constraint
     private array $messages = [];
 
     public function __construct(
-        private SchemaStorageInterface $schemaStorage,
+        private readonly SchemaStorageInterface $schemaStorage,
         private \stdClass|array $schema,
     ) {}
 

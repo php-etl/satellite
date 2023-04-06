@@ -12,24 +12,23 @@ use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
-    private string $fromImage;
-    private string $workdir;
+    private string $workdir = '/var/www/html/';
     /** @var iterable<string> */
-    private iterable $composerRequire;
-    private iterable $repositories;
-    private iterable $authenticationTokens;
+    private iterable $composerRequire = [];
+    private iterable $repositories = [];
+    private iterable $authenticationTokens = [];
     /** @var iterable<string> */
-    private iterable $entrypoint;
+    private iterable $entrypoint = [];
     /** @var iterable<string> */
-    private iterable $command;
+    private iterable $command = [];
     /** @var iterable<string> */
-    private iterable $tags;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
+    private iterable $tags = [];
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile = null;
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null;
     /** @var iterable<array<string, string>> */
-    private iterable $paths;
+    private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
-    private iterable $files;
+    private readonly iterable $files;
     /** @var array<string, array<string, string>> */
     private array $composerAutoload = [
         'psr4' => [
@@ -37,19 +36,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         ],
     ];
 
-    public function __construct(string $fromImage)
+    public function __construct(private readonly string $fromImage)
     {
-        $this->fromImage = $fromImage;
-        $this->workdir = '/var/www/html/';
-        $this->composerRequire = [];
-        $this->repositories = [];
-        $this->authenticationTokens = [];
-        $this->entrypoint = [];
-        $this->command = [];
-        $this->tags = [];
-        $this->composerJsonFile = null;
-        $this->composerLockFile = null;
-        $this->paths = [];
         $this->files = new \AppendIterator();
     }
 

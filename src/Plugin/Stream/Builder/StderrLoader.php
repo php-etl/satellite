@@ -9,15 +9,12 @@ use PhpParser\Node;
 
 final class StderrLoader implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
     public function __construct()
     {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
     }
 
     public function withLogger(Node\Expr $logger): self

@@ -11,7 +11,7 @@ final class SyslogRepository implements Configurator\RepositoryInterface
 {
     use Logger\RepositoryTrait;
 
-    public function __construct(private Logger\Builder\Monolog\SyslogBuilder $builder)
+    public function __construct(private readonly Logger\Builder\Monolog\SyslogBuilder $builder)
     {
         $this->files = [];
         $this->packages = [];

@@ -13,7 +13,7 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class ElasticSearchConfiguration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('elasticsearch');
 

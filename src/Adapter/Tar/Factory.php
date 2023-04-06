@@ -7,8 +7,7 @@ namespace Kiboko\Component\Satellite\Adapter\Tar;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Adapter(name: 'tar')]
-final class Factory implements Configurator\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'tar')] final readonly class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 

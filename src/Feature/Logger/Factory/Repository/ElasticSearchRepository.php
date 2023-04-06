@@ -11,7 +11,7 @@ final class ElasticSearchRepository implements Configurator\RepositoryInterface
 {
     use Logger\RepositoryTrait;
 
-    public function __construct(private Logger\Builder\Monolog\ElasticSearchBuilder $builder)
+    public function __construct(private readonly Logger\Builder\Monolog\ElasticSearchBuilder $builder)
     {
         $this->files = [];
         $this->packages = [];

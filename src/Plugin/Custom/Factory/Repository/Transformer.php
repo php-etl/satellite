@@ -11,7 +11,7 @@ final class Transformer implements Configurator\StepRepositoryInterface
 {
     use RepositoryTrait;
 
-    public function __construct(private Custom\Builder\Transformer $builder)
+    public function __construct(private readonly Custom\Builder\Transformer $builder)
     {
         $this->files = [];
         $this->packages = [];

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 final class ServiceTest extends TestCase
 {
-    public function configProvider()
+    public static function configProvider()
     {
         yield [
             'expected' => [
@@ -34,9 +34,7 @@ final class ServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('configProvider')]
     public function testWithConfiguration(array $expected, array $actual): void
     {
         $factory = new Logger\Service();
@@ -57,7 +55,7 @@ final class ServiceTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'Kiboko\\Component\\Satellite\\Feature\\Logger\\Repository',
+            \Kiboko\Component\Satellite\Feature\Logger\Repository::class,
             $factory->compile($normalizedConfig)
         );
     }

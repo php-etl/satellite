@@ -16,9 +16,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
 {
-    private Processor $processor;
-    private Satellite\Configuration $configuration;
-    private ExpressionLanguage $interpreter;
+    private readonly Processor $processor;
+    private readonly Satellite\Configuration $configuration;
+    private readonly ExpressionLanguage $interpreter;
     /** @var array<string, FactoryInterface> */
     private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
@@ -108,7 +108,7 @@ final class Service implements Configurator\FactoryInterface
                 foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
                     $this->addAdapter($attribute, $adapter);
                 }
-            } catch (MissingAttributeException $exception) {
+            } catch (MissingAttributeException) {
             }
         }
 
@@ -167,7 +167,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

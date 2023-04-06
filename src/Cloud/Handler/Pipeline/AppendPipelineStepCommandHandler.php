@@ -8,7 +8,7 @@ use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
-final class AppendPipelineStepCommandHandler
+final readonly class AppendPipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client,

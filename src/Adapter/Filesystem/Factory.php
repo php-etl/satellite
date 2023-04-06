@@ -7,8 +7,7 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Adapter(name: 'filesystem')]
-final class Factory implements Configurator\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'filesystem')] final readonly class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 
@@ -53,13 +52,13 @@ final class Factory implements Configurator\Adapter\FactoryInterface
                 $builder->withComposerRequire(...$configuration['composer']['require']);
             }
 
-            if (\array_key_exists('repositories', $configuration['composer']) && \count($configuration['composer']['repositories']) > 0) {
+            if (\array_key_exists('repositories', $configuration['composer']) && (is_countable($configuration['composer']['repositories']) ? \count($configuration['composer']['repositories']) : 0) > 0) {
                 foreach ($configuration['composer']['repositories'] as $repository) {
                     $builder->withRepositories($repository['name'], $repository['type'], $repository['url']);
                 }
             }
 
-            if (\array_key_exists('auth', $configuration['composer']) && \count($configuration['composer']['auth']) > 0) {
+            if (\array_key_exists('auth', $configuration['composer']) && (is_countable($configuration['composer']['auth']) ? \count($configuration['composer']['auth']) : 0) > 0) {
                 foreach ($configuration['composer']['auth'] as $auth) {
                     $builder->withAuthenticationToken($auth['url'], $auth['token']);
                 }

@@ -7,8 +7,7 @@ namespace Kiboko\Component\Satellite\Runtime\Pipeline;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Runtime(name: 'pipeline')]
-final class Factory implements Satellite\Runtime\FactoryInterface
+#[Configurator\Runtime(name: 'pipeline')] final readonly class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
 

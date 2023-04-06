@@ -8,7 +8,7 @@ use Symfony\Component\Config;
 
 final class RedisConfiguration implements Config\Definition\ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
     {
         $builder = new Config\Definition\Builder\TreeBuilder('redis');
 
@@ -23,24 +23,18 @@ final class RedisConfiguration implements Config\Definition\ConfigurationInterfa
             ->isRequired()
             ->arrayPrototype()
             ->validate()
-            ->ifTrue(function ($value) {
-                return \array_key_exists('socket', $value)
-                                    && \array_key_exists('host', $value);
-            })
+            ->ifTrue(fn ($value) => \array_key_exists('socket', $value)
+                                && \array_key_exists('host', $value))
             ->thenInvalid('Options "socket" and "host" are mutually exclusive, you should declare one or another, not both.')
             ->end()
             ->validate()
-            ->ifTrue(function ($value) {
-                return !\array_key_exists('socket', $value)
-                                    && !\array_key_exists('host', $value);
-            })
+            ->ifTrue(fn ($value) => !\array_key_exists('socket', $value)
+                                && !\array_key_exists('host', $value))
             ->thenInvalid('You should either declare the "socket" or the "host" options.')
             ->end()
             ->validate()
-            ->ifTrue(function ($value) {
-                return \array_key_exists('host', $value)
-                                    && !\array_key_exists('port', $value);
-            })
+            ->ifTrue(fn ($value) => \array_key_exists('host', $value)
+                                && !\array_key_exists('port', $value))
             ->thenInvalid('Options "host" and "port" should be both declared.')
             ->end()
             ->children()

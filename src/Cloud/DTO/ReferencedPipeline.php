@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-final class ReferencedPipeline implements PipelineInterface
+final readonly class ReferencedPipeline implements PipelineInterface
 {
     public function __construct(
         private PipelineId $id,

@@ -14,10 +14,10 @@ use Symfony\Component\HttpClient\Psr18Client;
 final class ChangeCommand extends Console\Command\Command
 {
     protected static $defaultName = 'organization:change';
+    protected static $defaultDescription = 'Sends configuration to the Gyroscops API.';
 
     protected function configure(): void
     {
-        $this->setDescription('Sends configuration to the Gyroscops API.');
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');

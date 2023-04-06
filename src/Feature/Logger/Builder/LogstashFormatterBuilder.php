@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Feature\Logger\Builder;
 use PhpParser\Builder;
 use PhpParser\Node;
 
-final class LogstashFormatterBuilder implements Builder
+final readonly class LogstashFormatterBuilder implements Builder
 {
     public function __construct(private string $applicationName)
     {

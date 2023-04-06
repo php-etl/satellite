@@ -7,8 +7,7 @@ namespace Kiboko\Component\Satellite\Runtime\Workflow;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Runtime(name: 'workflow')]
-final class Factory implements Satellite\Runtime\FactoryInterface
+#[Configurator\Runtime(name: 'workflow')] final readonly class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
 

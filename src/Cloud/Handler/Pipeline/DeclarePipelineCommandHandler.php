@@ -10,7 +10,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 use Kiboko\Component\Satellite\Cloud\DTO\PSR4AutoloadConfig;
 use Kiboko\Component\Satellite\Cloud\DTO\Step;
 
-final class DeclarePipelineCommandHandler
+final readonly class DeclarePipelineCommandHandler
 {
     public function __construct(
         private Api\Client $client,

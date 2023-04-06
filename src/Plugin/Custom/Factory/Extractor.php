@@ -21,17 +21,15 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExp
 
 class Extractor implements Configurator\FactoryInterface
 {
-    private Processor $processor;
-    private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
+    private readonly Processor $processor;
+    private readonly ConfigurationInterface $configuration;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null,
-        private array $providers = [],
+        private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage(),
+        private readonly array $providers = [],
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -57,7 +55,7 @@ class Extractor implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Plugin\Stream;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
-final class Repository implements Configurator\StepRepositoryInterface
+final readonly class Repository implements Configurator\StepRepositoryInterface
 {
     public function __construct(
         private Builder\StderrLoader|Builder\StdoutLoader|Builder\JSONStreamLoader|Builder\DebugLoader $builder

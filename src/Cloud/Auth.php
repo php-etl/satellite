@@ -52,7 +52,7 @@ final class Auth
     {
         try {
             $content = json_encode($this->configuration, flags: \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT);
-        } catch (\JsonException $exception) {
+        } catch (\JsonException) {
             throw new \RuntimeException('Could not encode authentication data, aborting.');
         }
 
@@ -186,10 +186,10 @@ final class Auth
         return new Credentials(
             $this->configuration[$url]['login'],
             $this->configuration[$url]['password'],
-            organization: array_key_exists('organization', $this->configuration[$url]) && $this->configuration[$url]['organization'] !== null ?
+            organization: \array_key_exists('organization', $this->configuration[$url]) && null !== $this->configuration[$url]['organization'] ?
                 new OrganizationId($this->configuration[$url]['organization']) :
                 null,
-            workspace: array_key_exists('workspace', $this->configuration[$url]) && $this->configuration[$url]['workspace'] !== null ?
+            workspace: \array_key_exists('workspace', $this->configuration[$url]) && null !== $this->configuration[$url]['workspace'] ?
                 new WorkspaceId($this->configuration[$url]['workspace']) :
                 null,
         );

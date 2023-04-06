@@ -8,13 +8,14 @@ use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
 use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
 
-final class Context
+final readonly class Context
 {
     public function __construct(
-        private readonly Api\Client $client,
-        private readonly Auth $auth,
-        private readonly string $url,
-    ) {}
+        private Api\Client $client,
+        private Auth $auth,
+        private string $url,
+    ) {
+    }
 
     public function changeOrganization(OrganizationId $organization): void
     {
@@ -27,7 +28,7 @@ final class Context
     public function organization(): OrganizationId
     {
         $organization = $this->auth->credentials($this->url)->organization;
-        if ($organization === null) {
+        if (null === $organization) {
             throw new NoOrganizationSelectedException('Could not determine the current organization.');
         }
 
@@ -45,7 +46,7 @@ final class Context
     public function workspace(): WorkspaceId
     {
         $workspace = $this->auth->credentials($this->url)->workspace;
-        if ($workspace === null) {
+        if (null === $workspace) {
             throw new NoWorkspaceSelectedException('Could not determine the current workspace.');
         }
 

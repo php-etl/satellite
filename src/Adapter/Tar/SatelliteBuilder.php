@@ -12,24 +12,20 @@ use Kiboko\Contract\Packaging as PackagingContract;
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
-    private iterable $composerRequire;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
+    private iterable $composerRequire = [];
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile = null;
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null;
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
-    private iterable $files;
+    private readonly iterable $files;
     /** @var array<string, array<string, string>> */
-    private array $composerAutoload;
+    private array $composerAutoload = [
+        'psr4' => [
+            'GyroscopsGenerated\\' => './',
+        ],
+    ];
 
-    public function __construct(private string $outputPath)
+    public function __construct(private readonly string $outputPath)
     {
-        $this->composerAutoload = [
-            'psr4' => [
-                'GyroscopsGenerated\\' => './',
-            ],
-        ];
-        $this->composerRequire = [];
-        $this->composerJsonFile = null;
-        $this->composerLockFile = null;
         $this->files = new \AppendIterator();
     }
 

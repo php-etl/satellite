@@ -9,17 +9,12 @@ use PhpParser\Node;
 
 final class Fork implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
-    public function __construct(
-        private Node\Expr $foreach,
-        private Node\Expr $do,
-    ) {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
+    public function __construct(private Node\Expr $foreach, private readonly Node\Expr $do)
+    {
     }
 
     public function withLogger(Node\Expr $logger): self
@@ -57,7 +52,7 @@ final class Fork implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(

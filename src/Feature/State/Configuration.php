@@ -9,7 +9,7 @@ use Symfony\Component\Config;
 
 final class Configuration implements FeatureConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
     {
         $builder = new Config\Definition\Builder\TreeBuilder('state');
 

@@ -9,7 +9,7 @@ return function (\Psr\Http\Message\ServerRequestInterface $request): \Psr\Http\M
                 json_encode([
                     'message' => 'Hello World!',
                     'server' => gethostname(),
-                ])
+                ], JSON_THROW_ON_ERROR)
             )
         );
 };

@@ -11,7 +11,7 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
 final class RabbitMQConfiguration implements Config\Definition\ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
     {
         $builder = new Config\Definition\Builder\TreeBuilder('rabbitmq');
 

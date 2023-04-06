@@ -13,7 +13,7 @@ final class Base64Decode extends ExpressionFunction
         parent::__construct(
             $name,
             fn ($value) => sprintf('base64_decode(%s)', $value),
-            fn ($value) => base64_decode($value),
+            fn ($value) => base64_decode((string) $value),
         );
     }
 }

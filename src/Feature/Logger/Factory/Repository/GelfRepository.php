@@ -11,7 +11,7 @@ final class GelfRepository implements Configurator\RepositoryInterface
 {
     use Logger\RepositoryTrait;
 
-    public function __construct(private Logger\Builder\Monolog\GelfBuilder $builder)
+    public function __construct(private readonly Logger\Builder\Monolog\GelfBuilder $builder)
     {
         $this->files = [];
         $this->packages = [];

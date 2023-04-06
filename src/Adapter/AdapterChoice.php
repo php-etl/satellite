@@ -6,7 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter;
 
 use Kiboko\Contract\Configurator;
 
-final class AdapterChoice
+final readonly class AdapterChoice
 {
     public function __construct(
         private array $adapters,

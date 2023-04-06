@@ -11,7 +11,7 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
 
-final class Runtime implements Satellite\Runtime\RuntimeInterface
+final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 {
     public function __construct(private array $config, private string $filename = 'function.php')
     {

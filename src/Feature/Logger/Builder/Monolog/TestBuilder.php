@@ -6,13 +6,8 @@ namespace Kiboko\Component\Satellite\Feature\Logger\Builder\Monolog;
 
 use PhpParser\Node;
 
-final class TestBuilder implements MonologBuilderInterface
+final readonly class TestBuilder implements MonologBuilderInterface
 {
-    private ?string $level;
-    private ?int $filePermissions;
-    private ?bool $useLocking;
-    private iterable $formatters;
-
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(

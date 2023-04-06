@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\DTO;
 final class StepList implements \Countable, \IteratorAggregate
 {
     /** @var list<Step> */
-    private array $steps;
+    private readonly array $steps;
 
     public function __construct(
         Step ...$steps,

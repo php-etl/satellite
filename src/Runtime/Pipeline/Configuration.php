@@ -40,13 +40,11 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             ->isRequired()
             ->fixXmlConfig('step')
             ->validate()
-            ->ifTrue(function ($value) {
-                return 1 <= array_reduce(
-                    array_keys($this->plugins),
-                    fn (int $count, string $plugin) => \array_key_exists($plugin, $value) ? $count + 1 : $count,
-                    0
-                );
-            })
+            ->ifTrue(fn ($value) => 1 <= array_reduce(
+                array_keys($this->plugins),
+                fn (int $count, string $plugin) => \array_key_exists($plugin, $value) ? $count + 1 : $count,
+                0
+            ))
             ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
             ->end()
         ;
@@ -62,7 +60,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         return $builder;
     }
 
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('pipeline');
 

@@ -13,15 +13,15 @@ use Symfony\Component\Console;
 final class BuildCommand extends Console\Command\Command
 {
     protected static $defaultName = 'build';
+    protected static $defaultDescription = 'Build the satellite.';
 
     protected function configure(): void
     {
-        $this->setDescription('Build the satellite.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
         $this->addOption('output', 'o', Console\Input\InputOption::VALUE_REQUIRED);
     }
 
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
         $style = new Console\Style\SymfonyStyle(
             $input,
@@ -73,7 +73,7 @@ final class BuildCommand extends Console\Command\Command
             return 255;
         }
 
-        chdir(\dirname($filename));
+        chdir(\dirname((string) $filename));
 
         if (\array_key_exists('satellite', $configuration)) {
             $output->writeln([
@@ -89,7 +89,7 @@ final class BuildCommand extends Console\Command\Command
                 new class() extends Log\AbstractLogger {
                     public function log($level, $message, array $context = []): void
                     {
-                        $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                        $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper((string) $level));
                         fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
                     }
                 },
@@ -110,13 +110,13 @@ final class BuildCommand extends Console\Command\Command
                     $service->adapterChoice(),
                     new class($output) extends Log\AbstractLogger {
                         public function __construct(
-                            private Console\Output\OutputInterface $output,
+                            private readonly Console\Output\OutputInterface $output,
                         ) {
                         }
 
                         public function log($level, $message, array $context = []): void
                         {
-                            $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                            $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper((string) $level));
                             $this->output->writeln($prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
                         }
                     },
@@ -126,6 +126,6 @@ final class BuildCommand extends Console\Command\Command
             }
         }
 
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Diff;
 use Kiboko\Component\Satellite\Cloud\Command\Pipeline;
 use Kiboko\Component\Satellite\Cloud\DTO;
 
-final class StepListDiff
+final readonly class StepListDiff
 {
     public function __construct(
         private DTO\PipelineId $pipelineId,

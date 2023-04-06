@@ -14,10 +14,10 @@ use Symfony\Component\Dotenv\Dotenv;
 final class WorkflowRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:workflow';
+    protected static $defaultDescription = 'Run the workflow satellite.';
 
     protected function configure(): void
     {
-        $this->setDescription('Run the workflow satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -33,7 +33,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled workflow at the provided path');
 
-            return 1;
+            return \Symfony\Component\Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
@@ -72,19 +72,19 @@ final class WorkflowRunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 
     private function formatTime(float $time): string
     {
         if ($time < .00001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 2));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000, 2));
         }
         if ($time < .0001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 1));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000, 1));
         }
         if ($time < .001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000));
         }
         if ($time < .01) {
             return sprintf('<fg=cyan>%sms</>', number_format($time * 1000, 2));

@@ -8,7 +8,7 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator\FactoryInterface;
 use Psr\Log\LoggerInterface;
 
-final class RuntimeChoice
+final readonly class RuntimeChoice
 {
     public function __construct(
         private FactoryInterface $service,

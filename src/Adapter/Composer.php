@@ -10,12 +10,12 @@ use Symfony\Component\Process\Process;
 
 final class Composer
 {
-    public function __construct(private string $workdir, private ?LoggerInterface $logger = null)
+    public function __construct(private readonly string $workdir, private ?LoggerInterface $logger = null)
     {
         $this->logger ??= new class() extends AbstractLogger {
             public function log($level, $message, array $context = []): void
             {
-                $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper($level));
+                $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper((string) $level));
                 fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
             }
         };
@@ -105,12 +105,12 @@ final class Composer
             match ($type) {
                 'psr4' => $this->pipe(
                     $this->subcommand('cat', 'composer.json'),
-                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."psr-4" |= . + %s', json_encode($autoload))),
+                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."psr-4" |= . + %s', json_encode($autoload, \JSON_THROW_ON_ERROR))),
                     $this->subcommand('tee', 'composer.json'),
                 ),
                 'file' => $this->pipe(
                     $this->subcommand('cat', 'composer.json'),
-                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."file" |= . + %s', json_encode($autoload))),
+                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."file" |= . + %s', json_encode($autoload, \JSON_THROW_ON_ERROR))),
                     $this->subcommand('tee', 'composer.json'),
                 )
             };

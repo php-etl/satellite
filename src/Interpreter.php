@@ -11,7 +11,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 final class Interpreter
 {
     /** @var list<ExpressionFunctionProviderInterface|ExpressionFunction> */
-    private array $expressionFunctions;
+    private readonly array $expressionFunctions;
 
     public function __construct(
         ExpressionFunctionProviderInterface|ExpressionFunction ...$expressionFunctions

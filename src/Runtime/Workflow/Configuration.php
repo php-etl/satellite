@@ -15,7 +15,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private iterable $features = [];
 
-    private Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
+    private readonly Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
 
     public function __construct()
     {
