@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd8eb4e0daf09a0fdbe63c851f23eff9",
+    "content-hash": "ca1dfa6c9b2b612d68efb1e3b4db8b19",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1371,6 +1371,62 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
+            "name": "php-etl/bucket",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/bucket.git",
+                "reference": "3f02158c75a6a29ce917b74440eed5990b9d32a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/bucket/zipball/3f02158c75a6a29ce917b74440eed5990b9d32a4",
+                "reference": "3f02158c75a6a29ce917b74440eed5990b9d32a4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "php-etl/bucket-contracts": "0.2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpspec/phpspec": "^7.3",
+                "phpstan/phpstan": "^1.10",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Bucket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements the Extract-Transform-Load pattern asynchronously in PHP with the help of iterators and generators",
+            "support": {
+                "issues": "https://github.com/php-etl/bucket/issues",
+                "source": "https://github.com/php-etl/bucket/tree/v0.3.0"
+            },
+            "time": "2023-04-06T09:27:31+00:00"
+        },
+        {
             "name": "php-etl/bucket-contracts",
             "version": "v0.2.0",
             "source": {
@@ -1762,6 +1818,70 @@
             "time": "2023-04-03T13:00:44+00:00"
         },
         {
+            "name": "php-etl/pipeline",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/pipeline.git",
+                "reference": "3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f",
+                "reference": "3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "php-etl/bucket": "*",
+                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/pipeline-contracts": "0.4.0",
+                "psr/log": "^3.0"
+            },
+            "provide": {
+                "php-etl/pipeline-implementation": "0.3.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/php-invoker": "^4.0",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Pipeline\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library implements the Extract-Transform-Load pattern asynchronously in PHP with the help of iterators and generators",
+            "support": {
+                "issues": "https://github.com/php-etl/pipeline/issues",
+                "source": "https://github.com/php-etl/pipeline/tree/v0.5.0"
+            },
+            "time": "2023-04-07T09:44:57+00:00"
+        },
+        {
             "name": "php-etl/pipeline-console-runtime",
             "version": "v0.2.0",
             "source": {
@@ -1938,6 +2058,65 @@
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/v0.5.0"
             },
             "time": "2023-04-06T12:23:06+00:00"
+        },
+        {
+            "name": "php-etl/workflow-console-runtime",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/workflow-console-runtime.git",
+                "reference": "b3e29e0261d2046303efddbb0ae5a07bf2d01fa8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/b3e29e0261d2046303efddbb0ae5a07bf2d01fa8",
+                "reference": "b3e29e0261d2046303efddbb0ae5a07bf2d01fa8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "php-etl/console-state": "*",
+                "php-etl/pipeline": "*",
+                "php-etl/pipeline-console-runtime": "*",
+                "php-etl/pipeline-contracts": "0.4.0",
+                "symfony/console": "^6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^1.10",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Runtime\\Workflow\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kiboko SAS",
+                    "homepage": "http://kiboko.fr"
+                },
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "description": "This library allows you to use the workflow console runtime",
+            "support": {
+                "issues": "https://github.com/php-etl/workflow-console-runtime/issues",
+                "source": "https://github.com/php-etl/workflow-console-runtime/tree/v0.2.0"
+            },
+            "time": "2023-04-07T09:47:41+00:00"
         },
         {
             "name": "php-http/client-common",

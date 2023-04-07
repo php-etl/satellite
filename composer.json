@@ -36,6 +36,8 @@
         "php-etl/pipeline-console-runtime": "*",
         "php-etl/gyroscops-api-client": "*",
         "php-etl/dockerfile": "*",
+        "php-etl/pipeline": "*",
+        "php-etl/workflow-console-runtime": "*",
         "composer/composer": "*"
     },
     "require-dev": {
