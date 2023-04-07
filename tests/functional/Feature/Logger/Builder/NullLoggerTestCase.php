@@ -3,19 +3,22 @@
 declare(strict_types=1);
 namespace functional\Kiboko\Component\Satellite\Feature\Logger\Builder;
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamWrapper;
+
 abstract class NullLoggerTestCase extends \PHPUnit\Framework\TestCase
 {
     use \Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
-    private ?\Vfs\FileSystem $fs = null;
+    private ?vfsStreamDirectory $fs = null;
     protected function setUp(): void
     {
-        $this->fs = \Vfs\FileSystem::factory('vfs://');
-        $this->fs->mount();
+        $this->fs = vfsStream::setup();
     }
     protected function tearDown(): void
     {
-        $this->fs->unmount();
         $this->fs = null;
+        vfsStreamWrapper::unregister();
     }
     public function testNullLogger(): void
     {

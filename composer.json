@@ -54,7 +54,8 @@
         "php-etl/csv-plugin": "*",
         "php-etl/spreadsheet-plugin": "*",
         "php-etl/sql-plugin": "*",
-        "php-etl/sylius-plugin": "*"
+        "php-etl/sylius-plugin": "*",
+        "mikey179/vfsstream": "^1.6"
     },
     "autoload": {
         "psr-4": {

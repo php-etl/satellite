@@ -5,22 +5,23 @@ namespace functional\Kiboko\Component\Satellite\Feature\Logger\Builder;
 
 use Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
 use Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger;
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamWrapper;
 use Psr\Log\AbstractLogger;
-use Vfs\FileSystem;
 
 abstract class StderrLoggerTestCase extends \PHPUnit\Framework\TestCase
 {
     use PipelineBuilderAssertTrait;
-    private ?FileSystem $fs = null;
+    private ?vfsStreamDirectory $fs = null;
     protected function setUp(): void
     {
-        $this->fs = FileSystem::factory('vfs://');
-        $this->fs->mount();
+        $this->fs = vfsStream::setup();
     }
     protected function tearDown(): void
     {
-        $this->fs->unmount();
         $this->fs = null;
+        vfsStreamWrapper::unregister();
     }
     public function testStderrLogger(): void
     {
