@@ -24,7 +24,7 @@ final class Configuration implements PluginConfigurationInterface
                                 ->ifTrue(fn ($value) => \in_array($value, ['stderr', 'stdout']))
                                 ->then(fn ($value) => sprintf('php://%s', $value))
                             ->end()
-                            ->setDeprecated()
+                            ->setDeprecated('php-etl/stream-plugin', '0.1')
                             ->cannotBeEmpty()
                             ->validate()
                                 ->ifTrue(fn ($data) => \is_string($data) && '' !== $data && str_starts_with($data, '@='))
