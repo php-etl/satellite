@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efdecc204000e10ded1fd4d9d1e40589",
+    "content-hash": "75576b357465bf92e9c8079e109c16dc",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -841,6 +841,58 @@
                 "source": "https://github.com/php-etl/console-state/tree/v0.2.0"
             },
             "time": "2023-04-06T12:58:19+00:00"
+        },
+        {
+            "name": "php-etl/dockerfile",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-etl/dockerfile.git",
+                "reference": "61dc79fff4cc81497f20803b4ce90cb744e39130"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/61dc79fff4cc81497f20803b4ce90cb744e39130",
+                "reference": "61dc79fff4cc81497f20803b4ce90cb744e39130",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2",
+                "php-etl/packaging-contracts": "0.3.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "infection/infection": "^0.26.18",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiboko\\Component\\Dockerfile\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégory Planchat",
+                    "email": "gregory@kiboko.fr"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/php-etl/dockerfile/issues",
+                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.0"
+            },
+            "time": "2023-04-06T12:25:13+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
