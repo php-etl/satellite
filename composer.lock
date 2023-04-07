@@ -7736,12 +7736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "4d0868a814472f81fe8551b68fef70bf14859dee"
+                "reference": "394bfe96ade5edb97cf87bd44b35aca92123dc41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/4d0868a814472f81fe8551b68fef70bf14859dee",
-                "reference": "4d0868a814472f81fe8551b68fef70bf14859dee",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/394bfe96ade5edb97cf87bd44b35aca92123dc41",
+                "reference": "394bfe96ade5edb97cf87bd44b35aca92123dc41",
                 "shasum": ""
             },
             "require": {
@@ -7807,7 +7807,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.6.0"
             },
-            "time": "2023-04-07T10:35:36+00:00"
+            "time": "2023-04-07T13:36:50+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
@@ -9103,16 +9103,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.18.0",
+            "version": "1.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "882eabc9b6a12e25c27091a261397f9c8792e722"
+                "reference": "22dcdfd725ddf99583bfe398fc624ad6c5004a0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/882eabc9b6a12e25c27091a261397f9c8792e722",
-                "reference": "882eabc9b6a12e25c27091a261397f9c8792e722",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/22dcdfd725ddf99583bfe398fc624ad6c5004a0f",
+                "reference": "22dcdfd725ddf99583bfe398fc624ad6c5004a0f",
                 "shasum": ""
             },
             "require": {
@@ -9142,9 +9142,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.18.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.18.1"
             },
-            "time": "2023-04-06T07:26:43+00:00"
+            "time": "2023-04-07T11:51:11+00:00"
         },
         {
             "name": "phpstan/phpstan",
