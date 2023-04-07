@@ -94,7 +94,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return $token->token;
+        return json_decode($token->getBody()->getContents())['token'];
     }
 
     public function changeWorkspace(
@@ -106,7 +106,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return $token->token;
+        return json_decode($token->getBody()->getContents())['token'];
     }
 
     public function persistOrganization(string $url, OrganizationId $organization): void
