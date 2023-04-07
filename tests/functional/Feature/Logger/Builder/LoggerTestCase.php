@@ -7,9 +7,16 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
 
-abstract class LoggerTestCase extends \PHPUnit\Framework\TestCase
+use Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
+use Kiboko\Component\Satellite\Feature\Logger\Builder\Logger;
+use Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\AbstractLogger;
+use Psr\Log\NullLogger;
+
+abstract class LoggerTestCase extends TestCase
 {
-    use \Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
+    use PipelineBuilderAssertTrait;
     private ?vfsStreamDirectory $fs = null;
     protected function setUp(): void
     {
@@ -22,18 +29,18 @@ abstract class LoggerTestCase extends \PHPUnit\Framework\TestCase
     }
     public function testWithStderrLogger(): void
     {
-        $log = new \Kiboko\Component\Satellite\Feature\Logger\Builder\Logger((new \Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger())->getNode());
-        $this->assertBuilderProducesInstanceOf(\Psr\Log\AbstractLogger::class, $log);
+        $log = new Logger((new StderrLogger())->getNode());
+        $this->assertBuilderProducesInstanceOf(AbstractLogger::class, $log);
     }
     public function testWithoutSpecifiedLogger(): void
     {
-        $log = new \Kiboko\Component\Satellite\Feature\Logger\Builder\Logger();
-        $this->assertBuilderProducesInstanceOf(\Psr\Log\NullLogger::class, $log);
+        $log = new Logger();
+        $this->assertBuilderProducesInstanceOf(NullLogger::class, $log);
     }
     public function testAddingStderrLogger(): void
     {
-        $log = new \Kiboko\Component\Satellite\Feature\Logger\Builder\Logger();
-        $log->withLogger((new \Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger())->getNode());
-        $this->assertBuilderProducesInstanceOf(\Psr\Log\AbstractLogger::class, $log);
+        $log = new Logger();
+        $log->withLogger((new StderrLogger())->getNode());
+        $this->assertBuilderProducesInstanceOf(AbstractLogger::class, $log);
     }
 }

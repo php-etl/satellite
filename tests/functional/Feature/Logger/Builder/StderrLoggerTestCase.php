@@ -9,8 +9,9 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
 use Psr\Log\AbstractLogger;
+use PHPUnit\Framework\TestCase;
 
-abstract class StderrLoggerTestCase extends \PHPUnit\Framework\TestCase
+abstract class StderrLoggerTestCase extends TestCase
 {
     use PipelineBuilderAssertTrait;
     private ?vfsStreamDirectory $fs = null;
