@@ -11,9 +11,9 @@ final class Repository implements Configurator\StepRepositoryInterface
 {
     use RepositoryTrait;
 
-    private ?Node\Expr $logger;
+    private ?Node\Expr $logger = null;
 
-    public function __construct(private Builder\State $builder)
+    public function __construct(private readonly Builder\State $builder)
     {
         $this->files = [];
         $this->packages = [];

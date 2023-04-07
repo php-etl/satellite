@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\DTO;
 final class ProbeList
 {
     /** @var list<Probe> */
-    private array $probes;
+    private readonly array $probes;
 
     public function __construct(
         Probe ...$probes,

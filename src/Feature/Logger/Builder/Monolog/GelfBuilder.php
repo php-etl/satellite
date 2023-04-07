@@ -9,22 +9,14 @@ use PhpParser\Node;
 final class GelfBuilder implements MonologBuilderInterface
 {
     private string $transport = 'tcp';
-    private ?string $level;
-    private ?string $vhost;
-    private ?string $host;
-    private ?int $port;
-    private ?float $timeout;
-    private ?string $queue;
-    private ?string $channel;
-    private iterable $formatters;
-
-    public function __construct()
-    {
-        $this->level = null;
-        $this->host = null;
-        $this->port = null;
-        $this->formatters = [];
-    }
+    private ?string $level = null;
+    private ?string $vhost = null;
+    private ?string $host = null;
+    private ?int $port = null;
+    private ?float $timeout = null;
+    private ?string $queue = null;
+    private ?string $channel = null;
+    private iterable $formatters = [];
 
     public function withLevel(string $level): self
     {

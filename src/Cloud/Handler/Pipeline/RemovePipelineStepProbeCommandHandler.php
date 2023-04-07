@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 
-final class RemovePipelineStepProbeCommandHandler
+final readonly class RemovePipelineStepProbeCommandHandler
 {
     public function __construct(
         private Api\Client $client

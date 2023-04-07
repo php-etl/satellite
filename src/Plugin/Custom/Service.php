@@ -18,19 +18,16 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         new Configurator\Pipeline\StepTransformer(),
         new Configurator\Pipeline\StepLoader(),
     ],
-)]
-final class Service implements Configurator\PipelinePluginInterface
+)] final readonly class Service implements Configurator\PipelinePluginInterface
 {
     private Processor $processor;
     private Configurator\PluginConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -61,7 +58,7 @@ final class Service implements Configurator\PipelinePluginInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

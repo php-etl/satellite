@@ -9,12 +9,12 @@ use Symfony\Component\Yaml;
 
 final class YamlFileLoader extends Config\Loader\FileLoader
 {
-    public function load($resource, $type = null)
+    public function load(mixed $resource, $type = null)
     {
         return Yaml\Yaml::parse(input: file_get_contents($resource));
     }
 
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
         return \is_string($resource)
             && preg_match('/ya?ml/i', pathinfo($resource, \PATHINFO_EXTENSION));

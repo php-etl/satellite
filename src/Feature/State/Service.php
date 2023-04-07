@@ -12,18 +12,16 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Feature(name: 'state')]
-final class Service implements Configurator\PipelineFeatureInterface
+final readonly class Service implements Configurator\PipelineFeatureInterface
 {
     private Processor $processor;
     private Configurator\FeatureConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null,
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage(),
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage

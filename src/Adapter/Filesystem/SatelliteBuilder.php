@@ -12,30 +12,23 @@ use Kiboko\Contract\Packaging as PackagingContract;
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     /** @var iterable<string> */
-    private iterable $composerRequire;
-    private array $composerAutoload;
-    private array $authenticationTokens;
-    private array $repositories;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile;
+    private iterable $composerRequire = [];
+    private array $composerAutoload = [
+        'psr4' => [
+            'GyroscopsGenerated\\' => './',
+        ],
+    ];
+    private array $authenticationTokens = [];
+    private array $repositories = [];
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile = null;
+    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null;
     /** @var iterable<array<string, string>> */
-    private iterable $paths;
+    private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
-    private iterable $files;
+    private readonly iterable $files;
 
     public function __construct(private string $workdir)
     {
-        $this->composerAutoload = [
-            'psr4' => [
-                'GyroscopsGenerated\\' => './',
-            ],
-        ];
-        $this->composerRequire = [];
-        $this->authenticationTokens = [];
-        $this->repositories = [];
-        $this->composerJsonFile = null;
-        $this->composerLockFile = null;
-        $this->paths = [];
         $this->files = new \AppendIterator();
     }
 

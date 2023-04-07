@@ -14,18 +14,16 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
-final class RabbitMQFactory implements Configurator\FactoryInterface
+final readonly class RabbitMQFactory implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null,
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage(),
     ) {
         $this->processor = new Processor();
         $this->configuration = new Rejection\Configuration\RabbitMQConfiguration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

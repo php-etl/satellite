@@ -22,12 +22,12 @@ final class Rejection implements Builder
     private static function nullRejection(): Node\Expr
     {
         return new Node\Expr\New_(
-            new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullRejection')
+            new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullRejection::class)
         );
     }
 
     public function getNode(): Node\Expr
     {
-        return null === $this->rejection ? self::nullRejection() : $this->rejection;
+        return $this->rejection ?? self::nullRejection();
     }
 }

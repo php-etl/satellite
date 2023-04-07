@@ -15,11 +15,11 @@ final class RabbitMQBuilder implements Builder
     private ?Node\Expr $exchange = null;
 
     public function __construct(
-        private Node\Expr $stepUuid,
-        private Node\Expr $host,
-        private Node\Expr $port,
-        private Node\Expr $vhost,
-        private Node\Expr $topic,
+        private readonly Node\Expr $stepUuid,
+        private readonly Node\Expr $host,
+        private readonly Node\Expr $port,
+        private readonly Node\Expr $vhost,
+        private readonly Node\Expr $topic,
     ) {
     }
 

@@ -8,7 +8,7 @@ use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator;
 
 #[Configurator\Adapter(name: 'tar')]
-final class Factory implements Configurator\Adapter\FactoryInterface
+final readonly class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 

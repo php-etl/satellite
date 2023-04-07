@@ -14,24 +14,15 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExp
 
 final class Loader implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
-    private iterable $servers;
-    private iterable $putStatements;
-    private array $serversMapping;
-    private ExpressionLanguage $interpreter;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
+    private iterable $servers = [];
+    private iterable $putStatements = [];
+    private array $serversMapping = [];
 
-    public function __construct(
-        ?ExpressionLanguage $interpreter = null
-    ) {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
-        $this->servers = [];
-        $this->serversMapping = [];
-        $this->putStatements = [];
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
     }
 
     public function addServerBasePath(Node\Expr $base_path): void
@@ -174,20 +165,13 @@ final class Loader implements StepBuilderInterface
                                                 ),
                                                 new Node\Arg(
                                                     new Node\Expr\Array_(
-                                                        items: array_merge(
-                                                            [
-                                                                new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server['base_path']),
-                                                                    key: new Node\Scalar\String_('%path%'),
-                                                                ),
-                                                            ],
-                                                            [
-                                                                new Node\Expr\ArrayItem(
-                                                                    value: compileValueWhenExpression($this->interpreter, $server['host']),
-                                                                    key: new Node\Scalar\String_('%server%'),
-                                                                ),
-                                                            ]
-                                                        ),
+                                                        items: [new Node\Expr\ArrayItem(
+                                                            value: compileValueWhenExpression($this->interpreter, $server['base_path']),
+                                                            key: new Node\Scalar\String_('%path%'),
+                                                        ), new Node\Expr\ArrayItem(
+                                                            value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                            key: new Node\Scalar\String_('%server%'),
+                                                        )],
                                                         attributes: [
                                                             'kind' => Node\Expr\Array_::KIND_SHORT,
                                                         ]
@@ -206,20 +190,13 @@ final class Loader implements StepBuilderInterface
                                 args: [
                                     new Node\Arg(
                                         new Node\Expr\Array_(
-                                            items: array_merge(
-                                                [
-                                                    new Node\Expr\ArrayItem(
-                                                        value: compileValueWhenExpression($this->interpreter, $server['base_path']),
-                                                        key: new Node\Scalar\String_('%path%'),
-                                                    ),
-                                                ],
-                                                [
-                                                    new Node\Expr\ArrayItem(
-                                                        value: compileValueWhenExpression($this->interpreter, $server['host']),
-                                                        key: new Node\Scalar\String_('%server%'),
-                                                    ),
-                                                ]
-                                            ),
+                                            items: [new Node\Expr\ArrayItem(
+                                                value: compileValueWhenExpression($this->interpreter, $server['base_path']),
+                                                key: new Node\Scalar\String_('%path%'),
+                                            ), new Node\Expr\ArrayItem(
+                                                value: compileValueWhenExpression($this->interpreter, $server['host']),
+                                                key: new Node\Scalar\String_('%server%'),
+                                            )],
                                             attributes: [
                                                 'kind' => Node\Expr\Array_::KIND_SHORT,
                                             ]
@@ -241,7 +218,7 @@ final class Loader implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\LoaderInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
@@ -251,7 +228,7 @@ final class Loader implements StepBuilderInterface
                                 'params' => [
                                     new Node\Param(
                                         var: new Node\Expr\Variable('logger'),
-                                        type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
+                                        type: new Node\Name\FullyQualified(name: \Psr\Log\LoggerInterface::class),
                                         flags: Node\Stmt\Class_::MODIFIER_PRIVATE,
                                     ),
                                 ],
@@ -533,7 +510,7 @@ final class Loader implements StepBuilderInterface
                 ],
             ),
             args: [
-                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified('Psr\\Log\\NullLogger'))),
+                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified(\Psr\Log\NullLogger::class))),
             ]
         );
     }

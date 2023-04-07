@@ -16,16 +16,14 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExp
 
 class Server implements Configurator\FactoryInterface
 {
-    private Processor $processor;
-    private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
+    private readonly Processor $processor;
+    private readonly ConfigurationInterface $configuration;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
         $this->configuration = new SFTP\Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -51,7 +49,7 @@ class Server implements Configurator\FactoryInterface
             $this->normalize($config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

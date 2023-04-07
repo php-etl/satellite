@@ -10,11 +10,10 @@ use Composer\Package\PackageInterface;
 final class Accumulator implements \IteratorAggregate, \Stringable
 {
     /** @var iterable|PackageInterface[] */
-    private iterable $packages;
+    private iterable $packages = [];
 
     public function __construct()
     {
-        $this->packages = [];
     }
 
     public function append(PackageInterface ...$packages): self

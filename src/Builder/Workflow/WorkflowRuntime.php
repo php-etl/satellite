@@ -16,7 +16,7 @@ final class WorkflowRuntime implements Builder
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Symfony\\Component\\Console\\Output\\ConsoleOutput'),
+                        class: new Node\Name\FullyQualified(\Symfony\Component\Console\Output\ConsoleOutput::class),
                     )
                 ),
                 new Node\Arg(
@@ -25,7 +25,7 @@ final class WorkflowRuntime implements Builder
                         args: [
                             new Node\Arg(
                                 value: new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                                    class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
                                 )
                             ),
                         ],

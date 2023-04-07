@@ -14,19 +14,17 @@ use Symfony\Component\Process\Process;
 final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
-    private array $imageTags;
+    private array $imageTags = [];
     /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
-    private iterable $dependencies;
+    private iterable $dependencies = [];
 
     public function __construct(
-        private Dockerfile\Dockerfile $dockerfile,
-        private string $workdir,
+        private readonly Dockerfile\Dockerfile $dockerfile,
+        private readonly string $workdir,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
-        $this->imageTags = [];
         $this->files = $files;
-        $this->dependencies = [];
     }
 
     public function addTags(string ...$imageTags): self

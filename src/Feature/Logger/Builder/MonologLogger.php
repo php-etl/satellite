@@ -9,13 +9,11 @@ use PhpParser\Node;
 
 final class MonologLogger implements Builder
 {
-    private iterable $handlers;
-    private iterable $processors;
+    private iterable $handlers = [];
+    private iterable $processors = [];
 
-    public function __construct(private string $channel)
+    public function __construct(private readonly string $channel)
     {
-        $this->handlers = [];
-        $this->processors = [];
     }
 
     public function withHandlers(Node\Expr ...$handlers): self

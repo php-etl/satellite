@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 
-final class AddPipelineComposerPSR4AutoloadCommandHandler
+final readonly class AddPipelineComposerPSR4AutoloadCommandHandler
 {
     public function __construct(
         private Api\Client $client

@@ -13,20 +13,13 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExp
 
 final class ElasticSearchBuilder implements MonologBuilderInterface
 {
-    private ?string $level;
-    private ?string $index;
-    private iterable $hosts;
-    private iterable $formatters;
-    private ExpressionLanguage $interpreter;
+    private ?string $level = null;
+    private ?string $index = null;
+    private iterable $hosts = [];
+    private iterable $formatters = [];
 
-    public function __construct(
-        ?ExpressionLanguage $interpreter = null,
-    ) {
-        $this->level = null;
-        $this->index = null;
-        $this->hosts = [];
-        $this->formatters = [];
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
     }
 
     public function withLevel(string $level): self

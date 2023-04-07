@@ -12,15 +12,15 @@ use Symfony\Component\Console;
 final class ValidateCommand extends Console\Command\Command
 {
     protected static $defaultName = 'validate';
+    protected static $defaultDescription = 'Validate the satellite configuration.';
 
     protected function configure(): void
     {
-        $this->setDescription('Validate the satellite configuration.');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
         $this->addOption('output', 'o', Console\Input\InputOption::VALUE_REQUIRED);
     }
 
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
         $style = new Console\Style\SymfonyStyle(
             $input,
@@ -76,6 +76,6 @@ final class ValidateCommand extends Console\Command\Command
 
         $style->writeln(json_encode($configuration, \JSON_PRETTY_PRINT));
 
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

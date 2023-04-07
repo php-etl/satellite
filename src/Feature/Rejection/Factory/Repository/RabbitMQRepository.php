@@ -11,7 +11,7 @@ final class RabbitMQRepository implements Configurator\RepositoryInterface
 {
     use Rejection\RepositoryTrait;
 
-    public function __construct(private Rejection\Builder\RabbitMQBuilder $builder)
+    public function __construct(private readonly Rejection\Builder\RabbitMQBuilder $builder)
     {
         $this->files = [];
         $this->packages = [

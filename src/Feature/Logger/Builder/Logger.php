@@ -24,7 +24,7 @@ final class Logger implements Builder
     {
         if (null === $this->logger) {
             return new Node\Expr\New_(
-                class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
             );
         }
 

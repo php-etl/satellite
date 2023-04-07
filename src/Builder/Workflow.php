@@ -12,40 +12,38 @@ final class Workflow implements Builder
     private array $pipelines = [];
 
     public function __construct(
-        private Node\Expr $runtime
+        private readonly Node\Expr $runtime
     ) {
     }
 
     public function addPipeline(
         string $pipelineFilename,
     ): self {
-        array_push($this->pipelines, function (Node\Expr $runtime) use ($pipelineFilename) {
-            return new Node\Expr\MethodCall(
-                var: $runtime,
-                name: new Node\Identifier('job'),
-                args: [
-                    new Node\Arg(
-                        new Node\Expr\MethodCall(
-                            var: new Node\Expr\Variable('runtime'),
-                            name: 'loadPipeline',
-                            args: [
-                                new Node\Arg(
-                                    value: new Node\Expr\BinaryOp\Concat(
-                                        left: new Node\Scalar\MagicConst\Dir(),
-                                        right: new Node\Scalar\Encapsed(
-                                            parts: [
-                                                new Node\Scalar\EncapsedStringPart('/'),
-                                                new Node\Scalar\EncapsedStringPart($pipelineFilename),
-                                            ],
-                                        ),
+        array_push($this->pipelines, fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
+            var: $runtime,
+            name: new Node\Identifier('job'),
+            args: [
+                new Node\Arg(
+                    new Node\Expr\MethodCall(
+                        var: new Node\Expr\Variable('runtime'),
+                        name: 'loadPipeline',
+                        args: [
+                            new Node\Arg(
+                                value: new Node\Expr\BinaryOp\Concat(
+                                    left: new Node\Scalar\MagicConst\Dir(),
+                                    right: new Node\Scalar\Encapsed(
+                                        parts: [
+                                            new Node\Scalar\EncapsedStringPart('/'),
+                                            new Node\Scalar\EncapsedStringPart($pipelineFilename),
+                                        ],
                                     ),
                                 ),
-                            ],
-                        ),
+                            ),
+                        ],
                     ),
-                ],
-            );
-        });
+                ),
+            ],
+        ));
 
         return $this;
     }

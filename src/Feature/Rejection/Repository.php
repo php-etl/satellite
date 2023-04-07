@@ -10,7 +10,7 @@ final class Repository implements Configurator\RepositoryInterface
 {
     use RepositoryTrait;
 
-    public function __construct(private Builder\Rejection $builder)
+    public function __construct(private readonly Builder\Rejection $builder)
     {
         $this->files = [];
         $this->packages = [];

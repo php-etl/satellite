@@ -21,7 +21,7 @@ final class Configuration implements ConfigurationInterface
     private array $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private array $features = [];
-    private BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
+    private readonly BackwardCompatibilityConfiguration $backwardCompatibilityConfiguration;
 
     public function __construct()
     {

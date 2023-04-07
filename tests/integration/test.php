@@ -20,7 +20,7 @@ class DefaultCommand extends Console\Command\Command
         $this->addArgument('file', Console\Input\InputArgument::REQUIRED);
     }
 
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
         $factory = new Logger\Service();
 
@@ -45,7 +45,7 @@ class DefaultCommand extends Console\Command\Command
             array_map(fn ($package) => [$package], $repository->getPackages())
         );
 
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }
 
