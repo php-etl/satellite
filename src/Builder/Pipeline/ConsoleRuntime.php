@@ -21,11 +21,11 @@ final class ConsoleRuntime implements Builder
                 ),
                 new Node\Arg(
                     value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
+                        class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Pipeline::class),
                         args: [
                             new Node\Arg(
                                 new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
+                                    class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\PipelineRunner::class),
                                     args: [
                                         new Node\Arg(
                                             value: new Node\Expr\New_(

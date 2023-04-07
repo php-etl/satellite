@@ -41,7 +41,7 @@ final class DebugLoader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\DebugLoader'),
+            class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Loader\DebugLoader::class),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\FuncCall(

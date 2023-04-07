@@ -146,7 +146,7 @@ final class Merge implements StepBuilderInterface
                                                                 var: new Node\Expr\Variable('line'),
                                                                 expr: new Node\Expr\Yield_(
                                                                     value: new Node\Expr\New_(
-                                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
                                                                         args: [
                                                                             new Node\Arg(
                                                                                 new Node\Expr\PropertyFetch(
@@ -192,7 +192,7 @@ final class Merge implements StepBuilderInterface
                                                                     var: new Node\Expr\Variable('line'),
                                                                     expr: new Node\Expr\Yield_(
                                                                         value: new Node\Expr\New_(
-                                                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\EmptyResultBucket')
+                                                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\EmptyResultBucket::class)
                                                                         ),
                                                                     ),
                                                                 ),
@@ -214,7 +214,7 @@ final class Merge implements StepBuilderInterface
                                 'stmts' => [
                                     new Node\Stmt\Return_(
                                         expr: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
                                             args: [
                                                 new Node\Arg(
                                                     new Node\Expr\PropertyFetch(

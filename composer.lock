@@ -7736,12 +7736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "a908427df74fd7f54623d45270dfe0c45910244a"
+                "reference": "4d0868a814472f81fe8551b68fef70bf14859dee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/a908427df74fd7f54623d45270dfe0c45910244a",
-                "reference": "a908427df74fd7f54623d45270dfe0c45910244a",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/4d0868a814472f81fe8551b68fef70bf14859dee",
+                "reference": "4d0868a814472f81fe8551b68fef70bf14859dee",
                 "shasum": ""
             },
             "require": {
@@ -7807,7 +7807,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.6.0"
             },
-            "time": "2023-04-06T13:03:28+00:00"
+            "time": "2023-04-07T10:35:36+00:00"
         },
         {
             "name": "php-etl/array-expression-language",

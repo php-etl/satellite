@@ -12,7 +12,7 @@ final class WorkflowRuntime implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Workflow\\Console'),
+            class: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Workflow\Console::class),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(
@@ -21,7 +21,7 @@ final class WorkflowRuntime implements Builder
                 ),
                 new Node\Arg(
                     new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
+                        class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\PipelineRunner::class),
                         args: [
                             new Node\Arg(
                                 value: new Node\Expr\New_(

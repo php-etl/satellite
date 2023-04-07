@@ -72,7 +72,7 @@ final class Fork implements StepBuilderInterface
                                             expr: new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
                                                     class: new Node\Name\FullyQualified(
-                                                        name: 'Kiboko\\Component\\Bucket\\AcceptanceResultBucket'
+                                                        name: \Kiboko\Component\Bucket\AcceptanceResultBucket::class
                                                     ),
                                                     args: [
                                                         new Node\Arg(

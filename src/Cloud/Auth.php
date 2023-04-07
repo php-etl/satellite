@@ -94,7 +94,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return json_decode($token->getBody()->getContents(), null, 512, JSON_THROW_ON_ERROR)['token'];
+        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
     }
 
     public function changeWorkspace(
@@ -106,7 +106,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return json_decode($token->getBody()->getContents(), null, 512, JSON_THROW_ON_ERROR)['token'];
+        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
     }
 
     public function persistOrganization(string $url, OrganizationId $organization): void

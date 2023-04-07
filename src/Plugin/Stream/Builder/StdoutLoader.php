@@ -37,7 +37,7 @@ final class StdoutLoader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\StdoutLoader'),
+            class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Loader\StdoutLoader::class),
         );
     }
 }
