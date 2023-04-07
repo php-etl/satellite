@@ -8426,12 +8426,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "0f63e051fb4345dbfae3f8e363a4254c75e003d6"
+                "reference": "f8070dcc71cbc6e1fd19e491adadbf42199849e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/0f63e051fb4345dbfae3f8e363a4254c75e003d6",
-                "reference": "0f63e051fb4345dbfae3f8e363a4254c75e003d6",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/f8070dcc71cbc6e1fd19e491adadbf42199849e8",
+                "reference": "f8070dcc71cbc6e1fd19e491adadbf42199849e8",
                 "shasum": ""
             },
             "require": {
@@ -8486,7 +8486,7 @@
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
                 "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.0"
             },
-            "time": "2023-04-06T13:44:14+00:00"
+            "time": "2023-04-07T15:21:08+00:00"
         },
         {
             "name": "php-etl/string-expression-language",
