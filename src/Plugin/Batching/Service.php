@@ -25,7 +25,8 @@ use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
         new Configurator\Pipeline\StepTransformer('merge'),
         new Configurator\Pipeline\StepTransformer('fork'),
     ],
-)] final readonly class Service implements Configurator\PipelinePluginInterface
+)]
+final readonly class Service implements Configurator\PipelinePluginInterface
 {
     private Processor $processor;
     private Configurator\PluginConfigurationInterface $configuration;

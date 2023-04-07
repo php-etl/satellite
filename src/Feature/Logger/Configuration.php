@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Feature\Logger;
 
 use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
-use Symfony\Component\Config;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements FeatureConfigurationInterface
 {
-    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new Config\Definition\Builder\TreeBuilder('logger');
+        $builder = new TreeBuilder('logger');
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()

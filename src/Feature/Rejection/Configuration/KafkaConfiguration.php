@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Feature\Rejection\Configuration;
 
 use Symfony\Component\Config;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class KafkaConfiguration implements Config\Definition\ConfigurationInterface
 {
-    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new Config\Definition\Builder\TreeBuilder('kafka');
+        $builder = new TreeBuilder('kafka');
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()

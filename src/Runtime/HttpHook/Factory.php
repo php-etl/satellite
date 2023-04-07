@@ -7,7 +7,8 @@ namespace Kiboko\Component\Satellite\Runtime\HttpHook;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Runtime(name: 'http_hook')] final readonly class Factory implements Satellite\Runtime\FactoryInterface
+#[Configurator\Runtime(name: 'http_hook')]
+final readonly class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
 

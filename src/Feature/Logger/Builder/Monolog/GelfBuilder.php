@@ -18,10 +18,6 @@ final class GelfBuilder implements MonologBuilderInterface
     private ?string $channel = null;
     private iterable $formatters = [];
 
-    public function __construct()
-    {
-    }
-
     public function withLevel(string $level): self
     {
         $this->level = $level;

@@ -7,7 +7,8 @@ namespace Kiboko\Component\Satellite\Adapter\Filesystem;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Adapter(name: 'filesystem')] final readonly class Factory implements Configurator\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'filesystem')]
+final readonly class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 

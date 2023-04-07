@@ -7,7 +7,8 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 use Kiboko\Component\Packaging;
 use Kiboko\Contract\Configurator;
 
-#[Configurator\Adapter(name: 'docker')] final readonly class Factory implements Configurator\Adapter\FactoryInterface
+#[Configurator\Adapter(name: 'docker')]
+final readonly class Factory implements Configurator\Adapter\FactoryInterface
 {
     private Configuration $configuration;
 

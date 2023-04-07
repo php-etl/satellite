@@ -13,10 +13,6 @@ final class State implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct()
-    {
-    }
-
     public function getNode(): Node\Stmt
     {
         return new Node\Stmt\Nop();

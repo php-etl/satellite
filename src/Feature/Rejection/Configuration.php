@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Feature\Rejection;
 
 use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
-use Symfony\Component\Config;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements FeatureConfigurationInterface
 {
-    public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new Config\Definition\Builder\TreeBuilder('rejection');
+        $builder = new TreeBuilder('rejection');
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()

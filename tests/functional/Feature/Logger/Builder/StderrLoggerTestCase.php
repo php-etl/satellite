@@ -3,13 +3,18 @@
 declare(strict_types=1);
 namespace functional\Kiboko\Component\Satellite\Feature\Logger\Builder;
 
+use Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
+use Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger;
+use Psr\Log\AbstractLogger;
+use Vfs\FileSystem;
+
 abstract class StderrLoggerTestCase extends \PHPUnit\Framework\TestCase
 {
-    use \Kiboko\Component\PHPUnitExtension\Assert\PipelineBuilderAssertTrait;
-    private ?\Vfs\FileSystem $fs = null;
+    use PipelineBuilderAssertTrait;
+    private ?FileSystem $fs = null;
     protected function setUp(): void
     {
-        $this->fs = \Vfs\FileSystem::factory('vfs://');
+        $this->fs = FileSystem::factory('vfs://');
         $this->fs->mount();
     }
     protected function tearDown(): void
@@ -19,7 +24,7 @@ abstract class StderrLoggerTestCase extends \PHPUnit\Framework\TestCase
     }
     public function testStderrLogger(): void
     {
-        $log = new \Kiboko\Component\Satellite\Feature\Logger\Builder\StderrLogger();
-        $this->assertBuilderProducesInstanceOf(\Psr\Log\AbstractLogger::class, $log);
+        $log = new StderrLogger();
+        $this->assertBuilderProducesInstanceOf(AbstractLogger::class, $log);
     }
 }
