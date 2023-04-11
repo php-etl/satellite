@@ -6,13 +6,10 @@ use Kiboko\Component\Bucket\AcceptanceResultBucket;
 use Kiboko\Contract\Mapping\CompiledMapperInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 
-final class FastMapTransformer implements TransformerInterface
+final readonly class FastMapTransformer implements TransformerInterface
 {
-    private CompiledMapperInterface $mapper;
-
-    public function __construct(CompiledMapperInterface $mapper)
+    public function __construct(private CompiledMapperInterface $mapper)
     {
-        $this->mapper = $mapper;
     }
 
     public function transform(): \Generator

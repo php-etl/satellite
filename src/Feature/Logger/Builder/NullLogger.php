@@ -12,7 +12,7 @@ final class NullLogger implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+            class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
         );
     }
 }

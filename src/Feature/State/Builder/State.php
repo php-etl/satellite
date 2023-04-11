@@ -9,16 +9,9 @@ use PhpParser\Node;
 
 final class State implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
-
-    public function __construct()
-    {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
-    }
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
     public function getNode(): Node\Stmt
     {

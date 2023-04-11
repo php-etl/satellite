@@ -11,7 +11,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
 use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
 use Symfony\Component\ExpressionLanguage\Expression;
 
-final class Pipeline implements PipelineInterface
+final readonly class Pipeline implements PipelineInterface
 {
     public function __construct(
         private Context $context,
@@ -21,6 +21,7 @@ final class Pipeline implements PipelineInterface
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
         $random = bin2hex(random_bytes(4));
+
         return new DTO\Pipeline(
             $configuration['pipeline']['name'] ?? sprintf('Pipeline %s', $random),
             $configuration['pipeline']['code'] ?? sprintf('pipeline_%s', $random),
@@ -30,7 +31,7 @@ final class Pipeline implements PipelineInterface
                     $code = $stepConfig['code'] ?? sprintf('step%d', $order);
                     unset($stepConfig['name'], $stepConfig['code']);
 
-                    array_walk_recursive($stepConfig, function (&$value) {
+                    array_walk_recursive($stepConfig, function (&$value): void {
                         if ($value instanceof Expression) {
                             $value = '@='.$value;
                         }
@@ -45,16 +46,11 @@ final class Pipeline implements PipelineInterface
                         ),
                         $order,
                     );
-                }, $configuration['pipeline']['steps'], range(0, \count($configuration['pipeline']['steps']) - 1))
+                }, $configuration['pipeline']['steps'], range(0, (is_countable($configuration['pipeline']['steps']) ? \count($configuration['pipeline']['steps']) : 0) - 1))
             ),
             new DTO\Autoload(
                 ...array_map(
-                    function (
-                        string $namespace,
-                        array $paths,
-                    ): DTO\PSR4AutoloadConfig {
-                        return new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']);
-                    },
+                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
                     array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                     $configuration['composer']['autoload']['psr4'] ?? [],
                 )
@@ -103,7 +99,6 @@ final class Pipeline implements PipelineInterface
     private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Pipeline
     {
         // Todo : update with the new endpoint, need to update the client
-        /** @phpstan-ignore-next-line */
         $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
 
         try {
@@ -132,12 +127,7 @@ final class Pipeline implements PipelineInterface
             ),
             new DTO\Autoload(
                 ...array_map(
-                    function (
-                        string $namespace,
-                        array $paths,
-                    ): DTO\PSR4AutoloadConfig {
-                        return new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']);
-                    },
+                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
                     array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                     $model->getAutoload(),
                 )

@@ -52,7 +52,7 @@ final class Auth
     {
         try {
             $content = json_encode($this->configuration, flags: \JSON_THROW_ON_ERROR | \JSON_PRETTY_PRINT);
-        } catch (\JsonException $exception) {
+        } catch (\JsonException) {
             throw new \RuntimeException('Could not encode authentication data, aborting.');
         }
 
@@ -94,7 +94,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return $token->token;
+        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
     }
 
     public function changeWorkspace(
@@ -106,7 +106,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return $token->token;
+        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
     }
 
     public function persistOrganization(string $url, OrganizationId $organization): void
@@ -166,10 +166,10 @@ final class Auth
             throw new AccessDeniedException('There is no available token to authenticate to the service.');
         }
 
-//        $date = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $this->configuration[$url]['date']);
-//        if ($date <= new \DateTimeImmutable('-1 hour')) {
-//            throw new AccessDeniedException('The stored token has expired, you need a fresh token to authenticate to the service.');
-//        }
+        //        $date = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $this->configuration[$url]['date']);
+        //        if ($date <= new \DateTimeImmutable('-1 hour')) {
+        //            throw new AccessDeniedException('The stored token has expired, you need a fresh token to authenticate to the service.');
+        //        }
 
         return $this->configuration[$url]['token'];
     }
@@ -186,10 +186,10 @@ final class Auth
         return new Credentials(
             $this->configuration[$url]['login'],
             $this->configuration[$url]['password'],
-            organization: array_key_exists('organization', $this->configuration[$url]) && $this->configuration[$url]['organization'] !== null ?
+            organization: \array_key_exists('organization', $this->configuration[$url]) && null !== $this->configuration[$url]['organization'] ?
                 new OrganizationId($this->configuration[$url]['organization']) :
                 null,
-            workspace: array_key_exists('workspace', $this->configuration[$url]) && $this->configuration[$url]['workspace'] !== null ?
+            workspace: \array_key_exists('workspace', $this->configuration[$url]) && null !== $this->configuration[$url]['workspace'] ?
                 new WorkspaceId($this->configuration[$url]['workspace']) :
                 null,
         );

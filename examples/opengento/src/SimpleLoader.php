@@ -47,7 +47,7 @@ final class SimpleLoader implements LoaderInterface
         $line = yield;
         do {
             $channel->publish(
-                \json_encode($line),
+                \json_encode($line, JSON_THROW_ON_ERROR),
                 [],
                 'akeneo',
                 'products'

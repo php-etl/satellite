@@ -14,9 +14,10 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 final class SatelliteDependencyInjection
 {
     private readonly array $providers;
+
     public function __construct(
         ExpressionFunctionProviderInterface ...$providers,
-    ){
+    ) {
         $this->providers = $providers;
     }
 
@@ -71,14 +72,14 @@ final class SatelliteDependencyInjection
                 ) {
                     foreach ($service['calls'] as $key => $arguments) {
                         $definition->addMethodCall($key, array_map(function ($argument) {
-                            if (preg_match('/^@=[^@=]/', $argument)) {
-                                return new Expression(substr($argument, 2));
+                            if (preg_match('/^@=[^@=]/', (string) $argument)) {
+                                return new Expression(substr((string) $argument, 2));
                             }
-                            if (preg_match('/^@[^@]/', $argument)) {
-                                return new Reference(substr($argument, 1));
+                            if (preg_match('/^@[^@]/', (string) $argument)) {
+                                return new Reference(substr((string) $argument, 1));
                             }
-                            if (preg_match('/^%[^%].*[^%]%$/', $argument)) {
-                                return new Parameter(substr($argument, 1, -1));
+                            if (preg_match('/^%[^%].*[^%]%$/', (string) $argument)) {
+                                return new Parameter(substr((string) $argument, 1, -1));
                             }
 
                             return $argument;
@@ -97,7 +98,7 @@ final class SatelliteDependencyInjection
             }
         }
 
-        $container->compile();
+        $container->compile(false);
 
         return $container;
     }

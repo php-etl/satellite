@@ -9,7 +9,7 @@ use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
-final class Repository implements Configurator\StepRepositoryInterface
+final readonly class Repository implements Configurator\StepRepositoryInterface
 {
     public function __construct(private Merge|Fork $builder)
     {

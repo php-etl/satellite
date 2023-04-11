@@ -13,15 +13,14 @@ final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
-    private iterable $dependencies;
+    private iterable $dependencies = [];
 
     public function __construct(
-        private string $workdir,
-        private Composer $composer,
+        private readonly string $workdir,
+        private readonly Composer $composer,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
         $this->files = $files;
-        $this->dependencies = [];
     }
 
     public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self

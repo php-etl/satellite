@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\Event;
 
-final class AddedAfterPipelineStep
+final readonly class AddedAfterPipelineStep
 {
     public function __construct(
         private string $id,

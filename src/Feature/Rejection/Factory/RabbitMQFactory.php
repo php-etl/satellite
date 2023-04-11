@@ -6,25 +6,24 @@ namespace Kiboko\Component\Satellite\Feature\Rejection\Factory;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Rejection;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class RabbitMQFactory implements Configurator\FactoryInterface
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+
+final readonly class RabbitMQFactory implements Configurator\FactoryInterface
 {
     private Processor $processor;
     private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null,
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage(),
     ) {
         $this->processor = new Processor();
         $this->configuration = new Rejection\Configuration\RabbitMQConfiguration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface

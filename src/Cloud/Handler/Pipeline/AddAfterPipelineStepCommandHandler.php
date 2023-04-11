@@ -8,7 +8,7 @@ use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 
-final class AddAfterPipelineStepCommandHandler
+final readonly class AddAfterPipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client,
@@ -19,9 +19,9 @@ final class AddAfterPipelineStepCommandHandler
     {
         try {
             /** @var \stdClass $result */
-            $result = $this->client->addAfterPipelineStepPipelineCollection(
+            $result = $this->client->addAfterPipelineStepPipelineItem(
+                $command->pipeline->asString(),
                 (new Api\Model\PipelineAddAfterPipelineStepCommandInput())
-                    ->setPrevious((string) $command->previous)
                     ->setLabel($command->step->label)
                     ->setCode((string) $command->step->code)
                     ->setConfiguration($command->step->config)
@@ -29,9 +29,9 @@ final class AddAfterPipelineStepCommandHandler
                         fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label)
                     ))
             );
-        } catch (Api\Exception\AddAfterPipelineStepPipelineCollectionBadRequestException $exception) {
+        } catch (Api\Exception\AddAfterPipelineStepPipelineItemBadRequestException $exception) {
             throw new Cloud\AddAfterPipelineStepFailedException('Something went wrong while trying to add a new step after an existing pipeline step. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
-        } catch (Api\Exception\AddAfterPipelineStepPipelineCollectionUnprocessableEntityException $exception) {
+        } catch (Api\Exception\AddAfterPipelineStepPipelineItemUnprocessableEntityException $exception) {
             throw new Cloud\AddAfterPipelineStepFailedException('Something went wrong while trying to add a new step after an existing pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 

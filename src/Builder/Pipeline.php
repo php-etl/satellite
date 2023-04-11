@@ -12,7 +12,7 @@ final class Pipeline implements Builder
     private array $steps = [];
 
     public function __construct(
-        private Node\Expr $runtime
+        private readonly Node\Expr $runtime
     ) {
     }
 
@@ -21,17 +21,15 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        $this->steps[] = function (Node\Expr $runtime) use ($extractor, $rejection, $state) {
-            return new Node\Expr\MethodCall(
-                var: $runtime,
-                name: new Node\Identifier('extract'),
-                args: [
-                    new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor),
-                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
-                ]
-            );
-        };
+        $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
+            var: $runtime,
+            name: new Node\Identifier('extract'),
+            args: [
+                new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor),
+                new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+            ]
+        );
 
         return $this;
     }
@@ -41,17 +39,15 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        $this->steps[] = function (Node\Expr $runtime) use ($transformer, $rejection, $state) {
-            return new Node\Expr\MethodCall(
-                var: $runtime,
-                name: new Node\Identifier('transform'),
-                args: [
-                    new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer),
-                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
-                ]
-            );
-        };
+        $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
+            var: $runtime,
+            name: new Node\Identifier('transform'),
+            args: [
+                new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer),
+                new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+            ]
+        );
 
         return $this;
     }
@@ -61,17 +57,15 @@ final class Pipeline implements Builder
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
     ): self {
-        $this->steps[] = function (Node\Expr $runtime) use ($loader, $rejection, $state) {
-            return new Node\Expr\MethodCall(
-                var: $runtime,
-                name: new Node\Identifier('load'),
-                args: [
-                    new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader),
-                    new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
-                    new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
-                ]
-            );
-        };
+        $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
+            var: $runtime,
+            name: new Node\Identifier('load'),
+            args: [
+                new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader),
+                new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
+                new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
+            ]
+        );
 
         return $this;
     }

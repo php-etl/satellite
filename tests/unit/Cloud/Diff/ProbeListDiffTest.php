@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProbeListDiffTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function diffIsEquivalent()
     {
         $diff = new Diff\ProbeListDiff(
@@ -33,7 +33,7 @@ class ProbeListDiffTest extends TestCase
         $this->assertEquals($expected, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasSameOrderWithDifferentNumbers()
     {
         $diff = new Diff\ProbeListDiff(
@@ -62,7 +62,7 @@ class ProbeListDiffTest extends TestCase
         $this->assertEquals($expected, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentOrders()
     {
         $diff = new Diff\ProbeListDiff(
@@ -91,7 +91,7 @@ class ProbeListDiffTest extends TestCase
         $this->assertEquals($expected, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentLabels()
     {
         $diff = new Diff\ProbeListDiff(
@@ -118,7 +118,7 @@ class ProbeListDiffTest extends TestCase
         $this->assertEquals($expected, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentCodes()
     {
         $diff = new Diff\ProbeListDiff(

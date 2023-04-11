@@ -8,7 +8,7 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 
 #[Configurator\Runtime(name: 'pipeline')]
-final class Factory implements Satellite\Runtime\FactoryInterface
+final readonly class Factory implements Satellite\Runtime\FactoryInterface
 {
     private Configuration $configuration;
 

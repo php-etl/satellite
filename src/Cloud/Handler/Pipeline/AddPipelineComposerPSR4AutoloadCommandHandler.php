@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 
-final class AddPipelineComposerPSR4AutoloadCommandHandler
+final readonly class AddPipelineComposerPSR4AutoloadCommandHandler
 {
     public function __construct(
         private Api\Client $client
@@ -18,15 +18,15 @@ final class AddPipelineComposerPSR4AutoloadCommandHandler
     {
         try {
             /** @var \stdClass $result */
-            $result = $this->client->addComposerPipelinePipelineCollection(
+            $result = $this->client->addComposerAuthPipelinePipelineItem(
+                $command->pipeline->asString(),
                 (new Api\Model\PipelineAddPipelineComposerPSR4AutoloadCommandInput())
-                    ->setPipeline((string) $command->pipeline)
                     ->setNamespace($command->namespace)
                     ->setPaths($command->paths),
             );
-        } catch (Api\Exception\AddComposerPipelinePipelineCollectionBadRequestException $exception) {
+        } catch (Api\Exception\AddComposerAuthPipelinePipelineItemBadRequestException $exception) {
             throw new Cloud\AddPipelineComposerPSR4AutoloadFailedException('Something went wrong while trying to add PSR4 autoloads into the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
-        } catch (Api\Exception\AddComposerPipelinePipelineCollectionUnprocessableEntityException $exception) {
+        } catch (Api\Exception\AddComposerAuthPipelinePipelineItemUnprocessableEntityException $exception) {
             throw new Cloud\AddPipelineComposerPSR4AutoloadFailedException('Something went wrong while trying to add PSR4 autoloads into the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 

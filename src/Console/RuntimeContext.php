@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Console;
 use Kiboko\Component\Satellite\ExpressionLanguage\ExpressionLanguage;
 use Kiboko\Component\Satellite\RuntimeContextInterface;
 
-final class RuntimeContext implements RuntimeContextInterface
+final readonly class RuntimeContext implements RuntimeContextInterface
 {
     public function __construct(
         private string $workingDirectory,

@@ -10,26 +10,16 @@ use PhpParser\Node;
 
 final class Server implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
-    private ?Node\Expr $username;
-    private ?Node\Expr $password;
-    private ?Node\Expr $passiveMode;
-    private ?Node\Expr $basePath;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
+    private ?Node\Expr $username = null;
+    private ?Node\Expr $password = null;
+    private ?Node\Expr $passiveMode = null;
+    private ?Node\Expr $basePath = null;
 
-    public function __construct(
-        private Node\Expr $host,
-        private ?Node\Expr $port = null,
-        private ?Node\Expr $timeout = null
-    ) {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
-        $this->username = null;
-        $this->password = null;
-        $this->passiveMode = null;
-        $this->basePath = null;
+    public function __construct(private readonly Node\Expr $host, private ?Node\Expr $port = null, private ?Node\Expr $timeout = null)
+    {
     }
 
     public function withLogger(Node\Expr $logger): self

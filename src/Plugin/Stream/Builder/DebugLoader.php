@@ -9,15 +9,12 @@ use PhpParser\Node;
 
 final class DebugLoader implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
-    public function __construct(private string $stream)
+    public function __construct(private readonly string $stream)
     {
-        $this->logger = null;
-        $this->rejection = null;
-        $this->state = null;
     }
 
     public function withLogger(Node\Expr $logger): self
@@ -44,7 +41,7 @@ final class DebugLoader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\DebugLoader'),
+            class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Loader\DebugLoader::class),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\FuncCall(

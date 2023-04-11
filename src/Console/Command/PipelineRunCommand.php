@@ -14,10 +14,10 @@ use Symfony\Component\Dotenv\Dotenv;
 final class PipelineRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:pipeline';
+    protected static $defaultDescription = 'Run the pipeline satellite.';
 
     protected function configure(): void
     {
-        $this->setDescription('Run the pipeline satellite.');
         $this->addArgument('path', Console\Input\InputArgument::REQUIRED);
     }
 
@@ -33,7 +33,7 @@ final class PipelineRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled pipeline at the provided path');
 
-            return 1;
+            return \Symfony\Component\Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
@@ -41,7 +41,7 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $dotenv = new Dotenv();
         $dotenv->usePutenv();
-        if (\file_exists($file = \dirname($cwd).'/.env')) {
+        if (file_exists($file = \dirname($cwd).'/.env')) {
             $dotenv->loadEnv($file);
         }
 
@@ -76,19 +76,19 @@ final class PipelineRunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 
     private function formatTime(float $time): string
     {
         if ($time < .00001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 2));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000, 2));
         }
         if ($time < .0001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000, 1));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000, 1));
         }
         if ($time < .001) {
-            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1000000));
+            return sprintf('<fg=cyan>%sµs</>', number_format($time * 1_000_000));
         }
         if ($time < .01) {
             return sprintf('<fg=cyan>%sms</>', number_format($time * 1000, 2));

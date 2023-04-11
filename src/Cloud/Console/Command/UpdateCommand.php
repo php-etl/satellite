@@ -15,10 +15,10 @@ use Symfony\Component\HttpClient\Psr18Client;
 final class UpdateCommand extends Console\Command\Command
 {
     protected static $defaultName = 'update';
+    protected static $defaultDescription = 'Updates the configuration to the Gyroscops API.';
 
     protected function configure(): void
     {
-        $this->setDescription('Updates the configuration to the Gyroscops API.');
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
@@ -108,13 +108,13 @@ final class UpdateCommand extends Console\Command\Command
 
         $psr18Client = new Psr18Client($httpClient);
         $client = Api\Client::create(httpClient: $psr18Client, additionalNormalizers: [
-            new Satellite\Cloud\Normalizer\ExpressionNormalizer()
+            new Satellite\Cloud\Normalizer\ExpressionNormalizer(),
         ]);
 
         $bus = Satellite\Cloud\CommandBus::withStandardHandlers($client);
 
         $configPath = $input->getArgument('config');
-        $configDirectory = \dirname($configPath);
+        $configDirectory = \dirname((string) $configPath);
         if (file_exists($configDirectory.'/satellite.lock')) {
             throw new \RuntimeException('Pipeline cannot be created, a lock file is present.');
         }

@@ -7,13 +7,13 @@ namespace Kiboko\Component\Satellite\Feature\Logger\Builder;
 use PhpParser\Builder;
 use PhpParser\Node;
 
-final class LogstashFormatterBuilder implements Builder
+final readonly class LogstashFormatterBuilder implements Builder
 {
     public function __construct(private string $applicationName)
     {
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
             class: new Node\Name\FullyQualified('Monolog\\Formatter\\LogstashFormatter'),

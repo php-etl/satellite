@@ -12,7 +12,7 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
 
-final class Runtime implements Satellite\Runtime\RuntimeInterface
+final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 {
     public function __construct(
         private array $config,
@@ -52,7 +52,7 @@ final class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\PipelineRuntimeInterface'),
+                                type: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface::class),
                             ),
                         ],
                         'stmts' => [

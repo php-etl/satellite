@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Builder\Workflow;
 use PhpParser\Builder;
 use PhpParser\Node;
 
-final class PipelineBuilder implements Builder
+final readonly class PipelineBuilder implements Builder
 {
     public function __construct(private Builder $builder)
     {
@@ -21,7 +21,7 @@ final class PipelineBuilder implements Builder
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
-                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\PipelineRuntimeInterface'),
+                        type: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface::class),
                     ),
                 ],
                 'stmts' => [

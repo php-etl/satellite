@@ -9,11 +9,11 @@ use PhpParser\Node;
 
 final class Merge implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
-    public function __construct(private int $size)
+    public function __construct(private readonly int $size)
     {
     }
 
@@ -45,8 +45,8 @@ final class Merge implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\FlushableInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\FlushableInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\Property(
@@ -146,7 +146,7 @@ final class Merge implements StepBuilderInterface
                                                                 var: new Node\Expr\Variable('line'),
                                                                 expr: new Node\Expr\Yield_(
                                                                     value: new Node\Expr\New_(
-                                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
                                                                         args: [
                                                                             new Node\Arg(
                                                                                 new Node\Expr\PropertyFetch(
@@ -192,7 +192,7 @@ final class Merge implements StepBuilderInterface
                                                                     var: new Node\Expr\Variable('line'),
                                                                     expr: new Node\Expr\Yield_(
                                                                         value: new Node\Expr\New_(
-                                                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\EmptyResultBucket')
+                                                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\EmptyResultBucket::class)
                                                                         ),
                                                                     ),
                                                                 ),
@@ -214,7 +214,7 @@ final class Merge implements StepBuilderInterface
                                 'stmts' => [
                                     new Node\Stmt\Return_(
                                         expr: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
                                             args: [
                                                 new Node\Arg(
                                                     new Node\Expr\PropertyFetch(
@@ -226,7 +226,7 @@ final class Merge implements StepBuilderInterface
                                         )
                                     ),
                                 ],
-                                'returnType' => new Node\Name\FullyQualified('Kiboko\\Contract\\Bucket\\ResultBucketInterface'),
+                                'returnType' => new Node\Name\FullyQualified(\Kiboko\Contract\Bucket\ResultBucketInterface::class),
                             ],
                         ),
                     ],

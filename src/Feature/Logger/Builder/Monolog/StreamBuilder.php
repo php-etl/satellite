@@ -8,17 +8,13 @@ use PhpParser\Node;
 
 final class StreamBuilder implements MonologBuilderInterface
 {
-    private ?string $level;
-    private ?int $filePermissions;
-    private ?bool $useLocking;
-    private iterable $formatters;
+    private ?string $level = null;
+    private ?int $filePermissions = 0o755;
+    private ?bool $useLocking = false;
+    private iterable $formatters = [];
 
-    public function __construct(private string $path)
+    public function __construct(private readonly string $path)
     {
-        $this->level = null;
-        $this->formatters = [];
-        $this->filePermissions = 0o755;
-        $this->useLocking = false;
     }
 
     public function withLevel(string $level): self
@@ -49,7 +45,7 @@ final class StreamBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function getNode(): \PhpParser\Node\Expr
+    public function getNode(): Node\Expr
     {
         $arguments = [
             new Node\Arg(

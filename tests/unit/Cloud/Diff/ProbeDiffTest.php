@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProbeDiffTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function diffIsEquivalent()
     {
         $diff = new Diff\ProbeDiff();
@@ -21,7 +21,7 @@ class ProbeDiffTest extends TestCase
         $this->assertCount(0, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentLabels()
     {
         $diff = new Diff\ProbeDiff();
@@ -34,7 +34,7 @@ class ProbeDiffTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentCodes()
     {
         $diff = new Diff\ProbeDiff();
@@ -47,7 +47,7 @@ class ProbeDiffTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentOrders()
     {
         $diff = new Diff\ProbeDiff();

@@ -14,10 +14,10 @@ use Symfony\Component\HttpClient\Psr18Client;
 final class LoginCommand extends Console\Command\Command
 {
     protected static $defaultName = 'login';
+    protected static $defaultDescription = 'Authenticate to the Gyroscops API.';
 
     protected function configure(): void
     {
-        $this->setDescription('Authenticate to the Gyroscops API.');
         $this->addArgument('username', mode: Console\Input\InputArgument::OPTIONAL);
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');

@@ -9,11 +9,11 @@ use PhpParser\Node;
 
 final class Extractor implements StepBuilderInterface
 {
-    private ?Node\Expr $logger;
-    private ?Node\Expr $rejection;
-    private ?Node\Expr $state;
+    private ?Node\Expr $logger = null;
+    private ?Node\Expr $rejection = null;
+    private ?Node\Expr $state = null;
 
-    public function __construct(private Node\Expr $service, private string $containerNamespace)
+    public function __construct(private readonly Node\Expr $service, private readonly string $containerNamespace)
     {
     }
 

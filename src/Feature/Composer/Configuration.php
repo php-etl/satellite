@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Feature\Composer;
 use Kiboko\Contract\Configurator\FeatureConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 

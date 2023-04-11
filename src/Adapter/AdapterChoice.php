@@ -6,7 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter;
 
 use Kiboko\Contract\Configurator;
 
-final class AdapterChoice
+final readonly class AdapterChoice
 {
     public function __construct(
         private array $adapters,
@@ -23,7 +23,7 @@ final class AdapterChoice
             }
         }
 
-        assert($factory instanceof \Kiboko\Contract\Configurator\Adapter\FactoryInterface, new AdapterNotFoundException('No compatible adapter was found for your satellite configuration.'));
+        \assert($factory instanceof \Kiboko\Contract\Configurator\Adapter\FactoryInterface, new AdapterNotFoundException('No compatible adapter was found for your satellite configuration.'));
 
         return $factory($configuration);
     }

@@ -43,18 +43,18 @@ final class SatelliteTest extends TestCase
         }
     }
 
-    private function schemaFromPath(string $path): \stdClass|array
+    private static function schemaFromPath(string $path): \stdClass|array
     {
-        return \json_decode(\file_get_contents($path));
+        return \json_decode(\file_get_contents($path), null, 512, JSON_THROW_ON_ERROR);
     }
 
-    public function validDataProvider(): \Generator
+    public static function validDataProvider(): \Generator
     {
 //        yield '[0.2] Empty unique satellite' => [
 //            (object) [
 //                'satellite' => (object) []
 //            ],
-//            $this->schemaFromPath(__DIR__.'/../../schema.json'),
+//            self::schemaFromPath(__DIR__.'/../../schema.json'),
 //        ];
 
         yield 'Unique satellite deploying in Docker' => [
@@ -69,7 +69,7 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Unique satellite deploying in Filesystem' => [
@@ -83,7 +83,7 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Akeneo plugin extractor' => [
@@ -94,17 +94,17 @@ final class SatelliteTest extends TestCase
                     'method' => 'all'
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
     }
 
-    public function invalidDataProvider(): \Generator
+    public static function invalidDataProvider(): \Generator
     {
         yield '[0.2] Empty unique satellite' => [
             (object) [
                 'satellite' => (object) []
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Empty multiple satellite' => [
@@ -115,14 +115,14 @@ final class SatelliteTest extends TestCase
                     'satellite2' => [],
                 ],
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Unrelated file format' => [
             [
                 'foo' => []
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Unique satellite with multiple adapters' => [
@@ -136,7 +136,7 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Empty satellite with multiple adapters' => [
@@ -153,7 +153,7 @@ final class SatelliteTest extends TestCase
                     ]
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema.json'),
         ];
 
         yield 'Akeneo plugin empty extractor' => [
@@ -162,7 +162,7 @@ final class SatelliteTest extends TestCase
                 'extractor' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
 
         yield 'Akeneo plugin empty lookup' => [
@@ -171,7 +171,7 @@ final class SatelliteTest extends TestCase
                 'lookup' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
 
         yield 'Akeneo plugin empty loader' => [
@@ -180,13 +180,11 @@ final class SatelliteTest extends TestCase
                 'loader' => (object) [
                 ]
             ],
-            $this->schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
+            self::schemaFromPath(__DIR__ . '/../../schema/plugin/akeneo.json'),
         ];
     }
 
-    /**
-     * @dataProvider validDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validDataProvider')]
     public function testDocumentIsValid($json, \stdClass|array $schema)
     {
         $this->assertThat(
@@ -195,7 +193,7 @@ final class SatelliteTest extends TestCase
         );
     }
 
-    /** @dataProvider invalidDataProvider */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidDataProvider')]
     public function testDocumentIsInvalid($json, \stdClass|array $schema)
     {
         $this->assertThat(

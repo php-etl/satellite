@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Diff;
 use Kiboko\Component\Satellite\Cloud\Command;
 use Kiboko\Component\Satellite\Cloud\DTO;
 
-final class ProbeListDiff
+final readonly class ProbeListDiff
 {
     private ProbeDiff $probeDiff;
 

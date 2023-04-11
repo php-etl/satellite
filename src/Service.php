@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
+use Kiboko\Contract\Configurator\Adapter\FactoryInterface;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -15,10 +16,10 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Service implements Configurator\FactoryInterface
 {
-    private Processor $processor;
-    private Satellite\Configuration $configuration;
-    private ExpressionLanguage $interpreter;
-    /** @var array<string, Satellite\Adapter\FactoryInterface> */
+    private readonly Processor $processor;
+    private readonly Satellite\Configuration $configuration;
+    private readonly ExpressionLanguage $interpreter;
+    /** @var array<string, FactoryInterface> */
     private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
     private array $runtimes = [];
@@ -74,7 +75,6 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    /** @param Configurator\PipelinePluginInterface $plugin */
     private function addPipelinePlugin(
         Configurator\Pipeline $attribute,
         Configurator\PipelinePluginInterface $plugin,
@@ -108,7 +108,7 @@ final class Service implements Configurator\FactoryInterface
                 foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
                     $this->addAdapter($attribute, $adapter);
                 }
-            } catch (MissingAttributeException $exception) {
+            } catch (MissingAttributeException) {
             }
         }
 
@@ -167,7 +167,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

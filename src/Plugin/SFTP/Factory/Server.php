@@ -6,25 +6,24 @@ namespace Kiboko\Component\Satellite\Plugin\SFTP\Factory;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\SFTP;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+
 class Server implements Configurator\FactoryInterface
 {
-    private Processor $processor;
-    private ConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
+    private readonly Processor $processor;
+    private readonly ConfigurationInterface $configuration;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
         $this->configuration = new SFTP\Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function configuration(): ConfigurationInterface
@@ -50,7 +49,7 @@ class Server implements Configurator\FactoryInterface
             $this->normalize($config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

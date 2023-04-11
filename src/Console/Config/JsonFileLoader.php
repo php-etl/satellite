@@ -8,12 +8,12 @@ use Symfony\Component\Config;
 
 final class JsonFileLoader extends Config\Loader\FileLoader
 {
-    public function load($resource, $type = null)
+    public function load(mixed $resource, $type = null)
     {
         return json_decode(json: file_get_contents($resource), associative: true);
     }
 
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
         return \is_string($resource)
             && 'json' === pathinfo($resource, \PATHINFO_EXTENSION);

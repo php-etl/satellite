@@ -15,7 +15,7 @@ final class CommandBus
     private array $commands = [];
 
     public function __construct(
-        private array $handlers
+        private readonly array $handlers
     ) {
     }
 

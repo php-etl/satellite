@@ -9,7 +9,6 @@ use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node\Expr\Variable;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -18,6 +17,8 @@ use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
+
 #[Configurator\Pipeline(
     name: 'batch',
     steps: [
@@ -25,18 +26,16 @@ use Symfony\Component\PropertyAccess\PropertyPath;
         new Configurator\Pipeline\StepTransformer('fork'),
     ],
 )]
-final class Service implements Configurator\PipelinePluginInterface
+final readonly class Service implements Configurator\PipelinePluginInterface
 {
     private Processor $processor;
     private Configurator\PluginConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -67,7 +66,7 @@ final class Service implements Configurator\PipelinePluginInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }

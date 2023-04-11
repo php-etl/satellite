@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 final class ServiceTest extends TestCase
 {
-    public function configProvider()
+    public static function configProvider()
     {
         yield [
             'expected' => [
                 'type' => 'stderr',
                 'destinations' => [],
             ],
-            'expected_class' => 'Kiboko\\Component\\Satellite\\Feature\\Logger\\Builder\\Logger',
+            'expected_class' => \Kiboko\Component\Satellite\Feature\Logger\Builder\Logger::class,
             'actual' => [
                 'logger' => [
                     'type' => 'stderr'
@@ -27,7 +27,7 @@ final class ServiceTest extends TestCase
                 'type' => 'null',
                 'destinations' => [],
             ],
-            'expected_class' => 'Kiboko\\Component\\Satellite\\Feature\\Logger\\Builder\\Logger',
+            'expected_class' => \Kiboko\Component\Satellite\Feature\Logger\Builder\Logger::class,
             'actual' => [
                 'logger' => [
                     'type' => 'null'
@@ -36,9 +36,7 @@ final class ServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('configProvider')]
     public function testWithConfigurationAndProcessor(array $expected, string $expectedClass, array $actual): void
     {
         $service = new Logger\Service();

@@ -12,18 +12,16 @@ use Psr\Log\LoggerInterface;
 final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
-    private array $imageTags;
+    private array $imageTags = [];
     /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
-    private iterable $dependencies;
+    private iterable $dependencies = [];
 
     public function __construct(
-        private string $outputPath,
+        private readonly string $outputPath,
         Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
-        $this->imageTags = [];
         $this->files = $files;
-        $this->dependencies = [];
     }
 
     public function addTags(string ...$imageTags): self

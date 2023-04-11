@@ -11,14 +11,12 @@ use Kiboko\Contract\Packaging;
 final class Workflow implements Configurator\RepositoryInterface
 {
     /** @var Packaging\FileInterface[] */
-    private array $files;
+    private array $files = [];
     /** @var string[] */
-    private array $packages;
+    private array $packages = [];
 
-    public function __construct(private Satellite\Builder\Workflow $builder)
+    public function __construct(private readonly Satellite\Builder\Workflow $builder)
     {
-        $this->files = [];
-        $this->packages = [];
     }
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface

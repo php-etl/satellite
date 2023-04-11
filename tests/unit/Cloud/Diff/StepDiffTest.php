@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class StepDiffTest extends TestCase
 {
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function diffIsEquivalent()
     {
         $diff = new Diff\StepDiff(
@@ -44,7 +44,7 @@ class StepDiffTest extends TestCase
         $this->assertEquals($expected, $commands);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentLabels()
     {
         $diff = new Diff\StepDiff(
@@ -77,7 +77,7 @@ class StepDiffTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentCodes()
     {
         $diff = new Diff\StepDiff(
@@ -110,7 +110,7 @@ class StepDiffTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentOrders()
     {
         $diff = new Diff\StepDiff(
@@ -143,7 +143,7 @@ class StepDiffTest extends TestCase
         );
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasDifferentProbes()
     {
         $diff = new Diff\StepDiff(
