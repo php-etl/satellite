@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca1dfa6c9b2b612d68efb1e3b4db8b19",
+    "content-hash": "4d37b77d3c0ac3f6c064a6fc6704b9d7",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1377,17 +1377,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/bucket.git",
-                "reference": "3f02158c75a6a29ce917b74440eed5990b9d32a4"
+                "reference": "4c63c1a55f93956634a53662dfd4cde1833ddcee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/bucket/zipball/3f02158c75a6a29ce917b74440eed5990b9d32a4",
-                "reference": "3f02158c75a6a29ce917b74440eed5990b9d32a4",
+                "url": "https://api.github.com/repos/php-etl/bucket/zipball/4c63c1a55f93956634a53662dfd4cde1833ddcee",
+                "reference": "4c63c1a55f93956634a53662dfd4cde1833ddcee",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/bucket-contracts": "0.2.0"
+                "php-etl/bucket-contracts": "0.2.*"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -1425,7 +1425,7 @@
                 "issues": "https://github.com/php-etl/bucket/issues",
                 "source": "https://github.com/php-etl/bucket/tree/v0.3.0"
             },
-            "time": "2023-04-06T09:27:31+00:00"
+            "time": "2023-04-12T12:40:59+00:00"
         },
         {
             "name": "php-etl/bucket-contracts",
@@ -1487,18 +1487,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/configurator-contracts.git",
-                "reference": "a8011fab7af398848ebb4068698e53eb2b7a21c0"
+                "reference": "f17ac6f867132853ec10564801c7ad393134fdef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/a8011fab7af398848ebb4068698e53eb2b7a21c0",
-                "reference": "a8011fab7af398848ebb4068698e53eb2b7a21c0",
+                "url": "https://api.github.com/repos/php-etl/configurator-contracts/zipball/f17ac6f867132853ec10564801c7ad393134fdef",
+                "reference": "f17ac6f867132853ec10564801c7ad393134fdef",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/packaging-contracts": "0.3.*",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.0",
                 "symfony/expression-language": "^6.0"
@@ -1538,7 +1538,7 @@
                 "issues": "https://github.com/php-etl/configurator-contracts/issues",
                 "source": "https://github.com/php-etl/configurator-contracts/tree/v0.7.0"
             },
-            "time": "2023-04-06T10:24:39+00:00"
+            "time": "2023-04-12T13:47:02+00:00"
         },
         {
             "name": "php-etl/console-state",
@@ -1546,17 +1546,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/console-state.git",
-                "reference": "728df463440861d787e4f159eb45215b859e731e"
+                "reference": "830d3f55506b1a743c6b8a12c62def7025188650"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/console-state/zipball/728df463440861d787e4f159eb45215b859e731e",
-                "reference": "728df463440861d787e4f159eb45215b859e731e",
+                "url": "https://api.github.com/repos/php-etl/console-state/zipball/830d3f55506b1a743c6b8a12c62def7025188650",
+                "reference": "830d3f55506b1a743c6b8a12c62def7025188650",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -1596,7 +1596,7 @@
                 "issues": "https://github.com/php-etl/console-state/issues",
                 "source": "https://github.com/php-etl/console-state/tree/v0.2.0"
             },
-            "time": "2023-04-06T12:58:19+00:00"
+            "time": "2023-04-12T12:55:42+00:00"
         },
         {
             "name": "php-etl/dockerfile",
@@ -1604,17 +1604,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "61dc79fff4cc81497f20803b4ce90cb744e39130"
+                "reference": "3ba51c04ed4d3fb658b6309fbe4912e9fb676188"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/61dc79fff4cc81497f20803b4ce90cb744e39130",
-                "reference": "61dc79fff4cc81497f20803b4ce90cb744e39130",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/3ba51c04ed4d3fb658b6309fbe4912e9fb676188",
+                "reference": "3ba51c04ed4d3fb658b6309fbe4912e9fb676188",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "php-etl/packaging-contracts": "0.3.0"
+                "php-etl/packaging-contracts": "0.3.*"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -1648,7 +1648,7 @@
                 "issues": "https://github.com/php-etl/dockerfile/issues",
                 "source": "https://github.com/php-etl/dockerfile/tree/v0.2.0"
             },
-            "time": "2023-04-06T12:25:13+00:00"
+            "time": "2023-04-12T13:19:15+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -1711,18 +1711,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/packaging.git",
-                "reference": "494f356cca9169e83b4f98c0bb38f2a93f217348"
+                "reference": "5492d785a4e38f531e0fa60ca79adbd59288f146"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/packaging/zipball/494f356cca9169e83b4f98c0bb38f2a93f217348",
-                "reference": "494f356cca9169e83b4f98c0bb38f2a93f217348",
+                "url": "https://api.github.com/repos/php-etl/packaging/zipball/5492d785a4e38f531e0fa60ca79adbd59288f146",
+                "reference": "5492d785a4e38f531e0fa60ca79adbd59288f146",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/packaging-contracts": "0.3.*",
                 "phpunit/phpunit": "^10.0"
             },
             "require-dev": {
@@ -1761,7 +1761,7 @@
                 "issues": "https://github.com/php-etl/packaging/issues",
                 "source": "https://github.com/php-etl/packaging/tree/v0.3.0"
             },
-            "time": "2023-04-06T10:28:06+00:00"
+            "time": "2023-04-12T13:55:34+00:00"
         },
         {
             "name": "php-etl/packaging-contracts",
@@ -1824,19 +1824,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline.git",
-                "reference": "3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f"
+                "reference": "3bc1ba70123ecdf386de5a890a4a46f2551c194d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f",
-                "reference": "3fb90d92d7b4b36f12f8ffb8ee6e6f3e8e374c6f",
+                "url": "https://api.github.com/repos/php-etl/pipeline/zipball/3bc1ba70123ecdf386de5a890a4a46f2551c194d",
+                "reference": "3bc1ba70123ecdf386de5a890a4a46f2551c194d",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
                 "php-etl/bucket": "*",
-                "php-etl/bucket-contracts": "0.2.0",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/bucket-contracts": "0.2.*",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "psr/log": "^3.0"
             },
             "provide": {
@@ -1880,7 +1880,7 @@
                 "issues": "https://github.com/php-etl/pipeline/issues",
                 "source": "https://github.com/php-etl/pipeline/tree/v0.5.0"
             },
-            "time": "2023-04-07T09:44:57+00:00"
+            "time": "2023-04-12T12:52:19+00:00"
         },
         {
             "name": "php-etl/pipeline-console-runtime",
@@ -1888,18 +1888,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-console-runtime.git",
-                "reference": "327bb8af909393df58d7233701c4ce50bc09e9d5"
+                "reference": "1b5b83225b081234693bc1b24bbccb2009f1ff3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/327bb8af909393df58d7233701c4ce50bc09e9d5",
-                "reference": "327bb8af909393df58d7233701c4ce50bc09e9d5",
+                "url": "https://api.github.com/repos/php-etl/pipeline-console-runtime/zipball/1b5b83225b081234693bc1b24bbccb2009f1ff3d",
+                "reference": "1b5b83225b081234693bc1b24bbccb2009f1ff3d",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
                 "php-etl/console-state": "*",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -1937,7 +1937,7 @@
                 "issues": "https://github.com/php-etl/pipeline-console-runtime/issues",
                 "source": "https://github.com/php-etl/pipeline-console-runtime/tree/v0.2.0"
             },
-            "time": "2023-04-06T13:01:55+00:00"
+            "time": "2023-04-12T13:57:23+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",
@@ -2000,18 +2000,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "491f1011a88a949c470ea95e5a24e22458c1867f"
+                "reference": "acfdf758359d3025fa01848e4a8316a41b6193be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/491f1011a88a949c470ea95e5a24e22458c1867f",
-                "reference": "491f1011a88a949c470ea95e5a24e22458c1867f",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/acfdf758359d3025fa01848e4a8316a41b6193be",
+                "reference": "acfdf758359d3025fa01848e4a8316a41b6193be",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/configurator-contracts": "0.7.*",
                 "symfony/expression-language": "^6.0"
             },
             "require-dev": {
@@ -2058,7 +2058,7 @@
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
                 "source": "https://github.com/php-etl/satellite-toolbox/tree/v0.5.0"
             },
-            "time": "2023-04-06T12:23:06+00:00"
+            "time": "2023-04-12T13:48:45+00:00"
         },
         {
             "name": "php-etl/workflow-console-runtime",
@@ -2066,12 +2066,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/workflow-console-runtime.git",
-                "reference": "b3e29e0261d2046303efddbb0ae5a07bf2d01fa8"
+                "reference": "d07a947b20ef5a44e949c0aa1008da854944b13c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/b3e29e0261d2046303efddbb0ae5a07bf2d01fa8",
-                "reference": "b3e29e0261d2046303efddbb0ae5a07bf2d01fa8",
+                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/d07a947b20ef5a44e949c0aa1008da854944b13c",
+                "reference": "d07a947b20ef5a44e949c0aa1008da854944b13c",
                 "shasum": ""
             },
             "require": {
@@ -2079,7 +2079,7 @@
                 "php-etl/console-state": "*",
                 "php-etl/pipeline": "*",
                 "php-etl/pipeline-console-runtime": "*",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "symfony/console": "^6.0"
             },
             "require-dev": {
@@ -2117,7 +2117,7 @@
                 "issues": "https://github.com/php-etl/workflow-console-runtime/issues",
                 "source": "https://github.com/php-etl/workflow-console-runtime/tree/v0.2.0"
             },
-            "time": "2023-04-07T09:47:41+00:00"
+            "time": "2023-04-12T13:59:36+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -7738,21 +7738,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "269afaff2e6732d2475db0c2ff9894a6e0894864"
+                "reference": "7d13dfacd25609084206146a1ff009321f923d89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/269afaff2e6732d2475db0c2ff9894a6e0894864",
-                "reference": "269afaff2e6732d2475db0c2ff9894a6e0894864",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/7d13dfacd25609084206146a1ff009321f923d89",
+                "reference": "7d13dfacd25609084206146a1ff009321f923d89",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.13.2",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/configurator-contracts": "0.7.*",
                 "php-etl/fast-map-plugin": "*",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/config": "^6.0",
                 "symfony/expression-language": "^6.0"
@@ -7767,8 +7767,8 @@
                 "mikey179/vfsstream": "^1.6",
                 "mybuilder/phpunit-accelerator": "*",
                 "php-etl/bucket": "*",
-                "php-etl/bucket-contracts": "0.2.0",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/bucket-contracts": "0.2.*",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "php-http/curl-client": "^2.0",
                 "php-http/message": "^1.11",
                 "php-http/mock-client": "^1.4@dev",
@@ -7809,7 +7809,7 @@
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
                 "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.6.0"
             },
-            "time": "2023-04-07T14:10:17+00:00"
+            "time": "2023-04-12T14:32:20+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
@@ -7871,20 +7871,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "856473c7eca8c9a0fe5905c24973b967dbe9bb62"
+                "reference": "bd6d2e4ec6743fe918b7bff2036e9bed0aba9a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/856473c7eca8c9a0fe5905c24973b967dbe9bb62",
-                "reference": "856473c7eca8c9a0fe5905c24973b967dbe9bb62",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/bd6d2e4ec6743fe918b7bff2036e9bed0aba9a71",
+                "reference": "bd6d2e4ec6743fe918b7bff2036e9bed0aba9a71",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/configurator-contracts": "0.7.*",
+                "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/config": "^6.0",
                 "symfony/expression-language": "^6.0"
@@ -7930,7 +7930,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/v0.6.0"
             },
-            "time": "2023-04-06T12:31:04+00:00"
+            "time": "2023-04-12T14:33:06+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -7938,21 +7938,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map.git",
-                "reference": "2b3db46d02202ff983fff51e522d67da9cf441e7"
+                "reference": "45ffe13c21febd777378d888eb659175ea5bcec8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/2b3db46d02202ff983fff51e522d67da9cf441e7",
-                "reference": "2b3db46d02202ff983fff51e522d67da9cf441e7",
+                "url": "https://api.github.com/repos/php-etl/fast-map/zipball/45ffe13c21febd777378d888eb659175ea5bcec8",
+                "reference": "45ffe13c21febd777378d888eb659175ea5bcec8",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^2.0",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/mapping-contracts": "0.4.0",
+                "php-etl/mapping-contracts": "0.4.*",
                 "php-etl/metadata": "*",
-                "php-etl/metadata-contracts": "0.2.0",
+                "php-etl/metadata-contracts": "0.2.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/cache": "^6.0",
                 "symfony/expression-language": "^6.0",
@@ -7961,7 +7961,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "mikey179/vfsstream": "^1.6",
-                "php-etl/phpspec-extension": "0.4.0",
+                "php-etl/phpspec-extension": "*",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^10.0",
@@ -7997,7 +7997,7 @@
                 "issues": "https://github.com/php-etl/fast-map/issues",
                 "source": "https://github.com/php-etl/fast-map/tree/v0.5.0"
             },
-            "time": "2023-04-06T10:23:27+00:00"
+            "time": "2023-04-12T13:50:21+00:00"
         },
         {
             "name": "php-etl/fast-map-config",
@@ -8005,18 +8005,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-config.git",
-                "reference": "af728ca3dbc18003c0be07f8af7f0c2084260105"
+                "reference": "a9588f92e4e88a9db22947ca809e052b2521116f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/af728ca3dbc18003c0be07f8af7f0c2084260105",
-                "reference": "af728ca3dbc18003c0be07f8af7f0c2084260105",
+                "url": "https://api.github.com/repos/php-etl/fast-map-config/zipball/a9588f92e4e88a9db22947ca809e052b2521116f",
+                "reference": "a9588f92e4e88a9db22947ca809e052b2521116f",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
                 "php-etl/fast-map": "*",
-                "php-etl/mapping-contracts": "0.4.0",
+                "php-etl/mapping-contracts": "0.4.*",
                 "php-etl/metadata": "*",
                 "symfony/expression-language": "^6.0",
                 "symfony/property-access": "^6.0"
@@ -8058,7 +8058,7 @@
                 "issues": "https://github.com/php-etl/fast-map-config/issues",
                 "source": "https://github.com/php-etl/fast-map-config/tree/v0.5.0"
             },
-            "time": "2023-04-06T12:40:56+00:00"
+            "time": "2023-04-12T13:51:34+00:00"
         },
         {
             "name": "php-etl/fast-map-plugin",
@@ -8066,21 +8066,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "4dd15c690c15662debb8078ef3bb2ad7ee922ac8"
+                "reference": "b1bee2a5f3b0d864e788ced8163853c773d7f6ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/4dd15c690c15662debb8078ef3bb2ad7ee922ac8",
-                "reference": "4dd15c690c15662debb8078ef3bb2ad7ee922ac8",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/b1bee2a5f3b0d864e788ced8163853c773d7f6ea",
+                "reference": "b1bee2a5f3b0d864e788ced8163853c773d7f6ea",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/configurator-contracts": "0.7.*",
                 "php-etl/fast-map-config": "*",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/config": "^6.0"
             },
@@ -8125,7 +8125,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/v0.8.0"
             },
-            "time": "2023-04-06T14:31:11+00:00"
+            "time": "2023-04-12T14:23:19+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -8190,19 +8190,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/metadata.git",
-                "reference": "161dc4eabd8d8239ec145628834e461726351f82"
+                "reference": "b404b5b985fee4fc4c55eeb2465f5cd14dae2349"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/metadata/zipball/161dc4eabd8d8239ec145628834e461726351f82",
-                "reference": "161dc4eabd8d8239ec145628834e461726351f82",
+                "url": "https://api.github.com/repos/php-etl/metadata/zipball/b404b5b985fee4fc4c55eeb2465f5cd14dae2349",
+                "reference": "b404b5b985fee4fc4c55eeb2465f5cd14dae2349",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^2.0",
                 "nikic/php-parser": "^4.9@dev",
                 "php": "^8.2",
-                "php-etl/metadata-contracts": "0.2.0",
+                "php-etl/metadata-contracts": "0.2.*",
                 "phpactor/docblock": "^0.3.0@dev"
             },
             "require-dev": {
@@ -8242,7 +8242,7 @@
                 "issues": "https://github.com/php-etl/metadata/issues",
                 "source": "https://github.com/php-etl/metadata/tree/v0.4.0"
             },
-            "time": "2023-04-06T12:09:29+00:00"
+            "time": "2023-04-12T13:29:44+00:00"
         },
         {
             "name": "php-etl/metadata-contracts",
@@ -8302,12 +8302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/phpunit-extension.git",
-                "reference": "9d0a83164e9eb2893dc0366634d1515802038aa9"
+                "reference": "0c89836f223b7b515a686dc1909564cfbe13b9f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/9d0a83164e9eb2893dc0366634d1515802038aa9",
-                "reference": "9d0a83164e9eb2893dc0366634d1515802038aa9",
+                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/0c89836f223b7b515a686dc1909564cfbe13b9f5",
+                "reference": "0c89836f223b7b515a686dc1909564cfbe13b9f5",
                 "shasum": ""
             },
             "require": {
@@ -8316,7 +8316,7 @@
                 "mikey179/vfsstream": "^1.6",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "php-http/message": "^1.11",
                 "php-http/mock-client": "^1.4@dev",
                 "phpunit/phpunit": "^10.0"
@@ -8353,7 +8353,7 @@
                 "issues": "https://github.com/php-etl/phpunit-extension/issues",
                 "source": "https://github.com/php-etl/phpunit-extension/tree/v0.5.0"
             },
-            "time": "2023-04-06T11:59:57+00:00"
+            "time": "2023-04-12T13:04:14+00:00"
         },
         {
             "name": "php-etl/spreadsheet-plugin",
@@ -8361,28 +8361,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a"
+                "reference": "7ae899671c27fd16ce85a81ca89a50c370025c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a",
-                "reference": "fc1a72892a0e48b65bb525ac7e3b28ca98fe4e7a",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/7ae899671c27fd16ce85a81ca89a50c370025c54",
+                "reference": "7ae899671c27fd16ce85a81ca89a50c370025c54",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/configurator-contracts": "0.7.*",
+                "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/config": "^6.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "infection/infection": "^0.26.18",
-                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/bucket-contracts": "0.2.*",
                 "php-etl/phpunit-extension": "*",
-                "php-etl/pipeline-contracts": "0.4.0",
+                "php-etl/pipeline-contracts": "0.4.*",
                 "php-etl/spreadsheet-flow": "*",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.0",
@@ -8420,7 +8420,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/v0.5.0"
             },
-            "time": "2023-04-06T13:21:37+00:00"
+            "time": "2023-04-12T14:35:34+00:00"
         },
         {
             "name": "php-etl/sql-plugin",
@@ -8428,18 +8428,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "f8070dcc71cbc6e1fd19e491adadbf42199849e8"
+                "reference": "83972375b9c4e9804c43fd191f6a3f9870d460e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/f8070dcc71cbc6e1fd19e491adadbf42199849e8",
-                "reference": "f8070dcc71cbc6e1fd19e491adadbf42199849e8",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/83972375b9c4e9804c43fd191f6a3f9870d460e8",
+                "reference": "83972375b9c4e9804c43fd191f6a3f9870d460e8",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/configurator-contracts": "0.7.*",
                 "php-etl/fast-map-plugin": "*",
                 "php-etl/packaging": "*",
                 "php-etl/satellite-toolbox": "*",
@@ -8488,7 +8488,7 @@
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
                 "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.0"
             },
-            "time": "2023-04-07T15:21:08+00:00"
+            "time": "2023-04-12T14:36:17+00:00"
         },
         {
             "name": "php-etl/string-expression-language",
@@ -9040,12 +9040,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "39a1c27cfacf11545c3a53292bf106dc09effe7d"
+                "reference": "1c8983d7f9e423943d1461c4955e235b7bcd08b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/39a1c27cfacf11545c3a53292bf106dc09effe7d",
-                "reference": "39a1c27cfacf11545c3a53292bf106dc09effe7d",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/1c8983d7f9e423943d1461c4955e235b7bcd08b7",
+                "reference": "1c8983d7f9e423943d1461c4955e235b7bcd08b7",
                 "shasum": ""
             },
             "require": {
@@ -9101,7 +9101,7 @@
                 "issues": "https://github.com/phpspec/prophecy/issues",
                 "source": "https://github.com/phpspec/prophecy/tree/master"
             },
-            "time": "2023-04-05T12:32:06+00:00"
+            "time": "2023-04-12T07:45:05+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -9150,16 +9150,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.11",
+            "version": "1.10.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8aa62e6ea8b58ffb650e02940e55a788cbc3fe21"
+                "reference": "7b2aaf999e522e2b10011a594cf06dc37de7fbd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8aa62e6ea8b58ffb650e02940e55a788cbc3fe21",
-                "reference": "8aa62e6ea8b58ffb650e02940e55a788cbc3fe21",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7b2aaf999e522e2b10011a594cf06dc37de7fbd8",
+                "reference": "7b2aaf999e522e2b10011a594cf06dc37de7fbd8",
                 "shasum": ""
             },
             "require": {
@@ -9208,7 +9208,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-04T19:17:42+00:00"
+            "time": "2023-04-12T10:33:29+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -9381,16 +9381,16 @@
         },
         {
             "name": "sanmai/pipeline",
-            "version": "v6.3",
+            "version": "v6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/pipeline.git",
-                "reference": "929b115ca58d62b6b2574702df1ebde4562c7c43"
+                "reference": "9260c4d05da37d67a69075858f41a6e7fff43743"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/929b115ca58d62b6b2574702df1ebde4562c7c43",
-                "reference": "929b115ca58d62b6b2574702df1ebde4562c7c43",
+                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/9260c4d05da37d67a69075858f41a6e7fff43743",
+                "reference": "9260c4d05da37d67a69075858f41a6e7fff43743",
                 "shasum": ""
             },
             "require": {
@@ -9400,7 +9400,7 @@
                 "ergebnis/composer-normalize": "^2.8",
                 "friendsofphp/php-cs-fixer": "^3",
                 "infection/infection": ">=0.10.5",
-                "league/pipeline": "^1.0 || ^0.3",
+                "league/pipeline": "^0.3 || ^1.0",
                 "phan/phan": ">=1.1",
                 "php-coveralls/php-coveralls": "^2.4.1",
                 "phpstan/phpstan": ">=0.10",
@@ -9434,7 +9434,7 @@
             "description": "General-purpose collections pipeline",
             "support": {
                 "issues": "https://github.com/sanmai/pipeline/issues",
-                "source": "https://github.com/sanmai/pipeline/tree/v6.3"
+                "source": "https://github.com/sanmai/pipeline/tree/v6.4"
             },
             "funding": [
                 {
@@ -9442,7 +9442,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-30T06:07:06+00:00"
+            "time": "2023-04-12T06:45:27+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
