@@ -8548,21 +8548,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "96b9a91f878047d814e91555ce033170aaf4cb71"
+                "reference": "aa850c4f0aae13037975678d7e17ec8d709e7373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/96b9a91f878047d814e91555ce033170aaf4cb71",
-                "reference": "96b9a91f878047d814e91555ce033170aaf4cb71",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/aa850c4f0aae13037975678d7e17ec8d709e7373",
+                "reference": "aa850c4f0aae13037975678d7e17ec8d709e7373",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.7.0",
+                "php-etl/configurator-contracts": "0.7.*",
                 "php-etl/fast-map-plugin": "*",
-                "php-etl/packaging-contracts": "0.3.0",
+                "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
                 "symfony/config": "^6.0"
             },
@@ -8571,7 +8571,7 @@
                 "infection/infection": "^0.26.18",
                 "laminas/laminas-diactoros": "^2.6",
                 "php-etl/bucket": "*",
-                "php-etl/bucket-contracts": "0.2.0",
+                "php-etl/bucket-contracts": "0.2.*",
                 "php-etl/phpunit-extension": "*",
                 "php-etl/sylius-api-php-client": "^2.1@dev",
                 "php-http/mock-client": "^1.4@dev",
@@ -8612,7 +8612,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/v0.7.0"
             },
-            "time": "2023-04-06T12:54:22+00:00"
+            "time": "2023-04-12T15:11:23+00:00"
         },
         {
             "name": "php-http/mock-client",
