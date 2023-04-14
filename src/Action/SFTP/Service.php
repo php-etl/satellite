@@ -15,19 +15,16 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[Configurator\Action(
     name: 'sftp',
     dependencies: ['ext-ssh2'],
-)]
-final class Service implements Configurator\PipelineActionInterface
+)]final readonly class Service implements Configurator\PipelineActionInterface
 {
     private Processor $processor;
     private Configurator\ActionConfigurationInterface $configuration;
-    private ExpressionLanguage $interpreter;
 
     public function __construct(
-        ?ExpressionLanguage $interpreter = null
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
         $this->configuration = new Configuration();
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
     }
 
     public function interpreter(): ExpressionLanguage

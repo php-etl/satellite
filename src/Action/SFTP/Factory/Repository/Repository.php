@@ -8,7 +8,7 @@ use Kiboko\Component\Satellite\Action\SFTP\Builder;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 
-final class Repository implements Configurator\RepositoryInterface
+final readonly class Repository implements Configurator\RepositoryInterface
 {
     public function __construct(private Builder\Action $builder)
     {

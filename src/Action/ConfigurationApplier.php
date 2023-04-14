@@ -14,9 +14,9 @@ final class ConfigurationApplier
     private array $packages = [];
 
     public function __construct(
-        private string $plugin,
-        private FactoryInterface $service,
-        private ExpressionLanguage $interpreter,
+        private readonly string $plugin,
+        private readonly FactoryInterface $service,
+        private readonly ExpressionLanguage $interpreter,
     ) {
     }
 

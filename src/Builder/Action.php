@@ -12,7 +12,7 @@ final class Action implements Builder
     private ?Node\Expr $action = null;
 
     public function __construct(
-        private Node\Expr $runtime,
+        private readonly Node\Expr $runtime,
     ) {
     }
 
@@ -35,6 +35,6 @@ final class Action implements Builder
 
     public function getNode(): Node\Expr
     {
-        return $this->action !== null ? $this->action : $this->runtime;
+        return $this->action ?? $this->runtime;
     }
 }

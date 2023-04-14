@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Builder\Workflow;
 use PhpParser\Builder;
 use PhpParser\Node;
 
-final class ActionBuilder implements Builder
+final readonly class ActionBuilder implements Builder
 {
     public function __construct(private Builder $builder)
     {

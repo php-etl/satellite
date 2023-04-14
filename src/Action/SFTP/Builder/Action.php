@@ -13,12 +13,12 @@ final class Action implements Builder
     private ?Node\Expr $state = null;
 
     public function __construct(
-        private Node\Expr $host,
-        private Node\Expr $port,
-        private Node\Expr $username,
-        private Node\Expr $password,
-        private Node\Expr $localFilePath,
-        private Node\Expr $serverFilePath,
+        private readonly Node\Expr $host,
+        private readonly Node\Expr $port,
+        private readonly Node\Expr $username,
+        private readonly Node\Expr $password,
+        private readonly Node\Expr $localFilePath,
+        private readonly Node\Expr $serverFilePath,
     ) {
     }
 

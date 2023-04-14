@@ -8,9 +8,9 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements Configurator\RuntimeConfigurationInterface
+final readonly class Configuration implements Configurator\RuntimeConfigurationInterface
 {
-    private readonly Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
+    private Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
     private Satellite\Runtime\Workflow\Action\Configuration $actionConfiguration;
 
     public function __construct()

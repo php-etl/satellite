@@ -12,15 +12,10 @@ use Kiboko\Contract\Configurator\RepositoryInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class Action
+final readonly class Action
 {
-    private ExpressionLanguage $interpreter;
-
-    public function __construct(
-        private ?string $plugin,
-        ?ExpressionLanguage $interpreter = null,
-    ) {
-        $this->interpreter = $interpreter ?? new Satellite\ExpressionLanguage();
+    public function __construct(private ?string $plugin, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
     }
 
     public function __invoke(array $config, ActionBuilder $action, RepositoryInterface $repository): void
@@ -37,7 +32,7 @@ final class Action
             $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
-                new Node\Name\FullyQualified('Psr\Log\NullLogger'),
+                new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
             );
         }
 
