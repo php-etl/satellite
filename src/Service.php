@@ -202,7 +202,7 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
 
         $repository->addPackages(
-            'php-etl/workflow:~0.1.0@dev',
+            'php-etl/workflow:*',
         );
 
         $repository->addFiles(
@@ -276,15 +276,15 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         $repository->addPackages(
-            'php-etl/pipeline-contracts:~0.3.0@dev',
-            'php-etl/pipeline:~0.4.0@dev',
-            'php-etl/console-state:~0.1.0@dev',
-            'php-etl/pipeline-console-runtime:~0.1.0@dev',
-            'php-etl/workflow-console-runtime:~0.1.0@dev',
-            'psr/log:^1.1',
+            'php-etl/pipeline-contracts:0.4.*',
+            'php-etl/pipeline:*',
+            'php-etl/console-state:*',
+            'php-etl/pipeline-console-runtime:*',
+            'php-etl/workflow-console-runtime:*',
+            'psr/log:^3.1',
             'monolog/monolog:^2.5',
-            'symfony/console:^5.4',
-            'symfony/dependency-injection:^5.4',
+            'symfony/console:^6.0',
+            'symfony/dependency-injection:^6.0',
         );
 
         if (\array_key_exists('expression_language', $config['pipeline'])
