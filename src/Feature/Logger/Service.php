@@ -74,7 +74,7 @@ final readonly class Service implements Configurator\PipelineFeatureInterface
                 || (\array_key_exists('type', $config) && 'stderr' === $config['type'])
             ) {
                 $builder->withLogger((new Builder\StderrLogger())->getNode());
-                $repository->addPackages('psr/log:^1.1');
+                $repository->addPackages('psr/log:*');
 
                 return $repository;
             }
@@ -82,7 +82,7 @@ final readonly class Service implements Configurator\PipelineFeatureInterface
                 || (\array_key_exists('type', $config) && 'null' === $config['type'])
             ) {
                 $builder->withLogger((new Builder\NullLogger())->getNode());
-                $repository->addPackages('psr/log:^1.1');
+                $repository->addPackages('psr/log:*');
 
                 return $repository;
             }

@@ -4,20 +4,6 @@ satellite:
     serverless:
       provider:
         name: "aws"
-    composer:
-      autoload:
-        psr4:
-        - namespace: "Pipeline\\"
-          paths: [ "" ]
-      require:
-        - "php-etl/pipeline:^0.2"
-        - "php-etl/fast-map:^0.2"
-        - "php-etl/csv-flow:^0.1"
-        - "php-etl/workflow:^0.1"
-        - "akeneo/api-php-client-ee"
-        - "diglin/sylius-api-php-client"
-        - "laminas/laminas-diactoros"
-        - "php-http/guzzle7-adapter"
     workflow:
       name: "Lorem Ipsum"
       jobs:

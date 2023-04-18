@@ -1,18 +1,6 @@
 satellite:
   filesystem:
     path: build
-  composer:
-    autoload:
-      psr4:
-      - namespace: "Pipeline\\AkeneoToSylius\\"
-        paths: [ "" ]
-    require:
-      - "php-etl/pipeline:^0.3.0"
-      - "php-etl/fast-map:^0.2.0"
-      - "php-etl/csv-flow:^0.2.0"
-      - "akeneo/api-php-client-ee"
-      - "laminas/laminas-diactoros"
-      - "php-http/guzzle7-adapter"
   pipeline:
     expression_language:
       - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'

@@ -281,8 +281,8 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/console-state:*',
             'php-etl/pipeline-console-runtime:*',
             'php-etl/workflow-console-runtime:*',
-            'psr/log:^3.1',
-            'monolog/monolog:^2.5',
+            'psr/log:*',
+            'monolog/monolog:*',
             'symfony/console:^6.0',
             'symfony/dependency-injection:^6.0',
         );
