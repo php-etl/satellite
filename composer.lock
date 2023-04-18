@@ -7859,12 +7859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/csv-plugin.git",
-                "reference": "feccdcd950cf47c44ba6e54d2b7321360743c953"
+                "reference": "c7446d176d0f44c0645f960adef7b704b03d30a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/feccdcd950cf47c44ba6e54d2b7321360743c953",
-                "reference": "feccdcd950cf47c44ba6e54d2b7321360743c953",
+                "url": "https://api.github.com/repos/php-etl/csv-plugin/zipball/c7446d176d0f44c0645f960adef7b704b03d30a4",
+                "reference": "c7446d176d0f44c0645f960adef7b704b03d30a4",
                 "shasum": ""
             },
             "require": {
@@ -7918,7 +7918,7 @@
                 "issues": "https://github.com/php-etl/csv-plugin/issues",
                 "source": "https://github.com/php-etl/csv-plugin/tree/v0.6.1"
             },
-            "time": "2023-04-18T12:16:34+00:00"
+            "time": "2023-04-18T13:06:47+00:00"
         },
         {
             "name": "php-etl/fast-map",
@@ -8054,12 +8054,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "0c3d9d9097147d3545f427cfa3f559fc40e7a518"
+                "reference": "14b47eab951fb586bf04df3c8db6781aaa6b5e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/0c3d9d9097147d3545f427cfa3f559fc40e7a518",
-                "reference": "0c3d9d9097147d3545f427cfa3f559fc40e7a518",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/14b47eab951fb586bf04df3c8db6781aaa6b5e40",
+                "reference": "14b47eab951fb586bf04df3c8db6781aaa6b5e40",
                 "shasum": ""
             },
             "require": {
@@ -8113,7 +8113,7 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/v0.8.1"
             },
-            "time": "2023-04-18T12:14:41+00:00"
+            "time": "2023-04-18T12:52:48+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
@@ -8349,12 +8349,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/spreadsheet-plugin.git",
-                "reference": "83e740d5d5b234b29e2c90b514ceb948d2f1ee83"
+                "reference": "f0a36823a34ca1b7c715abd8a87c437f3b65905a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/83e740d5d5b234b29e2c90b514ceb948d2f1ee83",
-                "reference": "83e740d5d5b234b29e2c90b514ceb948d2f1ee83",
+                "url": "https://api.github.com/repos/php-etl/spreadsheet-plugin/zipball/f0a36823a34ca1b7c715abd8a87c437f3b65905a",
+                "reference": "f0a36823a34ca1b7c715abd8a87c437f3b65905a",
                 "shasum": ""
             },
             "require": {
@@ -8408,7 +8408,7 @@
                 "issues": "https://github.com/php-etl/spreadsheet-plugin/issues",
                 "source": "https://github.com/php-etl/spreadsheet-plugin/tree/v0.5.1"
             },
-            "time": "2023-04-18T12:23:34+00:00"
+            "time": "2023-04-18T13:05:59+00:00"
         },
         {
             "name": "php-etl/sql-plugin",
@@ -8416,12 +8416,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "4724cf3cd6116949b2be37dda809b2529403b0ad"
+                "reference": "8ee817ead548a55941032af6be534402575666fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/4724cf3cd6116949b2be37dda809b2529403b0ad",
-                "reference": "4724cf3cd6116949b2be37dda809b2529403b0ad",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/8ee817ead548a55941032af6be534402575666fa",
+                "reference": "8ee817ead548a55941032af6be534402575666fa",
                 "shasum": ""
             },
             "require": {
@@ -8476,7 +8476,7 @@
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
                 "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.1"
             },
-            "time": "2023-04-18T12:16:00+00:00"
+            "time": "2023-04-18T13:04:50+00:00"
         },
         {
             "name": "php-etl/string-expression-language",

@@ -202,7 +202,7 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
 
         $repository->addPackages(
-            'php-etl/workflow:"*"',
+            'php-etl/workflow:*',
         );
 
         $repository->addFiles(
@@ -277,10 +277,10 @@ final class Service implements Configurator\FactoryInterface
 
         $repository->addPackages(
             'php-etl/pipeline-contracts:0.4.*',
-            'php-etl/pipeline:"*"',
-            'php-etl/console-state:"*"',
-            'php-etl/pipeline-console-runtime:"*"',
-            'php-etl/workflow-console-runtime:"*"',
+            'php-etl/pipeline:*',
+            'php-etl/console-state:*',
+            'php-etl/pipeline-console-runtime:*',
+            'php-etl/workflow-console-runtime:*',
             'psr/log:^3.1',
             'monolog/monolog:^2.5',
             'symfony/console:^6.0',
