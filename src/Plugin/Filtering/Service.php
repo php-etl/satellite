@@ -17,8 +17,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         new Configurator\Pipeline\StepTransformer('reject'),
         new Configurator\Pipeline\StepTransformer('drop'),
     ],
-)]
-final class Service implements Configurator\PipelinePluginInterface
+)]final readonly class Service implements Configurator\PipelinePluginInterface
 {
     private Processor $processor;
     private Configurator\PluginConfigurationInterface $configuration;
