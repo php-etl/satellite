@@ -44,6 +44,9 @@ final class PipelineRunCommand extends Console\Command\Command
         if (file_exists($file = \dirname($cwd).'/.env')) {
             $dotenv->loadEnv($file);
         }
+        if (file_exists($file = $cwd.'/'.$input->getArgument('path').'/.env')) {
+            $dotenv->loadEnv($file);
+        }
 
         /** @var ClassLoader $autoload */
         $autoload = include 'vendor/autoload.php';
