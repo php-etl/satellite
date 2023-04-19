@@ -52,18 +52,29 @@ final class Drop implements StepBuilderInterface
 
     private function buildExclusions(Node\Expr ...$exclusions): Node\Expr
     {
+        if (count($exclusions) > 3) {
+            $length = count($exclusions);
+            $middle = (int) floor($length / 2);
+            $left = array_slice($exclusions, 0, $middle);
+            $right = array_slice($exclusions, $middle, $length);
+            return new Node\Expr\BinaryOp\BooleanAnd(
+                $this->buildExclusions(...$left),
+                $this->buildExclusions(...$right),
+            );
+        }
+
         if (count($exclusions) > 2) {
-            $left = array_pop($exclusions);
-            return new Node\Expr\BinaryOp\LogicalAnd(
-                $left,
+            $right = array_shift($exclusions);
+            return new Node\Expr\BinaryOp\BooleanAnd(
                 $this->buildExclusions(...$exclusions),
+                $right,
             );
         }
 
         if (count($exclusions) > 1) {
             $left = array_pop($exclusions);
             $right = array_pop($exclusions);
-            return new Node\Expr\BinaryOp\LogicalAnd(
+            return new Node\Expr\BinaryOp\BooleanAnd(
                 $left,
                 $right,
             );
@@ -74,7 +85,7 @@ final class Drop implements StepBuilderInterface
         }
 
         return new Node\Expr\ConstFetch(
-            new Node\Name('true'),
+            new Node\Name('false'),
         );
     }
 

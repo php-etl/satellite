@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Factory;
 
-use Kiboko\Component\Packaging;
-use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Filtering;
 use Kiboko\Component\Satellite\Plugin\Filtering\Configuration;
@@ -13,11 +11,8 @@ use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\String\ByteString;
-
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
 
 class Reject implements Configurator\FactoryInterface
 {
@@ -65,26 +60,17 @@ class Reject implements Configurator\FactoryInterface
      */
     public function compile(array $config): Repository\Reject
     {
-        $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
+        $interpreter = clone $this->interpreter;
 
-        $builder = new Filtering\Builder\Reject(
-            compileValueWhenExpression($this->interpreter, $config['use']),
-            sprintf('GyroscopsGenerated\\%s', $containerName),
-        );
-
-        $container = (new SatelliteDependencyInjection(...$this->providers))($config);
+        $builder = new Filtering\Builder\Reject();
 
         $repository = new Repository\Reject($builder);
 
-        $dumper = new PhpDumper($container);
-        $repository->addFiles(
-            new Packaging\File(
-                sprintf('%s.php', $containerName),
-                new Packaging\Asset\InMemory(
-                    $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated'])
-                )
-            ),
-        );
+        foreach ($config as $condition) {
+            $builder->withExclusions(
+                compileExpression($interpreter, $condition['when'])
+            );
+        }
 
         return $repository;
     }

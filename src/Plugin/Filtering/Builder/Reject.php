@@ -52,18 +52,29 @@ final class Reject implements StepBuilderInterface
 
     private function buildExclusions(Node\Expr ...$exclusions): Node\Expr
     {
+        if (count($exclusions) > 3) {
+            $length = count($exclusions);
+            $middle = (int) floor($length / 2);
+            $left = array_slice($exclusions, 0, $middle);
+            $right = array_slice($exclusions, $middle, $length);
+            return new Node\Expr\BinaryOp\BooleanAnd(
+                $this->buildExclusions(...$left),
+                $this->buildExclusions(...$right),
+            );
+        }
+
         if (count($exclusions) > 2) {
-            $left = array_pop($exclusions);
-            return new Node\Expr\BinaryOp\LogicalAnd(
-                $left,
+            $right = array_shift($exclusions);
+            return new Node\Expr\BinaryOp\BooleanAnd(
                 $this->buildExclusions(...$exclusions),
+                $right,
             );
         }
 
         if (count($exclusions) > 1) {
             $left = array_pop($exclusions);
             $right = array_pop($exclusions);
-            return new Node\Expr\BinaryOp\LogicalAnd(
+            return new Node\Expr\BinaryOp\BooleanAnd(
                 $left,
                 $right,
             );
@@ -74,7 +85,7 @@ final class Reject implements StepBuilderInterface
         }
 
         return new Node\Expr\ConstFetch(
-            new Node\Name('true'),
+            new Node\Name('false'),
         );
     }
 
@@ -92,7 +103,7 @@ final class Reject implements StepBuilderInterface
                         ->addStmts([
                             new Node\Stmt\Expression(
                                 new Node\Expr\Assign(
-                                    new Node\Expr\Variable('line'),
+                                    new Node\Expr\Variable('input'),
                                     new Node\Expr\Yield_(),
                                 )
                             ),
@@ -107,12 +118,12 @@ final class Reject implements StepBuilderInterface
                                             'stmts' => [
                                                 new Node\Stmt\Expression(
                                                     new Node\Expr\Assign(
-                                                        new Node\Expr\Variable('line'),
+                                                        new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
                                                                 new Node\Name\FullyQualified(RejectionResultBucket::class),
                                                                 [
-                                                                    new Node\Arg(new Node\Expr\Variable('line')),
+                                                                    new Node\Arg(new Node\Expr\Variable('input')),
                                                                 ]
                                                             ),
                                                         ),
@@ -124,12 +135,12 @@ final class Reject implements StepBuilderInterface
                                     ),
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
-                                            new Node\Expr\Variable('line'),
+                                            new Node\Expr\Variable('input'),
                                             new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
                                                     new Node\Name\FullyQualified(AcceptanceResultBucket::class),
                                                     [
-                                                        new Node\Arg(new Node\Expr\Variable('line')),
+                                                        new Node\Arg(new Node\Expr\Variable('input')),
                                                     ]
                                                 ),
                                             ),
@@ -139,7 +150,7 @@ final class Reject implements StepBuilderInterface
                             ),
                             new Node\Stmt\Expression(
                                 new Node\Expr\Yield_(
-                                    new Node\Expr\Variable('line')
+                                    new Node\Expr\Variable('input')
                                 ),
                             ),
                         ])
