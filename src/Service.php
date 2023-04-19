@@ -111,7 +111,7 @@ final class Service implements Configurator\FactoryInterface
      */
     private function addAction(
         Configurator\Action $attribute,
-        Configurator\PipelineActionInterface $action,
+        Configurator\ActionInterface $action,
     ): self {
         $this->configuration->addAction($attribute->name, $action->configuration());
         $this->actions[$attribute->name] = $action;
@@ -168,7 +168,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    public function registerActions(Configurator\PipelineActionInterface ...$actions): self
+    public function registerActions(Configurator\ActionInterface ...$actions): self
     {
         foreach ($actions as $action) {
             /** @var Configurator\Action $attribute */

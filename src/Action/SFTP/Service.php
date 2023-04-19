@@ -15,7 +15,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[Configurator\Action(
     name: 'sftp',
     dependencies: ['ext-ssh2'],
-)]final readonly class Service implements Configurator\PipelineActionInterface
+)]
+final readonly class Service implements Configurator\ActionInterface
 {
     private Processor $processor;
     private Configurator\ActionConfigurationInterface $configuration;

@@ -20,7 +20,7 @@ final readonly class Action
 
     public function __invoke(array $config, ActionBuilder $action, RepositoryInterface $repository): void
     {
-        if (null !== $this->key && !\array_key_exists($this->plugin, $config)) {
+        if (!\array_key_exists($this->plugin, $config)) {
             return;
         }
 
