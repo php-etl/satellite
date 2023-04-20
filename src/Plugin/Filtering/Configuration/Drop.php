@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Configuration;
 
-use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

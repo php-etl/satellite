@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Plugin\Filtering;
 
 use Kiboko\Contract\Configurator\PluginConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyExclusiveFields;
 
 final class Configuration implements PluginConfigurationInterface

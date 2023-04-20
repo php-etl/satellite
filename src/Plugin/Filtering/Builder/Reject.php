@@ -20,7 +20,8 @@ final class Reject implements StepBuilderInterface
     private array $exclusions = [];
 
     public function __construct()
-    {}
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -52,35 +53,38 @@ final class Reject implements StepBuilderInterface
 
     private function buildExclusions(Node\Expr ...$exclusions): Node\Expr
     {
-        if (count($exclusions) > 3) {
-            $length = count($exclusions);
+        if (\count($exclusions) > 3) {
+            $length = \count($exclusions);
             $middle = (int) floor($length / 2);
-            $left = array_slice($exclusions, 0, $middle);
-            $right = array_slice($exclusions, $middle, $length);
+            $left = \array_slice($exclusions, 0, $middle);
+            $right = \array_slice($exclusions, $middle, $length);
+
             return new Node\Expr\BinaryOp\BooleanAnd(
                 $this->buildExclusions(...$left),
                 $this->buildExclusions(...$right),
             );
         }
 
-        if (count($exclusions) > 2) {
+        if (\count($exclusions) > 2) {
             $right = array_shift($exclusions);
+
             return new Node\Expr\BinaryOp\BooleanAnd(
                 $this->buildExclusions(...$exclusions),
                 $right,
             );
         }
 
-        if (count($exclusions) > 1) {
+        if (\count($exclusions) > 1) {
             $left = array_pop($exclusions);
             $right = array_pop($exclusions);
+
             return new Node\Expr\BinaryOp\BooleanAnd(
                 $left,
                 $right,
             );
         }
 
-        if (count($exclusions) > 0) {
+        if (\count($exclusions) > 0) {
             return array_pop($exclusions);
         }
 
@@ -130,7 +134,7 @@ final class Reject implements StepBuilderInterface
                                                     ),
                                                 ),
                                                 new Node\Stmt\Continue_(),
-                                            ]
+                                            ],
                                         ]
                                     ),
                                     new Node\Stmt\Expression(
@@ -154,7 +158,7 @@ final class Reject implements StepBuilderInterface
                                 ),
                             ),
                         ])
-                        ->getNode()
+                        ->getNode(),
                 ],
             ])
         );
