@@ -106,7 +106,6 @@ final class Service implements Configurator\FactoryInterface
     }
 
     /**
-     * @param Action $attribute
      * @param PipelineActionInterface $action
      */
     private function addAction(
