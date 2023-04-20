@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kiboko\Component\Satellite\Action\SFTP\Builder;
 
 use PhpParser\Builder;
@@ -11,4 +13,3 @@ interface ActionBuilderInterface extends Builder
 
     public function withState(Node\Expr $state): self;
 }
-
