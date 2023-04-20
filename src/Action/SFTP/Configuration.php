@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Action\SFTP;
 
 use Kiboko\Contract\Configurator\ActionConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration implements ActionConfigurationInterface
 {

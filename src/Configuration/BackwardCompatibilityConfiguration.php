@@ -9,6 +9,7 @@ use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyExclusiveFields;
 
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface

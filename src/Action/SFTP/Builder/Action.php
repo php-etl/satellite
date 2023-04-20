@@ -58,7 +58,7 @@ final class Action implements Builder
                 ),
                 new Node\Arg(
                     value: $this->serverFilePath,
-                )
+                ),
             ]
         );
     }

@@ -54,7 +54,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                             ),
                         ],
                         'stmts' => [
-                           new Node\Stmt\Return_(expr: $builder->getNode()),
+                            new Node\Stmt\Return_(expr: $builder->getNode()),
                         ],
                     ]
                 ),

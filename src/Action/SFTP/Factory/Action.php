@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Action\SFTP\Factory;
 
-use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Action\SFTP;
 use Kiboko\Component\Satellite\Action\SFTP\Factory\Repository\Repository;
-use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Action implements Configurator\FactoryInterface
 {

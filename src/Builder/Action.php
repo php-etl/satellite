@@ -19,8 +19,7 @@ final class Action implements Builder
     public function addAction(
         Node\Expr|Builder $loader,
         Node\Expr|Builder $state,
-    ): self
-    {
+    ): self {
         $this->action = new Node\Expr\MethodCall(
             var: $this->runtime,
             name: new Node\Identifier('execute'),

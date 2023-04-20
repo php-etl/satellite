@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Contract\Configurator\Action;
 use Kiboko\Contract\Configurator\PipelineActionInterface;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -294,7 +293,7 @@ final class Service implements Configurator\FactoryInterface
                 );
 
                 $workflow->addPipeline($pipelineFilename);
-            } elseif (array_key_exists('action', $job)) {
+            } elseif (\array_key_exists('action', $job)) {
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
 

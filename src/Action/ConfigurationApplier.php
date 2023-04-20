@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Action;
 
+use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator\FactoryInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Kiboko\Component\Satellite;
 
 final class ConfigurationApplier
 {

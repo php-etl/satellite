@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Action\SFTP;
 
 use Kiboko\Component\Satellite\Action\SFTP\Factory\Action;
-use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Action\SFTP\Factory\Repository\Repository;
+use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;

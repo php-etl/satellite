@@ -19,7 +19,7 @@ final class Workflow implements Builder
     public function addPipeline(
         string $pipelineFilename,
     ): self {
-        $this->jobs[] = fn(Node\Expr $runtime) => new Node\Expr\MethodCall(
+        $this->jobs[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
             name: new Node\Identifier('job'),
             args: [
@@ -50,7 +50,7 @@ final class Workflow implements Builder
 
     public function addAction(string $pipelineFilename): self
     {
-        $this->jobs[] = fn(Node\Expr $runtime) => new Node\Expr\MethodCall(
+        $this->jobs[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
             name: new Node\Identifier('job'),
             args: [
