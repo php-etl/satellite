@@ -31,7 +31,7 @@
         "react/promise": "^2.9",
         "symfony/dotenv": "^6.0",
         "php-etl/packaging": "*",
-        "php-etl/configurator-contracts": "0.7.*",
+        "php-etl/configurator-contracts": "0.8.*",
         "php-etl/satellite-toolbox": "*",
         "php-etl/pipeline-console-runtime": "*",
         "php-etl/gyroscops-api-client": "*",
@@ -87,7 +87,7 @@
     "bin": ["bin/satellite", "bin/cloud"],
     "extra": {
         "branch-alias": {
-            "dev-main": "0.5.x-dev"
+            "dev-main": "0.6.x-dev"
         },
         "gyroscops": {
             "adapters": [
