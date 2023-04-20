@@ -14,6 +14,8 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     private iterable $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private iterable $features = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private iterable $actions = [];
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {
@@ -25,6 +27,13 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
     public function addFeature(string $name, Configurator\FeatureConfigurationInterface $feature): self
     {
         $this->features[$name] = $feature;
+
+        return $this;
+    }
+
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actions[$name] = $action;
 
         return $this;
     }
@@ -67,12 +76,12 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-            ->arrayNode('expression_language')
-            ->scalarPrototype()->end()
-            ->end()
-            ->scalarNode('name')->end()
-            ->scalarNode('code')->end()
-            ->append($this->getStepsTreeBuilder()->getRootNode())
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->scalarNode('name')->end()
+                ->scalarNode('code')->end()
+                ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end()
         ;
 
@@ -85,8 +94,8 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             /* @phpstan-ignore-next-line */
             $node
                 ->children()
-                ->scalarNode('name')->end()
-                ->scalarNode('code')->end()
+                    ->scalarNode('name')->end()
+                    ->scalarNode('code')->end()
                 ->end()
                 ->append($plugin->getConfigTreeBuilder()->getRootNode())
             ;
@@ -100,8 +109,8 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         foreach ($this->features as $feature) {
             /* @phpstan-ignore-next-line */
             $node->children()
-                ->scalarNode('name')->end()
-                ->scalarNode('code')->end()
+                    ->scalarNode('name')->end()
+                    ->scalarNode('code')->end()
                 ->end()
                 ->append($feature->getConfigTreeBuilder()->getRootNode())
             ;

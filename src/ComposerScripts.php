@@ -64,6 +64,7 @@ final class ComposerScripts
                 && !isset($package->getExtra()['gyroscops']['plugins'])
                 && !isset($package->getExtra()['gyroscops']['adapters'])
                 && !isset($package->getExtra()['gyroscops']['runtimes'])
+                && !isset($package->getExtra()['gyroscops']['actions'])
             ) {
                 $io->error(strtr(
                     'There is no service class defined for the package %package%, please set the extra.gyroscops.plugins,'

@@ -8,18 +8,15 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-final class Configuration implements Configurator\RuntimeConfigurationInterface
+final readonly class Configuration implements Configurator\RuntimeConfigurationInterface
 {
-    /** @var array<string, Configurator\PluginConfigurationInterface> */
-    private iterable $plugins = [];
-    /** @var array<string, Configurator\FeatureConfigurationInterface> */
-    private iterable $features = [];
-
-    private readonly Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
+    private Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
+    private Satellite\Runtime\Workflow\Action\Configuration $actionConfiguration;
 
     public function __construct()
     {
         $this->pipelineConfiguration = new Satellite\Runtime\Pipeline\Configuration();
+        $this->actionConfiguration = new Satellite\Runtime\Workflow\Action\Configuration();
     }
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
@@ -42,6 +39,16 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         return $this;
     }
 
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actionConfiguration->addAction(
+            $name,
+            $action
+        );
+
+        return $this;
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('workflow');
@@ -49,19 +56,20 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->children()
-            ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
-            ->arrayNode('expression_language')
-            ->scalarPrototype()->end()
-            ->end()
-            ->scalarNode('name')->end()
-            ->arrayNode('jobs')
-            ->arrayPrototype()
-            ->children()
-            ->scalarNode('name')->end()
-            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
-            ->end()
-            ->end()
-            ->end()
+                ->append((new Satellite\DependencyInjection\Configuration\ServicesConfiguration())->getConfigTreeBuilder()->getRootNode())
+                ->arrayNode('expression_language')
+                    ->scalarPrototype()->end()
+                ->end()
+                ->scalarNode('name')->end()
+                ->arrayNode('jobs')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->end()
+                            ->append($this->pipelineConfiguration->getConfigTreeBuilder()->getRootNode())
+                            ->append($this->actionConfiguration->getConfigTreeBuilder()->getRootNode())
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

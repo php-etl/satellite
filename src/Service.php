@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Contract\Configurator\Adapter\FactoryInterface;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -19,7 +18,7 @@ final class Service implements Configurator\FactoryInterface
     private readonly Processor $processor;
     private readonly Satellite\Configuration $configuration;
     private readonly ExpressionLanguage $interpreter;
-    /** @var array<string, FactoryInterface> */
+    /** @var array<string, Configurator\Adapter\FactoryInterface> */
     private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
     private array $runtimes = [];
@@ -29,6 +28,10 @@ final class Service implements Configurator\FactoryInterface
     private array $pipelines = [];
     /** @var array<string, Satellite\Pipeline\ConfigurationApplier> */
     private array $plugins = [];
+    /** @var array<string, Configurator\FactoryInterface> */
+    private array $actions = [];
+    /** @var array<string, Satellite\Action\ConfigurationApplier> */
+    private array $actionPlugins = [];
 
     public function __construct(?ExpressionLanguage $expressionLanguage = null)
     {
@@ -100,6 +103,21 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
+    private function addAction(
+        Configurator\Action $attribute,
+        Configurator\ActionInterface $action,
+    ): self {
+        $this->configuration->addAction($attribute->name, $action->configuration());
+        $this->actions[$attribute->name] = $action;
+
+        $this->actionPlugins[$attribute->name] = $applier = new Satellite\Action\ConfigurationApplier($attribute->name, $action, $action->interpreter());
+        $applier->withPackages(...$attribute->dependencies);
+
+        $applier->withAction();
+
+        return $this;
+    }
+
     public function registerAdapters(Configurator\Adapter\FactoryInterface ...$adapters): self
     {
         foreach ($adapters as $adapter) {
@@ -138,6 +156,18 @@ final class Service implements Configurator\FactoryInterface
             /** @var Configurator\Pipeline $attribute */
             foreach (extractAttributes($plugin, Configurator\Pipeline::class) as $attribute) {
                 $this->addPipelinePlugin($attribute, $plugin);
+            }
+        }
+
+        return $this;
+    }
+
+    public function registerActions(Configurator\ActionInterface ...$actions): self
+    {
+        foreach ($actions as $action) {
+            /** @var Configurator\Action $attribute */
+            foreach (extractAttributes($action, Configurator\Action::class) as $attribute) {
+                $this->addAction($attribute, $action);
             }
         }
 
@@ -259,6 +289,22 @@ final class Service implements Configurator\FactoryInterface
                 );
 
                 $workflow->addPipeline($pipelineFilename);
+            } elseif (\array_key_exists('action', $job)) {
+                $action = $this->compileActionJob($job);
+                $actionFilename = sprintf('%s.php', uniqid('action'));
+
+                $repository->addFiles(
+                    new Packaging\File(
+                        $actionFilename,
+                        new Packaging\Asset\AST(
+                            new Node\Stmt\Return_(
+                                (new Satellite\Builder\Workflow\ActionBuilder($action->getBuilder()))->getNode()
+                            )
+                        )
+                    )
+                );
+
+                $workflow->addAction($actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -301,6 +347,22 @@ final class Service implements Configurator\FactoryInterface
             foreach ($plugins as $plugin) {
                 $plugin->appendTo($step, $repository);
             }
+        }
+
+        return $repository;
+    }
+
+    private function compileActionJob(array $config): Satellite\Builder\Repository\Action
+    {
+        $action = new Satellite\Builder\Action(
+            new Node\Expr\Variable('runtime'),
+        );
+
+        $repository = new Satellite\Builder\Repository\Action($action);
+
+        $actions = array_intersect_key($this->actionPlugins, $config['action']);
+        foreach ($actions as $action) {
+            $action->appendTo($config['action'], $repository);
         }
 
         return $repository;

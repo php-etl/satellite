@@ -10,6 +10,8 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+use function Kiboko\Component\SatelliteToolbox\Configuration\mutuallyExclusiveFields;
+
 final class BackwardCompatibilityConfiguration implements ConfigurationInterface
 {
     /** @var array<string, Configurator\AdapterConfigurationInterface> */
@@ -20,6 +22,8 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
     private array $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
     private array $features = [];
+    /** @var array<string, Configurator\ActionConfigurationInterface> */
+    private array $actions = [];
 
     public function addAdapter(string $name, Configurator\AdapterConfigurationInterface $adapter): self
     {
@@ -49,6 +53,13 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         return $this;
     }
 
+    public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
+    {
+        $this->actions[$name] = $action;
+
+        return $this;
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('satellite');
@@ -56,10 +67,10 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_keys($this->adapters)))
+                ->always(mutuallyExclusiveFields(...array_keys($this->adapters)))
             ->end()
             ->beforeNormalization()
-                ->always($this->mutuallyExclusiveFields(...array_keys($this->runtimes)))
+                ->always(mutuallyExclusiveFields(...array_keys($this->runtimes)))
             ->end()
             ->children()
                 ->append((new Satellite\Feature\Composer\Configuration())->getConfigTreeBuilder()->getRootNode())
@@ -82,42 +93,5 @@ final class BackwardCompatibilityConfiguration implements ConfigurationInterface
         }
 
         return $builder;
-    }
-
-    private function mutuallyExclusiveFields(string ...$exclusions): \Closure
-    {
-        return function (array $value) use ($exclusions) {
-            $fields = [];
-            foreach ($exclusions as $exclusion) {
-                if (\array_key_exists($exclusion, $value)) {
-                    $fields[] = $exclusion;
-                }
-
-                if (\count($fields) < 2) {
-                    continue;
-                }
-
-                throw new \InvalidArgumentException(sprintf('Your configuration should either contain the "%s" or the "%s" field, not both.', ...$fields));
-            }
-
-            return $value;
-        };
-    }
-
-    private function mutuallyDependentFields(string $field, string ...$dependencies): \Closure
-    {
-        return function (array $value) use ($field, $dependencies) {
-            if (!\array_key_exists($field, $value)) {
-                return $value;
-            }
-
-            foreach ($dependencies as $dependency) {
-                if (!\array_key_exists($dependency, $value)) {
-                    throw new \InvalidArgumentException(sprintf('Your configuration should contain the "%s" field if the "%s" field is present.', $dependency, $field));
-                }
-            }
-
-            return $value;
-        };
     }
 }
