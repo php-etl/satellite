@@ -58,7 +58,7 @@ final class PipelineRunCommand extends Console\Command\Command
 
         $runtime = new PipelineConsoleRuntime(
             $output,
-            new \Kiboko\Component\Pipeline\Action(
+            new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
                 )

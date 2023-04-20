@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Action;
 
+use Kiboko\Component\Satellite\Action\SFTP\Builder\ActionBuilderInterface;
 use Kiboko\Component\Satellite\Builder\Action as ActionBuilder;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Feature\Logger;
@@ -48,8 +49,11 @@ final readonly class Action
             );
         }
 
+        /** @var ActionBuilderInterface $builder */
+        $builder = $repository->getBuilder();
+
         $action->addAction(
-            $repository->getBuilder()
+            $builder
                 ->withLogger($logger)
                 ->withState($state),
             $state,

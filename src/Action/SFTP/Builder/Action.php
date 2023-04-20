@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Action\SFTP\Builder;
 
-use PhpParser\Builder;
 use PhpParser\Node;
 
-final class Action implements Builder
+final class Action implements ActionBuilderInterface
 {
     private ?Node\Expr $logger = null;
     private ?Node\Expr $state = null;

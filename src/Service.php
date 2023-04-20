@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
-use Kiboko\Contract\Configurator\PipelineActionInterface;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -19,7 +18,7 @@ final class Service implements Configurator\FactoryInterface
     private readonly Processor $processor;
     private readonly Satellite\Configuration $configuration;
     private readonly ExpressionLanguage $interpreter;
-    /** @var array<string, FactoryInterface> */
+    /** @var array<string, Configurator\Adapter\FactoryInterface> */
     private array $adapters = [];
     /** @var array<string, Satellite\Runtime\FactoryInterface> */
     private array $runtimes = [];
@@ -105,7 +104,7 @@ final class Service implements Configurator\FactoryInterface
     }
 
     /**
-     * @param PipelineActionInterface $action
+     * @param Configurator\ActionInterface $action
      */
     private function addAction(
         Configurator\Action $attribute,
