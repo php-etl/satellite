@@ -109,7 +109,8 @@
                 "Kiboko\\Component\\Satellite\\Plugin\\Stream\\Service",
                 "Kiboko\\Component\\Satellite\\Plugin\\SFTP\\Service",
                 "Kiboko\\Component\\Satellite\\Plugin\\FTP\\Service",
-                "Kiboko\\Component\\Satellite\\Plugin\\Batching\\Service"
+                "Kiboko\\Component\\Satellite\\Plugin\\Batching\\Service",
+                "Kiboko\\Component\\Satellite\\Plugin\\Filtering\\Service"
             ]
         }
     },
