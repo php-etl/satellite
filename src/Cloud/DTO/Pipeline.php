@@ -41,7 +41,7 @@ final readonly class Pipeline implements PipelineInterface
     {
         return $this->packages;
     }
-    
+
     public function repositories(): RepositoryList
     {
         return $this->repositories;

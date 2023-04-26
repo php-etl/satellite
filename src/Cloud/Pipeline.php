@@ -61,7 +61,7 @@ final readonly class Pipeline implements PipelineInterface
             new DTO\PackageList(
                 ...array_map(
                     function (string $namespace) {
-                        $parts = explode(":", $namespace);
+                        $parts = explode(':', $namespace);
 
                         return new Package($parts[0], $parts[1]);
                     },
@@ -71,13 +71,13 @@ final readonly class Pipeline implements PipelineInterface
             new RepositoryList(
                 ...array_map(
                     fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                $configuration['composer']['repositories'] ?? [],
+                    $configuration['composer']['repositories'] ?? [],
                 )
             ),
             new AuthList(
                 ...array_map(
                     fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                $configuration['composer']['auth'] ?? [],
+                    $configuration['composer']['auth'] ?? [],
                 )
             ),
         );
@@ -160,7 +160,7 @@ final readonly class Pipeline implements PipelineInterface
             new DTO\PackageList(
                 ...array_map(
                     function (string $namespace) {
-                        $parts = explode(":", $namespace);
+                        $parts = explode(':', $namespace);
 
                         return new Package($parts[0], $parts[1]);
                     },

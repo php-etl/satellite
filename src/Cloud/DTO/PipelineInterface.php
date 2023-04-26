@@ -13,10 +13,10 @@ interface PipelineInterface
     public function steps(): StepList;
 
     public function autoload(): Autoload;
-    
+
     public function packages(): PackageList;
-    
+
     public function repositories(): RepositoryList;
-    
+
     public function auths(): AuthList;
 }

@@ -90,6 +90,7 @@ final class Auth
         $data = new \stdClass();
         $data->organization = $organization->asString();
 
+        /** @var \stdClass $token */
         $token = $client->putAuthenticationToken($data);
 
         return $token->token;
@@ -102,6 +103,7 @@ final class Auth
         $data = new \stdClass();
         $data->workspace = $workspace->asString();
 
+        /* @var \stdClass $token */
         $token = $client->putAuthenticationToken($data);
 
         return $token->token;

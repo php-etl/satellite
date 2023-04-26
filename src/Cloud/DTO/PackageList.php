@@ -28,14 +28,14 @@ final class PackageList implements \Countable, \IteratorAggregate
     {
         return array_map($callback, $this->packages);
     }
-    
+
     public function transform(): array
     {
         $result = [];
         foreach ($this->packages as $package) {
             $result[$package->name] = $package->version;
         }
-        
+
         return $result;
     }
 }
