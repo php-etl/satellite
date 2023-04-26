@@ -39,6 +39,22 @@ final readonly class DeclarePipelineCommandHandler
                             ->setNamespace($autoloadConfig->namespace)
                             ->setPaths($autoloadConfig->paths)
                     ))
+                    ->setPackages($command->packages->map(
+                        fn (Cloud\DTO\Package $package) => (new Api\Model\PipelineAddPipelineComposerPackageCommandInput())
+                            ->setPackage($package->name)
+                            ->setVersion($package->version)
+                    ))
+                    ->setAuths($command->auths->map(
+                        fn (Cloud\DTO\Auth $auth) => (new Api\Model\AddPipelineComposerAuthCommandInput())
+                            ->setUrl($auth->url)
+                            ->setToken($auth->token)
+                    ))
+                    ->setRepositories($command->repositories->map(
+                        fn (Cloud\DTO\Repository $repository) => (new Api\Model\AddPipelineComposerRepositoryCommandInput())
+                            ->setName($repository->name)
+                            ->setType($repository->type)
+                            ->setUrl($repository->url)
+                    )),
             );
         } catch (Api\Exception\DeclarePipelinePipelineCollectionBadRequestException $exception) {
             throw new Cloud\DeclarePipelineFailedException('Something went wrong while declaring the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);

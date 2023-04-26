@@ -66,14 +66,12 @@ final class Auth
         $data = new Api\Model\Credentials();
         $data->setUsername($credentials->username);
         $data->setPassword($credentials->password);
-        if (!$credentials->workspace || $credentials->workspace->isNil()) {
-            throw new NoWorkspaceSelectedException('Please use "cloud workspace:change" to select the workspace you are working on.');
+        if ($credentials->workspace && !$credentials->workspace->isNil()) {
+            $data->setWorkspace($credentials->workspace->asString());
         }
-        $data->setWorkspace($credentials->workspace->asString());
-        if (!$credentials->organization || $credentials->organization->isNil()) {
-            throw new NoOrganizationSelectedException('Please use "cloud organization:change" to select the organization you are working on.');
+        if ($credentials->organization && !$credentials->organization->isNil()) {
+            $data->setOrganization($credentials->organization->asString());
         }
-        $data->setOrganization($credentials->organization->asString());
 
         $token = $client->postCredentialsItem($data);
         try {
@@ -94,7 +92,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
+        return $token->token;
     }
 
     public function changeWorkspace(
@@ -106,7 +104,7 @@ final class Auth
 
         $token = $client->putAuthenticationToken($data);
 
-        return json_decode($token->getBody()->getContents(), null, 512, \JSON_THROW_ON_ERROR)['token'];
+        return $token->token;
     }
 
     public function persistOrganization(string $url, OrganizationId $organization): void
@@ -140,8 +138,8 @@ final class Auth
         $this->configuration[$url] = array_merge($this->configuration[$url], [
             'login' => $credentials->username,
             'password' => $credentials->password,
-            'organization' => $credentials->organization->asString() ?? $this->configuration[$url]['organization'],
-            'workspace' => $credentials->workspace->asString() ?? $this->configuration[$url]['workspace'],
+            'organization' => $credentials->organization?->asString() ?? ($this->configuration[$url]['organization'] ?? null),
+            'workspace' => $credentials->workspace?->asString() ?? ($this->configuration[$url]['workspace'] ?? null),
         ]);
     }
 

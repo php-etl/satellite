@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api;
+use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
+use Kiboko\Component\Satellite\Cloud\DTO\Package;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
+use Kiboko\Component\Satellite\Cloud\DTO\RepositoryList;
 use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
 use Symfony\Component\ExpressionLanguage\Expression;
 
@@ -54,7 +57,29 @@ final readonly class Pipeline implements PipelineInterface
                     array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                     $configuration['composer']['autoload']['psr4'] ?? [],
                 )
-            )
+            ),
+            new DTO\PackageList(
+                ...array_map(
+                    function (string $namespace) {
+                        $parts = explode(":", $namespace);
+
+                        return new Package($parts[0], $parts[1]);
+                    },
+                    $configuration['composer']['require'] ?? [],
+                )
+            ),
+            new RepositoryList(
+                ...array_map(
+                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                $configuration['composer']['repositories'] ?? [],
+                )
+            ),
+            new AuthList(
+                ...array_map(
+                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                $configuration['composer']['auth'] ?? [],
+                )
+            ),
         );
     }
 
@@ -131,7 +156,29 @@ final readonly class Pipeline implements PipelineInterface
                     array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                     $model->getAutoload(),
                 )
-            )
+            ),
+            new DTO\PackageList(
+                ...array_map(
+                    function (string $namespace) {
+                        $parts = explode(":", $namespace);
+
+                        return new Package($parts[0], $parts[1]);
+                    },
+                    $model->getPackages(),
+                )
+            ),
+            new RepositoryList(
+                ...array_map(
+                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                    $model->getRepositories(),
+                )
+            ),
+            new AuthList(
+                ...array_map(
+                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                    $model->getAuths(),
+                )
+            ),
         );
     }
 
@@ -143,6 +190,9 @@ final readonly class Pipeline implements PipelineInterface
                 $pipeline->label(),
                 $pipeline->steps(),
                 $pipeline->autoload(),
+                $pipeline->packages(),
+                $pipeline->repositories(),
+                $pipeline->auths(),
                 $this->context->organization(),
                 $this->context->workspace(),
             )
