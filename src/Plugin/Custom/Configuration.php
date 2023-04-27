@@ -33,7 +33,7 @@ final class Configuration implements PluginConfigurationInterface
             ->end()
             ->beforeNormalization()
                 ->always(function (array $value) {
-                    if (\array_key_exists('expression_language', $value) && \count($value['expression_language']) <= 0)
+                    if (\array_key_exists('expression_language', $value) && (is_countable($value['expression_language']) ? \count($value['expression_language']) : 0) <= 0)
                     {
                         unset($value['expression_language']);
                     }
