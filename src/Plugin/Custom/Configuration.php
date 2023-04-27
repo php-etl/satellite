@@ -31,6 +31,16 @@ final class Configuration implements PluginConfigurationInterface
                 ->ifTrue(fn (array $value) => \array_key_exists('loader', $value) && \array_key_exists('transformer', $value))
                 ->thenInvalid('Your configuration should either contain the "loader" or the "transformer" key, not both.')
             ->end()
+            ->beforeNormalization()
+                ->always(function (array $value) {
+                    if (\array_key_exists('expression_language', $value) && \count($value['expression_language']) <= 0)
+                    {
+                        unset($value['expression_language']);
+                    }
+
+                    return $value;
+                })
+            ->end()
             ->children()
                 ->arrayNode('expression_language')
                     ->scalarPrototype()->end()
