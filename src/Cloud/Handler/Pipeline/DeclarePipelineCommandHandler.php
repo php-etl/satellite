@@ -39,11 +39,7 @@ final readonly class DeclarePipelineCommandHandler
                             ->setNamespace($autoloadConfig->namespace)
                             ->setPaths($autoloadConfig->paths)
                     ))
-                    ->setPackages($command->packages->map(
-                        fn (Cloud\DTO\Package $package) => (new Api\Model\PipelineAddPipelineComposerPackageCommandInput())
-                            ->setPackage($package->name)
-                            ->setVersion($package->version)
-                    ))
+                    ->setPackages($command->packages->transform())
                     ->setAuths($command->auths->map(
                         fn (Cloud\DTO\Auth $auth) => (new Api\Model\AddPipelineComposerAuthCommandInput())
                             ->setUrl($auth->url)
