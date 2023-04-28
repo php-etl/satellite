@@ -11,6 +11,9 @@ final readonly class Pipeline implements PipelineInterface
         private string $code,
         private StepList $steps,
         private Autoload $autoload,
+        private PackageList $packages,
+        private RepositoryList $repositories,
+        private AuthList $auths,
     ) {
     }
 
@@ -32,5 +35,20 @@ final readonly class Pipeline implements PipelineInterface
     public function autoload(): Autoload
     {
         return $this->autoload;
+    }
+
+    public function packages(): PackageList
+    {
+        return $this->packages;
+    }
+
+    public function repositories(): RepositoryList
+    {
+        return $this->repositories;
+    }
+
+    public function auths(): AuthList
+    {
+        return $this->auths;
     }
 }

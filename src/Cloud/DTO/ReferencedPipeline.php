@@ -36,4 +36,19 @@ final readonly class ReferencedPipeline implements PipelineInterface
     {
         return $this->decorated->autoload();
     }
+
+    public function packages(): PackageList
+    {
+        return $this->decorated->packages();
+    }
+
+    public function repositories(): RepositoryList
+    {
+        return $this->decorated->repositories();
+    }
+
+    public function auths(): AuthList
+    {
+        return $this->decorated->auths();
+    }
 }
