@@ -103,7 +103,7 @@ final class Auth
         $data = new \stdClass();
         $data->workspace = $workspace->asString();
 
-        /* @var \stdClass $token */
+        /** @var \stdClass $token */
         $token = $client->putAuthenticationToken($data);
 
         return $token->token;
