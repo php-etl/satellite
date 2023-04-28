@@ -9,14 +9,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 final class SatelliteDependencyInjection
 {
     private readonly array $providers;
 
     public function __construct(
-        ExpressionFunctionProviderInterface ...$providers,
+        string ...$providers,
     ) {
         $this->providers = $providers;
     }
@@ -26,7 +25,7 @@ final class SatelliteDependencyInjection
         $container = new ContainerBuilder();
 
         foreach ($this->providers as $provider) {
-            $container->addExpressionLanguageProvider($provider);
+            $container->addExpressionLanguageProvider(new $provider());
         }
 
         if (\array_key_exists('parameters', $config)
