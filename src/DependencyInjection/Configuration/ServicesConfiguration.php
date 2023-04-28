@@ -48,6 +48,7 @@ final class ServicesConfiguration implements ConfigurationInterface
                             unset($service['calls']);
                         }
                     }
+
                     return $data;
                 })
             ->end()
@@ -58,6 +59,7 @@ final class ServicesConfiguration implements ConfigurationInterface
                             unset($service['arguments']);
                         }
                     }
+
                     return $data;
                 })
             ->end()
