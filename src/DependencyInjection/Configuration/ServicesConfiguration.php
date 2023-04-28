@@ -33,8 +33,30 @@ final class ServicesConfiguration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always(function ($data) {
                     foreach ($data as &$service) {
-                        if (\array_key_exists('calls', $service)) {
+                        if (\array_key_exists('calls', $service) && (is_countable($service['calls']) ? \count($service['calls']) : 0) > 0) {
                             $service['calls'] = array_merge(...$service['calls']);
+                        }
+                    }
+
+                    return $data;
+                })
+            ->end()
+            ->beforeNormalization()
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (\array_key_exists('calls', $service) && (is_countable($service['calls']) ? \count($service['calls']) : 0) <= 0) {
+                            unset($service['calls']);
+                        }
+                    }
+
+                    return $data;
+                })
+            ->end()
+            ->beforeNormalization()
+                ->always(function ($data) {
+                    foreach ($data as &$service) {
+                        if (\array_key_exists('arguments', $service) && (is_countable($service['arguments']) ? \count($service['arguments']) : 0) <= 0) {
+                            unset($service['arguments']);
                         }
                     }
 
