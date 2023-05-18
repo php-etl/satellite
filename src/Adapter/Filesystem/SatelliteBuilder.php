@@ -114,6 +114,10 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             }
         }
 
+        if (!file_exists($this->workdir.'/.env') && file_exists(getcwd().'/.env')) {
+            symlink(getcwd().'/.env', $this->workdir.'/.env');
+        }
+
         $composer = new Satellite\Adapter\Composer($this->workdir);
         $satellite = new Satellite\Adapter\Filesystem\Satellite(
             $this->workdir,
