@@ -104,7 +104,7 @@ final class Composer
         }
 
         foreach ($iterator as $file) {
-            $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+            $file->getType() === 'dir' ? rmdir($file->getPathname()) : unlink($file->getPathname());
         }
     }
 
