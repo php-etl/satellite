@@ -162,6 +162,21 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
         $satellite->dependsOn(...$this->composerRequire);
 
+        $this->clearPipelines();
+
         return $satellite;
+    }
+
+    private function clearPipelines(): void
+    {
+        $iterator = new \AppendIterator();
+
+        $iterator->append(new \GlobIterator($this->workdir.'/pipeline*.php', \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS));
+
+        foreach ($iterator as $file) {
+            if (is_file($file->getPathname())) {
+                unlink($file->getPathname());
+            }
+        }
     }
 }
