@@ -13,7 +13,7 @@ final class Auth
     private string $pathName;
     private array $configuration;
 
-    public function __construct(?string $pathName = null)
+    public function __construct(null|string $pathName = null)
     {
         if (null === $pathName) {
             $this->pathName = getenv('HOME').'/.gyroscops/';

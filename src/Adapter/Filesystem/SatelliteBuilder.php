@@ -65,7 +65,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\FileInterface|PackagingContract\AssetInterface $source,
-        ?string $destinationPath = null
+        null|string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
@@ -80,7 +80,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, null|string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
