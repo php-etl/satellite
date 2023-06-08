@@ -32,7 +32,7 @@ final class Composer
         });
 
         if (0 !== $process->getExitCode()) {
-            throw new \RuntimeException(sprintf('Process exited unexpectedly. %s', $process->getCommandLine()));
+            throw new ComposerFailureException($process->getCommandLine(), sprintf('Process exited unexpectedly with output: %s', $process->getErrorOutput()), $process->getExitCode());
         }
     }
 
@@ -86,14 +86,76 @@ final class Composer
         );
     }
 
+    private function clearVendor(): void
+    {
+        $iterator = new \AppendIterator();
+
+        try {
+            $iterator->append(new \GlobIterator($this->workdir.'/composer.*', \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::KEY_AS_PATHNAME));
+            $iterator->append(new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $this->workdir.'/vendor',
+                    \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::CHILD_FIRST,
+            ));
+        } catch (\UnexpectedValueException $e) {
+            $this->logger->warning($e->getMessage());
+        }
+
+        foreach ($iterator as $file) {
+            'dir' === $file->getType() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+        }
+    }
+
     public function init(string $name): void
     {
+        if (file_exists($this->workdir.'/composer.json')) {
+            if (filesize($this->workdir.'/composer.json') <= 2) {
+                $this->clearVendor();
+            } else {
+                try {
+                    $this->allowPlugins('php-http/discovery');
+
+                    return;
+                } catch (ComposerFailureException) {
+                    $this->clearVendor();
+                }
+            }
+        }
+
         $this->command(
             'composer',
             'init',
             '--no-interaction',
             sprintf('--name=%s', $name),
         );
+
+        $this->allowPlugins('php-http/discovery');
+    }
+
+    public function allowPlugins(string ...$plugins): void
+    {
+        foreach ($plugins as $packageName) {
+            $this->command(
+                'composer',
+                'config',
+                sprintf('allow-plugins.%s', $packageName),
+                'true',
+            );
+        }
+    }
+
+    public function denyPlugins(string ...$plugins): void
+    {
+        foreach ($plugins as $packageName) {
+            $this->command(
+                'composer',
+                'config',
+                sprintf('allow-plugins.%s', $packageName),
+                'false',
+            );
+        }
     }
 
     /**

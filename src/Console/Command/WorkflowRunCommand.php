@@ -61,6 +61,11 @@ final class WorkflowRunCommand extends Console\Command\Command
             new \Kiboko\Component\Pipeline\PipelineRunner(new \Psr\Log\NullLogger()),
         );
 
+        if (!file_exists('workflow.php')) {
+            $style->error('The provided path does not contain a workflow, did you mean to run "run:pipeline"?');
+
+            return \Symfony\Component\Console\Command\Command::FAILURE;
+        }
         /** @var callable(runtime: WorkflowRuntimeInterface): \Runtime $workflow */
         $workflow = include 'workflow.php';
 
