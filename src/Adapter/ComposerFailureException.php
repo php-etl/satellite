@@ -6,7 +6,7 @@ namespace Kiboko\Component\Satellite\Adapter;
 
 final class ComposerFailureException extends \RuntimeException
 {
-    public function __construct(private readonly string $command = '', string $message = '', int $code = 0, ?\Throwable $previous = null)
+    public function __construct(private readonly string $command = '', string $message = '', int $code = 0, null|\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

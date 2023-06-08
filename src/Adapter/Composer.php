@@ -104,7 +104,7 @@ final class Composer
         }
 
         foreach ($iterator as $file) {
-            $file->getType() === 'dir' ? rmdir($file->getPathname()) : unlink($file->getPathname());
+            'dir' === $file->getType() ? rmdir($file->getPathname()) : unlink($file->getPathname());
         }
     }
 
@@ -132,18 +132,6 @@ final class Composer
         );
 
         $this->allowPlugins('php-http/discovery');
-    }
-
-    public function forcePlugins(string ...$plugins): void
-    {
-        foreach ($plugins as $packageName) {
-            $this->command(
-                'composer',
-                'config',
-                sprintf('allow-plugins.%s', $packageName),
-                'true',
-            );
-        }
     }
 
     public function allowPlugins(string ...$plugins): void
