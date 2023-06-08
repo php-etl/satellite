@@ -65,6 +65,11 @@ final class PipelineRunCommand extends Console\Command\Command
             ),
         );
 
+        if (!file_exists('pipeline.php')) {
+            $style->error('The provided path does not contain one single pipeline, did you mean to run "run:workflow"?');
+
+            return \Symfony\Component\Console\Command\Command::FAILURE;
+        }
         /** @var callable(runtime: PipelineRuntimeInterface): \Runtime $pipeline */
         $pipeline = include 'pipeline.php';
 
