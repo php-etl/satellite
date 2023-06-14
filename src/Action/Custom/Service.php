@@ -76,6 +76,7 @@ final readonly class Service implements Configurator\ActionInterface
         }
 
         $actionFactory = new Custom\Factory\Action($this->interpreter);
+
         return $actionFactory->compile($config);
     }
 }

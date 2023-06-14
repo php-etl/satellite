@@ -8,6 +8,7 @@ use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Node;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 final class Extractor implements StepBuilderInterface

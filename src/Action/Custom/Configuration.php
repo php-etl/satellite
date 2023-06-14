@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Action\Custom;
 use Kiboko\Component\Satellite\DependencyInjection\Configuration\ServicesConfiguration;
 use Kiboko\Contract\Configurator\ActionConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 use function Kiboko\Component\SatelliteToolbox\Configuration\asExpression;
 use function Kiboko\Component\SatelliteToolbox\Configuration\isExpression;
 
