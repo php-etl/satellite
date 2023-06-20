@@ -42,10 +42,10 @@ final class PipelineRunCommand extends Console\Command\Command
         $dotenv = new Dotenv();
         $dotenv->usePutenv();
 
-        if (file_exists($file = $cwd . '/.env')) {
+        if (file_exists($file = $cwd.'/.env')) {
             $dotenv->loadEnv($file);
         }
-        if (file_exists($file = $cwd . '/' . $input->getArgument('path') . '/.env')) {
+        if (file_exists($file = $cwd.'/'.$input->getArgument('path').'/.env')) {
             $dotenv->loadEnv($file);
         }
 
