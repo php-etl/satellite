@@ -33,7 +33,7 @@ final class Service implements Configurator\FactoryInterface
     /** @var array<string, Satellite\Action\ConfigurationApplier> */
     private array $actionPlugins = [];
 
-    public function __construct(null|ExpressionLanguage $expressionLanguage = null)
+    public function __construct(ExpressionLanguage $expressionLanguage = null)
     {
         $this->processor = new Processor();
         $this->configuration = new Satellite\Configuration();
@@ -293,6 +293,7 @@ final class Service implements Configurator\FactoryInterface
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
 
+                $repository->merge($action);
                 $repository->addFiles(
                     new Packaging\File(
                         $actionFilename,

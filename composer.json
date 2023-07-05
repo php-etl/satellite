@@ -111,6 +111,10 @@
                 "Kiboko\\Component\\Satellite\\Plugin\\FTP\\Service",
                 "Kiboko\\Component\\Satellite\\Plugin\\Batching\\Service",
                 "Kiboko\\Component\\Satellite\\Plugin\\Filtering\\Service"
+            ],
+            "actions": [
+                "Kiboko\\Component\\Satellite\\Action\\SFTP\\Service",
+                "Kiboko\\Component\\Satellite\\Action\\Custom\\Service"
             ]
         }
     },

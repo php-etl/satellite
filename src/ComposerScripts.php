@@ -46,6 +46,7 @@ final class ComposerScripts
             }
             if ('satellite-plugin' !== $package->getType()
                 && 'gyroscops-plugin' !== $package->getType()
+                && 'gyroscops-action' !== $package->getType()
                 && 'php-etl/satellite' !== $package->getName()
             ) {
                 continue;
