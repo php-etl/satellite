@@ -1,7 +1,7 @@
 name: PHPStan level 6
 on: push
 jobs:
-  phpstan:
+  phpstan6:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

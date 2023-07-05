@@ -293,6 +293,7 @@ final class Service implements Configurator\FactoryInterface
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
 
+                $repository->merge($action);
                 $repository->addFiles(
                     new Packaging\File(
                         $actionFilename,
