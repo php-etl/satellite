@@ -129,6 +129,7 @@ final class Composer
             'init',
             '--no-interaction',
             sprintf('--name=%s', $name),
+            '--require=php:^8.2',
         );
 
         $this->allowPlugins('php-http/discovery');
@@ -163,20 +164,14 @@ final class Composer
      */
     public function autoload(array $autoloads): void
     {
+        $composer = json_decode(file_get_contents($this->workdir.'/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
         foreach ($autoloads as $type => $autoload) {
             match ($type) {
-                'psr4' => $this->pipe(
-                    $this->subcommand('cat', 'composer.json'),
-                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."psr-4" |= . + %s', json_encode($autoload, \JSON_THROW_ON_ERROR))),
-                    $this->subcommand('tee', 'composer.json'),
-                ),
-                'file' => $this->pipe(
-                    $this->subcommand('cat', 'composer.json'),
-                    $this->subcommand('jq', '--indent', '4', sprintf('.autoload."file" |= . + %s', json_encode($autoload, \JSON_THROW_ON_ERROR))),
-                    $this->subcommand('tee', 'composer.json'),
-                )
+                'psr4' => $composer['autoload']['psr-4'] = $autoload,
+                'file' => $composer['autoload']['file'] = $autoload,
             };
         }
+        file_put_contents($this->workdir.'/composer.json', json_encode($composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
     }
 
     public function install(): void
