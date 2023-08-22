@@ -7,13 +7,14 @@ namespace Kiboko\Component\Satellite\Runtime\Api;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator;
+use PhpParser\Builder;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter;
 use Psr\Log\LoggerInterface;
 
 final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'function.php')
+    public function __construct(private array $config, private string $filename = 'api.php')
     {
     }
 
@@ -28,14 +29,18 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 
         $satellite->withFile(
             new Packaging\File($this->filename, new Packaging\Asset\InMemory(
-                '<?php'.\PHP_EOL.(new PrettyPrinter\Standard())->prettyPrint($this->build())
+                '<?php'.\PHP_EOL.(new PrettyPrinter\Standard())->prettyPrint($this->build($repository->getBuilder()))
             )),
+        );
+
+        $satellite->withFile(
+            ...$repository->getFiles(),
         );
 
         $satellite->dependsOn(...$repository->getPackages());
     }
 
-    public function build(): array
+    public function build(Builder $builder): array
     {
         return [
             new Node\Stmt\Expression(
@@ -47,13 +52,36 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                     Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'), 'NikiFastRoute')]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\FastRoute'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Utils\\Dispatcher'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Uuid'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\BasePath'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\RequestHandler'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Psr'))]),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
 
+            new Node\Stmt\Return_(
+                new Node\Expr\Closure(
+                    subNodes: [
+                        'static' => true,
+                        'params' => [
+                            new Node\Param(
+                                var: new Node\Expr\Variable('runtime'),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\API\\APIRuntime'),
+                            ),
+                        ],
+                        'stmts' => $this->buildAPIClosure($builder),
+                    ]
+                ),
+            ),
+        ];
+    }
+
+    public function buildAPIClosure(Builder $builder): array
+    {
+        return [
             new Node\Stmt\Expression(
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('psr17Factory'),
@@ -88,7 +116,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('fastRouteDispatcher'),
                     new Node\Expr\FuncCall(
-                        new Node\Name('FastRoute\\simpleDispatcher'),
+                        new Node\Name('NikiFastRoute\\simpleDispatcher'),
                         [
                             new Node\Arg(
                                 new Node\Expr\Closure([
@@ -96,16 +124,16 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                                         new Node\Param(
                                             new Node\Expr\Variable('router'),
                                             null,
-                                            new Node\Name('FastRoute\\RouteCollector')
+                                            new Node\Name('NikiFastRoute\\RouteCollector')
                                         ),
                                     ],
                                     'uses' => [
+                                        new Node\Expr\Variable('runtime'),
                                         new Node\Expr\Variable('psr17Factory'),
                                     ],
-                                    'stmts' => iterator_to_array($this->compileRoutes(
-                                        new Node\Expr\Variable('router'),
-                                        new Node\Expr\Variable('psr17Factory'),
-                                    )),
+                                    'stmts' => iterator_to_array(
+                                        $this->compileRoutes($builder, new Node\Expr\Variable('router'))
+                                    ),
                                 ])
                             ),
                         ]
@@ -114,22 +142,22 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
             ),
 
             new Node\Stmt\Expression(
-                new Node\Expr\Assign(
-                    new Node\Expr\Variable('dispatcher'),
-                    new Node\Expr\New_(
-                        new Node\Name('Middlewares\\Utils\\Dispatcher'),
-                        [
+                expr: new Node\Expr\Assign(
+                    var: new Node\Expr\Variable('dispatcher'),
+                    expr: new Node\Expr\New_(
+                        class: new Node\Name('Dispatcher'),
+                        args: [
                             new Node\Arg(
-                                new Node\Expr\Array_(
-                                    [
+                                value: new Node\Expr\Array_(
+                                    items: array_filter([
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\Uuid'),
+                                                new Node\Name('Uuid'),
                                             ),
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\BasePath'),
+                                                new Node\Name('BasePath'),
                                                 [
                                                     new Node\Arg(
                                                         new Node\Scalar\String_($this->config['path'] ?? '/')
@@ -137,9 +165,12 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                                                 ],
                                             ),
                                         ),
+                                        \array_key_exists('authorization', $this->config['http_api']) ? new Node\Expr\ArrayItem(
+                                            (new Satellite\Runtime\Authorization())->build($this->config['http_api']),
+                                        ) : null,
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\FastRoute'),
+                                                new Node\Name('FastRoute'),
                                                 [
                                                     new Node\Arg(
                                                         new Node\Expr\Variable('fastRouteDispatcher')
@@ -149,11 +180,11 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                         new Node\Expr\ArrayItem(
                                             new Node\Expr\New_(
-                                                new Node\Name('Middlewares\\RequestHandler'),
+                                                new Node\Name('RequestHandler'),
                                             ),
                                         ),
-                                    ],
-                                    [
+                                    ]),
+                                    attributes: [
                                         'kind' => Node\Expr\Array_::KIND_SHORT,
                                     ],
                                 ),
@@ -187,31 +218,124 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
-    private function routeToAST(array $routeConfig, Node\Expr\Variable $router, Node\Expr\Variable $factory): Node\Stmt\Expression
+    private function compileRoutes(Builder $builder, Node\Expr\Variable $router): \Iterator
     {
-        return new Node\Stmt\Expression(
-            new Node\Expr\MethodCall(
-                $router,
-                $routeConfig['method'] ?? 'get',
-                [
-                    new Node\Arg(
-                        new Node\Scalar\String_($routeConfig['path'])
-                    ),
-                    new Node\Arg(
-                        new Node\Expr\Include_(
-                            new Node\Scalar\String_($routeConfig['function']),
-                            Node\Expr\Include_::TYPE_REQUIRE,
-                        )
-                    ),
-                ],
-            ),
-        );
+        foreach ($this->config['http_api']['routes'] as $routeConfig) {
+            yield new Node\Stmt\Expression(
+                new Node\Expr\MethodCall(
+                    $router,
+                    $routeConfig['method'] ?? 'post',
+                    [
+                        new Node\Arg(
+                            new Node\Scalar\String_($this->config['http_api']['path'].$routeConfig['route'])
+                        ),
+                        new Node\Arg(
+                            $this->compileClosure($builder, $routeConfig)
+                        ),
+                    ]
+                )
+            );
+        }
     }
 
-    private function compileRoutes(Node\Expr\Variable $router, Node\Expr\Variable $factory): \Iterator
+    private function compileClosure(Builder $builder, array $routeConfig): Node\Expr\Closure
     {
-        foreach ($this->config['routes'] as $route) {
-            yield $this->routeToAST($route, $router, $factory);
-        }
+        return new Node\Expr\Closure(
+            subNodes: [
+                'params' => [
+                    new Node\Param(
+                        var: new Node\Expr\Variable('request'),
+                        type: new Node\Name\FullyQualified(\Psr\Http\Message\RequestInterface::class),
+                    ),
+                ],
+                'uses' => [
+                    new Node\Expr\Variable('runtime'),
+                    new Node\Expr\Variable('psr17Factory'),
+                ],
+                'stmts' => [
+                    new Node\Stmt\Expression(
+                        expr: new Node\Expr\Assign(
+                            var: new Node\Expr\Variable('interpreter'),
+                            expr: new Node\Expr\New_(new Node\Name(\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)),
+                        ),
+                    ),
+                    new Node\Stmt\Expression(
+                        new Node\Expr\Assign(
+                            new Node\Expr\Variable('items'),
+                            new Node\Expr\MethodCall(
+                                new Node\Expr\Variable('interpreter'),
+                                'evaluate',
+                                [
+                                    new Node\Arg(
+                                        new Node\Scalar\String_($routeConfig['expression'])
+                                    ),
+                                    new Node\Arg(
+                                        new Node\Expr\Array_([
+                                            new Node\Expr\ArrayItem(
+                                                value: new Node\Expr\FuncCall(
+                                                    name: new Node\Name('json_decode'),
+                                                    args: [
+                                                        new Node\Arg(
+                                                            value: new Node\Expr\MethodCall(
+                                                                var: new Node\Expr\MethodCall(
+                                                                    var: new Node\Expr\Variable('request'),
+                                                                    name: 'getBody',
+                                                                ),
+                                                                name: 'getContents'
+                                                            )
+                                                        ),
+                                                        new Node\Arg(
+                                                            new Node\Expr\ConstFetch(new Node\Name('true'))
+                                                        ),
+                                                    ]
+                                                ),
+                                                key: new Node\Scalar\String_('input'),
+                                            ),
+                                        ])
+                                    ),
+                                ]
+                            )
+                        )
+                    ),
+                    new Node\Stmt\Foreach_(
+                        new Node\Expr\Variable('items'),
+                        new Node\Expr\Variable('item'),
+                        [
+                            'stmts' => [
+                                new Node\Stmt\Expression(
+                                    new Node\Expr\MethodCall(
+                                        var: new Node\Expr\Variable('runtime'),
+                                        name: 'feed',
+                                        args: [
+                                            new Node\Arg(
+                                                new Node\Scalar\String_($routeConfig['route'])
+                                            ),
+                                            new Node\Arg(
+                                                value: new Node\Expr\Variable('item'),
+                                                unpack: true
+                                            ),
+                                        ]
+                                    ),
+                                ),
+                            ],
+                        ]
+                    ),
+                    new Node\Stmt\Expression(
+                        expr: new Node\Expr\Assign(
+                            var: new Node\Expr\Variable('response'),
+                            expr: new Node\Expr\MethodCall(
+                                var: new Node\Expr\Variable('runtime'),
+                                name: 'run',
+                                args: [
+                                    new Node\Arg(
+                                        new Node\Scalar\String_($routeConfig['route'])),
+                                ]
+                            )
+                        )
+                    ),
+                    $builder->getNode(),
+                ],
+            ],
+        );
     }
 }
