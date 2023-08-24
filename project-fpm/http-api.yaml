@@ -1,40 +1,43 @@
 satellite:
-  docker:
-    from: php:8.0-fpm-alpine
-    workdir: /var/www/html
-    tags:
-      - kiboko/satellite:foo
-      - kiboko/satellite:bar
-#  filesystem:
-#    path: foo
+  #  docker:
+  #    from: php:8.0-fpm-alpine
+  #    workdir: /var/www/html
+  #    tags:
+  #      - kiboko/satellite:foo
+  #      - kiboko/satellite:bar
+  filesystem:
+    path: foo
   composer:
 #    from_local: true
-    autoload:
-      psr4:
-        - namespace: "Pipeline\\"
-          paths: [ "" ]
     require:
-      - "psr/http-message:^1.0@dev"
-      - "psr/http-factory:^1.0@dev"
-      - "psr/http-server-handler:^1.0@dev"
       - "middlewares/uuid:dev-master"
       - "middlewares/base-path:dev-master"
       - "middlewares/request-handler:dev-master"
       - "middlewares/fast-route:dev-master"
       - "laminas/laminas-diactoros"
-      - "laminas/laminas-httphandlerrunner:1.2.x-dev"
+      - "laminas/laminas-httphandlerrunner"
+      - "nyholm/psr7-server"
+      - "nyholm/psr7"
+      - "php-etl/pipeline"
+      - "php-etl/satellite"
+      - "php-etl/api-runtime"
+      - "php-etl/mapping-contracts"
+      - "tuupola/slim-jwt-auth"
+      - "tuupola/slim-basic-auth"
   http_api:
     path: /foo
+    authorization:
+      jwt:
+        secret: 'my_secret'
     routes:
       - route: /hello
+        expression: 'input["_items"]'
         pipeline:
           steps:
             - fastmap:
                 map:
                   - field: '[sku]'
                     copy: '[sku]'
-                  - field: '[title]'
-                    expression: 'input["sku"] ~" | "~ input["name"]'
                   - field: '[name]'
                     copy: '[name]'
                   - field: '[staticValue]'
@@ -48,14 +51,13 @@ satellite:
                 logger:
                   type: stderr
       - route: /events/products
+        expression: 'input["_items"]'
         pipeline:
           steps:
             - fastmap:
                 map:
                   - field: '[sku]'
                     copy: '[sku]'
-                  - field: '[title]'
-                    expression: 'input["sku"] ~" | "~ input["name"]'
                   - field: '[name]'
                     copy: '[name]'
                   - field: '[staticValue]'
