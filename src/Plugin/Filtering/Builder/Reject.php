@@ -19,9 +19,7 @@ final class Reject implements StepBuilderInterface
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function withLogger(Node\Expr $logger): self
     {

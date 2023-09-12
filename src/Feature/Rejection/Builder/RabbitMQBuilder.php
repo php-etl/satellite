@@ -20,8 +20,7 @@ final class RabbitMQBuilder implements Builder
         private readonly Node\Expr $port,
         private readonly Node\Expr $vhost,
         private readonly Node\Expr $topic,
-    ) {
-    }
+    ) {}
 
     public function withAuthentication(
         Node\Expr $user,

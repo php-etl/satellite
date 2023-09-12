@@ -16,8 +16,7 @@ final class CommandBus
 
     public function __construct(
         private readonly array $handlers
-    ) {
-    }
+    ) {}
 
     public static function withStandardHandlers(Client $client): self
     {

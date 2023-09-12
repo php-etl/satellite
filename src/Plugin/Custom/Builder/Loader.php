@@ -13,9 +13,7 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private Node\Expr $service, private readonly string $containerNamespace)
-    {
-    }
+    public function __construct(private Node\Expr $service, private readonly string $containerNamespace) {}
 
     public function withService(Node\Expr $service): self
     {

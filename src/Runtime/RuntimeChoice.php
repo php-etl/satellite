@@ -14,8 +14,7 @@ final readonly class RuntimeChoice
         private FactoryInterface $service,
         private Satellite\Adapter\AdapterChoice $adapterChoice,
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(array $configuration): RuntimeInterface
     {

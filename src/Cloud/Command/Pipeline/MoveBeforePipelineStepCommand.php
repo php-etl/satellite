@@ -14,6 +14,5 @@ final class MoveBeforePipelineStepCommand implements Command
         public PipelineId $pipeline,
         public StepCode $next,
         public StepCode $current,
-    ) {
-    }
+    ) {}
 }

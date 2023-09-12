@@ -18,8 +18,7 @@ final class Action implements ActionBuilderInterface
         private readonly Node\Expr $password,
         private readonly Node\Expr $localFilePath,
         private readonly Node\Expr $serverFilePath,
-    ) {
-    }
+    ) {}
 
     public function withLogger(Node\Expr $logger): self
     {
