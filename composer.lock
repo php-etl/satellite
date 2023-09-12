@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d14cc2c15f243096e28439ab402f8de2",
+    "content-hash": "d3f473f2042c075fd26aed71995f9c47",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2105,16 +2105,16 @@
         },
         {
             "name": "php-etl/pipeline-contracts",
-            "version": "v0.4.1",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/pipeline-contracts.git",
-                "reference": "b5c45090ed92f93530f3f69782bb016b52627b1a"
+                "reference": "5a37ebe518d4d85aa964c74b9da068d29e2e9b92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/b5c45090ed92f93530f3f69782bb016b52627b1a",
-                "reference": "b5c45090ed92f93530f3f69782bb016b52627b1a",
+                "url": "https://api.github.com/repos/php-etl/pipeline-contracts/zipball/5a37ebe518d4d85aa964c74b9da068d29e2e9b92",
+                "reference": "5a37ebe518d4d85aa964c74b9da068d29e2e9b92",
                 "shasum": ""
             },
             "require": {
@@ -2155,9 +2155,9 @@
             "description": "This library describes contracts for the Extract-Transform-Load pattern.",
             "support": {
                 "issues": "https://github.com/php-etl/pipeline-contracts/issues",
-                "source": "https://github.com/php-etl/pipeline-contracts/tree/v0.4.1"
+                "source": "https://github.com/php-etl/pipeline-contracts/tree/v0.4.2"
             },
-            "time": "2023-04-18T14:32:57+00:00"
+            "time": "2023-06-12T09:38:03+00:00"
         },
         {
             "name": "php-etl/satellite-contracts",
@@ -2279,16 +2279,16 @@
         },
         {
             "name": "php-etl/workflow-console-runtime",
-            "version": "v0.3.0",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/workflow-console-runtime.git",
-                "reference": "d0654936e8e267bf42dc7f8fd88f6cf81a290917"
+                "reference": "e35c494ba232eac6f5f26d7cd1d3949e1b9d4a3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/d0654936e8e267bf42dc7f8fd88f6cf81a290917",
-                "reference": "d0654936e8e267bf42dc7f8fd88f6cf81a290917",
+                "url": "https://api.github.com/repos/php-etl/workflow-console-runtime/zipball/e35c494ba232eac6f5f26d7cd1d3949e1b9d4a3a",
+                "reference": "e35c494ba232eac6f5f26d7cd1d3949e1b9d4a3a",
                 "shasum": ""
             },
             "require": {
@@ -2310,7 +2310,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.3.x-dev"
+                    "dev-main": "0.4.x-dev"
                 }
             },
             "autoload": {
@@ -2335,9 +2335,9 @@
             "description": "This library allows you to use the workflow console runtime",
             "support": {
                 "issues": "https://github.com/php-etl/workflow-console-runtime/issues",
-                "source": "https://github.com/php-etl/workflow-console-runtime/tree/v0.3.0"
+                "source": "https://github.com/php-etl/workflow-console-runtime/tree/v0.4.2"
             },
-            "time": "2023-04-19T11:48:30+00:00"
+            "time": "2023-09-12T07:37:11+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -7884,16 +7884,16 @@
         },
         {
             "name": "php-etl/akeneo-expression-language",
-            "version": "0.3.0",
+            "version": "0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-expression-language.git",
-                "reference": "e0a72c37af7c88b2108a86b7fe696f09afd906dc"
+                "reference": "6507cb3abbd5771cfb8660f057d5c9bc9e6da820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-expression-language/zipball/e0a72c37af7c88b2108a86b7fe696f09afd906dc",
-                "reference": "e0a72c37af7c88b2108a86b7fe696f09afd906dc",
+                "url": "https://api.github.com/repos/php-etl/akeneo-expression-language/zipball/6507cb3abbd5771cfb8660f057d5c9bc9e6da820",
+                "reference": "6507cb3abbd5771cfb8660f057d5c9bc9e6da820",
                 "shasum": ""
             },
             "require": {
@@ -7936,22 +7936,22 @@
             "description": "This library implements functions for manupulating Akeneo API data in ExpressionLanguage",
             "support": {
                 "issues": "https://github.com/php-etl/akeneo-expression-language/issues",
-                "source": "https://github.com/php-etl/akeneo-expression-language/tree/0.3.0"
+                "source": "https://github.com/php-etl/akeneo-expression-language/tree/0.3.1"
             },
-            "time": "2023-04-04T07:12:38+00:00"
+            "time": "2023-06-23T09:37:35+00:00"
         },
         {
             "name": "php-etl/akeneo-plugin",
-            "version": "v0.6.1",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/akeneo-plugin.git",
-                "reference": "e752707ab02e4cdd0d8e617b7238de8f271cab06"
+                "reference": "93e913e0fee10701354590b3a28bc0968c332081"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/e752707ab02e4cdd0d8e617b7238de8f271cab06",
-                "reference": "e752707ab02e4cdd0d8e617b7238de8f271cab06",
+                "url": "https://api.github.com/repos/php-etl/akeneo-plugin/zipball/93e913e0fee10701354590b3a28bc0968c332081",
+                "reference": "93e913e0fee10701354590b3a28bc0968c332081",
                 "shasum": ""
             },
             "require": {
@@ -7966,30 +7966,23 @@
                 "symfony/expression-language": "^6.0"
             },
             "require-dev": {
-                "akeneo/api-php-client-ee": "^4.0",
+                "akeneo/api-php-client": "^9.0",
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "guzzlehttp/psr7": "^2.0",
                 "infection/infection": "^0.26.18",
-                "johnkary/phpunit-speedtrap": "*",
-                "laminas/laminas-diactoros": "^2.6",
-                "mikey179/vfsstream": "^1.6",
-                "mybuilder/phpunit-accelerator": "*",
                 "php-etl/bucket": "*",
                 "php-etl/bucket-contracts": "0.2.*",
-                "php-etl/pipeline-contracts": "0.4.*",
+                "php-etl/phpunit-extension": "0.5.x-dev",
                 "php-http/curl-client": "^2.0",
                 "php-http/message": "^1.11",
-                "php-http/mock-client": "^1.4@dev",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/php-invoker": "*",
-                "phpunit/phpunit": "^10.0",
                 "rector/rector": "^0.15",
                 "symfony/yaml": "^6.0"
             },
             "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.6.x-dev"
+                    "dev-main": "0.7.x-dev"
                 },
                 "gyroscops": {
                     "plugins": [
@@ -8015,22 +8008,22 @@
             "description": "Adapters for the Akeneo API client",
             "support": {
                 "issues": "https://github.com/php-etl/akeneo-plugin/issues",
-                "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.6.1"
+                "source": "https://github.com/php-etl/akeneo-plugin/tree/v0.7.2"
             },
-            "time": "2023-04-20T09:13:42+00:00"
+            "time": "2023-07-28T10:28:31+00:00"
         },
         {
             "name": "php-etl/array-expression-language",
-            "version": "v0.2.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/array-expression-language.git",
-                "reference": "6684d2e0fcf95aaba3addfdd989b66260545fd59"
+                "reference": "353c3ed8bfbcc9d72d5098612e05e185134e524a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/6684d2e0fcf95aaba3addfdd989b66260545fd59",
-                "reference": "6684d2e0fcf95aaba3addfdd989b66260545fd59",
+                "url": "https://api.github.com/repos/php-etl/array-expression-language/zipball/353c3ed8bfbcc9d72d5098612e05e185134e524a",
+                "reference": "353c3ed8bfbcc9d72d5098612e05e185134e524a",
                 "shasum": ""
             },
             "require": {
@@ -8048,7 +8041,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.2.x-dev"
+                    "dev-main": "0.4.x-dev"
                 }
             },
             "autoload": {
@@ -8069,9 +8062,9 @@
             "description": "This library implements functions for manipulating array data in ExpressionLanguage",
             "support": {
                 "issues": "https://github.com/php-etl/array-expression-language/issues",
-                "source": "https://github.com/php-etl/array-expression-language/tree/v0.2.0"
+                "source": "https://github.com/php-etl/array-expression-language/tree/v0.4.1"
             },
-            "time": "2023-04-03T15:31:20+00:00"
+            "time": "2023-08-10T15:33:59+00:00"
         },
         {
             "name": "php-etl/csv-plugin",
@@ -8274,19 +8267,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/fast-map-plugin.git",
-                "reference": "e95562c5aa4f2517072414a02e665a1b35a3896f"
+                "reference": "6f7d5afd924c134f06e777b951664104e63f9a1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/e95562c5aa4f2517072414a02e665a1b35a3896f",
-                "reference": "e95562c5aa4f2517072414a02e665a1b35a3896f",
+                "url": "https://api.github.com/repos/php-etl/fast-map-plugin/zipball/6f7d5afd924c134f06e777b951664104e63f9a1f",
+                "reference": "6f7d5afd924c134f06e777b951664104e63f9a1f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/configurator-contracts": "0.8.0",
+                "php-etl/configurator-contracts": "0.8.*",
                 "php-etl/fast-map-config": "*",
                 "php-etl/packaging-contracts": "0.3.*",
                 "php-etl/satellite-toolbox": "*",
@@ -8333,26 +8326,26 @@
                 "issues": "https://github.com/php-etl/fast-map-plugin/issues",
                 "source": "https://github.com/php-etl/fast-map-plugin/tree/v0.8.2"
             },
-            "time": "2023-04-20T08:15:46+00:00"
+            "time": "2023-04-21T07:26:57+00:00"
         },
         {
             "name": "php-etl/mapping-contracts",
-            "version": "v0.4.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/mapping-contracts.git",
-                "reference": "965d756220a23be391609891da887db7b13c45aa"
+                "reference": "6188ef28f960442f3da2eb42758537b6e90ff8a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/mapping-contracts/zipball/965d756220a23be391609891da887db7b13c45aa",
-                "reference": "965d756220a23be391609891da887db7b13c45aa",
+                "url": "https://api.github.com/repos/php-etl/mapping-contracts/zipball/6188ef28f960442f3da2eb42758537b6e90ff8a5",
+                "reference": "6188ef28f960442f3da2eb42758537b6e90ff8a5",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.10",
                 "php": "^8.2",
-                "php-etl/metadata-contracts": "0.2.0",
+                "php-etl/metadata-contracts": "0.2.*",
                 "symfony/property-access": "^6.0"
             },
             "require-dev": {
@@ -8388,9 +8381,9 @@
             "description": "Contracts for building compiled data mappers",
             "support": {
                 "issues": "https://github.com/php-etl/mapping-contracts/issues",
-                "source": "https://github.com/php-etl/mapping-contracts/tree/v0.4.0"
+                "source": "https://github.com/php-etl/mapping-contracts/tree/v0.4.1"
             },
-            "time": "2023-04-06T11:59:27+00:00"
+            "time": "2023-04-27T15:20:08+00:00"
         },
         {
             "name": "php-etl/metadata",
@@ -8632,16 +8625,16 @@
         },
         {
             "name": "php-etl/sql-plugin",
-            "version": "v0.4.2",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sql-plugin.git",
-                "reference": "420003c99207ffa4ac30c376a17c0eb1c72698a4"
+                "reference": "8de741413a6c4d480b8242411e997e5e0dad0800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/420003c99207ffa4ac30c376a17c0eb1c72698a4",
-                "reference": "420003c99207ffa4ac30c376a17c0eb1c72698a4",
+                "url": "https://api.github.com/repos/php-etl/sql-plugin/zipball/8de741413a6c4d480b8242411e997e5e0dad0800",
+                "reference": "8de741413a6c4d480b8242411e997e5e0dad0800",
                 "shasum": ""
             },
             "require": {
@@ -8668,7 +8661,7 @@
             "type": "gyroscops-plugin",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.4.x-dev"
+                    "dev-main": "0.5.x-dev"
                 },
                 "gyroscops": {
                     "plugins": [
@@ -8694,22 +8687,22 @@
             "description": "This plugin allows you to perform SQL queries in the ETL pipelines",
             "support": {
                 "issues": "https://github.com/php-etl/sql-plugin/issues",
-                "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.2"
+                "source": "https://github.com/php-etl/sql-plugin/tree/v0.4.4"
             },
-            "time": "2023-04-20T09:24:09+00:00"
+            "time": "2023-07-10T07:44:11+00:00"
         },
         {
             "name": "php-etl/string-expression-language",
-            "version": "v0.3.0",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/string-expression-language.git",
-                "reference": "195d0012545776f5bd9f75037373faf21b0046e3"
+                "reference": "eb3f2bd89672d79259719d5c2db1650eba7a45b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/195d0012545776f5bd9f75037373faf21b0046e3",
-                "reference": "195d0012545776f5bd9f75037373faf21b0046e3",
+                "url": "https://api.github.com/repos/php-etl/string-expression-language/zipball/eb3f2bd89672d79259719d5c2db1650eba7a45b4",
+                "reference": "eb3f2bd89672d79259719d5c2db1650eba7a45b4",
                 "shasum": ""
             },
             "require": {
@@ -8746,9 +8739,9 @@
             "description": "This library implements functions for manipulating string data in ExpressionLanguage",
             "support": {
                 "issues": "https://github.com/php-etl/string-expression-language/issues",
-                "source": "https://github.com/php-etl/string-expression-language/tree/v0.3.0"
+                "source": "https://github.com/php-etl/string-expression-language/tree/v0.2.2"
             },
-            "time": "2023-04-03T15:39:40+00:00"
+            "time": "2023-06-28T07:18:24+00:00"
         },
         {
             "name": "php-etl/sylius-plugin",
@@ -8756,12 +8749,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/sylius-plugin.git",
-                "reference": "a0360efc2ba92e5b8a9b9bbdfd7f3d5f66398462"
+                "reference": "6e5410e96ed0a721371731c989173188a991e287"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/a0360efc2ba92e5b8a9b9bbdfd7f3d5f66398462",
-                "reference": "a0360efc2ba92e5b8a9b9bbdfd7f3d5f66398462",
+                "url": "https://api.github.com/repos/php-etl/sylius-plugin/zipball/6e5410e96ed0a721371731c989173188a991e287",
+                "reference": "6e5410e96ed0a721371731c989173188a991e287",
                 "shasum": ""
             },
             "require": {
@@ -8820,7 +8813,7 @@
                 "issues": "https://github.com/php-etl/sylius-plugin/issues",
                 "source": "https://github.com/php-etl/sylius-plugin/tree/v0.7.1"
             },
-            "time": "2023-04-20T09:17:25+00:00"
+            "time": "2023-04-21T07:50:13+00:00"
         },
         {
             "name": "php-http/mock-client",
