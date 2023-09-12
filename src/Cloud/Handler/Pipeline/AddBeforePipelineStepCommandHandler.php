@@ -12,8 +12,7 @@ final readonly class AddBeforePipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\AddBeforePipelineStepCommand $command): Cloud\Event\AddedBeforePipelineStep
     {

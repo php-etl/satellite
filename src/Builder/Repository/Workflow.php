@@ -15,9 +15,7 @@ final class Workflow implements Configurator\RepositoryInterface
     /** @var string[] */
     private array $packages = [];
 
-    public function __construct(private readonly Satellite\Builder\Workflow $builder)
-    {
-    }
+    public function __construct(private readonly Satellite\Builder\Workflow $builder) {}
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface
     {

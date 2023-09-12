@@ -11,6 +11,5 @@ final class RemovePipelineCommand implements Command
 {
     public function __construct(
         public PipelineId $pipeline,
-    ) {
-    }
+    ) {}
 }

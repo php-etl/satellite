@@ -12,9 +12,7 @@ final class Accumulator implements \IteratorAggregate, \Stringable
     /** @var iterable|PackageInterface[] */
     private iterable $packages = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function append(PackageInterface ...$packages): self
     {
