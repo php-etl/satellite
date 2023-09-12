@@ -1871,16 +1871,16 @@
         },
         {
             "name": "php-etl/packaging",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/packaging.git",
-                "reference": "5492d785a4e38f531e0fa60ca79adbd59288f146"
+                "reference": "7a05eb46e3b28e230a3d3fb6bf0f9200eca7e424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/packaging/zipball/5492d785a4e38f531e0fa60ca79adbd59288f146",
-                "reference": "5492d785a4e38f531e0fa60ca79adbd59288f146",
+                "url": "https://api.github.com/repos/php-etl/packaging/zipball/7a05eb46e3b28e230a3d3fb6bf0f9200eca7e424",
+                "reference": "7a05eb46e3b28e230a3d3fb6bf0f9200eca7e424",
                 "shasum": ""
             },
             "require": {
@@ -1923,9 +1923,9 @@
             "description": "This library aims at building TAR archives, using PHP resources and streams",
             "support": {
                 "issues": "https://github.com/php-etl/packaging/issues",
-                "source": "https://github.com/php-etl/packaging/tree/v0.3.0"
+                "source": "https://github.com/php-etl/packaging/tree/v0.3.1"
             },
-            "time": "2023-04-12T13:55:34+00:00"
+            "time": "2023-09-12T13:31:27+00:00"
         },
         {
             "name": "php-etl/packaging-contracts",
