@@ -38,9 +38,6 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
                         new Packaging\Asset\LocalFile('composer.json'),
                     );
                 }
-                if (file_exists('vendor')) {
-                    $builder->withDirectory(new Packaging\Directory('vendor/'));
-                }
             }
 
             if (\array_key_exists('autoload', $configuration['composer']) && \array_key_exists('psr4', $configuration['composer']['autoload'])) {

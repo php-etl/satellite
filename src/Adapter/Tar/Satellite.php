@@ -13,13 +13,13 @@ final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags = [];
-    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
+    /** @var iterable<Packaging\AssetInterface|Packaging\DirectoryInterface> */
     private iterable $files;
     private iterable $dependencies = [];
 
     public function __construct(
         private readonly string $outputPath,
-        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
+        Packaging\AssetInterface|Packaging\DirectoryInterface ...$files
     ) {
         $this->files = $files;
     }
@@ -31,7 +31,7 @@ final class Satellite implements Configurator\SatelliteInterface
         return $this;
     }
 
-    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function withFile(Packaging\AssetInterface|Packaging\DirectoryInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
