@@ -9,6 +9,5 @@ final class Auth
     public function __construct(
         public string $url,
         public string $token,
-    ) {
-    }
+    ) {}
 }

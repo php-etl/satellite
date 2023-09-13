@@ -11,8 +11,7 @@ final readonly class Repository implements Configurator\StepRepositoryInterface
 {
     public function __construct(
         private Builder\StderrLoader|Builder\StdoutLoader|Builder\JSONStreamLoader|Builder\DebugLoader $builder
-    ) {
-    }
+    ) {}
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {

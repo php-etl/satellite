@@ -18,8 +18,7 @@ final readonly class Pipeline implements PipelineInterface
 {
     public function __construct(
         private Context $context,
-    ) {
-    }
+    ) {}
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {

@@ -15,6 +15,5 @@ final class ReplacePipelineStepCommand implements Command
         public PipelineId $pipeline,
         public StepCode $former,
         public Step $step,
-    ) {
-    }
+    ) {}
 }

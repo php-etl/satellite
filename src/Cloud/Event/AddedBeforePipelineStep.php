@@ -8,8 +8,7 @@ final readonly class AddedBeforePipelineStep
 {
     public function __construct(
         private string $id,
-    ) {
-    }
+    ) {}
 
     public function getId(): string
     {

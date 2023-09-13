@@ -20,9 +20,7 @@ final class Server implements StepBuilderInterface
     private ?Node\Expr $privateKeyPassphrase = null;
     private ?Node\Expr $basePath = null;
 
-    public function __construct(private readonly Node\Expr $host, private ?Node\Expr $port = null)
-    {
-    }
+    public function __construct(private readonly Node\Expr $host, private ?Node\Expr $port = null) {}
 
     public function withLogger(Node\Expr $logger): self
     {

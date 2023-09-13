@@ -21,9 +21,7 @@ final class Loader implements StepBuilderInterface
     private iterable $putStatements = [];
     private array $serversMapping = [];
 
-    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
-    {
-    }
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
 
     public function addServerBasePath(Node\Expr $base_path): void
     {

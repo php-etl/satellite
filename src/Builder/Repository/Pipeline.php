@@ -15,9 +15,7 @@ final class Pipeline implements Configurator\RepositoryInterface
     /** @var string[] */
     private array $packages = [];
 
-    public function __construct(private readonly Satellite\Builder\Pipeline $builder)
-    {
-    }
+    public function __construct(private readonly Satellite\Builder\Pipeline $builder) {}
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface
     {

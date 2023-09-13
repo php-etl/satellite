@@ -12,9 +12,7 @@ final class MonologLogger implements Builder
     private iterable $handlers = [];
     private iterable $processors = [];
 
-    public function __construct(private readonly string $channel)
-    {
-    }
+    public function __construct(private readonly string $channel) {}
 
     public function withHandlers(Node\Expr ...$handlers): self
     {

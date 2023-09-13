@@ -12,8 +12,7 @@ final readonly class AppendPipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\AppendPipelineStepCommand $command): Cloud\Event\AppendedPipelineStep
     {

@@ -10,6 +10,5 @@ final class Repository
         public string $name,
         public string $type,
         public string $url,
-    ) {
-    }
+    ) {}
 }

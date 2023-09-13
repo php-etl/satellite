@@ -11,8 +11,7 @@ final readonly class RemovePipelineStepCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {
-    }
+    ) {}
 
     public function __invoke(Cloud\Command\Pipeline\RemovePipelineStepCommand $command): Cloud\Event\RemovedPipelineStep
     {

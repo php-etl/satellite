@@ -15,9 +15,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Action
 {
-    public function __construct(private ?string $plugin, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
-    {
-    }
+    public function __construct(private ?string $plugin, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
 
     public function __invoke(array $config, ActionBuilder $action, RepositoryInterface $repository): void
     {

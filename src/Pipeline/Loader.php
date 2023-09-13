@@ -15,9 +15,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Loader implements StepInterface
 {
-    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
-    {
-    }
+    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {

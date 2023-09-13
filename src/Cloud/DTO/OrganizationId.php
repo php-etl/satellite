@@ -8,8 +8,7 @@ final readonly class OrganizationId implements \Stringable
 {
     public function __construct(
         private string $reference,
-    ) {
-    }
+    ) {}
 
     public function isNil(): bool
     {

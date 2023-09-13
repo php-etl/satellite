@@ -11,6 +11,5 @@ final class CompilePipelineCommand implements Command
 {
     public function __construct(
         public PipelineId $pipeline
-    ) {
-    }
+    ) {}
 }

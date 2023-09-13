@@ -13,6 +13,5 @@ final class RemovePipelineStepCommand implements Command
     public function __construct(
         public PipelineId $pipeline,
         public StepCode $code,
-    ) {
-    }
+    ) {}
 }

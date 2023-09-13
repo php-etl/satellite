@@ -15,9 +15,7 @@ final class API implements Configurator\RepositoryInterface
     /** @var string[] */
     private array $packages = [];
 
-    public function __construct(private readonly Satellite\Builder\API $builder)
-    {
-    }
+    public function __construct(private readonly Satellite\Builder\API $builder) {}
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface
     {
