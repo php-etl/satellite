@@ -11,19 +11,19 @@ use Psr\Log\LoggerInterface;
 
 final class Satellite implements Configurator\SatelliteInterface
 {
-    /** @var iterable<Packaging\AssetInterface|Packaging\DirectoryInterface> */
+    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
     private iterable $files;
     private iterable $dependencies = [];
 
     public function __construct(
         private readonly string $workdir,
         private readonly Composer $composer,
-        Packaging\AssetInterface|Packaging\DirectoryInterface ...$files
+        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
     ) {
         $this->files = $files;
     }
 
-    public function withFile(Packaging\AssetInterface|Packaging\DirectoryInterface ...$files): self
+    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
