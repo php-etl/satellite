@@ -80,7 +80,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('name')->end()
-                ->scalarNode('code')->end()
+                ->scalarNode('code')->isRequired()->end()
                 ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end()
         ;

@@ -87,7 +87,7 @@
     "bin": ["bin/satellite", "bin/cloud"],
     "extra": {
         "branch-alias": {
-            "dev-main": "0.6.x-dev"
+            "dev-main": "0.7.x-dev"
         },
         "gyroscops": {
             "adapters": [
