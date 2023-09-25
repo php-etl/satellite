@@ -164,7 +164,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             }
 
             $dockerfile->push(new Dockerfile\PHP\Composer());
-            $dockerfile->push(new Dockerfile\PHP\ComposerInstall());
         } else {
             $dockerfile->push(new Dockerfile\PHP\Composer());
             $dockerfile->push(new Dockerfile\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));

@@ -15,6 +15,5 @@ final class AddBeforePipelineStepCommand implements Command
         public PipelineId $pipeline,
         public StepCode $next,
         public Step $step,
-    ) {
-    }
+    ) {}
 }

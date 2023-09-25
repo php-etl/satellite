@@ -19,9 +19,7 @@ final class Extractor implements StepBuilderInterface
     private iterable $servers = [];
     private iterable $putStatements = [];
 
-    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
-    {
-    }
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
 
     public function withLogger(Node\Expr $logger): self
     {

@@ -13,6 +13,5 @@ final class AddPipelineComposerPSR4AutoloadCommand implements Command
         public PipelineId $pipeline,
         public string $namespace,
         public array $paths
-    ) {
-    }
+    ) {}
 }

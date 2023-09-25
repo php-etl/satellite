@@ -8,8 +8,7 @@ final readonly class StepCode implements \Stringable
 {
     public function __construct(
         private string $reference,
-    ) {
-    }
+    ) {}
 
     public function asString(): string
     {

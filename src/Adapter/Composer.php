@@ -174,20 +174,6 @@ final class Composer
         file_put_contents($this->workdir.'/composer.json', json_encode($composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
     }
 
-    public function install(): void
-    {
-        $this->command(
-            'composer',
-            'install',
-            '--prefer-dist',
-            '--no-progress',
-            '--prefer-stable',
-            '--sort-packages',
-            '--optimize-autoloader',
-            '--no-dev',
-        );
-    }
-
     public function addGithubRepository(string $name, string $url): void
     {
         $this->command(

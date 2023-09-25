@@ -30,16 +30,13 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
             if (\array_key_exists('from_local', $configuration['composer']) && true === $configuration['composer']['from_local']) {
                 if (file_exists('composer.lock')) {
                     $builder->withComposerFile(
-                        new Packaging\Asset\LocalFile('composer.json'),
-                        new Packaging\Asset\LocalFile('composer.lock'),
+                        new Packaging\File('composer.json', new Packaging\Asset\LocalFile('composer.json')),
+                        new Packaging\File('composer.lock', new Packaging\Asset\LocalFile('composer.lock')),
                     );
                 } else {
                     $builder->withComposerFile(
-                        new Packaging\Asset\LocalFile('composer.json'),
+                        new Packaging\File('composer.json', new Packaging\Asset\LocalFile('composer.json')),
                     );
-                }
-                if (file_exists('vendor')) {
-                    $builder->withDirectory(new Packaging\Directory('vendor/'));
                 }
             }
 

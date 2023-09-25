@@ -9,9 +9,7 @@ use PhpParser\Node;
 
 final readonly class PipelineBuilder
 {
-    public function __construct(private Builder $builder)
-    {
-    }
+    public function __construct(private Builder $builder) {}
 
     public function getNode(): Node\Expr
     {

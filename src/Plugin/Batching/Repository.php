@@ -11,9 +11,7 @@ use Kiboko\Contract\Packaging;
 
 final readonly class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Merge|Fork $builder)
-    {
-    }
+    public function __construct(private Merge|Fork $builder) {}
 
     public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
     {

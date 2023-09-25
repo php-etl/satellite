@@ -129,8 +129,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             if (null !== $this->composerLockFile) {
                 $satellite->withFile($this->composerLockFile);
             }
-
-            $composer->install();
         } else {
             $composer->init(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64)));
             $composer->minimumStability('dev');
