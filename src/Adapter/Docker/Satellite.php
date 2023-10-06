@@ -56,8 +56,7 @@ final class Satellite implements Configurator\SatelliteInterface
     public function build(
         LoggerInterface $logger,
     ): void {
-        $this->sortFiles();
-        $archive = new TarArchive($this->dockerfile, ...$this->files);
+        $archive = new TarArchive($this->dockerfile, ...array_values($this->files));
 
         $iterator = function (iterable $tags) {
             foreach ($tags as $tag) {
@@ -85,22 +84,5 @@ final class Satellite implements Configurator\SatelliteInterface
         if (0 !== $process->getExitCode()) {
             throw new \RuntimeException('Process exited unexpectedly.');
         }
-    }
-
-    private function sortFiles(): void
-    {
-        uksort($this->files, function ($a, $b) {
-            if (is_numeric($a) && is_numeric($b)) {
-                return $a - $b;
-            }
-            if (is_numeric($a)) {
-                return -1;
-            }
-            if (is_numeric($b)) {
-                return 1;
-            }
-
-            return strcmp($a, $b);
-        });
     }
 }
