@@ -21,6 +21,14 @@ final class Configuration implements AdapterConfigurationInterface
                 ->arrayNode('tags')
                     ->scalarPrototype()->end()
                 ->end()
+                ->arrayNode('copy')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('from')->isRequired()->end()
+                            ->scalarNode('to')->isRequired()->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
