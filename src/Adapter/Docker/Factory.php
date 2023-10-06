@@ -53,26 +53,6 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
             }
         }
 
-        if (isset($configuration['docker']['include']) && is_iterable($configuration['docker']['include'])) {
-            foreach ($configuration['docker']['include'] as $path) {
-                if (is_dir($path)) {
-                    $builder->withDirectory(new Packaging\Directory($path));
-                } else {
-                    $builder->withFile(new Packaging\Asset\LocalFile($path));
-                }
-            }
-        }
-
-        if (isset($configuration['include'])) {
-            foreach ($configuration['include'] as $path) {
-                if (is_dir($path)) {
-                    $builder->withDirectory(new Packaging\Directory($path));
-                } else {
-                    $builder->withFile(new Packaging\Asset\LocalFile($path));
-                }
-            }
-        }
-
         if (\array_key_exists('composer', $configuration)) {
             if (\array_key_exists('from_local', $configuration['composer']) && true === $configuration['composer']['from_local']) {
                 if (file_exists('composer.lock')) {
