@@ -32,23 +32,16 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
         if (isset($configuration['docker']['tags'])) {
             $builder->withTags(...$configuration['docker']['tags']);
         }
-
-        if (isset($configuration['docker']['include']) && is_iterable($configuration['docker']['include'])) {
-            foreach ($configuration['docker']['include'] as $path) {
-                if (is_dir($path)) {
-                    $builder->withDirectory(new Packaging\Directory($path));
-                } else {
-                    $builder->withFile(new Packaging\Asset\LocalFile($path));
+        if (isset($configuration['docker']['copy'])) {
+            foreach ($configuration['docker']['copy'] as $copy) {
+                if (!file_exists($copy['from'])) {
+                    throw new FileOrDirectoryNotFoundException(strtr('Unable to find the file or the directory at path %path%', ['path' => $copy['from']]));
                 }
-            }
-        }
 
-        if (isset($configuration['include'])) {
-            foreach ($configuration['include'] as $path) {
-                if (is_dir($path)) {
-                    $builder->withDirectory(new Packaging\Directory($path));
+                if (is_file($copy['from'])) {
+                    $builder->withFile(new Packaging\File($copy['from'], new Packaging\Asset\LocalFile($copy['from'])), $copy['to']);
                 } else {
-                    $builder->withFile(new Packaging\Asset\LocalFile($path));
+                    $builder->withDirectory(new Packaging\Directory($copy['from']), $copy['to']);
                 }
             }
         }
@@ -59,6 +52,9 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
                     $builder->withComposerFile(new Packaging\Asset\LocalFile('composer.json'), new Packaging\Asset\LocalFile('composer.lock'));
                 } else {
                     $builder->withComposerFile(new Packaging\Asset\LocalFile('composer.json'));
+                }
+                if (file_exists('vendor')) {
+                    $builder->withDirectory(new Packaging\Directory('vendor/'));
                 }
             }
 
