@@ -56,7 +56,7 @@ final class Satellite implements Configurator\SatelliteInterface
     public function build(
         LoggerInterface $logger,
     ): void {
-        $archive = new TarArchive($this->dockerfile, ...$this->files);
+        $archive = new TarArchive($this->dockerfile, ...array_values($this->files));
 
         $iterator = function (iterable $tags) {
             foreach ($tags as $tag) {
