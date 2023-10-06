@@ -92,13 +92,15 @@ final class Satellite implements Configurator\SatelliteInterface
         uksort($this->files, function ($a, $b) {
             if (is_numeric($a) && is_numeric($b)) {
                 return $a - $b;
-            } elseif (is_numeric($a)) {
-                return -1;
-            } elseif (is_numeric($b)) {
-                return 1;
-            } else {
-                return strcmp($a, $b);
             }
+            if (is_numeric($a)) {
+                return -1;
+            }
+            if (is_numeric($b)) {
+                return 1;
+            }
+
+            return strcmp($a, $b);
         });
     }
 }
