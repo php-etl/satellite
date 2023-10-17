@@ -28,7 +28,7 @@ final class Reject implements ConfigurationInterface
                             ->then(asExpression())
                         ->end()
                     ->end()
-                    ->scalarNode('dataToFormat')
+                    ->scalarNode('serialize_rejection')
                         ->cannotBeEmpty()
                         ->validate()
                             ->ifTrue(isExpression())

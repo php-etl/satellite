@@ -16,7 +16,7 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
-    private ?Node\Expr $dataToFormat = null;
+    private ?Node\Expr $serialize_rejection = null;
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
@@ -43,9 +43,9 @@ final class Reject implements StepBuilderInterface
         return $this;
     }
 
-    public function withDataToFormat(Node\Expr $dataToFormat): self
+    public function withSerialiazeRejection(Node\Expr $serialize_rejection): self
     {
-        $this->dataToFormat = $dataToFormat;
+        $this->serialize_rejection = $serialize_rejection;
 
         return $this;
     }
@@ -133,7 +133,7 @@ final class Reject implements StepBuilderInterface
                                                             new Node\Expr\New_(
                                                                 new Node\Name\FullyQualified(RejectionResultBucket::class),
                                                                 [
-                                                                    $this->dataToFormat !== null ? new Node\Arg($this->dataToFormat) : new Node\Arg(new Node\Expr\Variable('input'))
+                                                                    $this->serialize_rejection !== null ? new Node\Arg($this->serialize_rejection) : new Node\Arg(new Node\Expr\Variable('input'))
                                                                 ]
                                                             ),
                                                         ),
