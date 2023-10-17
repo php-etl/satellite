@@ -71,6 +71,9 @@ class Reject implements Configurator\FactoryInterface
             $builder->withExclusions(
                 compileExpression($interpreter, $condition['when'])
             );
+            if (array_key_exists('dataToFormat', $condition)) {
+                $builder->withDataToFormat(compileExpression($interpreter, $condition['dataToFormat']));
+            }
         }
 
         return $repository;

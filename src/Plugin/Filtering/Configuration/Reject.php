@@ -28,6 +28,13 @@ final class Reject implements ConfigurationInterface
                             ->then(asExpression())
                         ->end()
                     ->end()
+                    ->scalarNode('dataToFormat')
+                        ->cannotBeEmpty()
+                        ->validate()
+                            ->ifTrue(isExpression())
+                            ->then(asExpression())
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

@@ -16,6 +16,7 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
+    private ?Node\Expr $dataToFormat = null;
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
@@ -38,6 +39,13 @@ final class Reject implements StepBuilderInterface
     public function withState(Node\Expr $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function withDataToFormat(Node\Expr $dataToFormat): self
+    {
+        $this->dataToFormat = $dataToFormat;
 
         return $this;
     }
@@ -125,7 +133,7 @@ final class Reject implements StepBuilderInterface
                                                             new Node\Expr\New_(
                                                                 new Node\Name\FullyQualified(RejectionResultBucket::class),
                                                                 [
-                                                                    new Node\Arg(new Node\Expr\Variable('input')),
+                                                                    $this->dataToFormat !== null ? new Node\Arg($this->dataToFormat) : new Node\Arg(new Node\Expr\Variable('input'))
                                                                 ]
                                                             ),
                                                         ),
