@@ -29,8 +29,6 @@ final class Reject implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->scalarNode('reason')
-                        ->isRequired()
-                        ->cannotBeEmpty()
                         ->validate()
                             ->ifTrue(isExpression())
                             ->then(asExpression())

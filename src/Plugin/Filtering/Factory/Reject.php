@@ -14,6 +14,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Reject implements Configurator\FactoryInterface
 {
@@ -69,7 +70,10 @@ class Reject implements Configurator\FactoryInterface
 
         foreach ($config as $condition) {
             $builder->withExclusions(
-                compileExpression($interpreter, $condition['when'])
+                new Filtering\DTO\Exclusion(
+                    compileExpression($interpreter, $condition['when']),
+                    compileValueWhenExpression($interpreter, $condition['reason']) ?: null,
+                ),
             );
         }
 

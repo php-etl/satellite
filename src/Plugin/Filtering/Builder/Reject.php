@@ -6,6 +6,8 @@ namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 
 use Kiboko\Component\Bucket\AcceptanceResultBucket;
 use Kiboko\Component\Bucket\RejectionResultBucket;
+use Kiboko\Component\Bucket\RejectionWithReasonResultBucket;
+use Kiboko\Component\Satellite\Plugin\Filtering\DTO\Exclusion;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 use PhpParser\Builder;
@@ -16,10 +18,8 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
-    /** @var list<?Node\Expr> */
+    /** @var list<?Exclusion> */
     private array $exclusions = [];
-
-    public function __construct() {}
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -42,53 +42,46 @@ final class Reject implements StepBuilderInterface
         return $this;
     }
 
-    public function withExclusions(Node\Expr ...$exclusions): self
+    public function withExclusions(Exclusion ...$exclusions): self
     {
         array_push($this->exclusions, ...$exclusions);
 
         return $this;
     }
 
-    private function buildExclusions(Node\Expr ...$exclusions): Node\Expr
+    private function buildExclusions(Exclusion ...$exclusions): array
     {
-        if (\count($exclusions) > 3) {
-            $length = \count($exclusions);
-            $middle = (int) floor($length / 2);
-            $left = \array_slice($exclusions, 0, $middle);
-            $right = \array_slice($exclusions, $middle, $length);
-
-            return new Node\Expr\BinaryOp\BooleanAnd(
-                $this->buildExclusions(...$left),
-                $this->buildExclusions(...$right),
+        $statements = [];
+        foreach ($exclusions as $exclusion) {
+            $statements[] = new Node\Stmt\If_(
+                $exclusion->when,
+                [
+                    'stmts' => [
+                        new Node\Stmt\Expression(
+                            new Node\Expr\Assign(
+                                new Node\Expr\Variable('input'),
+                                new Node\Expr\Yield_(
+                                    new Node\Expr\New_(
+                                        $exclusion->reason ? new Node\Name\FullyQualified(RejectionWithReasonResultBucket::class) : new Node\Name\FullyQualified(RejectionResultBucket::class),
+                                        [
+                                            new Node\Arg(new Node\Expr\Variable('input')),
+                                            $exclusion->reason ? new Node\Arg($exclusion->reason) : new Node\Arg(
+                                                new Node\Expr\ConstFetch(
+                                                    new Node\Name(null)
+                                                ),
+                                            ),
+                                        ]
+                                    ),
+                                ),
+                            ),
+                        ),
+                        new Node\Stmt\Continue_(),
+                    ],
+                ]
             );
         }
 
-        if (\count($exclusions) > 2) {
-            $right = array_shift($exclusions);
-
-            return new Node\Expr\BinaryOp\BooleanAnd(
-                $this->buildExclusions(...$exclusions),
-                $right,
-            );
-        }
-
-        if (\count($exclusions) > 1) {
-            $left = array_pop($exclusions);
-            $right = array_pop($exclusions);
-
-            return new Node\Expr\BinaryOp\BooleanAnd(
-                $left,
-                $right,
-            );
-        }
-
-        if (\count($exclusions) > 0) {
-            return array_pop($exclusions);
-        }
-
-        return new Node\Expr\ConstFetch(
-            new Node\Name('false'),
-        );
+        return $statements;
     }
 
     public function getNode(): Node
@@ -114,27 +107,7 @@ final class Reject implements StepBuilderInterface
                                     new Node\Name('true'),
                                 ),
                                 [
-                                    new Node\Stmt\If_(
-                                        $this->buildExclusions(...$this->exclusions),
-                                        [
-                                            'stmts' => [
-                                                new Node\Stmt\Expression(
-                                                    new Node\Expr\Assign(
-                                                        new Node\Expr\Variable('input'),
-                                                        new Node\Expr\Yield_(
-                                                            new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified(RejectionResultBucket::class),
-                                                                [
-                                                                    new Node\Arg(new Node\Expr\Variable('input')),
-                                                                ]
-                                                            ),
-                                                        ),
-                                                    ),
-                                                ),
-                                                new Node\Stmt\Continue_(),
-                                            ],
-                                        ]
-                                    ),
+                                    ...$this->buildExclusions(...$this->exclusions),
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
                                             new Node\Expr\Variable('input'),
