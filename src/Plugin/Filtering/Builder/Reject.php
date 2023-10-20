@@ -133,7 +133,7 @@ final class Reject implements StepBuilderInterface
                                                             new Node\Expr\New_(
                                                                 new Node\Name\FullyQualified(RejectionResultBucket::class),
                                                                 [
-                                                                    $this->serialize_rejection !== null ? new Node\Arg($this->serialize_rejection) : new Node\Arg(new Node\Expr\Variable('input'))
+                                                                    null !== $this->serialize_rejection ? new Node\Arg($this->serialize_rejection) : new Node\Arg(new Node\Expr\Variable('input')),
                                                                 ]
                                                             ),
                                                         ),

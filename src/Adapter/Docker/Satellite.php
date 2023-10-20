@@ -22,7 +22,7 @@ final class Satellite implements Configurator\SatelliteInterface
     public function __construct(
         private readonly Dockerfile\Dockerfile $dockerfile,
         private readonly string $workdir,
-        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
+        Packaging\DirectoryInterface|Packaging\FileInterface ...$files
     ) {
         $this->files = $files;
     }
@@ -34,7 +34,7 @@ final class Satellite implements Configurator\SatelliteInterface
         return $this;
     }
 
-    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function withFile(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         array_push($this->files, ...$files);
 

@@ -82,7 +82,7 @@ final class RemoveCommand extends Console\Command\Command
 
         try {
             $configuration = $service->normalize($configuration);
-        } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
+        } catch (Config\Definition\Exception\InvalidConfigurationException|Config\Definition\Exception\InvalidTypeException $exception) {
             $style->error($exception->getMessage());
 
             return self::FAILURE;
