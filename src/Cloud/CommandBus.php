@@ -29,6 +29,7 @@ final class CommandBus
             Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
             Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
+            Satellite\Cloud\Command\Workflow\DeclareWorkflowCommand::class => new Satellite\Cloud\Handler\Workflow\DeclareWorkflowCommandHandler($client),
         ]);
     }
 
