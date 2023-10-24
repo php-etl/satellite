@@ -6,49 +6,85 @@ namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
+use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
+use Kiboko\Component\Satellite\Cloud\DTO\ReferencedWorkflow;
 use Kiboko\Component\Satellite\Cloud\DTO\RepositoryList;
+use Kiboko\Component\Satellite\Cloud\DTO\Step;
 use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
+use Kiboko\Component\Satellite\Cloud\DTO\StepList;
+use Kiboko\Component\Satellite\Cloud\DTO\WorkflowId;
 use Symfony\Component\ExpressionLanguage\Expression;
 
-final readonly class Workflow implements PipelineInterface
+final readonly class Workflow implements WorkflowInterface
 {
     public function __construct(
         private Context $context,
     ) {}
 
-    public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
+    public static function fromLegacyConfiguration(array $configuration): DTO\Workflow
     {
         $random = bin2hex(random_bytes(4));
 
-        return new DTO\Pipeline(
-            $configuration['pipeline']['name'] ?? sprintf('Pipeline %s', $random),
-            $configuration['pipeline']['code'] ?? sprintf('pipeline_%s', $random),
-            new DTO\StepList(
-                ...array_map(function (array $stepConfig, int $order) {
-                    $name = $stepConfig['name'] ?? sprintf('step%d', $order);
-                    $code = $stepConfig['code'] ?? sprintf('step%d', $order);
-                    unset($stepConfig['name'], $stepConfig['code']);
+        return new DTO\Workflow(
+            $configuration['pipeline']['name'] ?? sprintf('Workflow %s', $random),
+            $configuration['pipeline']['code'] ?? sprintf('workflow_%s', $random),
+            new DTO\JobList(
+                ...array_map(
+                    function (array $config, int $order) {
+                        if (array_key_exists('pipeline', $config)) {
+                            $name = $config['pipeline']['name'] ?? sprintf('pipeline%d', $order);
+                            $code = $config['pipeline']['code'] ?? sprintf('pipeline%d', $order);
+                            unset($config['pipeline']['name'], $config['pipeline']['code']);
 
-                    array_walk_recursive($stepConfig, function (&$value): void {
-                        if ($value instanceof Expression) {
-                            $value = '@='.$value;
+                            array_walk_recursive($config, function (&$value): void {
+                                if ($value instanceof Expression) {
+                                    $value = '@='.$value;
+                                }
+                            });
+
+                            return new DTO\Workflow\Pipeline(
+                                $name,
+                                new JobCode($code),
+                                new StepList(
+                                    ...array_map(fn (array $step, int $order) => new Step(
+                                            $step['name'] ?? sprintf('step%d', $order),
+                                            new StepCode($step['code'] ?? sprintf('step%d', $order)),
+                                            $step,
+                                            new ProbeList(),
+                                            $order
+                                        ),
+                                        $config['pipeline']['steps'],
+                                        range(0, (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) - 1)
+                                    ),
+                                ),
+                                $order
+                            );
+                        } elseif (array_key_exists('action', $config)) {
+                            $name = $config['action']['name'] ?? sprintf('pipeline%d', $order);
+                            $code = $config['action']['code'] ?? sprintf('pipeline%d', $order);
+                            unset($config['action']['name'], $config['action']['code']);
+
+                            array_walk_recursive($config, function (&$value): void {
+                                if ($value instanceof Expression) {
+                                    $value = '@='.$value;
+                                }
+                            });
+
+                            return new DTO\Workflow\Action(
+                                $name,
+                                new JobCode($code),
+                                $config,
+                                $order,
+                            );
                         }
-                    });
-
-                    return new DTO\Step(
-                        $name,
-                        new StepCode($code),
-                        $stepConfig,
-                        new ProbeList(
-                            // FIXME: add probes
-                        ),
-                        $order,
-                    );
-                }, $configuration['pipeline']['steps'], range(0, (is_countable($configuration['pipeline']['steps']) ? \count($configuration['pipeline']['steps']) : 0) - 1))
+                    },
+                    $configuration['workflow']['jobs'],
+                    range(0, (is_countable($configuration['workflow']['jobs']) ? \count($configuration['workflow']['jobs']) : 0) - 1)
+                )
             ),
             new DTO\Autoload(
                 ...array_map(
@@ -62,7 +98,7 @@ final readonly class Workflow implements PipelineInterface
                     function (string $namespace) {
                         $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1]);
+                         return new Package($parts[0], $parts[1] ?? '*');
                     },
                     $configuration['composer']['require'] ?? [],
                 )
@@ -82,7 +118,7 @@ final readonly class Workflow implements PipelineInterface
         );
     }
 
-    public static function fromApiWithId(Api\Client $client, PipelineId $id, array $configuration): DTO\ReferencedPipeline
+    public static function fromApiWithId(Api\Client $client, WorkflowId $id, array $configuration): DTO\ReferencedWorkflow
     {
         $item = $client->getPipelineItem($id->asString());
 
@@ -92,13 +128,13 @@ final readonly class Workflow implements PipelineInterface
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
 
-        return new ReferencedPipeline(
-            new PipelineId($item->getId()),
+        return new ReferencedWorkflow(
+            new WorkflowId($item->getId()),
             self::fromApiModel($client, $item, $configuration)
         );
     }
 
-    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): DTO\ReferencedPipeline
+    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): DTO\ReferencedWorkflow
     {
         $collection = $client->getPipelineCollection(['code' => $code]);
 
@@ -114,15 +150,15 @@ final readonly class Workflow implements PipelineInterface
             throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
         }
 
-        return new ReferencedPipeline(
-            new PipelineId($collection[0]->getId()),
+        return new ReferencedWorkflow(
+            new WorkflowId($collection[0]->getId()),
             self::fromApiModel($client, $collection[0], $configuration)
         );
     }
 
-    private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Pipeline
+    private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Workflow
     {
-        $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
+        $steps = $client->add($model->getId());
 
         try {
             \assert(\is_array($steps));
@@ -130,10 +166,10 @@ final readonly class Workflow implements PipelineInterface
             throw new AccessDeniedException('Could not retrieve the pipeline steps.');
         }
 
-        return new DTO\Pipeline(
+        return new DTO\Workflow(
             $model->getLabel(),
             $model->getCode(),
-            new DTO\StepList(
+            new DTO\JobList(
                 ...array_map(function (Api\Model\PipelineStep $step, int $order) use ($client) {
                     $probes = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($step->getId());
 
@@ -160,7 +196,7 @@ final readonly class Workflow implements PipelineInterface
                     function (string $namespace) {
                         $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1]);
+                        return new Package($parts[0], $parts[1] ?? '*');
                     },
                     $model->getPackages(),
                 )
@@ -180,48 +216,43 @@ final readonly class Workflow implements PipelineInterface
         );
     }
 
-    public function create(DTO\PipelineInterface $pipeline): DTO\CommandBatch
+    public function create(DTO\WorkflowInterface $workflow): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
-            new Command\Pipeline\DeclarePipelineCommand(
-                $pipeline->code(),
-                $pipeline->label(),
-                $pipeline->steps(),
-                $pipeline->autoload(),
-                $pipeline->packages(),
-                $pipeline->repositories(),
-                $pipeline->auths(),
+            new Command\Workflow\DeclareWorkflowCommand(
+                $workflow->code(),
+                $workflow->label(),
+                $workflow->jobs(),
+                $workflow->autoload(),
+                $workflow->packages(),
+                $workflow->repositories(),
+                $workflow->auths(),
                 $this->context->organization(),
                 $this->context->workspace(),
             )
         );
     }
 
-    public function update(DTO\ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch
+    public function update(DTO\ReferencedWorkflow $actual, DTO\WorkflowInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
-            throw new \RuntimeException('Code does not match between actual and desired pipeline definition.');
+            throw new \RuntimeException('Code does not match between actual and desired workflow definition.');
         }
         if ($actual->label() !== $desired->label()) {
-            throw new \RuntimeException('Label does not match between actual and desired pipeline definition.');
+            throw new \RuntimeException('Label does not match between actual and desired workflow definition.');
         }
 
         // Check the changes in the list of steps
         $diff = new Diff\StepListDiff($actual->id());
         $commands = $diff->diff($actual->steps(), $desired->steps());
 
-        // Check the changes in the list of autoloads
-        if (\count($actual->autoload()) !== \count($desired->autoload())) {
-            // TODO: make diff of the autoload
-        }
-
         return new DTO\CommandBatch(...$commands);
     }
 
-    public function remove(DTO\PipelineId $id): DTO\CommandBatch
+    public function remove(DTO\WorkflowId $id): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
-            new Command\Pipeline\RemovePipelineCommand($id),
+            new Command\Workflow\RemoveWorkflowCommand($id),
         );
     }
 }
