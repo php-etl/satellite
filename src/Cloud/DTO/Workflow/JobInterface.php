@@ -8,5 +8,4 @@ use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 
 interface JobInterface
 {
-
 }

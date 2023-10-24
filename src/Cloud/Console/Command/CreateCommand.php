@@ -23,6 +23,7 @@ final class CreateCommand extends Console\Command\Command
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addArgument('type', Console\Input\InputArgument::REQUIRED, 'Type de configuration (pipeline ou workflow)');
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -60,6 +61,12 @@ final class CreateCommand extends Console\Command\Command
             if (!isset($configuration)) {
                 throw new \RuntimeException('Could not find configuration file.');
             }
+        }
+
+        $type = $input->getArgument('type');
+        if ($type !== 'pipeline' && $type !== 'workflow') {
+            $output->writeln('Le type doit être soit "pipeline" soit "workflow".');
+            return Console\Command\Command::FAILURE;
         }
 
         for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
@@ -121,15 +128,31 @@ final class CreateCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        $pipeline = new Satellite\Cloud\Pipeline($context);
-        if (!\array_key_exists('version', $configuration)) {
-            foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
-                $bus->push($command);
-            }
-        } else {
-            foreach ($configuration['satellites'] as $satellite) {
-                foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($satellite)) as $command) {
+
+        if ($type === 'pipeline') {
+            $pipeline = new Satellite\Cloud\Pipeline($context);
+            if (!\array_key_exists('version', $configuration)) {
+                foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
                     $bus->push($command);
+                }
+            } else {
+                foreach ($configuration['satellites'] as $satellite) {
+                    foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($satellite)) as $command) {
+                        $bus->push($command);
+                    }
+                }
+            }
+        } elseif ($type === 'workflow') {
+            $workflow = new Satellite\Cloud\Workflow($context);
+            if (!\array_key_exists('version', $configuration)) {
+                foreach ($workflow->create(Satellite\Cloud\Workflow::fromLegacyConfiguration($configuration['satellite'])) as $command) {
+                    $bus->push($command);
+                }
+            } else {
+                foreach ($configuration['satellites'] as $satellite) {
+                    foreach ($workflow->create(Satellite\Cloud\Workflow::fromLegacyConfiguration($satellite)) as $command) {
+                        $bus->push($command);
+                    }
                 }
             }
         }
