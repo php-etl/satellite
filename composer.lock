@@ -1817,16 +1817,16 @@
         },
         {
             "name": "php-etl/gyroscops-api-client",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/gyroscops-api-client.git",
-                "reference": "0beedf3f7f3804ff3483bbeb70fba086657ddcb8"
+                "reference": "aebd5ea11b069877f2f4e0b5d0d2a3d9343cf124"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/0beedf3f7f3804ff3483bbeb70fba086657ddcb8",
-                "reference": "0beedf3f7f3804ff3483bbeb70fba086657ddcb8",
+                "url": "https://api.github.com/repos/php-etl/gyroscops-api-client/zipball/aebd5ea11b069877f2f4e0b5d0d2a3d9343cf124",
+                "reference": "aebd5ea11b069877f2f4e0b5d0d2a3d9343cf124",
                 "shasum": ""
             },
             "require": {
@@ -1841,7 +1841,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "0.2.x-dev"
+                    "dev-main": "0.3.x-dev"
                 }
             },
             "autoload": {
@@ -1866,9 +1866,9 @@
             "description": "This package provides Jane-PHP generated API models and client based on the OpenAPI specification.",
             "support": {
                 "issues": "https://github.com/php-etl/gyroscops-api-client/issues",
-                "source": "https://github.com/php-etl/gyroscops-api-client/tree/v0.2.0"
+                "source": "https://github.com/php-etl/gyroscops-api-client/tree/v0.3.0"
             },
-            "time": "2023-04-05T14:35:12+00:00"
+            "time": "2023-10-24T07:53:14+00:00"
         },
         {
             "name": "php-etl/packaging",
