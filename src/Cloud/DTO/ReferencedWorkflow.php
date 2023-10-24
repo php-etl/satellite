@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-final class ReferencedWorkflow implements WorkflowInterface
+final readonly class ReferencedWorkflow implements WorkflowInterface
 {
     public function __construct(
         private WorkflowId $id,

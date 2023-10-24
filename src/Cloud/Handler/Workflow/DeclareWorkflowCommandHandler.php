@@ -16,6 +16,7 @@ final readonly class DeclareWorkflowCommandHandler
 
     public function __invoke(Cloud\Command\Workflow\DeclareWorkflowCommand $command): Cloud\Event\Workflow\WorkflowDeclared
     {
+        $result = null;
         try {
             /** @var Api\Model\WorkflowDeclareWorkflowCommandJsonldRead $result */
             $result = $this->client->declareWorkflowWorkflowCollection(
