@@ -28,6 +28,7 @@ final class RemoveCommand extends Console\Command\Command
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
+        $configuration = [];
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,

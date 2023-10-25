@@ -189,7 +189,7 @@ final readonly class Workflow implements WorkflowInterface
                     }
 
                     throw new \RuntimeException('This type of job is not currently supported.');
-                }, $jobs = $workflow->getJobs(), range(0, \count($jobs)))
+                }, $jobs = $workflow->getJobs(), range(0, \count((array) $jobs)))
             ),
             new DTO\Autoload(
                 ...array_map(
