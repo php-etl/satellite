@@ -23,6 +23,7 @@ final class UpdateCommand extends Console\Command\Command
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addArgument('type', Console\Input\InputArgument::REQUIRED, 'Type of runtime (pipeline ou workflow)');
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -62,6 +63,13 @@ final class UpdateCommand extends Console\Command\Command
             }
         }
 
+        $type = $input->getArgument('type');
+        if ('pipeline' !== $type && 'workflow' !== $type) {
+            $output->writeln('The type must be either "pipeline" or "workflow.');
+
+            return Console\Command\Command::FAILURE;
+        }
+
         for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
             if (file_exists($directory.'/.gyro.php')) {
                 break;
@@ -73,7 +81,7 @@ final class UpdateCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Console\RuntimeContext(
-            $input->getOption('output') ?? 'php://fd/3',
+            'php://fd/3',
             new Satellite\ExpressionLanguage\ExpressionLanguage(),
         );
 
@@ -120,9 +128,19 @@ final class UpdateCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        $pipeline = new Satellite\Cloud\Pipeline($context);
-        $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code'], $configuration['satellite']['pipeline']);
-        foreach ($pipeline->update($model, Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
+        match ($type) {
+            ArgumentType::PIPELINE->value => $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, array_key_first($configuration['satellites']), $configuration['satellite']['pipeline']),
+            ArgumentType::WORKFLOW->value => $model = Satellite\Cloud\Workflow::fromApiWithCode($client, array_key_first($configuration['satellites'])),
+            default => throw new \InvalidArgumentException('Invalid type provided.'),
+        };
+
+        $instance = match ($type) {
+            ArgumentType::PIPELINE->value => new Satellite\Cloud\Pipeline($context),
+            ArgumentType::WORKFLOW->value => new Satellite\Cloud\Workflow($context),
+            default => throw new \InvalidArgumentException('Invalid type provided.'),
+        };
+
+        foreach ($instance->update($model, $instance::fromLegacyConfiguration($configuration['satellite'])) as $command) {
             $bus->push($command);
         }
 

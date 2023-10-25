@@ -8,9 +8,7 @@ use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
 use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
-use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
-use Kiboko\Component\Satellite\Cloud\DTO\ReferencedPipeline;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedWorkflow;
 use Kiboko\Component\Satellite\Cloud\DTO\RepositoryList;
 use Kiboko\Component\Satellite\Cloud\DTO\Step;
@@ -30,12 +28,12 @@ final readonly class Workflow implements WorkflowInterface
         $random = bin2hex(random_bytes(4));
 
         return new DTO\Workflow(
-            $configuration['pipeline']['name'] ?? sprintf('Workflow %s', $random),
-            $configuration['pipeline']['code'] ?? sprintf('workflow_%s', $random),
+            $configuration['workflow']['name'] ?? sprintf('Workflow %s', $random),
+            $configuration['workflow']['code'] ?? sprintf('workflow_%s', $random),
             new DTO\JobList(
                 ...array_map(
                     function (array $config, int $order) {
-                        if (array_key_exists('pipeline', $config)) {
+                        if (\array_key_exists('pipeline', $config)) {
                             $name = $config['pipeline']['name'] ?? sprintf('pipeline%d', $order);
                             $code = $config['pipeline']['code'] ?? sprintf('pipeline%d', $order);
                             unset($config['pipeline']['name'], $config['pipeline']['code']);
@@ -51,19 +49,21 @@ final readonly class Workflow implements WorkflowInterface
                                 new JobCode($code),
                                 new StepList(
                                     ...array_map(fn (array $step, int $order) => new Step(
-                                            $step['name'] ?? sprintf('step%d', $order),
-                                            new StepCode($step['code'] ?? sprintf('step%d', $order)),
-                                            $step,
-                                            new ProbeList(),
-                                            $order
-                                        ),
+                                        $step['name'] ?? sprintf('step%d', $order),
+                                        new StepCode($step['code'] ?? sprintf('step%d', $order)),
+                                        $step,
+                                        new ProbeList(),
+                                        $order
+                                    ),
                                         $config['pipeline']['steps'],
                                         range(0, (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) - 1)
                                     ),
                                 ),
                                 $order
                             );
-                        } elseif (array_key_exists('action', $config)) {
+                        }
+
+                        if (\array_key_exists('action', $config)) {
                             $name = $config['action']['name'] ?? sprintf('pipeline%d', $order);
                             $code = $config['action']['code'] ?? sprintf('pipeline%d', $order);
                             unset($config['action']['name'], $config['action']['code']);
@@ -81,6 +81,8 @@ final readonly class Workflow implements WorkflowInterface
                                 $order,
                             );
                         }
+
+                        throw new \RuntimeException('This type is currently not supported.');
                     },
                     $configuration['workflow']['jobs'],
                     range(0, (is_countable($configuration['workflow']['jobs']) ? \count($configuration['workflow']['jobs']) : 0) - 1)
@@ -98,7 +100,7 @@ final readonly class Workflow implements WorkflowInterface
                     function (string $namespace) {
                         $parts = explode(':', $namespace);
 
-                         return new Package($parts[0], $parts[1] ?? '*');
+                        return new Package($parts[0], $parts[1] ?? '*');
                     },
                     $configuration['composer']['require'] ?? [],
                 )
@@ -118,76 +120,81 @@ final readonly class Workflow implements WorkflowInterface
         );
     }
 
-    public static function fromApiWithId(Api\Client $client, WorkflowId $id, array $configuration): DTO\ReferencedWorkflow
+    public static function fromApiWithId(Api\Client $client, WorkflowId $id): DTO\ReferencedWorkflow
     {
-        $item = $client->getPipelineItem($id->asString());
+        /** @var Api\Model\WorkflowJsonldRead|Api\Model\WorkflowRead $item */
+        $item = $client->getWorkflowItem($id->asString());
 
         try {
             \assert($item instanceof Api\Model\PipelineRead);
         } catch (\AssertionError) {
-            throw new AccessDeniedException('Could not retrieve the pipeline.');
+            throw new AccessDeniedException('Could not retrieve the workflow.');
         }
 
         return new ReferencedWorkflow(
             new WorkflowId($item->getId()),
-            self::fromApiModel($client, $item, $configuration)
+            self::fromApiModel($client, $item)
         );
     }
 
-    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): DTO\ReferencedWorkflow
+    public static function fromApiWithCode(Api\Client $client, string $code): DTO\ReferencedWorkflow
     {
-        $collection = $client->getPipelineCollection(['code' => $code]);
+        $collection = $client->getWorkflowCollection(['code' => $code]);
 
         try {
             \assert(\is_array($collection));
         } catch (\AssertionError) {
-            throw new AccessDeniedException('Could not retrieve the pipeline.');
+            throw new AccessDeniedException('Could not retrieve the workflow.');
         }
+
         try {
             \assert(1 === \count($collection));
-            \assert($collection[0] instanceof Api\Model\PipelineRead);
+            \assert($collection[0] instanceof Api\Model\WorkflowRead);
         } catch (\AssertionError) {
             throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
         }
 
         return new ReferencedWorkflow(
             new WorkflowId($collection[0]->getId()),
-            self::fromApiModel($client, $collection[0], $configuration)
+            self::fromApiModel($client, $collection[0])
         );
     }
 
-    private static function fromApiModel(Api\Client $client, Api\Model\PipelineRead $model, array $configuration): DTO\Workflow
+    private static function fromApiModel(Api\Client $client, Api\Model\WorkflowRead $model): DTO\Workflow
     {
-        $steps = $client->add($model->getId());
-
-        try {
-            \assert(\is_array($steps));
-        } catch (\AssertionError) {
-            throw new AccessDeniedException('Could not retrieve the pipeline steps.');
-        }
+        /** @var Api\Model\WorkflowJsonldRead|Api\Model\WorkflowRead $workflow */
+        $workflow = $client->getWorkflowItem($model->getId());
 
         return new DTO\Workflow(
-            $model->getLabel(),
-            $model->getCode(),
+            $workflow->getLabel(),
+            $workflow->getCode(),
             new DTO\JobList(
-                ...array_map(function (Api\Model\PipelineStep $step, int $order) use ($client) {
-                    $probes = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($step->getId());
+                ...array_map(function (Api\Model\Job $job, int $order) {
+                    if (null == $job->getPipeline()) {
+                        return new DTO\Workflow\Pipeline(
+                            $job->getLabel(),
+                            new JobCode($job->getCode()),
+                            $job->getConfiguration(),
+                            $order
+                        );
+                    }
 
-                    return new DTO\Step(
-                        $step->getLabel(),
-                        new StepCode($step->getCode()),
-                        $step->getConfiguration(),
-                        new ProbeList(
-                            ...array_map(fn (Api\Model\PipelineStepProbe $probe) => new DTO\Probe($probe->getLabel(), $probe->getCode(), $probe->getOrder()), $probes)
-                        ),
-                        $order
-                    );
-                }, $steps, range(0, \count($steps)))
+                    if (null == $job->getAction()) {
+                        return new DTO\Workflow\Action(
+                            $job->getLabel(),
+                            new JobCode($job->getCode()),
+                            $job->getConfiguration(),
+                            $order
+                        );
+                    }
+
+                    throw new \RuntimeException('This type of job is not currently supported.');
+                }, $jobs = $workflow->getJobs(), range(0, \count($jobs)))
             ),
             new DTO\Autoload(
                 ...array_map(
                     fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                    array_keys($configuration['composer']['autoload']['psr4'] ?? []),
+                    array_keys($workflow->getAutoload()),
                     $model->getAutoload(),
                 )
             ),
@@ -198,19 +205,19 @@ final readonly class Workflow implements WorkflowInterface
 
                         return new Package($parts[0], $parts[1] ?? '*');
                     },
-                    $model->getPackages(),
+                    $workflow->getPackages(),
                 )
             ),
             new RepositoryList(
                 ...array_map(
                     fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                    $model->getRepositories(),
+                    $workflow->getRepositories(),
                 )
             ),
             new AuthList(
                 ...array_map(
                     fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                    $model->getAuths(),
+                    $workflow->getAuths(),
                 )
             ),
         );
@@ -242,9 +249,8 @@ final readonly class Workflow implements WorkflowInterface
             throw new \RuntimeException('Label does not match between actual and desired workflow definition.');
         }
 
-        // Check the changes in the list of steps
-        $diff = new Diff\StepListDiff($actual->id());
-        $commands = $diff->diff($actual->steps(), $desired->steps());
+        $diff = new Diff\JobListDiff($actual->id());
+        $commands = $diff->diff($actual->jobs(), $desired->jobs());
 
         return new DTO\CommandBatch(...$commands);
     }
