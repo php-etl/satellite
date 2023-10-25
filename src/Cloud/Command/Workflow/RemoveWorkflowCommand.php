@@ -10,6 +10,6 @@ use Kiboko\Component\Satellite\Cloud\DTO\WorkflowId;
 final class RemoveWorkflowCommand implements Command
 {
     public function __construct(
-        public WorkflowId $workflow,
+        public WorkflowId $id,
     ) {}
 }
