@@ -8,6 +8,7 @@ use Kiboko\Component\Satellite\Cloud\Command\Command;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\Step;
 use Kiboko\Component\Satellite\Cloud\DTO\StepCode;
+
 final class AddBeforePipelineStepCommand implements Command
 {
     public function __construct(

@@ -11,8 +11,7 @@ final readonly class RemoveWorkflowCommandHandler
 {
     public function __construct(
         private \Gyroscops\Api\Client $client,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Cloud\Command\Workflow\RemoveWorkflowCommand $command): Cloud\Event\Workflow\WorkflowRemoved
     {
@@ -27,6 +26,11 @@ final readonly class RemoveWorkflowCommandHandler
             throw new Cloud\RemoveWorkflowFailedException('Something went wrong while removing the workflow. It seems the data you sent was invalid, please check your input.', previous: $exception);
         } catch (Api\Exception\SoftDeleteWorkflowItemNotFoundException $exception) {
             throw new Cloud\RemoveWorkflowFailedException('Something went wrong while removing the workflow. It seems the data you want to delete do not exists.', previous: $exception);
+        }
+
+        /* TODO : we need to remove this condition from this class and fix the Authentication checker */
+        if (null == $result) {
+            throw new \RuntimeException('Your token has expired, please refresh it.');
         }
 
         return new Cloud\Event\Workflow\WorkflowRemoved($result->getId());
