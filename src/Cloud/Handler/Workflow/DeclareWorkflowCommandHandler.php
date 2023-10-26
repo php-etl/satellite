@@ -85,11 +85,6 @@ final readonly class DeclareWorkflowCommandHandler
             throw new Cloud\DeclareWorkflowFailedException('Something went wrong while declaring the workflow. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        /* TODO : we need to remove this condition from this class and fix the Authentication checker */
-        if (null == $result) {
-            throw new \RuntimeException('Your token has expired, please refresh it.');
-        }
-
         return new Cloud\Event\Workflow\WorkflowDeclared($result->getId());
     }
 }
