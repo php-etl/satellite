@@ -22,11 +22,6 @@ final readonly class RemovePipelineCommandHandler
             throw new Cloud\RemovePipelineFailedException('Something went wrong while trying to remove a step from the pipeline. Maybe you are trying to delete a pipeline that never existed or has already been deleted.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\RemovePipelineFailedException('Something went wrong while trying to remove a step from the pipeline.');
-        }
-
         return new Cloud\Event\RemovedPipeline((string) $command->pipeline);
     }
 }

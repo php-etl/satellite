@@ -32,11 +32,6 @@ final readonly class AddPipelineStepProbeCommandHandler
             throw new Cloud\AddPipelineStepProbeFailedException('Something went wrong while trying to add a probe into an existing pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\AddPipelineStepProbeFailedException('Something went wrong while trying to add a probe into an existing pipeline step.');
-        }
-
         return new Cloud\Event\AddedPipelineStepProbe($result->id);
     }
 }

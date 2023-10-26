@@ -27,11 +27,6 @@ final readonly class RemovePipelineStepProbeCommandHandler
             throw new Cloud\RemovePipelineStepProbeFailedException('Something went wrong while removing a probe from the step. Maybe you are trying to delete a probe that never existed or has already been deleted.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\RemovePipelineStepProbeFailedException('Something went wrong while removing a probe from the step.');
-        }
-
         return new Cloud\Event\RemovedPipelineStepProbe($result->id);
     }
 }

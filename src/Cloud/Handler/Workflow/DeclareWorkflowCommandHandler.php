@@ -24,18 +24,18 @@ final readonly class DeclareWorkflowCommandHandler
                     ->setCode($command->code)
                     ->setComposer(
                         (new Api\Model\Composer())
-                            ->setAutoloads($command->autoload->map(
+                            ->setAutoloads($command->composer->autoload()->map(
                                 fn (PSR4AutoloadConfig $autoloadConfig) => (new Api\Model\ComposerAutoload())
                                     ->setNamespace($autoloadConfig->namespace)
                                     ->setPaths($autoloadConfig->paths)
                             ))
-                            ->setPackages($command->packages->transform())
-                            ->setAuthentications($command->auths->map(
+                            ->setPackages($command->composer->packages()->transform())
+                            ->setAuthentications($command->composer->auths()->map(
                                 fn (Cloud\DTO\Auth $auth) => (new Api\Model\ComposerAuthentication())
                                     ->setUrl($auth->url)
                                     ->setToken($auth->token)
                             ))
-                            ->setRepositories($command->repositories->map(
+                            ->setRepositories($command->composer->repositories()->map(
                                 fn (Cloud\DTO\Repository $repository) => (new Api\Model\ComposerRepository())
                                     ->setName($repository->name)
                                     ->setType($repository->type)

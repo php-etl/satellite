@@ -29,11 +29,6 @@ final readonly class AddPipelineComposerPSR4AutoloadCommandHandler
             throw new Cloud\AddPipelineComposerPSR4AutoloadFailedException('Something went wrong while trying to add PSR4 autoloads into the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\AddPipelineComposerPSR4AutoloadFailedException('Something went wrong while trying to add PSR4 autoloads into the pipeline.');
-        }
-
         return new Cloud\Event\AddedPipelineComposerPSR4Autoload($result->id, $result->namespace, $result->paths);
     }
 }
