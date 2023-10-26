@@ -96,6 +96,12 @@ final class UpdateCommand extends Console\Command\Command
             return self::FAILURE;
         }
 
+        if (!\array_key_exists('version', $configuration)) {
+            $style->warning('The current version of your configuration does not allow you to use Cloud commands. Please update your configuration to version 0.3.');
+
+            return self::INVALID;
+        }
+
         $auth = new Satellite\Cloud\Auth();
         try {
             $token = $auth->token($url);
@@ -128,19 +134,13 @@ final class UpdateCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        match ($type) {
-            ArgumentType::PIPELINE->value => $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, array_key_first($configuration['satellites']), $configuration['satellite']['pipeline']),
-            ArgumentType::WORKFLOW->value => $model = Satellite\Cloud\Workflow::fromApiWithCode($client, array_key_first($configuration['satellites'])),
-            default => throw new \InvalidArgumentException('Invalid type provided.'),
-        };
-
         $instance = match ($type) {
             ArgumentType::PIPELINE->value => new Satellite\Cloud\Pipeline($context),
             ArgumentType::WORKFLOW->value => new Satellite\Cloud\Workflow($context),
             default => throw new \InvalidArgumentException('Invalid type provided.'),
         };
 
-        foreach ($instance->update($model, $instance::fromLegacyConfiguration($configuration['satellite'])) as $command) {
+        foreach ($instance->update($instance::fromApiWithCode($client, array_key_first($configuration['satellites'])), $instance::fromLegacyConfiguration($configuration['satellite'])) as $command) {
             $bus->push($command);
         }
 
