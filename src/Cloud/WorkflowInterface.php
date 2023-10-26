@@ -14,9 +14,9 @@ interface WorkflowInterface
 
     public static function fromApiWithCode(Client $client, string $code): DTO\ReferencedWorkflow;
 
-    public function create(DTO\WorkflowInterface $workflow): DTO\CommandBatch;
+    public function create(DTO\SatelliteInterface&DTO\WorkflowInterface $workflow): DTO\CommandBatch;
 
-    public function update(DTO\ReferencedWorkflow $actual, DTO\WorkflowInterface $desired): DTO\CommandBatch;
+    public function update(DTO\ReferencedWorkflow $actual, DTO\SatelliteInterface&DTO\WorkflowInterface $desired): DTO\CommandBatch;
 
     public function remove(DTO\WorkflowId $id): DTO\CommandBatch;
 }

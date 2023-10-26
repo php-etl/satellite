@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud;
 
-use DateTimeInterface;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
 use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
@@ -167,7 +166,7 @@ final class Auth
             throw new AccessDeniedException('There is no available token to authenticate to the service.');
         }
 
-        $date = \DateTimeImmutable::createFromFormat(DateTimeInterface::RFC3339_EXTENDED, $this->configuration[$url]['date']);
+        $date = \DateTimeImmutable::createFromFormat(\DateTimeInterface::RFC3339_EXTENDED, $this->configuration[$url]['date']);
         if ($date <= new \DateTimeImmutable('-1 hour')) {
             throw new AccessDeniedException('The stored token has expired, you need a fresh token to authenticate to the service.');
         }

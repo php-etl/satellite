@@ -35,11 +35,6 @@ final readonly class AddBeforePipelineStepCommandHandler
             throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\AddBeforePipelineStepFailedException('Something went wrong while trying to add a new step before an existing pipeline step.');
-        }
-
         return new Cloud\Event\AddedBeforePipelineStep($result->id);
     }
 }

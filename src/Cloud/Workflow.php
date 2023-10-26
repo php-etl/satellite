@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
+use Kiboko\Component\Satellite\Cloud\DTO\Composer;
 use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
@@ -88,34 +89,36 @@ final readonly class Workflow implements WorkflowInterface
                     range(0, (is_countable($configuration['workflow']['jobs']) ? \count($configuration['workflow']['jobs']) : 0) - 1)
                 )
             ),
-            new DTO\Autoload(
-                ...array_map(
-                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                    array_keys($configuration['composer']['autoload']['psr4'] ?? []),
-                    $configuration['composer']['autoload']['psr4'] ?? [],
-                )
-            ),
-            new DTO\PackageList(
-                ...array_map(
-                    function (string $namespace) {
-                        $parts = explode(':', $namespace);
+            new Composer(
+                new DTO\Autoload(
+                    ...array_map(
+                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        array_keys($configuration['composer']['autoload']['psr4'] ?? []),
+                        $configuration['composer']['autoload']['psr4'] ?? [],
+                    )
+                ),
+                new DTO\PackageList(
+                    ...array_map(
+                        function (string $namespace) {
+                            $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1] ?? '*');
-                    },
-                    $configuration['composer']['require'] ?? [],
-                )
-            ),
-            new RepositoryList(
-                ...array_map(
-                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                    $configuration['composer']['repositories'] ?? [],
-                )
-            ),
-            new AuthList(
-                ...array_map(
-                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                    $configuration['composer']['auth'] ?? [],
-                )
+                            return new Package($parts[0], $parts[1] ?? '*');
+                        },
+                        $configuration['composer']['require'] ?? [],
+                    )
+                ),
+                new RepositoryList(
+                    ...array_map(
+                        fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                        $configuration['composer']['repositories'] ?? [],
+                    )
+                ),
+                new AuthList(
+                    ...array_map(
+                        fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                        $configuration['composer']['auth'] ?? [],
+                    )
+                ),
             ),
         );
     }
@@ -191,56 +194,55 @@ final readonly class Workflow implements WorkflowInterface
                     throw new \RuntimeException('This type of job is not currently supported.');
                 }, $jobs = $workflow->getJobs(), range(0, \count((array) $jobs)))
             ),
-            new DTO\Autoload(
-                ...array_map(
-                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                    array_keys($workflow->getAutoload()),
-                    $model->getAutoload(),
-                )
-            ),
-            new DTO\PackageList(
-                ...array_map(
-                    function (string $namespace) {
-                        $parts = explode(':', $namespace);
+            new Composer(
+                new DTO\Autoload(
+                    ...array_map(
+                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        array_keys($workflow->getAutoload()),
+                        $model->getAutoload(),
+                    )
+                ),
+                new DTO\PackageList(
+                    ...array_map(
+                        function (string $namespace) {
+                            $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1] ?? '*');
-                    },
-                    $workflow->getPackages(),
-                )
-            ),
-            new RepositoryList(
-                ...array_map(
-                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                    $workflow->getRepositories(),
-                )
-            ),
-            new AuthList(
-                ...array_map(
-                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                    $workflow->getAuths(),
-                )
+                            return new Package($parts[0], $parts[1] ?? '*');
+                        },
+                        $workflow->getPackages(),
+                    )
+                ),
+                new RepositoryList(
+                    ...array_map(
+                        fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                        $workflow->getRepositories(),
+                    )
+                ),
+                new AuthList(
+                    ...array_map(
+                        fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                        $workflow->getAuths(),
+                    )
+                ),
             ),
         );
     }
 
-    public function create(DTO\WorkflowInterface $workflow): DTO\CommandBatch
+    public function create(DTO\SatelliteInterface&DTO\WorkflowInterface $workflow): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
             new Command\Workflow\DeclareWorkflowCommand(
                 $workflow->code(),
                 $workflow->label(),
                 $workflow->jobs(),
-                $workflow->autoload(),
-                $workflow->packages(),
-                $workflow->repositories(),
-                $workflow->auths(),
+                $workflow->composer(),
                 $this->context->organization(),
                 $this->context->workspace(),
             )
         );
     }
 
-    public function update(DTO\ReferencedWorkflow $actual, DTO\WorkflowInterface $desired): DTO\CommandBatch
+    public function update(DTO\ReferencedWorkflow $actual, DTO\SatelliteInterface&DTO\WorkflowInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
             throw new \RuntimeException('Code does not match between actual and desired workflow definition.');

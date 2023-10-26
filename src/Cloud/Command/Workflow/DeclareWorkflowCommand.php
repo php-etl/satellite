@@ -13,10 +13,7 @@ final class DeclareWorkflowCommand implements Command
         public string $code,
         public string $label,
         public DTO\JobList $jobs,
-        public DTO\Autoload $autoload,
-        public DTO\PackageList $packages,
-        public DTO\RepositoryList $repositories,
-        public DTO\AuthList $auths,
+        public DTO\Composer $composer,
         public DTO\OrganizationId $organizationId,
         public DTO\WorkspaceId $project,
     ) {}
