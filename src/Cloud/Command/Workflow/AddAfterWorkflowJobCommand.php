@@ -10,8 +10,8 @@ use Kiboko\Component\Satellite\Cloud\DTO;
 final class AddAfterWorkflowJobCommand implements Command
 {
     public function __construct(
-        DTO\WorkflowId $workflowId,
-        DTO\JobCode $code,
-        DTO\Workflow\JobInterface $job,
+        public DTO\WorkflowId $workflowId,
+        public DTO\JobCode $code,
+        public DTO\Workflow\JobInterface $job,
     ) {}
 }
