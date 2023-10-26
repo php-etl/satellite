@@ -9,6 +9,7 @@ use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
 use Kiboko\Component\Satellite\Cloud\DTO\Composer;
 use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
+use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedWorkflow;
 use Kiboko\Component\Satellite\Cloud\DTO\RepositoryList;
@@ -154,7 +155,7 @@ final readonly class Workflow implements WorkflowInterface
             \assert(1 === \count($collection));
             \assert($collection[0] instanceof Api\Model\WorkflowRead);
         } catch (\AssertionError) {
-            throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
+            throw new \OverflowException('There seems to be several workflows with the same code, please contact your Customer Success Manager.');
         }
 
         return new ReferencedWorkflow(
@@ -173,21 +174,32 @@ final readonly class Workflow implements WorkflowInterface
             $workflow->getCode(),
             new DTO\JobList(
                 ...array_map(function (Api\Model\Job $job, int $order) {
-                    if (null == $job->getPipeline()) {
+                    if (null !== $job->getPipeline()) {
                         return new DTO\Workflow\Pipeline(
                             $job->getLabel(),
                             new JobCode($job->getCode()),
-                            $job->getConfiguration(),
+                            new StepList(...array_map(
+                                fn (Api\Model\PipelineStepRead $step, int $order) => new Step(
+                                    $step->getLabel(),
+                                    new StepCode($step->getCode()),
+                                    $step->getConfiguration(),
+                                    /** TODO : implement probes when it is enabled */
+                                    new ProbeList(),
+                                    $order
+                                ),
+                                $steps = $job->getPipeline()->getSteps(),
+                                range(0, \count((array) $steps)),
+                            )),
                             $order
                         );
                     }
 
-                    if (null == $job->getAction()) {
+                    if (null !== $job->getAction()) {
                         return new DTO\Workflow\Action(
                             $job->getLabel(),
                             new JobCode($job->getCode()),
-                            $job->getConfiguration(),
-                            $order
+                            $job->getAction()->getConfiguration(),
+                            $order,
                         );
                     }
 
