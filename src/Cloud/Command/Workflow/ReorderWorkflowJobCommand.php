@@ -9,9 +9,13 @@ use Kiboko\Component\Satellite\Cloud\DTO;
 
 class ReorderWorkflowJobCommand implements Command
 {
+    /** @var list<DTO\JobCode> */
+    public array $codes;
+
     public function __construct(
-        DTO\WorkflowId $workflowId,
-        $param,
-        array $array_map
-    ) {}
+        public DTO\WorkflowId $workflowId,
+        DTO\JobCode ...$codes,
+    ) {
+        $this->codes = $codes;
+    }
 }

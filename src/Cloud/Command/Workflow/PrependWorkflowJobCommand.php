@@ -10,7 +10,7 @@ use Kiboko\Component\Satellite\Cloud\DTO;
 final class PrependWorkflowJobCommand implements Command
 {
     public function __construct(
-        DTO\WorkflowId $workflowId,
-        DTO\Workflow\JobInterface $job,
+        public DTO\WorkflowId $workflowId,
+        public DTO\Workflow\JobInterface $job,
     ) {}
 }

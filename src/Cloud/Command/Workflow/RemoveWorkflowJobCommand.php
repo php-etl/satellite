@@ -10,7 +10,7 @@ use Kiboko\Component\Satellite\Cloud\DTO;
 final class RemoveWorkflowJobCommand implements Command
 {
     public function __construct(
-        DTO\WorkflowId $workflowId,
-        DTO\StepCode $stepCode,
+        public DTO\WorkflowId $workflowId,
+        public DTO\StepCode $stepCode,
     ) {}
 }
