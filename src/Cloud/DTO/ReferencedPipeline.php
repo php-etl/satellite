@@ -33,21 +33,21 @@ final readonly class ReferencedPipeline implements PipelineInterface
 
     public function autoload(): Autoload
     {
-        return $this->decorated->autoload();
+        return $this->decorated->composer()->autoload();
     }
 
     public function packages(): PackageList
     {
-        return $this->decorated->packages();
+        return $this->decorated->composer()->packages();
     }
 
     public function repositories(): RepositoryList
     {
-        return $this->decorated->repositories();
+        return $this->decorated->composer()->repositories();
     }
 
     public function auths(): AuthList
     {
-        return $this->decorated->auths();
+        return $this->decorated->composer()->auths();
     }
 }
