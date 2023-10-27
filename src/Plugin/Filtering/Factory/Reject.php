@@ -71,8 +71,8 @@ class Reject implements Configurator\FactoryInterface
             $builder->withExclusions(
                 compileExpression($interpreter, $condition['when'])
             );
-            if (\array_key_exists('serialize_rejection', $condition)) {
-                $builder->withSerialiazeRejection(compileExpression($interpreter, $condition['serialize_rejection']));
+            if (\array_key_exists('rejection_serializer', $condition)) {
+                $builder->withRejectionSerializer(compileExpression($interpreter, $condition['rejection_serializer']));
             }
         }
 
