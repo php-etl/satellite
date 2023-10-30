@@ -68,14 +68,15 @@ class Reject implements Configurator\FactoryInterface
 
         $repository = new Repository\Reject($builder);
 
+        $exclusionBuilder = new Filtering\Builder\ExclusionsBuilder();
         foreach ($config as $condition) {
-            $builder->withExclusions(
-                new Filtering\DTO\Exclusion(
+            $exclusionBuilder
+                ->withCondition(
                     compileExpression($interpreter, $condition['when']),
                     compileValueWhenExpression($interpreter, $condition['reason']) ?: null,
-                ),
-            );
+                );
         }
+        $builder->withExclusions($exclusionBuilder);
 
         return $repository;
     }

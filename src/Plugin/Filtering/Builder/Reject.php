@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 use Kiboko\Component\Bucket\AcceptanceResultBucket;
 use Kiboko\Component\Bucket\RejectionResultBucket;
 use Kiboko\Component\Bucket\RejectionWithReasonResultBucket;
-use Kiboko\Component\Satellite\Plugin\Filtering\DTO\Exclusion;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 use PhpParser\Builder;
@@ -18,8 +17,7 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
-    /** @var list<?Exclusion> */
-    private array $exclusions = [];
+    private ?ExclusionsBuilder $exclusions = null;
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -42,46 +40,11 @@ final class Reject implements StepBuilderInterface
         return $this;
     }
 
-    public function withExclusions(Exclusion ...$exclusions): self
+    public function withExclusions(ExclusionsBuilder $builder): self
     {
-        array_push($this->exclusions, ...$exclusions);
+        $this->exclusions = $builder;
 
         return $this;
-    }
-
-    private function buildExclusions(Exclusion ...$exclusions): array
-    {
-        $statements = [];
-        foreach ($exclusions as $exclusion) {
-            $statements[] = new Node\Stmt\If_(
-                $exclusion->when,
-                [
-                    'stmts' => [
-                        new Node\Stmt\Expression(
-                            new Node\Expr\Assign(
-                                new Node\Expr\Variable('input'),
-                                new Node\Expr\Yield_(
-                                    new Node\Expr\New_(
-                                        $exclusion->reason ? new Node\Name\FullyQualified(RejectionWithReasonResultBucket::class) : new Node\Name\FullyQualified(RejectionResultBucket::class),
-                                        [
-                                            new Node\Arg(new Node\Expr\Variable('input')),
-                                            $exclusion->reason ? new Node\Arg($exclusion->reason) : new Node\Arg(
-                                                new Node\Expr\ConstFetch(
-                                                    new Node\Name(null)
-                                                ),
-                                            ),
-                                        ]
-                                    ),
-                                ),
-                            ),
-                        ),
-                        new Node\Stmt\Continue_(),
-                    ],
-                ]
-            );
-        }
-
-        return $statements;
     }
 
     public function getNode(): Node
@@ -107,7 +70,7 @@ final class Reject implements StepBuilderInterface
                                     new Node\Name('true'),
                                 ),
                                 [
-                                    ...$this->buildExclusions(...$this->exclusions),
+                                    ...$this->exclusions->getNode(),
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
                                             new Node\Expr\Variable('input'),
