@@ -31,7 +31,7 @@ final readonly class Workflow implements WorkflowInterface
 
         return new DTO\Workflow(
             $configuration['workflow']['name'] ?? sprintf('Workflow %s', $random),
-            $configuration['workflow']['code'] ?? sprintf('workflow_%s', $random),
+            $configuration['code'] ?? sprintf('workflow_%s', $random),
             new DTO\JobList(
                 ...array_map(
                     function (array $config, int $order) {

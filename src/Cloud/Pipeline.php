@@ -27,7 +27,7 @@ final readonly class Pipeline implements PipelineInterface
 
         return new DTO\Pipeline(
             $configuration['pipeline']['name'] ?? sprintf('Pipeline %s', $random),
-            $configuration['pipeline']['code'] ?? sprintf('pipeline_%s', $random),
+            $configuration['code'] ?? sprintf('pipeline_%s', $random),
             new DTO\StepList(
                 ...array_map(function (array $stepConfig, int $order) {
                     $name = $stepConfig['name'] ?? sprintf('step%d', $order);
