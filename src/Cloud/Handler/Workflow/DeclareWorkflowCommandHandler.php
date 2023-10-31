@@ -27,6 +27,7 @@ final readonly class DeclareWorkflowCommandHandler
                             ->setAutoloads($command->composer->autoload()->map(
                                 fn (PSR4AutoloadConfig $autoloadConfig) => (new Api\Model\ComposerAutoload())
                                     ->setNamespace($autoloadConfig->namespace)
+                                    ->setType('psr-4')
                                     ->setPaths($autoloadConfig->paths)
                             ))
                             ->setPackages($command->composer->packages()->transform())
