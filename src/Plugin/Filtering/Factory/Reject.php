@@ -73,7 +73,7 @@ class Reject implements Configurator\FactoryInterface
             $exclusionBuilder
                 ->withCondition(
                     compileExpression($interpreter, $condition['when']),
-                    compileValueWhenExpression($interpreter, $condition['reason']) ?: null,
+                    \array_key_exists('reason', $condition) ? compileValueWhenExpression($interpreter, $condition['reason']) : null,
                 );
         }
         $builder->withExclusions($exclusionBuilder);
