@@ -23,7 +23,6 @@ final class CreateCommand extends Console\Command\Command
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
         $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
-        $this->addArgument('type', Console\Input\InputArgument::REQUIRED, 'Type of runtime (pipeline ou workflow)');
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
@@ -61,13 +60,6 @@ final class CreateCommand extends Console\Command\Command
             if (!isset($configuration)) {
                 throw new \RuntimeException('Could not find configuration file.');
             }
-        }
-
-        $type = $input->getArgument('type');
-        if ('pipeline' !== $type && 'workflow' !== $type) {
-            $output->writeln('The type must be either "pipeline" or "workflow".');
-
-            return Console\Command\Command::FAILURE;
         }
 
         for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
@@ -136,13 +128,14 @@ final class CreateCommand extends Console\Command\Command
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
 
-        $instance = match ($type) {
-            ArgumentType::PIPELINE->value => new Satellite\Cloud\Pipeline($context),
-            ArgumentType::WORKFLOW->value => new Satellite\Cloud\Workflow($context),
-            default => throw new \InvalidArgumentException('Invalid type provided.'),
-        };
+        foreach ($configuration['satellites'] as $code => $satellite) {
+            $satellite['code'] = $code;
+            $instance = match (true) {
+                array_key_exists('pipeline', $satellite) => new Satellite\Cloud\Pipeline($context),
+                array_key_exists('workflow', $satellite) => new Satellite\Cloud\Workflow($context),
+                default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
+            };
 
-        foreach ($configuration['satellites'] as $satellite) {
             foreach ($instance->create($instance::fromLegacyConfiguration($satellite)) as $command) {
                 $bus->push($command);
             }
