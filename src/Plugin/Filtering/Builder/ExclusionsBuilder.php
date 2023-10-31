@@ -9,7 +9,7 @@ use Kiboko\Component\Bucket\RejectionWithReasonResultBucket;
 use PhpParser\Builder;
 use PhpParser\Node;
 
-final class ExclusionsBuilder extends Builder
+final class ExclusionsBuilder implements Builder
 {
     /** @var list<list<Node\Expr>> */
     private array $exclusions = [];
@@ -24,7 +24,7 @@ final class ExclusionsBuilder extends Builder
         return $this;
     }
 
-    public function getNode(): array
+    public function getNode(): Node
     {
         $statements = [];
         foreach ($this->exclusions as $exclusion) {
@@ -56,6 +56,6 @@ final class ExclusionsBuilder extends Builder
             );
         }
 
-        return $statements;
+        return new Node;
     }
 }
