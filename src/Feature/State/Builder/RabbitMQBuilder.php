@@ -42,28 +42,23 @@ final class RabbitMQBuilder implements Builder
                new Node\Expr\StaticCall(
                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\StateManager'),
                    name: 'withAuthentication',
-                   args: array_merge([
-                       new Node\Arg(
-                           value: new Node\Expr\New_(
-                               class: new Node\Name\FullyQualified(
-                                   'Bunny\\Client',
-                               ),
+                   args: [new Node\Arg(
+                       value: new Node\Expr\New_(
+                           class: new Node\Name\FullyQualified(
+                               'Bunny\\Client',
                            ),
-                           name: new Node\Identifier('connection')
-                        ),
-                       new Node\Arg(
-                           value: $this->topic,
-                           name: new Node\Identifier('topic')
-                        ),
-                       $this->lineThreshold != null ? new Node\Arg(
-                           value: $this->lineThreshold,
-                           name: new Node\Identifier('lineThreshold')
-                       ) : null,
-                       $this->exchange != null ? new Node\Arg(
-                           value:  $this->exchange,
-                           name: new Node\Identifier('exchange')
-                        ) : null,
-                   ]),
+                       ),
+                       name: new Node\Identifier('connection')
+                    ), new Node\Arg(
+                       value: $this->topic,
+                       name: new Node\Identifier('topic')
+                    ), $this->lineThreshold != null ? new Node\Arg(
+                       value: $this->lineThreshold,
+                       name: new Node\Identifier('lineThreshold')
+                   ) : null, $this->exchange != null ? new Node\Arg(
+                       value:  $this->exchange,
+                       name: new Node\Identifier('exchange')
+                    ) : null],
                ),
                name: new Node\Identifier('manager'),
            ),
