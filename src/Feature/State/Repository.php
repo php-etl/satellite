@@ -7,7 +7,7 @@ namespace Kiboko\Component\Satellite\Feature\State;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 
-final class Repository implements Configurator\StepRepositoryInterface
+final class Repository implements Configurator\RepositoryInterface
 {
     use RepositoryTrait;
 
