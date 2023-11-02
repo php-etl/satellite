@@ -31,7 +31,7 @@ final readonly class Workflow implements WorkflowInterface
 
         return new DTO\Workflow(
             $configuration['workflow']['name'] ?? sprintf('Workflow %s', $random),
-            $configuration['code'] ?? sprintf('workflow_%s', $random),
+            $configuration['code'] ?? sprintf('workflow%s', $random),
             new DTO\JobList(
                 ...array_map(
                     function (array $config, int $order) {
@@ -66,8 +66,8 @@ final readonly class Workflow implements WorkflowInterface
                         }
 
                         if (\array_key_exists('action', $config)) {
-                            $name = $config['action']['name'] ?? sprintf('pipeline%d', $order);
-                            $code = $config['action']['code'] ?? sprintf('pipeline%d', $order);
+                            $name = $config['action']['name'] ?? sprintf('action%d', $order);
+                            $code = $config['action']['code'] ?? sprintf('action%d', $order);
                             unset($config['action']['name'], $config['action']['code']);
 
                             array_walk_recursive($config, function (&$value): void {
