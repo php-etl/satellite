@@ -59,9 +59,18 @@ final readonly class RabbitMQFactory implements Configurator\FactoryInterface
     {
         $builder = new State\Builder\RabbitMQBuilder(
             stepCode: compileValueWhenExpression($this->interpreter, uniqid()),
-            stepLabel: compileValueWhenExpression($this->interpreter, uniqid()),
+            host: compileValueWhenExpression($this->interpreter, $config['host']),
+            port: compileValueWhenExpression($this->interpreter, $config['port']),
+            vhost: compileValueWhenExpression($this->interpreter, $config['vhost']),
             topic: compileValueWhenExpression($this->interpreter, $config['topic']),
         );
+
+        if (\array_key_exists('user', $config) && \array_key_exists('password', $config)) {
+            $builder->withAuthentication(
+                compileValueWhenExpression($this->interpreter, $config['user']),
+                compileValueWhenExpression($this->interpreter, $config['password']),
+            );
+        }
 
         if (\array_key_exists('exchange', $config)) {
             $builder->withExchange(compileValueWhenExpression($this->interpreter, $config['exchange']));

@@ -10,14 +10,28 @@ use PhpParser\Node\Identifier;
 
 final class RabbitMQBuilder implements Builder
 {
+    private ?Node\Expr $user = null;
+    private ?Node\Expr $password = null;
     private ?Node\Expr $exchange = null;
     private ?Node\Expr $lineThreshold = null;
 
     public function __construct(
         private readonly Node\Expr $stepCode,
-        private readonly Node\Expr $stepLabel,
+        private readonly Node\Expr $host,
+        private readonly Node\Expr $port,
+        private readonly Node\Expr $vhost,
         private readonly Node\Expr $topic,
     ) {}
+
+    public function withAuthentication(
+        Node\Expr $user,
+        Node\Expr $password,
+    ): self {
+        $this->user = $user;
+        $this->password = $password;
+
+        return $this;
+    }
 
     public function withExchange(
         Node\Expr $exchange,
@@ -42,28 +56,44 @@ final class RabbitMQBuilder implements Builder
                new Node\Expr\StaticCall(
                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\StateManager'),
                    name: 'withAuthentication',
-                   args: [new Node\Arg(
-                       value: new Node\Expr\New_(
-                           class: new Node\Name\FullyQualified(
-                               'Bunny\\Client',
-                           ),
+                   args: array_filter([
+                       new Node\Arg(
+                           value: $this->host,
+                           name: new Node\Identifier('host')
+                        ),
+                       new Node\Arg(
+                           value: $this->vhost,
+                           name: new Node\Identifier('vhost')
+                        ),
+                       new Node\Arg(
+                           value: $this->topic,
+                           name: new Node\Identifier('topic')
+                        ),
+                       new Node\Arg(
+                           value: $this->user,
+                           name: new Node\Identifier('user')
                        ),
-                       name: new Node\Identifier('connection')
-                    ), new Node\Arg(
-                       value: $this->topic,
-                       name: new Node\Identifier('topic')
-                    ), $this->lineThreshold != null ? new Node\Arg(
-                       value: $this->lineThreshold,
-                       name: new Node\Identifier('lineThreshold')
-                   ) : null, $this->exchange != null ? new Node\Arg(
-                       value:  $this->exchange,
-                       name: new Node\Identifier('exchange')
-                    ) : null],
+                       new Node\Arg(
+                           value: $this->password,
+                           name: new Node\Identifier('password')
+                        ),
+                       new Node\Arg(
+                           value: $this->port,
+                           name: new Node\Identifier('port')
+                       ),
+                       $this->lineThreshold != null ? new Node\Arg(
+                           value: $this->lineThreshold,
+                           name: new Node\Identifier('lineThreshold')
+                       ) : null,
+                       $this->exchange != null ? new Node\Arg(
+                           value:  $this->exchange,
+                           name: new Node\Identifier('exchange')
+                        ) : null,
+                   ]),
                ),
                name: new Node\Identifier('manager'),
            ),
             new Node\Arg($this->stepCode, name: new Node\Identifier('stepCode')),
-            new Node\Arg($this->stepLabel, name: new Node\Identifier('stepLabel')),
         ];
 
         return new Node\Expr\New_(
