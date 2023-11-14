@@ -62,6 +62,7 @@ final readonly class Extractor implements StepInterface
         }
 
         $pipeline->addExtractor(
+            new Node\Scalar\String_($config['code']),
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)

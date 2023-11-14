@@ -325,8 +325,8 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         $repository->addPackages(
-            'php-etl/pipeline-contracts:0.4.*',
-            'php-etl/pipeline:*',
+            'php-etl/pipeline-contracts:dev-main',
+            'php-etl/pipeline:dev-main',
             'php-etl/console-state:*',
             'php-etl/pipeline-console-runtime:*',
             'php-etl/workflow-console-runtime:*',

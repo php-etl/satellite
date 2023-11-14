@@ -49,12 +49,12 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             ->isRequired()
             ->fixXmlConfig('step')
             ->validate()
-            ->ifTrue(fn ($value) => 1 <= array_reduce(
-                array_keys($this->plugins),
-                fn (int $count, string $plugin) => \array_key_exists($plugin, $value) ? $count + 1 : $count,
-                0
-            ))
-            ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
+                ->ifTrue(fn ($value) => 1 <= array_reduce(
+                    array_keys($this->plugins),
+                    fn (int $count, string $plugin) => \array_key_exists($plugin, $value) ? $count + 1 : $count,
+                    0
+                ))
+                ->thenInvalid(sprintf('You should only specify one plugin between %s.', implode('", "', array_map(fn (string $plugin) => sprintf('"%s"', $plugin), array_keys($this->plugins)))))
             ->end()
         ;
 
@@ -80,7 +80,9 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('name')->end()
-                ->scalarNode('code')->end()
+                ->scalarNode('code')
+                    ->isRequired()
+                ->end()
                 ->append($this->getStepsTreeBuilder()->getRootNode())
             ->end()
         ;
@@ -95,7 +97,9 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             $node
                 ->children()
                     ->scalarNode('name')->end()
-                    ->scalarNode('code')->end()
+                    ->scalarNode('code')
+                        ->isRequired()
+                    ->end()
                 ->end()
                 ->append($plugin->getConfigTreeBuilder()->getRootNode())
             ;
@@ -110,7 +114,9 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
             /* @phpstan-ignore-next-line */
             $node->children()
                     ->scalarNode('name')->end()
-                    ->scalarNode('code')->end()
+                    ->scalarNode('code')
+                        ->isRequired()
+                    ->end()
                 ->end()
                 ->append($feature->getConfigTreeBuilder()->getRootNode())
             ;

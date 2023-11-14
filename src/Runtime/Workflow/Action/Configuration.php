@@ -26,7 +26,14 @@ final class Configuration implements ConfigurationInterface
         $builder = new TreeBuilder('action');
 
         /** @var ArrayNodeDefinition $node */
-        $node = $builder->getRootNode();
+        $node = $builder->getRootNode()
+            ->children()
+                ->scalarNode('name')->end()
+                ->scalarNode('code')
+                    ->isRequired()
+                ->end()
+            ->end()
+        ;
 
         foreach ($this->actions as $action) {
             $node->append($action->getConfigTreeBuilder()->getRootNode());

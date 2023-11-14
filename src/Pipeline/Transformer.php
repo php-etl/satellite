@@ -62,6 +62,7 @@ final readonly class Transformer implements StepInterface
         }
 
         $pipeline->addTransformer(
+            new Node\Scalar\String_($config['code']),
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)

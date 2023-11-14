@@ -62,6 +62,7 @@ final readonly class Loader implements StepInterface
         }
 
         $pipeline->addLoader(
+            new Node\Scalar\String_($config['code']),
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)
