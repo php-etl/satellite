@@ -14,6 +14,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Reject implements Configurator\FactoryInterface
 {
@@ -40,7 +41,7 @@ class Reject implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -51,7 +52,7 @@ class Reject implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException) {
+        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
             return false;
         }
     }
@@ -67,14 +68,16 @@ class Reject implements Configurator\FactoryInterface
 
         $repository = new Repository\Reject($builder);
 
+        $exclusionBuilder = new Filtering\Builder\ExclusionsBuilder();
         foreach ($config as $condition) {
-            $builder->withExclusions(
-                compileExpression($interpreter, $condition['when'])
-            );
-            if (\array_key_exists('rejection_serializer', $condition)) {
-                $builder->withRejectionSerializer(compileExpression($interpreter, $condition['rejection_serializer']));
-            }
+            $exclusionBuilder
+                ->withCondition(
+                    compileExpression($interpreter, $condition['when']),
+                    \array_key_exists('reason', $condition) ? compileValueWhenExpression($interpreter, $condition['reason']) : null,
+                    \array_key_exists('rejection_serializer', $condition) ? compileValueWhenExpression($interpreter, $condition['rejection_serializer']) : null,
+                );
         }
+        $builder->withExclusions($exclusionBuilder);
 
         return $repository;
     }
