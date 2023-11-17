@@ -14,7 +14,7 @@ final class Interpreter
     private readonly array $expressionFunctions;
 
     public function __construct(
-        ExpressionFunctionProviderInterface|ExpressionFunction ...$expressionFunctions
+        ExpressionFunction|ExpressionFunctionProviderInterface ...$expressionFunctions
     ) {
         $this->expressionFunctions = $expressionFunctions;
     }
