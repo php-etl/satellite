@@ -14,11 +14,12 @@ final class ExclusionsBuilder implements Builder
     /** @var list<list<Node\Expr>> */
     private array $exclusions = [];
 
-    public function withCondition(Node\Expr $condition, ?Node\Expr $reason = null):self
+    public function withCondition(Node\Expr $condition, Node\Expr $reason = null, Node\Expr $serializeRejection = null): self
     {
         $this->exclusions[] = [
             'condition' => $condition,
             'reason' => $reason,
+            'rejection_serializer' => $serializeRejection,
         ];
 
         return $this;
@@ -39,7 +40,7 @@ final class ExclusionsBuilder implements Builder
                                     new Node\Expr\New_(
                                         \array_key_exists('reason', $exclusion) ? new Node\Name\FullyQualified(RejectionWithReasonResultBucket::class) : new Node\Name\FullyQualified(RejectionResultBucket::class),
                                         [
-                                            new Node\Arg(new Node\Expr\Variable('input')),
+                                            null !== $this->{$exclusion}['rejection_serializer'] ? new Node\Arg($this->{$exclusion}['rejection_serializer']) : new Node\Arg(new Node\Expr\Variable('input')),
                                             \array_key_exists('reason', $exclusion) ? new Node\Arg($exclusion['reason']) : new Node\Arg(
                                                 new Node\Expr\ConstFetch(
                                                     new Node\Name(null)
@@ -56,6 +57,6 @@ final class ExclusionsBuilder implements Builder
             );
         }
 
-        return new Node;
+        return new Node();
     }
 }

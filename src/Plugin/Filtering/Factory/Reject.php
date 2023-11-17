@@ -41,7 +41,7 @@ class Reject implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -52,7 +52,7 @@ class Reject implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException) {
             return false;
         }
     }
@@ -75,7 +75,8 @@ class Reject implements Configurator\FactoryInterface
                     compileExpression($interpreter, $condition['when']),
                     \array_key_exists('reason', $condition) ? compileValueWhenExpression($interpreter, $condition['reason']) : null,
                     \array_key_exists('rejection_serializer', $condition) ? compileValueWhenExpression($interpreter, $condition['rejection_serializer']) : null,
-                );
+                )
+            ;
         }
         $builder->withExclusions($exclusionBuilder);
 
