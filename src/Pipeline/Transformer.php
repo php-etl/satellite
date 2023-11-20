@@ -15,7 +15,12 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Transformer implements StepInterface
 {
-    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(
+        private ?string $plugin,
+        private ?string $key,
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
+    ) {
+    }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
@@ -61,7 +66,14 @@ final readonly class Transformer implements StepInterface
             );
         }
 
+        if (array_key_exists('code', $config)) {
+            $code = new Node\Scalar\String_($config['code']);
+        } else {
+            $code = new node\Scalar\String_(sprintf('%s.%s', $this->plugin, $this->key));
+        }
+
         $pipeline->addTransformer(
+            $code,
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)
