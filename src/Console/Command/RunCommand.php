@@ -27,10 +27,8 @@ class RunCommand extends Console\Command\Command
             $output,
         );
 
-        $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
-
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
-            $style->error('There is no compiled pipeline at the provided path');
+            $style->error('There is no compiled satellite at the provided path.');
 
             return Console\Command\Command::FAILURE;
         }
@@ -39,14 +37,37 @@ class RunCommand extends Console\Command\Command
         chdir($input->getArgument('path'));
 
         if (file_exists('pipeline.php')) {
-            $source = 'pipeline.php';
+            $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
+
+            $process = $this->dataflowWorker($style, $cwd, $input->getArgument('path'), 'pipeline.php');
         } else if (file_exists('workflow.php')) {
-            $source = 'workflow.php';
+            $style->writeln(sprintf('<fg=cyan>Running workflow in %s</>', $input->getArgument('path')));
+
+            $process = $this->dataflowWorker($style, $cwd, $input->getArgument('path'), 'workflow.php');
+        } else if (file_exists('main.php')) {
+            $style->writeln(sprintf('<fg=cyan>Running API in %s</>', $input->getArgument('path')));
+
+            $process = $this->httpWorker($style, $cwd, $input->getArgument('path'), 'main.php');
         } else {
             $style->error('The provided path does not contain either a workflow or a pipeline satellite, did you mean to run "run:api"?');
             return Console\Command\Command::FAILURE;
         }
 
+        $start = microtime(true);
+
+        if (!$this->executeWorker($style, $process)) {
+            return Console\Command\Command::FAILURE;
+        }
+
+        $end = microtime(true);
+
+        $style->writeln(sprintf('time: %s', $this->formatTime($end - $start)));
+
+        return Console\Command\Command::SUCCESS;
+    }
+
+    private function dataflowWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
+    {
         $source =<<<PHP
         \$dotenv = new Dotenv();
         \$dotenv->usePutenv();
@@ -54,7 +75,7 @@ class RunCommand extends Console\Command\Command
         if (file_exists(\$file = $cwd.'/.env')) {
             \$dotenv->loadEnv(\$file);
         }
-        if (file_exists(\$file = $cwd.'/'.{$input->getArgument('path')}.'/.env')) {
+        if (file_exists(\$file = $cwd.'/'.{$path}.'/.env')) {
             \$dotenv->loadEnv(\$file);
         }
 
@@ -67,7 +88,7 @@ class RunCommand extends Console\Command\Command
         \$autoload->register();
 
         \$runtime = new PipelineConsoleRuntime(
-            $output,
+            new Symfony\Component\Console\Output\StreamOutput(STDOUT),
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
@@ -75,7 +96,7 @@ class RunCommand extends Console\Command\Command
             ),
         );
         
-        \$satellite = include '$source';
+        \$satellite = include '$entrypoint';
         
         \$satellite(\$runtime);
         \$runtime->run();
@@ -89,22 +110,27 @@ class RunCommand extends Console\Command\Command
 
         $input = new ReadableResourceStream($stream);
 
-        $start = microtime(true);
-        $end = microtime(true);
-
-        $style->writeln(sprintf('time: %s', $this->formatTime($end - $start)));
-
         chdir($cwd);
 
-        $command = ['php', '-r', 'localhost:8000', 'main.php'];
+        $command = ['php', '-r', '--'];
 
         $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
 
-        if (!$this->executeWorker($style, $process)) {
-            return Console\Command\Command::FAILURE;
-        }
+        $input->pipe($process->stdin);
 
-        return Console\Command\Command::SUCCESS;
+        return $process;
+    }
+
+
+    private function httpWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
+    {
+        chdir($cwd);
+
+        $command = ['php', '-S', 'localhost:8000', 'main.php'];
+
+        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
+
+        return $process;
     }
 
     private function formatTime(float $time): string
