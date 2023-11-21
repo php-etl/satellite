@@ -96,6 +96,7 @@ class RunCommand extends Console\Command\Command
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
                 ),
+                new \Kiboko\Contract\Pipeline\NullState(),
             ),
         );
         
@@ -162,7 +163,7 @@ class RunCommand extends Console\Command\Command
         }
 
         \$runtime = new \Kiboko\Component\Runtime\Workflow\Console(
-            new \Symfony\Component\Console\Output\StreamOutput(STDOUT),
+            new \Symfony\Component\Console\Output\StreamOutput(fopen('php://stdout', 'w')),
             new \Kiboko\Component\Pipeline\PipelineRunner(
                 new \Psr\Log\NullLogger()
             ),
