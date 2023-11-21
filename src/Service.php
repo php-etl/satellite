@@ -234,6 +234,9 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Workflow($workflow);
 
         $repository->addPackages(
+            'php-etl/satellite-contracts:>=0.1.1 <0.2',
+            'php-etl/pipeline-contracts:>=0.5.1 <0.6',
+            'php-etl/action-contracts:>=0.2.0 <0.3',
             'php-etl/workflow:*',
         );
 
@@ -273,7 +276,7 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        foreach ($config['workflow']['jobs'] as $job) {
+        foreach ($config['workflow']['jobs'] as $code => $job) {
             if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
@@ -290,7 +293,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addPipeline($pipelineFilename);
+                $workflow->addPipeline($code, $pipelineFilename);
             } elseif (\array_key_exists('action', $job)) {
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
@@ -307,7 +310,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addAction($actionFilename);
+                $workflow->addAction($code, $actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
@@ -325,7 +328,7 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         $repository->addPackages(
-            'php-etl/pipeline-contracts:0.4.*',
+            'php-etl/pipeline-contracts:>=0.5.1 <0.6',
             'php-etl/pipeline:*',
             'php-etl/console-state:*',
             'php-etl/pipeline-console-runtime:*',
@@ -333,6 +336,7 @@ final class Service implements Configurator\FactoryInterface
             'psr/log:*',
             'monolog/monolog:*',
             'symfony/console:^6.0',
+            'symfony/dotenv:^6.0',
             'symfony/dependency-injection:^6.0',
         );
 

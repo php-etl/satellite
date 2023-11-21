@@ -6,10 +6,15 @@ namespace Kiboko\Component\Satellite\Adapter\Docker;
 
 use Kiboko\Component\Dockerfile;
 use Kiboko\Component\Packaging\TarArchive;
+use Kiboko\Component\Satellite\Adapter\ComposerFailureException;
 use Kiboko\Contract\Configurator;
 use Kiboko\Contract\Packaging;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use React\ChildProcess\Process;
+use React\Promise\Deferred;
+use React\Stream\ReadableResourceStream;
+use function React\Async\await;
+use function React\Promise\Timer\timeout;
 
 final class Satellite implements Configurator\SatelliteInterface
 {
@@ -65,24 +70,50 @@ final class Satellite implements Configurator\SatelliteInterface
             }
         };
 
-        $process = new Process([
-            'docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags)),
-        ]);
+        $command = ['docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags))];
 
-        $process->setInput($archive->asResource());
+        $process = new Process(
+            implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)),
+            $this->workdir,
+        );
 
-        $process->setTimeout(300);
+        $process->start();
 
-        $process->run(function ($type, $buffer) use ($logger): void {
-            if (Process::ERR === $type) {
-                $logger->info($buffer);
-            } else {
-                $logger->debug($buffer);
-            }
-        });
+        $input = new ReadableResourceStream($archive->asResource());
+
+        $input->pipe($process->stdin);
+
+        $this->execute($logger, $process);
 
         if (0 !== $process->getExitCode()) {
             throw new \RuntimeException('Process exited unexpectedly.');
+        }
+    }
+
+    private function execute(
+        LoggerInterface $logger,
+        Process $process,
+        float $timeout = 300
+    ): void {
+        $process->stdout->on('data', function ($chunk) use ($logger) {
+            $logger->debug($chunk);
+        });
+        $process->stderr->on('data', function ($chunk) use ($logger) {
+            $logger->info($chunk);
+        });
+
+        $deferred = new Deferred();
+
+        $process->on('exit', function () use ($deferred) {
+            $deferred->resolve();
+        });
+
+        $logger->debug(sprintf('Starting process "%s".', $process->getCommand()));
+
+        await(timeout($deferred->promise(), $timeout));
+
+        if (0 !== $process->getExitCode()) {
+            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $process->getExitCode()), $process->getExitCode());
         }
     }
 }
