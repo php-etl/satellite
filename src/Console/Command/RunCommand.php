@@ -115,6 +115,7 @@ class RunCommand extends Console\Command\Command
         $command = ['php', '-r', '--'];
 
         $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
+        $process->start();
 
         $input->pipe($process->stdin);
 
