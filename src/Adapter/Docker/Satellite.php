@@ -108,7 +108,7 @@ final class Satellite implements Configurator\SatelliteInterface
             $deferred->resolve();
         });
 
-        $logger->notice(sprintf('Starting process "%s".', $process->getCommand()));
+        $logger->debug(sprintf('Starting process "%s".', $process->getCommand()));
 
         await(timeout($deferred->promise(), $timeout));
 

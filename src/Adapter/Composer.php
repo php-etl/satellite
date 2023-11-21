@@ -41,7 +41,7 @@ final class Composer
             $deferred->resolve();
         });
 
-        $this->logger->notice(sprintf('Starting process "%s".', $process->getCommand()));
+        $this->logger->debug(sprintf('Starting process "%s".', $process->getCommand()));
 
         await(timeout($deferred->promise(), $timeout));
 

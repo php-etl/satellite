@@ -197,7 +197,7 @@ class RunCommand extends Console\Command\Command
             $deferred->resolve();
         });
 
-        $style->note(sprintf('Starting process "%s".', $process->getCommand()));
+        $style->info(sprintf('Starting process "%s".', $process->getCommand()));
 
         await($deferred->promise());
 
