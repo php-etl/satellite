@@ -39,11 +39,11 @@ class RunCommand extends Console\Command\Command
         if (file_exists('pipeline.php')) {
             $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
-            $process = $this->dataflowWorker($style, $cwd, $input->getArgument('path'), 'pipeline.php');
+            $process = $this->pipelineWorker($style, $cwd, $input->getArgument('path'), 'pipeline.php');
         } else if (file_exists('workflow.php')) {
             $style->writeln(sprintf('<fg=cyan>Running workflow in %s</>', $input->getArgument('path')));
 
-            $process = $this->dataflowWorker($style, $cwd, $input->getArgument('path'), 'workflow.php');
+            $process = $this->workflowWorker($style, $cwd, $input->getArgument('path'), 'workflow.php');
         } else if (file_exists('main.php')) {
             $style->writeln(sprintf('<fg=cyan>Running API in %s</>', $input->getArgument('path')));
 
@@ -66,7 +66,7 @@ class RunCommand extends Console\Command\Command
         return Console\Command\Command::SUCCESS;
     }
 
-    private function dataflowWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
+    private function pipelineWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
     {
         $source =<<<PHP
         <?php
@@ -90,12 +90,12 @@ class RunCommand extends Console\Command\Command
             \$dotenv->loadEnv(\$file);
         }
 
-        \$runtime = new \Kiboko\Component\Satellite\Builder\Pipeline\ConsoleRuntime(
+        \$runtime = new \Kiboko\Component\Runtime\Pipeline\Console(
             new \Symfony\Component\Console\Output\StreamOutput(STDOUT),
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
-                )
+                ),
             ),
         );
         
@@ -137,6 +137,74 @@ class RunCommand extends Console\Command\Command
         return $process;
     }
 
+    private function workflowWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
+    {
+        $source =<<<PHP
+        <?php
+        declare(strict_types=1);
+
+        /** @var ClassLoader \$autoload */
+        \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
+        \$autoload->addClassMap([
+            /* @phpstan-ignore-next-line */
+            \ProjectServiceContainer::class => 'container.php',
+        ]);
+        \$autoload->register();
+        
+        \$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        \$dotenv->usePutenv();
+
+        if (file_exists(\$file = '{$cwd}/.env')) {
+            \$dotenv->loadEnv(\$file);
+        }
+        if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
+            \$dotenv->loadEnv(\$file);
+        }
+
+        \$runtime = new \Kiboko\Component\Runtime\Workflow\Console(
+            new \Symfony\Component\Console\Output\StreamOutput(STDOUT),
+            new \Kiboko\Component\Pipeline\PipelineRunner(
+                new \Psr\Log\NullLogger()
+            ),
+        );
+        
+        \$satellite = include '{$cwd}/{$path}/$entrypoint';
+        
+        \$satellite(\$runtime);
+        \$runtime->run();
+        
+        \$autoload->unregister();
+        PHP;
+
+        $stream = fopen('php://temp', 'r+');
+        fwrite($stream, $source);
+        fseek($stream, 0, SEEK_SET);
+
+        $input = new ReadableResourceStream($stream);
+
+        chdir($cwd);
+
+        $command = ['php'];
+
+        $style->note($source);
+
+        $command = implode(' ', array_map(fn ($part) => escapeshellarg($part), $command));
+        $style->note($command);
+        $process = new Process($command, $cwd);
+
+        $process->start();
+
+        $process->stdout->on('data', function ($chunk) use ($style) {
+            $style->text($chunk);
+        });
+        $process->stderr->on('data', function ($chunk) use ($style) {
+            $style->info($chunk);
+        });
+
+        $input->pipe($process->stdin);
+
+        return $process;
+    }
 
     private function httpWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
     {
