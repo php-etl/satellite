@@ -163,7 +163,7 @@ class RunCommand extends Console\Command\Command
         }
 
         \$runtime = new \Kiboko\Component\Runtime\Workflow\Console(
-            new \Symfony\Component\Console\Output\StreamOutput(fopen('php://stdout', 'w')),
+            new \Symfony\Component\Console\Output\ConsoleOutput(),
             new \Kiboko\Component\Pipeline\PipelineRunner(
                 new \Psr\Log\NullLogger()
             ),
