@@ -73,7 +73,7 @@ final class Satellite implements Configurator\SatelliteInterface
         $command = ['docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags))];
 
         $process = new Process(
-            implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)),
+            implode (' ', array_map(fn ($part) => escapeshellarg((string) $part), $command)),
             $this->workdir,
         );
 
