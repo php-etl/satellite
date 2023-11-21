@@ -16,7 +16,7 @@ final class Pipeline implements Builder
     ) {}
 
     public function addExtractor(
-        Node\Expr|Builder $stepCode,
+        Node\Expr|Builder $code,
         Node\Expr|Builder $extractor,
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
@@ -25,7 +25,7 @@ final class Pipeline implements Builder
             var: $runtime,
             name: new Node\Identifier('extract'),
             args: [
-                new Node\Arg($stepCode instanceof Builder ? $stepCode->getNode() : $stepCode),
+                new Node\Arg($code instanceof Builder ? $code->getNode() : $code),
                 new Node\Arg($extractor instanceof Builder ? $extractor->getNode() : $extractor),
                 new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
                 new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
@@ -36,7 +36,7 @@ final class Pipeline implements Builder
     }
 
     public function addTransformer(
-        Node\Expr|Builder $stepCode,
+        Node\Expr|Builder $code,
         Node\Expr|Builder $transformer,
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
@@ -45,7 +45,7 @@ final class Pipeline implements Builder
             var: $runtime,
             name: new Node\Identifier('transform'),
             args: [
-                new Node\Arg($stepCode instanceof Builder ? $stepCode->getNode() : $stepCode),
+                new Node\Arg($code instanceof Builder ? $code->getNode() : $code),
                 new Node\Arg($transformer instanceof Builder ? $transformer->getNode() : $transformer),
                 new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
                 new Node\Arg($state instanceof Builder ? $state->getNode() : $state),
@@ -56,7 +56,7 @@ final class Pipeline implements Builder
     }
 
     public function addLoader(
-        Node\Expr|Builder $stepCode,
+        Node\Expr|Builder $code,
         Node\Expr|Builder $loader,
         Node\Expr|Builder $rejection,
         Node\Expr|Builder $state,
@@ -65,7 +65,7 @@ final class Pipeline implements Builder
             var: $runtime,
             name: new Node\Identifier('load'),
             args: [
-                new Node\Arg($stepCode instanceof Builder ? $stepCode->getNode() : $stepCode),
+                new Node\Arg($code instanceof Builder ? $code->getNode() : $code),
                 new Node\Arg($loader instanceof Builder ? $loader->getNode() : $loader),
                 new Node\Arg($rejection instanceof Builder ? $rejection->getNode() : $rejection),
                 new Node\Arg($state instanceof Builder ? $state->getNode() : $state),

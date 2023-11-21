@@ -15,7 +15,12 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Loader implements StepInterface
 {
-    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(
+        private ?string $plugin,
+        private ?string $key,
+        private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
+    ) {
+    }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
@@ -45,7 +50,7 @@ final readonly class Loader implements StepInterface
             $rejection = $compiled->getBuilder()->getNode();
         } else {
             $rejection = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullRejection::class),
+                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullStepRejection::class),
             );
         }
 
@@ -57,12 +62,24 @@ final readonly class Loader implements StepInterface
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullState::class),
+                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullStepState::class),
             );
         }
 
+        if (array_key_exists('code', $config)) {
+            $code = $config['code'];
+        } else {
+            $code = sprintf('%s.%s', $this->plugin, $this->key);
+        }
+
         $pipeline->addLoader(
-            new Node\Scalar\String_($config['code']),
+            new Node\Expr\StaticCall(
+                new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\StepCode'),
+                new Node\Identifier('fromString'),
+                [
+                    new Node\Arg(new Node\Scalar\String_($code))
+                ]
+            ),
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)

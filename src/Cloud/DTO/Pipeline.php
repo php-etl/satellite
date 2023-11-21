@@ -10,10 +10,10 @@ final readonly class Pipeline implements PipelineInterface
         private string $label,
         private string $code,
         private StepList $steps,
-        private Autoload $autoload,
-        private PackageList $packages,
-        private RepositoryList $repositories,
-        private AuthList $auths,
+        private Autoload $autoload = new Autoload(),
+        private PackageList $packages = new PackageList(),
+        private RepositoryList $repositories = new RepositoryList(),
+        private AuthList $auths = new AuthList(),
     ) {}
 
     public function code(): string
