@@ -6,7 +6,10 @@ namespace Kiboko\Component\Satellite\Adapter;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use React\ChildProcess\Process;
+use React\Promise\Deferred;
+use function React\Async\await;
+use function React\Promise\Timer\timeout;
 
 final class Composer
 {
@@ -21,44 +24,39 @@ final class Composer
         };
     }
 
-    private function execute(Process $process): void
+    private function execute(Process $process, float $timeout = 300): void
     {
-        $process->run(function ($type, $buffer): void {
-            if (Process::ERR === $type) {
-                $this->logger->info($buffer);
-            } else {
-                $this->logger->debug($buffer);
-            }
+        $process->stdout->on('data', function ($chunk) {
+            $this->logger->debug($chunk);
+        });
+        $process->stderr->on('data', function ($chunk) {
+            $this->logger->info($chunk);
         });
 
+        $deferred = new Deferred();
+
+        $process->on('exit', function () use ($deferred) {
+            $deferred->resolve();
+        });
+
+        $process->start();
+        $this->logger->notice(sprintf('Starting process "%s".', $process->getCommand()));
+
+        await(timeout($deferred->promise(), $timeout));
+
         if (0 !== $process->getExitCode()) {
-            throw new ComposerFailureException($process->getCommandLine(), sprintf('Process exited unexpectedly with output: %s', $process->getErrorOutput()), $process->getExitCode());
+            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $process->getExitCode()), $process->getExitCode());
         }
     }
 
     private function command(string ...$command): void
     {
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->workdir);
-
-        $process->setTimeout(300);
-
-        $this->execute($process);
-    }
-
-    private function pipe(Process ...$processes): void
-    {
-        $process = Process::fromShellCommandline(implode('|', array_map(fn (Process $process) => $process->getCommandLine(), $processes)));
-        $process->setWorkingDirectory($this->workdir);
-
-        $process->setTimeout(300);
+        $process = new Process(
+            implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)),
+            $this->workdir,
+        );
 
         $this->execute($process);
-    }
-
-    private function subcommand(string ...$command): Process
-    {
-        return new Process($command);
     }
 
     public function require(string ...$packages): void
@@ -67,6 +65,7 @@ final class Composer
             'composer',
             'require',
             '--with-dependencies',
+            '--with-all-dependencies',
             '--prefer-dist',
             '--no-progress',
             '--prefer-stable',

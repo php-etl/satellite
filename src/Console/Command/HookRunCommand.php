@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command;
 
+use React\ChildProcess\Process;
+use React\Promise\Deferred;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use function React\Async\await;
 
-class HookRunCommand extends Console\Command\Command
+final class HookRunCommand extends Console\Command\Command
 {
     protected static $defaultName = 'run:hook';
     protected static $defaultDescription = 'Run the hook.';
@@ -31,20 +33,50 @@ class HookRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('Nothing is compiled at the provided path');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
         chdir($input->getArgument('path'));
 
-        $process = new Process(['php', '-S', 'localhost:8000', 'main.php']);
-        $process->setTimeout(null);
-        $process->run(function ($type, $buffer): void {
-            echo $buffer;
+        $command = ['php', '-S', 'localhost:8000', 'main.php'];
+
+        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
+
+        if (!$this->executeWorker($style, $process)) {
+            return Console\Command\Command::FAILURE;
+        }
+
+        return Console\Command\Command::SUCCESS;
+    }
+
+    private function executeWorker(
+        Console\Style\SymfonyStyle $style,
+        Process $process
+    ): bool {
+        $process->stdout->on('data', function ($chunk) use ($style) {
+            $style->text($chunk);
+        });
+        $process->stderr->on('data', function ($chunk) use ($style) {
+            $style->info($chunk);
         });
 
-        chdir($cwd);
+        $deferred = new Deferred();
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        $process->on('exit', function () use ($deferred) {
+            $deferred->resolve();
+        });
+
+        $process->start();
+        $style->note(sprintf('Starting process "%s".', $process->getCommand()));
+
+        await($deferred->promise());
+
+        if (0 !== $process->getExitCode()) {
+            $style->error(sprintf('Process exited unexpectedly with exit code %d', $process->getExitCode()));
+            return false;
+        }
+
+        return true;
     }
 }
