@@ -67,13 +67,19 @@ final readonly class Transformer implements StepInterface
         }
 
         if (array_key_exists('code', $config)) {
-            $code = new Node\Scalar\String_($config['code']);
+            $code = $config['code'];
         } else {
-            $code = new node\Scalar\String_(sprintf('%s.%s', $this->plugin, $this->key));
+            $code = sprintf('%s.%s', $this->plugin, $this->key);
         }
 
         $pipeline->addTransformer(
-            $code,
+            new Node\Expr\StaticCall(
+                new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\StepCode'),
+                new Node\Identifier('fromString'),
+                [
+                    new Node\Arg(new Node\Scalar\String_($code))
+                ]
+            ),
             $repository->getBuilder()
                 ->withLogger($logger)
                 ->withRejection($rejection)
