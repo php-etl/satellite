@@ -336,6 +336,7 @@ final class Service implements Configurator\FactoryInterface
             'psr/log:*',
             'monolog/monolog:*',
             'symfony/console:^6.0',
+            'symfony/dotenv:^6.0',
             'symfony/dependency-injection:^6.0',
         );
 

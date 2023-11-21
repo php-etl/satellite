@@ -69,26 +69,29 @@ class RunCommand extends Console\Command\Command
     private function dataflowWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
     {
         $source =<<<PHP
-        \$dotenv = new Dotenv();
-        \$dotenv->usePutenv();
-
-        if (file_exists(\$file = $cwd.'/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
-        if (file_exists(\$file = $cwd.'/'.{$path}.'/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
+        <?php
+        declare(strict_types=1);
 
         /** @var ClassLoader \$autoload */
-        \$autoload = include 'vendor/autoload.php';
+        \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
         \$autoload->addClassMap([
             /* @phpstan-ignore-next-line */
             \ProjectServiceContainer::class => 'container.php',
         ]);
         \$autoload->register();
+        
+        \$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        \$dotenv->usePutenv();
 
-        \$runtime = new PipelineConsoleRuntime(
-            new Symfony\Component\Console\Output\StreamOutput(STDOUT),
+        if (file_exists(\$file = '{$cwd}/.env')) {
+            \$dotenv->loadEnv(\$file);
+        }
+        if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
+            \$dotenv->loadEnv(\$file);
+        }
+
+        \$runtime = new \Kiboko\Component\Satellite\Builder\Pipeline\ConsoleRuntime(
+            new \Symfony\Component\Console\Output\StreamOutput(STDOUT),
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
@@ -96,7 +99,7 @@ class RunCommand extends Console\Command\Command
             ),
         );
         
-        \$satellite = include '$entrypoint';
+        \$satellite = include '{$cwd}/{$path}/$entrypoint';
         
         \$satellite(\$runtime);
         \$runtime->run();
@@ -112,10 +115,22 @@ class RunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        $command = ['php', '-r', '--'];
+        $command = ['php'];
 
-        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
+        $style->note($source);
+
+        $command = implode(' ', array_map(fn ($part) => escapeshellarg($part), $command));
+        $style->note($command);
+        $process = new Process($command, $cwd);
+
         $process->start();
+
+        $process->stdout->on('data', function ($chunk) use ($style) {
+            $style->text($chunk);
+        });
+        $process->stderr->on('data', function ($chunk) use ($style) {
+            $style->info($chunk);
+        });
 
         $input->pipe($process->stdin);
 
@@ -127,9 +142,11 @@ class RunCommand extends Console\Command\Command
     {
         chdir($cwd);
 
-        $command = ['php', '-S', 'localhost:8000', 'main.php'];
+        $command = ['php', '-S', 'localhost:8000', $entrypoint];
 
-        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd);
+        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd.'/'.$path);
+
+        $process->start();
 
         return $process;
     }
@@ -174,20 +191,12 @@ class RunCommand extends Console\Command\Command
         Console\Style\SymfonyStyle $style,
         Process $process
     ): bool {
-        $process->stdout->on('data', function ($chunk) use ($style) {
-            $style->text($chunk);
-        });
-        $process->stderr->on('data', function ($chunk) use ($style) {
-            $style->info($chunk);
-        });
-
         $deferred = new Deferred();
 
         $process->on('exit', function () use ($deferred) {
             $deferred->resolve();
         });
 
-        $process->start();
         $style->note(sprintf('Starting process "%s".', $process->getCommand()));
 
         await($deferred->promise());
