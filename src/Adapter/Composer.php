@@ -26,6 +26,8 @@ final class Composer
 
     private function execute(Process $process, float $timeout = 300): void
     {
+        $process->start();
+
         $process->stdout->on('data', function ($chunk) {
             $this->logger->debug($chunk);
         });
@@ -39,7 +41,6 @@ final class Composer
             $deferred->resolve();
         });
 
-        $process->start();
         $this->logger->notice(sprintf('Starting process "%s".', $process->getCommand()));
 
         await(timeout($deferred->promise(), $timeout));
