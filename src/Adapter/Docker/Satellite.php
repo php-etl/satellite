@@ -77,7 +77,10 @@ final class Satellite implements Configurator\SatelliteInterface
             $this->workdir,
         );
 
+        $process->start();
+
         $input = new ReadableResourceStream($archive->asResource());
+
         $input->pipe($process->stdin);
 
         $this->execute($logger, $process);
@@ -105,7 +108,6 @@ final class Satellite implements Configurator\SatelliteInterface
             $deferred->resolve();
         });
 
-        $process->start();
         $logger->notice(sprintf('Starting process "%s".', $process->getCommand()));
 
         await(timeout($deferred->promise(), $timeout));
