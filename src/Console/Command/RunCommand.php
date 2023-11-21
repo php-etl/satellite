@@ -89,9 +89,9 @@ class RunCommand extends Console\Command\Command
         if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
             \$dotenv->loadEnv(\$file);
         }
-
+        
         \$runtime = new \Kiboko\Component\Runtime\Pipeline\Console(
-            new \Symfony\Component\Console\Output\StreamOutput(fopen('php://stdout', 'w')),
+            new \Symfony\Component\Console\Output\ConsoleOutput(),
             new \Kiboko\Component\Pipeline\Pipeline(
                 new \Kiboko\Component\Pipeline\PipelineRunner(
                     new \Psr\Log\NullLogger()
