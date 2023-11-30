@@ -23,8 +23,8 @@ jobs:
 
             -   name: Infection
                 run: |
-                    wget -q https://github.com/infection/infection/releases/download/0.26.18/infection.phar
-                    wget -q https://github.com/infection/infection/releases/download/0.26.18/infection.phar.asc
+                    wget -q https://github.com/infection/infection/releases/download/0.27.0/infection.phar
+                    wget -q https://github.com/infection/infection/releases/download/0.27.0/infection.phar.asc
                     chmod +x infection.phar
                     ./infection.phar
 
