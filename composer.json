@@ -37,9 +37,8 @@
         "php-etl/gyroscops-api-client": "*",
         "php-etl/dockerfile": "*",
         "php-etl/pipeline": "*",
-        "php-etl/workflow-console-runtime": "*",
-        "composer/composer": "*",
-        "php-etl/action-contracts": "0.1.*"
+        "php-etl/workflow-console-runtime": "^0.4",
+        "composer/composer": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
