@@ -38,7 +38,8 @@
         "php-etl/dockerfile": "*",
         "php-etl/pipeline": "*",
         "php-etl/workflow-console-runtime": "*",
-        "composer/composer": "*"
+        "composer/composer": "*",
+        "php-etl/action-contracts": "0.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
