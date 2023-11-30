@@ -34,7 +34,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function withHosts(string|array|Expression ...$hosts): self
+    public function withHosts(array|Expression|string ...$hosts): self
     {
         array_push($this->hosts, ...$hosts);
 
