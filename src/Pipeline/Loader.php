@@ -19,8 +19,7 @@ final readonly class Loader implements StepInterface
         private ?string $plugin,
         private ?string $key,
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
-    ) {
-    }
+    ) {}
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
@@ -66,7 +65,7 @@ final readonly class Loader implements StepInterface
             );
         }
 
-        if (array_key_exists('code', $config)) {
+        if (\array_key_exists('code', $config)) {
             $code = $config['code'];
         } else {
             $code = sprintf('%s.%s', $this->plugin, $this->key);
@@ -77,7 +76,7 @@ final readonly class Loader implements StepInterface
                 new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\StepCode'),
                 new Node\Identifier('fromString'),
                 [
-                    new Node\Arg(new Node\Scalar\String_($code))
+                    new Node\Arg(new Node\Scalar\String_($code)),
                 ]
             ),
             $repository->getBuilder()

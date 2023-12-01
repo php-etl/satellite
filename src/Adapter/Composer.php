@@ -8,6 +8,7 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use React\ChildProcess\Process;
 use React\Promise\Deferred;
+
 use function React\Async\await;
 use function React\Promise\Timer\timeout;
 
@@ -28,16 +29,16 @@ final class Composer
     {
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) {
+        $process->stdout->on('data', function ($chunk): void {
             $this->logger->debug($chunk);
         });
-        $process->stderr->on('data', function ($chunk) {
+        $process->stderr->on('data', function ($chunk): void {
             $this->logger->info($chunk);
         });
 
         $deferred = new Deferred();
 
-        $process->on('exit', function () use ($deferred) {
+        $process->on('exit', function () use ($deferred): void {
             $deferred->resolve();
         });
 
@@ -53,7 +54,7 @@ final class Composer
     private function command(string ...$command): void
     {
         $process = new Process(
-            implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)),
+            implode(' ', array_map(fn ($part) => escapeshellarg($part), $command)),
             $this->workdir,
         );
 

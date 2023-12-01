@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use React\ChildProcess\Process;
 use React\Promise\Deferred;
 use React\Stream\ReadableResourceStream;
+
 use function React\Async\await;
 use function React\Promise\Timer\timeout;
 
@@ -27,7 +28,7 @@ final class Satellite implements Configurator\SatelliteInterface
     public function __construct(
         private readonly Dockerfile\Dockerfile $dockerfile,
         private readonly string $workdir,
-        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
+        Packaging\DirectoryInterface|Packaging\FileInterface ...$files
     ) {
         $this->files = $files;
     }
@@ -39,7 +40,7 @@ final class Satellite implements Configurator\SatelliteInterface
         return $this;
     }
 
-    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function withFile(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         array_push($this->files, ...$files);
 
@@ -73,7 +74,7 @@ final class Satellite implements Configurator\SatelliteInterface
         $command = ['docker', 'build', '--rm', '-', ...iterator_to_array($iterator($this->imageTags))];
 
         $process = new Process(
-            implode (' ', array_map(fn (string $part) => escapeshellarg($part), $command)),
+            implode(' ', array_map(fn (string $part) => escapeshellarg($part), $command)),
             $this->workdir,
         );
 
@@ -95,16 +96,16 @@ final class Satellite implements Configurator\SatelliteInterface
         Process $process,
         float $timeout = 300
     ): void {
-        $process->stdout->on('data', function ($chunk) use ($logger) {
+        $process->stdout->on('data', function ($chunk) use ($logger): void {
             $logger->debug($chunk);
         });
-        $process->stderr->on('data', function ($chunk) use ($logger) {
+        $process->stderr->on('data', function ($chunk) use ($logger): void {
             $logger->info($chunk);
         });
 
         $deferred = new Deferred();
 
-        $process->on('exit', function () use ($deferred) {
+        $process->on('exit', function () use ($deferred): void {
             $deferred->resolve();
         });
 

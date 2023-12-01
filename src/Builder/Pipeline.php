@@ -16,10 +16,10 @@ final class Pipeline implements Builder
     ) {}
 
     public function addExtractor(
-        Node\Expr|Builder $code,
-        Node\Expr|Builder $extractor,
-        Node\Expr|Builder $rejection,
-        Node\Expr|Builder $state,
+        Builder|Node\Expr $code,
+        Builder|Node\Expr $extractor,
+        Builder|Node\Expr $rejection,
+        Builder|Node\Expr $state,
     ): self {
         $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
@@ -36,10 +36,10 @@ final class Pipeline implements Builder
     }
 
     public function addTransformer(
-        Node\Expr|Builder $code,
-        Node\Expr|Builder $transformer,
-        Node\Expr|Builder $rejection,
-        Node\Expr|Builder $state,
+        Builder|Node\Expr $code,
+        Builder|Node\Expr $transformer,
+        Builder|Node\Expr $rejection,
+        Builder|Node\Expr $state,
     ): self {
         $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
@@ -56,10 +56,10 @@ final class Pipeline implements Builder
     }
 
     public function addLoader(
-        Node\Expr|Builder $code,
-        Node\Expr|Builder $loader,
-        Node\Expr|Builder $rejection,
-        Node\Expr|Builder $state,
+        Builder|Node\Expr $code,
+        Builder|Node\Expr $loader,
+        Builder|Node\Expr $rejection,
+        Builder|Node\Expr $state,
     ): self {
         $this->steps[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
