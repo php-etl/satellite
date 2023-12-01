@@ -39,7 +39,7 @@ class Action implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -50,7 +50,7 @@ class Action implements Configurator\FactoryInterface
             $this->normalize($config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException) {
             return false;
         }
     }
@@ -68,7 +68,7 @@ class Action implements Configurator\FactoryInterface
 
         try {
             return new Repository($builder);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException(message: $exception->getMessage(), previous: $exception);
         }
     }

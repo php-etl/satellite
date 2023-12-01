@@ -33,11 +33,11 @@
         "php-etl/packaging": "*",
         "php-etl/configurator-contracts": "0.8.*",
         "php-etl/satellite-toolbox": "*",
-        "php-etl/pipeline-console-runtime": "*",
+        "php-etl/pipeline-console-runtime": "^0.2",
         "php-etl/gyroscops-api-client": "*",
         "php-etl/dockerfile": "*",
         "php-etl/pipeline": "*",
-        "php-etl/workflow-console-runtime": "*",
+        "php-etl/workflow-console-runtime": "^0.4",
         "composer/composer": "*"
     },
     "require-dev": {

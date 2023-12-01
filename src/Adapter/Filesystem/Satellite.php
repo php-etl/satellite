@@ -18,12 +18,12 @@ final class Satellite implements Configurator\SatelliteInterface
     public function __construct(
         private readonly string $workdir,
         private readonly Composer $composer,
-        Packaging\FileInterface|Packaging\DirectoryInterface ...$files
+        Packaging\DirectoryInterface|Packaging\FileInterface ...$files
     ) {
         $this->files = $files;
     }
 
-    public function withFile(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function withFile(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         array_push($this->files, ...$files);
 

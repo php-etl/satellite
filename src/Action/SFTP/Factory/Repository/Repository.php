@@ -12,7 +12,7 @@ final readonly class Repository implements Configurator\RepositoryInterface
 {
     public function __construct(private Builder\Action $builder) {}
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         return $this;
     }
