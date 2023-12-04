@@ -48,7 +48,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Workflow\Console::class),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Workflow\\Console'),
                             ),
                         ],
                         'stmts' => [

@@ -19,7 +19,7 @@ final readonly class AddPipelineStepProbeCommandHandler
             /** @var \stdClass $result */
             $result = $this->client->addPipelineStepProbePipelineItem(
                 $command->pipeline->asString(),
-                (new Api\Model\PipelineAddPipelineStepProbCommandInput())
+                (new Api\Model\PipelineAddPipelineStepProbeCommandInput())
                     ->setProbe(
                         (new Api\Model\Probe())
                             ->setCode($command->probe->code)

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 
-use Kiboko\Component\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\Bucket\RejectionResultBucket;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use Kiboko\Contract\Pipeline\TransformerInterface;
 use PhpParser\Builder;
@@ -96,7 +94,7 @@ final class Reject implements StepBuilderInterface
         return new Node\Expr\New_(
             class: new Node\Stmt\Class_(null, [
                 'implements' => [
-                    new Node\Name\FullyQualified(TransformerInterface::class),
+                    new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
                 ],
                 'stmts' => [
                     (new Builder\Method('transform'))
@@ -123,7 +121,7 @@ final class Reject implements StepBuilderInterface
                                                         new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified(RejectionResultBucket::class),
+                                                                new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
                                                                 [
                                                                     new Node\Arg(new Node\Expr\Variable('input')),
                                                                 ]
@@ -140,7 +138,7 @@ final class Reject implements StepBuilderInterface
                                             new Node\Expr\Variable('input'),
                                             new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
-                                                    new Node\Name\FullyQualified(AcceptanceResultBucket::class),
+                                                    new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
                                                     [
                                                         new Node\Arg(new Node\Expr\Variable('input')),
                                                     ]
