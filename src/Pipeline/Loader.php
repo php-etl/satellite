@@ -49,7 +49,7 @@ final readonly class Loader implements StepInterface
             $rejection = $compiled->getBuilder()->getNode();
         } else {
             $rejection = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullStepRejection::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullStepRejection'),
             );
         }
 
@@ -61,7 +61,7 @@ final readonly class Loader implements StepInterface
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullStepState::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullStepState'),
             );
         }
 

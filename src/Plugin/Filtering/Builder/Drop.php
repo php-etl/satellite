@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 
-use Kiboko\Component\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\Bucket\RejectionResultBucket;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
-use Kiboko\Contract\Pipeline\TransformerInterface;
 use PhpParser\Builder;
 use PhpParser\Node;
 
