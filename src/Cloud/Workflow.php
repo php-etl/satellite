@@ -76,6 +76,10 @@ final readonly class Workflow implements WorkflowInterface
                                 }
                             });
 
+                            $configuration = $config["action"];
+                            unset($config["action"]);
+                            $config += $configuration;
+
                             return new DTO\Workflow\Action(
                                 $name,
                                 new JobCode($code),
