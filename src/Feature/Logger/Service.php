@@ -96,7 +96,7 @@ final readonly class Service implements Configurator\PipelineFeatureInterface
 
             $monologBuilder = new Builder\MonologLogger($config['channel']);
 
-            $repository->addPackages('monolog/monolog:^2.5');
+            $repository->addPackages('monolog/monolog:*');
 
             foreach ($config['destinations'] as $destination) {
                 if (\array_key_exists('stream', $destination)) {
