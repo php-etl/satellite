@@ -9,7 +9,6 @@ use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
 use Kiboko\Component\Satellite\Cloud\DTO\Composer;
 use Kiboko\Component\Satellite\Cloud\DTO\JobCode;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
-use Kiboko\Component\Satellite\Cloud\DTO\Probe;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
 use Kiboko\Component\Satellite\Cloud\DTO\ReferencedWorkflow;
 use Kiboko\Component\Satellite\Cloud\DTO\RepositoryList;
@@ -76,8 +75,8 @@ final readonly class Workflow implements WorkflowInterface
                                 }
                             });
 
-                            $configuration = $config["action"];
-                            unset($config["action"]);
+                            $configuration = $config['action'];
+                            unset($config['action']);
                             $config += $configuration;
 
                             return new DTO\Workflow\Action(
@@ -187,7 +186,7 @@ final readonly class Workflow implements WorkflowInterface
                                     $step->getLabel(),
                                     new StepCode($step->getCode()),
                                     $step->getConfiguration(),
-                                    /** TODO : implement probes when it is enabled */
+                                    /* TODO : implement probes when it is enabled */
                                     new ProbeList(),
                                     $order
                                 ),

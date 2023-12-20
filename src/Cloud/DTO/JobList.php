@@ -20,7 +20,7 @@ readonly class JobList implements \Countable, \IteratorAggregate
     {
         $jobs = $this->jobs;
 
-        /** @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         usort($jobs, fn (DTO\Workflow\JobInterface $left, DTO\Workflow\JobInterface $right) => $left->order <=> $right->order);
 
         return new \ArrayIterator($jobs);
@@ -30,10 +30,10 @@ readonly class JobList implements \Countable, \IteratorAggregate
     {
         $jobs = $this->jobs;
 
-        /** @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         usort($jobs, fn (DTO\Workflow\JobInterface $left, DTO\Workflow\JobInterface $right) => $left->order <=> $right->order);
 
-        /** @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         return array_map(fn (DTO\Workflow\JobInterface $job) => $job->code->asString(), $jobs);
     }
 

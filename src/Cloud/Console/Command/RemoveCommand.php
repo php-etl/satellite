@@ -124,8 +124,8 @@ final class RemoveCommand extends Console\Command\Command
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
         $instance = match (true) {
-            array_key_exists('pipeline', $configuration) => new Satellite\Cloud\Pipeline($context),
-            array_key_exists('workflow', $configuration) => new Satellite\Cloud\Workflow($context),
+            \array_key_exists('pipeline', $configuration) => new Satellite\Cloud\Pipeline($context),
+            \array_key_exists('workflow', $configuration) => new Satellite\Cloud\Workflow($context),
             default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
         };
 

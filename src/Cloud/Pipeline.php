@@ -187,7 +187,7 @@ final readonly class Pipeline implements PipelineInterface
         );
     }
 
-    public function create(DTO\SatelliteInterface&DTO\PipelineInterface $pipeline): DTO\CommandBatch
+    public function create(DTO\PipelineInterface&DTO\SatelliteInterface $pipeline): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
             new Command\Pipeline\DeclarePipelineCommand(
@@ -201,7 +201,7 @@ final readonly class Pipeline implements PipelineInterface
         );
     }
 
-    public function update(ReferencedPipeline $actual, DTO\SatelliteInterface&DTO\PipelineInterface $desired): DTO\CommandBatch
+    public function update(ReferencedPipeline $actual, DTO\PipelineInterface&DTO\SatelliteInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
             throw new \RuntimeException('Code does not match between actual and desired pipeline definition.');

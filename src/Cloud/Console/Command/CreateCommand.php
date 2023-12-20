@@ -131,8 +131,8 @@ final class CreateCommand extends Console\Command\Command
         foreach ($configuration['satellites'] as $code => $satellite) {
             $satellite['code'] = $code;
             $instance = match (true) {
-                array_key_exists('pipeline', $satellite) => new Satellite\Cloud\Pipeline($context),
-                array_key_exists('workflow', $satellite) => new Satellite\Cloud\Workflow($context),
+                \array_key_exists('pipeline', $satellite) => new Satellite\Cloud\Pipeline($context),
+                \array_key_exists('workflow', $satellite) => new Satellite\Cloud\Workflow($context),
                 default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
             };
 
