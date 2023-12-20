@@ -19,8 +19,7 @@ final readonly class Loader implements StepInterface
         private ?string $plugin,
         private ?string $key,
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
-    ) {
-    }
+    ) {}
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
