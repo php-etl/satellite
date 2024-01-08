@@ -22,7 +22,8 @@ final readonly class Workflow implements WorkflowInterface
 {
     public function __construct(
         private Context $context,
-    ) {}
+    ) {
+    }
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Workflow
     {

@@ -9,7 +9,8 @@ final readonly class ReferencedWorkflow implements WorkflowInterface
     public function __construct(
         private WorkflowId $id,
         private Workflow $decorated,
-    ) {}
+    ) {
+    }
 
     public function id(): WorkflowId
     {

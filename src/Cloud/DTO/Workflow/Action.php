@@ -13,5 +13,6 @@ final readonly class Action implements JobInterface
         public JobCode $code,
         public array $configuration,
         public int $order,
-    ) {}
+    ) {
+    }
 }

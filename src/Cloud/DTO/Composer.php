@@ -11,7 +11,8 @@ final readonly class Composer
         private PackageList $packages,
         private RepositoryList $repositories,
         private AuthList $auths,
-    ) {}
+    ) {
+    }
 
     public function autoload(): Autoload
     {

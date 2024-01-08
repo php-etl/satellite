@@ -16,5 +16,6 @@ final class DeclareWorkflowCommand implements Command
         public DTO\Composer $composer,
         public DTO\OrganizationId $organizationId,
         public DTO\WorkspaceId $project,
-    ) {}
+    ) {
+    }
 }

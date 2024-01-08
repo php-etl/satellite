@@ -10,7 +10,8 @@ final readonly class JobListDiff
 {
     public function __construct(
         private DTO\WorkflowId $workflowId,
-    ) {}
+    ) {
+    }
 
     public function diff(DTO\JobList $left, DTO\JobList $right): DTO\CommandBatch
     {

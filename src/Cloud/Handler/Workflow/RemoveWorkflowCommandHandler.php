@@ -11,7 +11,8 @@ final readonly class RemoveWorkflowCommandHandler
 {
     public function __construct(
         private \Gyroscops\Api\Client $client,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Workflow\RemoveWorkflowCommand $command): Cloud\Event\Workflow\WorkflowRemoved
     {

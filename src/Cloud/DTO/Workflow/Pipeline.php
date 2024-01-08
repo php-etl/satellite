@@ -14,5 +14,6 @@ final readonly class Pipeline implements JobInterface
         public JobCode $code,
         public StepList $stepList,
         public int $order,
-    ) {}
+    ) {
+    }
 }

@@ -11,7 +11,8 @@ final readonly class Workflow implements SatelliteInterface, WorkflowInterface
         private string $code,
         private JobList $jobs,
         private Composer $composer,
-    ) {}
+    ) {
+    }
 
     public function code(): string
     {

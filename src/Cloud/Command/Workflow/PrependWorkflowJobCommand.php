@@ -12,5 +12,6 @@ final class PrependWorkflowJobCommand implements Command
     public function __construct(
         public DTO\WorkflowId $workflowId,
         public DTO\Workflow\JobInterface $job,
-    ) {}
+    ) {
+    }
 }

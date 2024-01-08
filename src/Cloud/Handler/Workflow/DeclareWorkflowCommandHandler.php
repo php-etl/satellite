@@ -12,7 +12,8 @@ final readonly class DeclareWorkflowCommandHandler
 {
     public function __construct(
         private Api\Client $client,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Workflow\DeclareWorkflowCommand $command): Cloud\Event\Workflow\WorkflowDeclared
     {

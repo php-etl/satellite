@@ -12,5 +12,6 @@ final class RemoveWorkflowJobCommand implements Command
     public function __construct(
         public DTO\WorkflowId $workflowId,
         public DTO\StepCode $stepCode,
-    ) {}
+    ) {
+    }
 }

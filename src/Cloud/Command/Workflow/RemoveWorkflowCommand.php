@@ -11,5 +11,6 @@ final class RemoveWorkflowCommand implements Command
 {
     public function __construct(
         public WorkflowId $id,
-    ) {}
+    ) {
+    }
 }

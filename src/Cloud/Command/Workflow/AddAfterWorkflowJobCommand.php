@@ -13,5 +13,6 @@ final class AddAfterWorkflowJobCommand implements Command
         public DTO\WorkflowId $workflowId,
         public DTO\JobCode $code,
         public DTO\Workflow\JobInterface $job,
-    ) {}
+    ) {
+    }
 }
