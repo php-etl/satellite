@@ -276,7 +276,7 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        foreach ($config['workflow']['jobs'] as $job) {
+        foreach ($config['workflow']['jobs'] as $code => $job) {
             if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
@@ -293,7 +293,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addPipeline($job['code'], $pipelineFilename);
+                $workflow->addPipeline($code, $pipelineFilename);
             } elseif (\array_key_exists('action', $job)) {
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
@@ -310,7 +310,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addAction($job['code'], $actionFilename);
+                $workflow->addAction($code, $actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
