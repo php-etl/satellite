@@ -147,7 +147,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    public function registerPlugins(Configurator\PipelinePluginInterface|Configurator\PipelineFeatureInterface ...$plugins): self
+    public function registerPlugins(Configurator\PipelineFeatureInterface|Configurator\PipelinePluginInterface ...$plugins): self
     {
         foreach ($plugins as $plugin) {
             /** @var Configurator\Feature $attribute */
@@ -188,7 +188,7 @@ final class Service implements Configurator\FactoryInterface
     {
         try {
             return $this->processor->processConfiguration($this->configuration, $config);
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException $exception) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException($exception->getMessage(), 0, $exception);
         }
     }
@@ -199,7 +199,7 @@ final class Service implements Configurator\FactoryInterface
             $this->processor->processConfiguration($this->configuration, $config);
 
             return true;
-        } catch (Symfony\InvalidTypeException|Symfony\InvalidConfigurationException) {
+        } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException) {
             return false;
         }
     }
@@ -276,7 +276,7 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        foreach ($config['workflow']['jobs'] as $code => $job) {
+        foreach ($config['workflow']['jobs'] as $job) {
             if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
@@ -293,7 +293,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addPipeline($code, $pipelineFilename);
+                $workflow->addPipeline($job['code'], $pipelineFilename);
             } elseif (\array_key_exists('action', $job)) {
                 $action = $this->compileActionJob($job);
                 $actionFilename = sprintf('%s.php', uniqid('action'));
@@ -310,7 +310,7 @@ final class Service implements Configurator\FactoryInterface
                     )
                 );
 
-                $workflow->addAction($code, $actionFilename);
+                $workflow->addAction($job['code'], $actionFilename);
             } else {
                 throw new \LogicException('Not implemented');
             }
