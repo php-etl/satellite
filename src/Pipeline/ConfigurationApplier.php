@@ -17,7 +17,8 @@ final class ConfigurationApplier
         private readonly string $plugin,
         private readonly FactoryInterface $service,
         private readonly ExpressionLanguage $interpreter,
-    ) {}
+    ) {
+    }
 
     public function withExtractor(?string $key = 'extractor'): self
     {

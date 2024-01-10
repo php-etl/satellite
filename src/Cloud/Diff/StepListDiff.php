@@ -11,7 +11,8 @@ final readonly class StepListDiff
 {
     public function __construct(
         private DTO\PipelineId $pipelineId,
-    ) {}
+    ) {
+    }
 
     public function diff(DTO\StepList $left, DTO\StepList $right): DTO\CommandBatch
     {

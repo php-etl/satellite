@@ -13,9 +13,11 @@ final class Workflow implements Builder
 
     public function __construct(
         private readonly Node\Expr $runtime
-    ) {}
+    ) {
+    }
 
-    public function addPipeline(string $code, string $pipelineFilename): self {
+    public function addPipeline(string $code, string $pipelineFilename): self
+    {
         $this->jobs[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
             name: new Node\Identifier('job'),

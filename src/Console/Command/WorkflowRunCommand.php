@@ -25,7 +25,7 @@ final class WorkflowRunCommand extends Console\Command\Command
 
         $style->warning([
             'The command "run:pipeline is deprecated and will be removed in future releases.',
-            'Please use the "run" command as a replacement.'
+            'Please use the "run" command as a replacement.',
         ]);
 
         return parent::execute($input, $output);

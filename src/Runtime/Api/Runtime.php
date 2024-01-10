@@ -14,7 +14,9 @@ use Psr\Log\LoggerInterface;
 
 final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'api.php') {}
+    public function __construct(private array $config, private string $filename = 'api.php')
+    {
+    }
 
     public function getFilename(): string
     {

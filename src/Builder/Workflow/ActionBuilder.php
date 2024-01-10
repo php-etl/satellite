@@ -9,7 +9,9 @@ use PhpParser\Node;
 
 final readonly class ActionBuilder implements Builder
 {
-    public function __construct(private Builder $builder) {}
+    public function __construct(private Builder $builder)
+    {
+    }
 
     public function getNode(): Node\Expr
     {

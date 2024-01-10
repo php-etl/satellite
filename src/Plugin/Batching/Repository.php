@@ -11,9 +11,11 @@ use Kiboko\Contract\Packaging;
 
 final readonly class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Merge|Fork $builder) {}
+    public function __construct(private Fork|Merge $builder)
+    {
+    }
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         return $this;
     }
@@ -33,7 +35,7 @@ final readonly class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Merge|Fork
+    public function getBuilder(): Fork|Merge
     {
         return $this->builder;
     }

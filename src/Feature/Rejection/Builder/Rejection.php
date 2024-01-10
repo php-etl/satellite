@@ -11,7 +11,8 @@ final class Rejection implements Builder
 {
     public function __construct(
         private ?Node\Expr $rejection = null
-    ) {}
+    ) {
+    }
 
     public function withRejection(Node\Expr $rejection): void
     {

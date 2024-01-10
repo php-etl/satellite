@@ -10,6 +10,7 @@ use React\Stream\ReadableResourceStream;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function React\Async\await;
 
 #[Console\Attribute\AsCommand('run', 'Run a data flow satellite (pipeline or workflow).')]
@@ -40,16 +41,17 @@ class RunCommand extends Console\Command\Command
             $style->writeln(sprintf('<fg=cyan>Running pipeline in %s</>', $input->getArgument('path')));
 
             $process = $this->pipelineWorker($style, $cwd, $input->getArgument('path'), 'pipeline.php');
-        } else if (file_exists('workflow.php')) {
+        } elseif (file_exists('workflow.php')) {
             $style->writeln(sprintf('<fg=cyan>Running workflow in %s</>', $input->getArgument('path')));
 
             $process = $this->workflowWorker($style, $cwd, $input->getArgument('path'), 'workflow.php');
-        } else if (file_exists('main.php')) {
+        } elseif (file_exists('main.php')) {
             $style->writeln(sprintf('<fg=cyan>Running API in %s</>', $input->getArgument('path')));
 
             $process = $this->httpWorker($style, $cwd, $input->getArgument('path'), 'main.php');
         } else {
             $style->error('The provided path does not contain either a workflow or a pipeline satellite, did you mean to run "run:api"?');
+
             return Console\Command\Command::FAILURE;
         }
 
@@ -68,49 +70,49 @@ class RunCommand extends Console\Command\Command
 
     private function pipelineWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
     {
-        $source =<<<PHP
-        <?php
-        declare(strict_types=1);
+        $source = <<<PHP
+            <?php
+            declare(strict_types=1);
 
-        /** @var ClassLoader \$autoload */
-        \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
-        \$autoload->addClassMap([
-            /* @phpstan-ignore-next-line */
-            \ProjectServiceContainer::class => 'container.php',
-        ]);
-        \$autoload->register();
+            /** @var ClassLoader \$autoload */
+            \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
+            \$autoload->addClassMap([
+                /* @phpstan-ignore-next-line */
+                \\ProjectServiceContainer::class => 'container.php',
+            ]);
+            \$autoload->register();
         
-        \$dotenv = new \Symfony\Component\Dotenv\Dotenv();
-        \$dotenv->usePutenv();
+            \$dotenv = new \\Symfony\\Component\\Dotenv\\Dotenv();
+            \$dotenv->usePutenv();
 
-        if (file_exists(\$file = '{$cwd}/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
-        if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
+            if (file_exists(\$file = '{$cwd}/.env')) {
+                \$dotenv->loadEnv(\$file);
+            }
+            if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
+                \$dotenv->loadEnv(\$file);
+            }
         
-        \$runtime = new \Kiboko\Component\Runtime\Pipeline\Console(
-            new \Symfony\Component\Console\Output\ConsoleOutput(),
-            new \Kiboko\Component\Pipeline\Pipeline(
-                new \Kiboko\Component\Pipeline\PipelineRunner(
-                    new \Psr\Log\NullLogger()
+            \$runtime = new \\Kiboko\\Component\\Runtime\\Pipeline\\Console(
+                new \\Symfony\\Component\\Console\\Output\\ConsoleOutput(),
+                new \\Kiboko\\Component\\Pipeline\\Pipeline(
+                    new \\Kiboko\\Component\\Pipeline\\PipelineRunner(
+                        new \\Psr\\Log\\NullLogger()
+                    ),
+                    new \\Kiboko\\Contract\\Pipeline\\NullState(),
                 ),
-                new \Kiboko\Contract\Pipeline\NullState(),
-            ),
-        );
+            );
         
-        \$satellite = include '{$cwd}/{$path}/$entrypoint';
+            \$satellite = include '{$cwd}/{$path}/{$entrypoint}';
         
-        \$satellite(\$runtime);
-        \$runtime->run();
+            \$satellite(\$runtime);
+            \$runtime->run();
         
-        \$autoload->unregister();
-        PHP;
+            \$autoload->unregister();
+            PHP;
 
         $stream = fopen('php://temp', 'r+');
         fwrite($stream, $source);
-        fseek($stream, 0, SEEK_SET);
+        fseek($stream, 0, \SEEK_SET);
 
         $input = new ReadableResourceStream($stream);
 
@@ -126,10 +128,10 @@ class RunCommand extends Console\Command\Command
 
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) use ($style) {
+        $process->stdout->on('data', function ($chunk) use ($style): void {
             $style->text($chunk);
         });
-        $process->stderr->on('data', function ($chunk) use ($style) {
+        $process->stderr->on('data', function ($chunk) use ($style): void {
             $style->info($chunk);
         });
 
@@ -140,46 +142,46 @@ class RunCommand extends Console\Command\Command
 
     private function workflowWorker(Console\Style\SymfonyStyle $style, string $cwd, string $path, string $entrypoint): Process
     {
-        $source =<<<PHP
-        <?php
-        declare(strict_types=1);
+        $source = <<<PHP
+            <?php
+            declare(strict_types=1);
 
-        /** @var ClassLoader \$autoload */
-        \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
-        \$autoload->addClassMap([
-            /* @phpstan-ignore-next-line */
-            \ProjectServiceContainer::class => 'container.php',
-        ]);
-        \$autoload->register();
+            /** @var ClassLoader \$autoload */
+            \$autoload = include '{$cwd}/{$path}/vendor/autoload.php';
+            \$autoload->addClassMap([
+                /* @phpstan-ignore-next-line */
+                \\ProjectServiceContainer::class => 'container.php',
+            ]);
+            \$autoload->register();
         
-        \$dotenv = new \Symfony\Component\Dotenv\Dotenv();
-        \$dotenv->usePutenv();
+            \$dotenv = new \\Symfony\\Component\\Dotenv\\Dotenv();
+            \$dotenv->usePutenv();
 
-        if (file_exists(\$file = '{$cwd}/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
-        if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
-            \$dotenv->loadEnv(\$file);
-        }
+            if (file_exists(\$file = '{$cwd}/.env')) {
+                \$dotenv->loadEnv(\$file);
+            }
+            if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
+                \$dotenv->loadEnv(\$file);
+            }
 
-        \$runtime = new \Kiboko\Component\Runtime\Workflow\Console(
-            new \Symfony\Component\Console\Output\ConsoleOutput(),
-            new \Kiboko\Component\Pipeline\PipelineRunner(
-                new \Psr\Log\NullLogger()
-            ),
-        );
+            \$runtime = new \\Kiboko\\Component\\Runtime\\Workflow\\Console(
+                new \\Symfony\\Component\\Console\\Output\\ConsoleOutput(),
+                new \\Kiboko\\Component\\Pipeline\\PipelineRunner(
+                    new \\Psr\\Log\\NullLogger()
+                ),
+            );
         
-        \$satellite = include '{$cwd}/{$path}/$entrypoint';
+            \$satellite = include '{$cwd}/{$path}/{$entrypoint}';
         
-        \$satellite(\$runtime);
-        \$runtime->run();
+            \$satellite(\$runtime);
+            \$runtime->run();
         
-        \$autoload->unregister();
-        PHP;
+            \$autoload->unregister();
+            PHP;
 
         $stream = fopen('php://temp', 'r+');
         fwrite($stream, $source);
-        fseek($stream, 0, SEEK_SET);
+        fseek($stream, 0, \SEEK_SET);
 
         $input = new ReadableResourceStream($stream);
 
@@ -195,10 +197,10 @@ class RunCommand extends Console\Command\Command
 
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) use ($style) {
+        $process->stdout->on('data', function ($chunk) use ($style): void {
             $style->text($chunk);
         });
-        $process->stderr->on('data', function ($chunk) use ($style) {
+        $process->stderr->on('data', function ($chunk) use ($style): void {
             $style->info($chunk);
         });
 
@@ -213,7 +215,7 @@ class RunCommand extends Console\Command\Command
 
         $command = ['php', '-S', 'localhost:8000', $entrypoint];
 
-        $process = new Process(implode (' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd.'/'.$path);
+        $process = new Process(implode(' ', array_map(fn ($part) => escapeshellarg($part), $command)), $cwd.'/'.$path);
 
         $process->start();
 
@@ -262,7 +264,7 @@ class RunCommand extends Console\Command\Command
     ): bool {
         $deferred = new Deferred();
 
-        $process->on('exit', function () use ($deferred) {
+        $process->on('exit', function () use ($deferred): void {
             $deferred->resolve();
         });
 
@@ -272,6 +274,7 @@ class RunCommand extends Console\Command\Command
 
         if (0 !== $process->getExitCode()) {
             $style->error(sprintf('Process exited unexpectedly with exit code %d', $process->getExitCode()));
+
             return false;
         }
 

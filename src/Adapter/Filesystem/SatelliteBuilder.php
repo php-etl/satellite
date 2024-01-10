@@ -20,8 +20,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     ];
     private array $authenticationTokens = [];
     private array $repositories = [];
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile = null;
-    private null|PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null;
+    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
+    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
     /** @var iterable<array<string, string>> */
     private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
@@ -54,8 +54,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     }
 
     public function withComposerFile(
-        PackagingContract\FileInterface|PackagingContract\AssetInterface $composerJsonFile,
-        PackagingContract\FileInterface|PackagingContract\AssetInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
+        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -64,7 +64,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     }
 
     public function withFile(
-        PackagingContract\FileInterface|PackagingContract\AssetInterface $source,
+        PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
         string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {

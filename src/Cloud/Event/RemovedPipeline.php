@@ -8,7 +8,8 @@ final readonly class RemovedPipeline
 {
     public function __construct(
         private string $id,
-    ) {}
+    ) {
+    }
 
     public function getId(): string
     {
