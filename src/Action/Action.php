@@ -45,7 +45,7 @@ final readonly class Action
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Action\NullState::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Action\\NullState'),
             );
         }
 
