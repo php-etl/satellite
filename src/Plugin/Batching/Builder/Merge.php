@@ -45,8 +45,8 @@ final class Merge implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\FlushableInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\FlushableInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\Property(
@@ -226,7 +226,7 @@ final class Merge implements StepBuilderInterface
                                         )
                                     ),
                                 ],
-                                'returnType' => new Node\Name\FullyQualified('Kiboko\\Contract\\Bucket\\ResultBucketInterface'),
+                                'returnType' => new Node\Name\FullyQualified(\Kiboko\Contract\Bucket\ResultBucketInterface::class),
                             ],
                         ),
                     ],

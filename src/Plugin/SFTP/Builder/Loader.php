@@ -89,7 +89,7 @@ final class Loader implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\LoaderInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(

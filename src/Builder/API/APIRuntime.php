@@ -23,7 +23,7 @@ final class APIRuntime
                                     args: [
                                         new Node\Arg(
                                             value: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger')
+                                                class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class)
                                             )
                                         ),
                                     ]

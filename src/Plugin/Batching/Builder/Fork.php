@@ -52,7 +52,7 @@ final class Fork implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
+                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
