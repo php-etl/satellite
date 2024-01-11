@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Batching;
 
-// FIXME: hidden dependency to php-etl/fast-map
-use Kiboko\Component\FastMap\Compiler\Builder\PropertyPathBuilder;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Fork;
 use Kiboko\Component\Satellite\Plugin\Batching\Builder\Merge;
+use Kiboko\Component\SatelliteToolbox\Builder\PropertyPathBuilder;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node\Expr\Variable;
 use Symfony\Component\Config\Definition\Exception as Symfony;

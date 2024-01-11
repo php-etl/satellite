@@ -7,7 +7,6 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 use Kiboko\Component\Satellite\Cloud\DTO\Probe;
-use Kiboko\Component\Satellite\Cloud\DTO\PSR4AutoloadConfig;
 use Kiboko\Component\Satellite\Cloud\DTO\Step;
 
 final readonly class DeclarePipelineCommandHandler
@@ -26,7 +25,7 @@ final readonly class DeclarePipelineCommandHandler
                     ->setLabel($command->label)
                     ->setCode($command->code)
                     ->setSteps($command->steps->map(
-                        fn (Step $step) => (new Api\Model\StepInput())
+                        fn (Step $step) => (new Api\Model\Step())
                             ->setCode((string) $step->code)
                             ->setLabel($step->label)
                             ->setConfiguration($step->config)
@@ -34,23 +33,8 @@ final readonly class DeclarePipelineCommandHandler
                                 fn (Probe $probe) => (new Api\Model\Probe())->setCode($probe->code)->setLabel($probe->label))
                             )
                     ))
-                    ->setAutoloads($command->autoload->map(
-                        fn (PSR4AutoloadConfig $autoloadConfig) => (new Api\Model\AutoloadInput())
-                            ->setNamespace($autoloadConfig->namespace)
-                            ->setPaths($autoloadConfig->paths)
-                    ))
-                    ->setPackages($command->packages->transform())
-                    ->setAuths($command->auths->map(
-                        fn (Cloud\DTO\Auth $auth) => (new Api\Model\AddPipelineComposerAuthCommandInput())
-                            ->setUrl($auth->url)
-                            ->setToken($auth->token)
-                    ))
-                    ->setRepositories($command->repositories->map(
-                        fn (Cloud\DTO\Repository $repository) => (new Api\Model\AddPipelineComposerRepositoryCommandInput())
-                            ->setName($repository->name)
-                            ->setType($repository->type)
-                            ->setUrl($repository->url)
-                    )),
+                // TODO : implements the composer declaration
+                //                    ->setComposer(),
             );
         } catch (Api\Exception\DeclarePipelinePipelineCollectionBadRequestException $exception) {
             throw new Cloud\DeclarePipelineFailedException('Something went wrong while declaring the pipeline. Maybe your client is not up to date, you may want to update your Gyroscops client.', previous: $exception);
