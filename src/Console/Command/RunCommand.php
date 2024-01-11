@@ -81,7 +81,7 @@ class RunCommand extends Console\Command\Command
                 \\ProjectServiceContainer::class => 'container.php',
             ]);
             \$autoload->register();
-        
+
             \$dotenv = new \\Symfony\\Component\\Dotenv\\Dotenv();
             \$dotenv->usePutenv();
 
@@ -91,7 +91,7 @@ class RunCommand extends Console\Command\Command
             if (file_exists(\$file = '{$cwd}/{$path}/.env')) {
                 \$dotenv->loadEnv(\$file);
             }
-        
+
             \$runtime = new \\Kiboko\\Component\\Runtime\\Pipeline\\Console(
                 new \\Symfony\\Component\\Console\\Output\\ConsoleOutput(),
                 new \\Kiboko\\Component\\Pipeline\\Pipeline(
@@ -101,12 +101,12 @@ class RunCommand extends Console\Command\Command
                     new \\Kiboko\\Contract\\Pipeline\\NullState(),
                 ),
             );
-        
+
             \$satellite = include '{$cwd}/{$path}/{$entrypoint}';
-        
+
             \$satellite(\$runtime);
             \$runtime->run();
-        
+
             \$autoload->unregister();
             PHP;
 
@@ -153,7 +153,7 @@ class RunCommand extends Console\Command\Command
                 \\ProjectServiceContainer::class => 'container.php',
             ]);
             \$autoload->register();
-        
+
             \$dotenv = new \\Symfony\\Component\\Dotenv\\Dotenv();
             \$dotenv->usePutenv();
 
@@ -170,12 +170,12 @@ class RunCommand extends Console\Command\Command
                     new \\Psr\\Log\\NullLogger()
                 ),
             );
-        
+
             \$satellite = include '{$cwd}/{$path}/{$entrypoint}';
-        
+
             \$satellite(\$runtime);
             \$runtime->run();
-        
+
             \$autoload->unregister();
             PHP;
 
