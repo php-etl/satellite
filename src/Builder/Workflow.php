@@ -13,16 +13,18 @@ final class Workflow implements Builder
 
     public function __construct(
         private readonly Node\Expr $runtime
-    ) {}
+    ) {
+    }
 
-    public function addPipeline(string $code, string $pipelineFilename): self {
+    public function addPipeline(string $code, string $pipelineFilename): self
+    {
         $this->jobs[] = fn (Node\Expr $runtime) => new Node\Expr\MethodCall(
             var: $runtime,
             name: new Node\Identifier('job'),
             args: [
                 new Node\Arg(
                     new Node\Expr\StaticCall(
-                        new Node\Name\FullyQualified(\Kiboko\Component\Workflow\JobCode::class),
+                        new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\JobCode'),
                         new Node\Identifier('fromString'),
                         [
                             new Node\Arg(new Node\Scalar\String_($code)),
@@ -36,7 +38,7 @@ final class Workflow implements Builder
                         args: [
                             new Node\Arg(
                                 new Node\Expr\StaticCall(
-                                    new Node\Name\FullyQualified(\Kiboko\Component\Workflow\JobCode::class),
+                                    new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\JobCode'),
                                     new Node\Identifier('fromString'),
                                     [
                                         new Node\Arg(new Node\Scalar\String_($code)),
@@ -71,7 +73,7 @@ final class Workflow implements Builder
             args: [
                 new Node\Arg(
                     new Node\Expr\StaticCall(
-                        new Node\Name\FullyQualified(\Kiboko\Component\Workflow\JobCode::class),
+                        new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\JobCode'),
                         new Node\Identifier('fromString'),
                         [
                             new Node\Arg(new Node\Scalar\String_($code)),
@@ -85,7 +87,7 @@ final class Workflow implements Builder
                         args: [
                             new Node\Arg(
                                 new Node\Expr\StaticCall(
-                                    new Node\Name\FullyQualified(\Kiboko\Component\Workflow\JobCode::class),
+                                    new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\JobCode'),
                                     new Node\Identifier('fromString'),
                                     [
                                         new Node\Arg(new Node\Scalar\String_($code)),

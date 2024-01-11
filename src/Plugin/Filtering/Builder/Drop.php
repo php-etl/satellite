@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 
-use Kiboko\Component\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\Bucket\RejectionResultBucket;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
-use Kiboko\Contract\Pipeline\TransformerInterface;
 use PhpParser\Builder;
 use PhpParser\Node;
 
@@ -19,7 +16,9 @@ final class Drop implements StepBuilderInterface
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -96,12 +95,12 @@ final class Drop implements StepBuilderInterface
         return new Node\Expr\New_(
             class: new Node\Stmt\Class_(null, [
                 'implements' => [
-                    new Node\Name\FullyQualified(TransformerInterface::class),
+                    new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
                 ],
                 'stmts' => [
                     (new Builder\Method('transform'))
                         ->makePublic()
-                        ->setReturnType(new Node\Name\FullyQualified(\Generator::class))
+                        ->setReturnType(new Node\Name\FullyQualified('Generator'))
                         ->addStmts([
                             new Node\Stmt\Expression(
                                 new Node\Expr\Assign(
@@ -123,7 +122,7 @@ final class Drop implements StepBuilderInterface
                                                         new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified(RejectionResultBucket::class),
+                                                                new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
                                                             ),
                                                         ),
                                                     ),
@@ -137,7 +136,7 @@ final class Drop implements StepBuilderInterface
                                             new Node\Expr\Variable('input'),
                                             new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
-                                                    new Node\Name\FullyQualified(AcceptanceResultBucket::class),
+                                                    new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
                                                     [
                                                         new Node\Arg(new Node\Expr\Variable('input')),
                                                     ]

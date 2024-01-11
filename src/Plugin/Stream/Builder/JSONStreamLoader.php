@@ -13,7 +13,9 @@ final class JSONStreamLoader implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly string $stream) {}
+    public function __construct(private readonly string $stream)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -39,7 +41,7 @@ final class JSONStreamLoader implements StepBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Loader\JSONStreamLoader::class),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Loader\\JSONStreamLoader'),
             args: [
                 new Node\Arg(
                     value: new Node\Expr\FuncCall(

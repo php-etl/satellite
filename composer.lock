@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79cb51665cfefdd58d4aa51b6737a8e9",
+    "content-hash": "62f878223223ac87d5e0ffa323666abc",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1483,16 +1483,16 @@
         },
         {
             "name": "php-etl/dockerfile",
-            "version": "v0.2.1",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "860d280d40efb5067cc612c51aaedbdd049d22db"
+                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/860d280d40efb5067cc612c51aaedbdd049d22db",
-                "reference": "860d280d40efb5067cc612c51aaedbdd049d22db",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
+                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
                 "shasum": ""
             },
             "require": {
@@ -1500,8 +1500,8 @@
                 "php-etl/packaging-contracts": "0.3.*"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "infection/infection": "^0.26.18",
+                "friendsofphp/php-cs-fixer": "^3.38",
+                "infection/infection": "^0.26",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.0",
                 "rector/rector": "^0.15"
@@ -1529,9 +1529,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-etl/dockerfile/issues",
-                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.1"
+                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.2"
             },
-            "time": "2023-09-14T07:20:52+00:00"
+            "time": "2024-01-10T13:35:47+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -1703,29 +1703,30 @@
         },
         {
             "name": "php-etl/satellite-toolbox",
-            "version": "v0.5.1",
+            "version": "v0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/satellite-toolbox.git",
-                "reference": "94552565ade7d29a632672aaed05ec98b623700d"
+                "reference": "84e2bf19a2bf2f94012f894edcaf48c97a4935f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/94552565ade7d29a632672aaed05ec98b623700d",
-                "reference": "94552565ade7d29a632672aaed05ec98b623700d",
+                "url": "https://api.github.com/repos/php-etl/satellite-toolbox/zipball/84e2bf19a2bf2f94012f894edcaf48c97a4935f5",
+                "reference": "84e2bf19a2bf2f94012f894edcaf48c97a4935f5",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "^4.10",
+                "nikic/php-parser": "^4.15",
                 "php": "^8.2",
                 "php-etl/configurator-contracts": "0.8.*",
-                "symfony/expression-language": "^6.0"
+                "symfony/expression-language": "^6.0",
+                "symfony/property-access": "^6.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "infection/infection": "^0.26.18",
+                "friendsofphp/php-cs-fixer": "^3.38",
+                "infection/infection": "^0.26",
                 "mikey179/vfsstream": "^1.6",
-                "php-etl/phpunit-extension": "*",
+                "php-etl/phpunit-extension": "0.7.*",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^10.0",
@@ -1763,9 +1764,9 @@
             "description": "This library aims at building and running lambda PHP functions",
             "support": {
                 "issues": "https://github.com/php-etl/satellite-toolbox/issues",
-                "source": "https://github.com/php-etl/satellite-toolbox/tree/v0.5.1"
+                "source": "https://github.com/php-etl/satellite-toolbox/tree/v0.5.2"
             },
-            "time": "2023-04-20T08:03:07+00:00"
+            "time": "2023-12-04T15:09:34+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -5983,6 +5984,166 @@
             "time": "2023-08-07T10:39:22+00:00"
         },
         {
+            "name": "symfony/property-access",
+            "version": "v6.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-access.git",
+                "reference": "75f6990ae8e8040dd587162f3f1863f755957129"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/75f6990ae8e8040dd587162f3f1863f755957129",
+                "reference": "75f6990ae8e8040dd587162f3f1863f755957129",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/property-info": "^5.4|^6.0|^7.0"
+            },
+            "require-dev": {
+                "symfony/cache": "^5.4|^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyAccess\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides functions to read and write from/to an object or array using a simple string notation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "access",
+                "array",
+                "extraction",
+                "index",
+                "injection",
+                "object",
+                "property",
+                "property-path",
+                "reflection"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/property-access/tree/v6.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-09-25T12:52:38+00:00"
+        },
+        {
+            "name": "symfony/property-info",
+            "version": "v6.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-info.git",
+                "reference": "664ae7ad443d7cc591ff3e15496b954e4cefe729"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/664ae7ad443d7cc591ff3e15496b954e4cefe729",
+                "reference": "664ae7ad443d7cc591ff3e15496b954e4cefe729",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/string": "^5.4|^6.0"
+            },
+            "conflict": {
+                "phpdocumentor/reflection-docblock": "<5.2",
+                "phpdocumentor/type-resolver": "<1.5.1",
+                "symfony/dependency-injection": "<5.4"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.10.4|^2",
+                "phpdocumentor/reflection-docblock": "^5.2",
+                "phpstan/phpdoc-parser": "^1.0",
+                "symfony/cache": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/serializer": "^5.4|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyInfo\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kévin Dunglas",
+                    "email": "dunglas@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Extracts information about PHP class' properties using metadata of popular sources",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "doctrine",
+                "phpdoc",
+                "property",
+                "symfony",
+                "type",
+                "validator"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/property-info/tree/v6.3.9"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-11-24T11:57:32+00:00"
+        },
+        {
             "name": "symfony/serializer",
             "version": "v6.3.8",
             "source": {
@@ -7555,12 +7716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/phpunit-extension.git",
-                "reference": "fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3"
+                "reference": "5a612872d8a7275adc31be2c8f2f625d341b5326"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3",
-                "reference": "fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3",
+                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/5a612872d8a7275adc31be2c8f2f625d341b5326",
+                "reference": "5a612872d8a7275adc31be2c8f2f625d341b5326",
                 "shasum": ""
             },
             "require": {
@@ -7607,7 +7768,7 @@
                 "issues": "https://github.com/php-etl/phpunit-extension/issues",
                 "source": "https://github.com/php-etl/phpunit-extension/tree/main"
             },
-            "time": "2023-11-16T15:32:17+00:00"
+            "time": "2023-11-21T12:56:00+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",
@@ -9092,5 +9253,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

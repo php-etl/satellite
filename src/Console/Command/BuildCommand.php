@@ -67,7 +67,7 @@ final class BuildCommand extends Console\Command\Command
 
         try {
             $configuration = $service->normalize($configuration);
-        } catch (Config\Definition\Exception\InvalidTypeException|Config\Definition\Exception\InvalidConfigurationException $exception) {
+        } catch (Config\Definition\Exception\InvalidConfigurationException|Config\Definition\Exception\InvalidTypeException $exception) {
             $style->error($exception->getMessage());
 
             return 255;
@@ -111,7 +111,8 @@ final class BuildCommand extends Console\Command\Command
                     new class($output) extends Log\AbstractLogger {
                         public function __construct(
                             private readonly Console\Output\OutputInterface $output,
-                        ) {}
+                        ) {
+                        }
 
                         public function log($level, $message, array $context = []): void
                         {

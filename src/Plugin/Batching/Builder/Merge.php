@@ -13,7 +13,9 @@ final class Merge implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly int $size) {}
+    public function __construct(private readonly int $size)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -144,7 +146,7 @@ final class Merge implements StepBuilderInterface
                                                                 var: new Node\Expr\Variable('line'),
                                                                 expr: new Node\Expr\Yield_(
                                                                     value: new Node\Expr\New_(
-                                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
+                                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket:'),
                                                                         args: [
                                                                             new Node\Arg(
                                                                                 new Node\Expr\PropertyFetch(
@@ -190,7 +192,7 @@ final class Merge implements StepBuilderInterface
                                                                     var: new Node\Expr\Variable('line'),
                                                                     expr: new Node\Expr\Yield_(
                                                                         value: new Node\Expr\New_(
-                                                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\EmptyResultBucket::class)
+                                                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\EmptyResultBucket')
                                                                         ),
                                                                     ),
                                                                 ),
@@ -212,7 +214,7 @@ final class Merge implements StepBuilderInterface
                                 'stmts' => [
                                     new Node\Stmt\Return_(
                                         expr: new Node\Expr\New_(
-                                            class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\AcceptanceResultBucket::class),
+                                            class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
                                             args: [
                                                 new Node\Arg(
                                                     new Node\Expr\PropertyFetch(

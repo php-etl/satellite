@@ -25,7 +25,7 @@ final class ApiRunCommand extends RunCommand
 
         $style->warning([
             'The command "run:hook is deprecated and will be removed in future releases.',
-            'Please use the "run" command as a replacement.'
+            'Please use the "run" command as a replacement.',
         ]);
 
         return parent::execute($input, $output);

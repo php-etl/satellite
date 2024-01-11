@@ -13,7 +13,9 @@ final class Fork implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private Node\Expr $foreach, private readonly Node\Expr $do) {}
+    public function __construct(private Node\Expr $foreach, private readonly Node\Expr $do)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -70,7 +72,7 @@ final class Fork implements StepBuilderInterface
                                             expr: new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
                                                     class: new Node\Name\FullyQualified(
-                                                        name: \Kiboko\Component\Bucket\AcceptanceResultBucket::class
+                                                        name: 'Kiboko\\Component\\Bucket\\AcceptanceResultBucket'
                                                     ),
                                                     args: [
                                                         new Node\Arg(

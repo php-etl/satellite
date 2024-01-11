@@ -15,9 +15,11 @@ final class Action implements Configurator\RepositoryInterface
     /** @var string[] */
     private array $packages = [];
 
-    public function __construct(private readonly Satellite\Builder\Action $builder) {}
+    public function __construct(private readonly Satellite\Builder\Action $builder)
+    {
+    }
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): Configurator\RepositoryInterface
+    public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): Configurator\RepositoryInterface
     {
         array_push($this->files, ...$files);
 

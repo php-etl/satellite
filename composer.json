@@ -31,7 +31,7 @@
         "php-etl/packaging": "*",
         "php-etl/configurator-contracts": "0.8.*",
         "php-etl/satellite-toolbox": "*",
-        "php-etl/gyroscops-api-client": "*",
+        "php-etl/gyroscops-api-client": "^0.3.0",
         "php-etl/dockerfile": "*",
         "composer/composer": "*",
         "symfony/deprecation-contracts": "*",

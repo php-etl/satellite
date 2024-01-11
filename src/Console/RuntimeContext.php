@@ -12,7 +12,8 @@ final readonly class RuntimeContext implements RuntimeContextInterface
     public function __construct(
         private string $workingDirectory,
         private ExpressionLanguage $expressionLanguage,
-    ) {}
+    ) {
+    }
 
     public function workingDirectory(): string
     {

@@ -19,7 +19,9 @@ final class Loader implements StepBuilderInterface
     private iterable $servers = [];
     private iterable $putStatements = [];
 
-    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -135,7 +137,7 @@ final class Loader implements StepBuilderInterface
                                                 new Node\Expr\Assign(
                                                     var: new Node\Expr\Variable('bucket'),
                                                     expr: new Node\Expr\New_(
-                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\ComplexResultBucket::class)
+                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\ComplexResultBucket')
                                                     )
                                                 )
                                             ),

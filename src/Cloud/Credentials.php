@@ -14,7 +14,8 @@ final class Credentials
         public string $password,
         public ?OrganizationId $organization = null,
         public ?WorkspaceId $workspace = null,
-    ) {}
+    ) {
+    }
 
     public function __debugInfo(): ?array
     {

@@ -13,11 +13,12 @@ final class Action implements Builder
 
     public function __construct(
         private readonly Node\Expr $runtime,
-    ) {}
+    ) {
+    }
 
     public function addAction(
-        Node\Expr|Builder $loader,
-        Node\Expr|Builder $state,
+        Builder|Node\Expr $loader,
+        Builder|Node\Expr $state,
     ): self {
         $this->action = new Node\Expr\MethodCall(
             var: $this->runtime,

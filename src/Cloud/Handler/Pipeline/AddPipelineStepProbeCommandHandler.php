@@ -11,7 +11,8 @@ final readonly class AddPipelineStepProbeCommandHandler
 {
     public function __construct(
         private Api\Client $client
-    ) {}
+    ) {
+    }
 
     public function __invoke(Cloud\Command\Pipeline\AddPipelineStepProbeCommand $command): Cloud\Event\AddedPipelineStepProbe
     {
@@ -19,7 +20,7 @@ final readonly class AddPipelineStepProbeCommandHandler
             /** @var \stdClass $result */
             $result = $this->client->addPipelineStepProbePipelineItem(
                 $command->pipeline->asString(),
-                (new Api\Model\PipelineAddPipelineStepProbCommandInput())
+                (new Api\Model\PipelineAddPipelineStepProbeCommandInput())
                     ->setProbe(
                         (new Api\Model\Probe())
                             ->setCode($command->probe->code)

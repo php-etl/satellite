@@ -10,10 +10,11 @@ use Kiboko\Contract\Packaging;
 final readonly class Repository implements Configurator\StepRepositoryInterface
 {
     public function __construct(
-        private Builder\StderrLoader|Builder\StdoutLoader|Builder\JSONStreamLoader|Builder\DebugLoader $builder
-    ) {}
+        private Builder\DebugLoader|Builder\JSONStreamLoader|Builder\StderrLoader|Builder\StdoutLoader $builder
+    ) {
+    }
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         return $this;
     }
@@ -33,7 +34,7 @@ final readonly class Repository implements Configurator\StepRepositoryInterface
         return new \EmptyIterator();
     }
 
-    public function getBuilder(): Builder\StderrLoader|Builder\StdoutLoader|Builder\JSONStreamLoader|Builder\DebugLoader
+    public function getBuilder(): Builder\DebugLoader|Builder\JSONStreamLoader|Builder\StderrLoader|Builder\StdoutLoader
     {
         return $this->builder;
     }
