@@ -13,5 +13,6 @@ final class PrependPipelineStepCommand implements Command
     public function __construct(
         public PipelineId $pipeline,
         public Step $step,
-    ) {}
+    ) {
+    }
 }

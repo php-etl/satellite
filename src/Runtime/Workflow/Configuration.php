@@ -62,6 +62,7 @@ final readonly class Configuration implements Configurator\RuntimeConfigurationI
                 ->end()
                 ->scalarNode('name')->end()
                 ->arrayNode('jobs')
+                    ->useAttributeAsKey('code')
                     ->arrayPrototype()
                         ->children()
                             ->scalarNode('name')->end()

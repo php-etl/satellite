@@ -12,5 +12,6 @@ final class Step
         public array $config,
         public ProbeList $probes,
         public int $order,
-    ) {}
+    ) {
+    }
 }

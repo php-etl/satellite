@@ -17,7 +17,8 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
     public function __construct(
         private array $config,
         private string $filename = 'pipeline.php'
-    ) {}
+    ) {
+    }
 
     public function getFilename(): string
     {

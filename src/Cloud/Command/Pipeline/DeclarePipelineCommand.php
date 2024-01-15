@@ -19,5 +19,6 @@ final class DeclarePipelineCommand implements Command
         public DTO\AuthList $auths,
         public DTO\OrganizationId $organizationId,
         public DTO\WorkspaceId $project,
-    ) {}
+    ) {
+    }
 }

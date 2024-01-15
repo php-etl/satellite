@@ -10,7 +10,9 @@ use Symfony\Component\Config;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
-    public function __construct(private readonly string $basePath) {}
+    public function __construct(private readonly string $basePath)
+    {
+    }
 
     /** @return \Generator<array> */
     private function load(

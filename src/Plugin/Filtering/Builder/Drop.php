@@ -16,7 +16,9 @@ final class Drop implements StepBuilderInterface
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -98,7 +100,7 @@ final class Drop implements StepBuilderInterface
                 'stmts' => [
                     (new Builder\Method('transform'))
                         ->makePublic()
-                        ->setReturnType(new Node\Name\FullyQualified(\Generator::class))
+                        ->setReturnType(new Node\Name\FullyQualified('Generator'))
                         ->addStmts([
                             new Node\Stmt\Expression(
                                 new Node\Expr\Assign(

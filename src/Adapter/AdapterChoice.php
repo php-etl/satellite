@@ -10,7 +10,8 @@ final readonly class AdapterChoice
 {
     public function __construct(
         private array $adapters,
-    ) {}
+    ) {
+    }
 
     public function __invoke(array $configuration): Configurator\SatelliteBuilderInterface
     {

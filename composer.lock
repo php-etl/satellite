@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79cb51665cfefdd58d4aa51b6737a8e9",
+    "content-hash": "62f878223223ac87d5e0ffa323666abc",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1483,16 +1483,16 @@
         },
         {
             "name": "php-etl/dockerfile",
-            "version": "v0.2.1",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "860d280d40efb5067cc612c51aaedbdd049d22db"
+                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/860d280d40efb5067cc612c51aaedbdd049d22db",
-                "reference": "860d280d40efb5067cc612c51aaedbdd049d22db",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
+                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
                 "shasum": ""
             },
             "require": {
@@ -1500,8 +1500,8 @@
                 "php-etl/packaging-contracts": "0.3.*"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "infection/infection": "^0.26.18",
+                "friendsofphp/php-cs-fixer": "^3.38",
+                "infection/infection": "^0.26",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.0",
                 "rector/rector": "^0.15"
@@ -1529,9 +1529,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-etl/dockerfile/issues",
-                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.1"
+                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.2"
             },
-            "time": "2023-09-14T07:20:52+00:00"
+            "time": "2024-01-10T13:35:47+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -7716,12 +7716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/phpunit-extension.git",
-                "reference": "fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3"
+                "reference": "5a612872d8a7275adc31be2c8f2f625d341b5326"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3",
-                "reference": "fd1758d8fc3d353de2b3f4e9ba0c1e7af92b19f3",
+                "url": "https://api.github.com/repos/php-etl/phpunit-extension/zipball/5a612872d8a7275adc31be2c8f2f625d341b5326",
+                "reference": "5a612872d8a7275adc31be2c8f2f625d341b5326",
                 "shasum": ""
             },
             "require": {
@@ -7768,7 +7768,7 @@
                 "issues": "https://github.com/php-etl/phpunit-extension/issues",
                 "source": "https://github.com/php-etl/phpunit-extension/tree/main"
             },
-            "time": "2023-11-16T15:32:17+00:00"
+            "time": "2023-11-21T12:56:00+00:00"
         },
         {
             "name": "php-etl/pipeline-contracts",

@@ -18,7 +18,9 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
     private iterable $hosts = [];
     private iterable $formatters = [];
 
-    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
+    }
 
     public function withLevel(string $level): self
     {

@@ -13,7 +13,9 @@ final class Fork implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private Node\Expr $foreach, private readonly Node\Expr $do) {}
+    public function __construct(private Node\Expr $foreach, private readonly Node\Expr $do)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {

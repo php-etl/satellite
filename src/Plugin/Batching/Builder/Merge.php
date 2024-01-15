@@ -13,7 +13,9 @@ final class Merge implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly int $size) {}
+    public function __construct(private readonly int $size)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {

@@ -13,7 +13,9 @@ final class JSONStreamLoader implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly string $stream) {}
+    public function __construct(private readonly string $stream)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
