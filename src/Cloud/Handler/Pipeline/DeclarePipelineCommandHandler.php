@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite\Cloud\Handler\Pipeline;
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud;
 use Kiboko\Component\Satellite\Cloud\DTO\Probe;
+use Kiboko\Component\Satellite\Cloud\DTO\PSR4AutoloadConfig;
 use Kiboko\Component\Satellite\Cloud\DTO\Step;
 
 final readonly class DeclarePipelineCommandHandler
