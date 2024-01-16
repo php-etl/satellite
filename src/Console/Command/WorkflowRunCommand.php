@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[Console\Attribute\AsCommand('run:workflow', 'Run a data flow satellite (pipeline or workflow).', hidden: true)]
-final class WorkflowRunCommand extends Console\Command\Command
+final class WorkflowRunCommand extends RunCommand
 {
     protected function configure(): void
     {
