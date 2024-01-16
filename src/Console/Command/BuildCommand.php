@@ -126,6 +126,6 @@ final class BuildCommand extends Console\Command\Command
             }
         }
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 }

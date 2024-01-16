@@ -63,7 +63,7 @@ class Extractor implements Configurator\FactoryInterface
             && \is_array($config['loader']['servers'])
         ) {
             foreach ($config['loader']['servers'] as $server) {
-                $serverFactory = new Server($this->interpreter);
+                $serverFactory = new SFTP\Factory\Server($this->interpreter);
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();

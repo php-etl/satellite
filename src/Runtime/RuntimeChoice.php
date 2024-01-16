@@ -17,7 +17,7 @@ final readonly class RuntimeChoice
     ) {
     }
 
-    public function __invoke(array $configuration): RuntimeInterface
+    public function __invoke(array $configuration): Satellite\Runtime\RuntimeInterface
     {
         $satellite = ($this->adapterChoice)($configuration)->build();
 
