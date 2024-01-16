@@ -55,7 +55,7 @@ final readonly class RabbitMQFactory implements Configurator\FactoryInterface
         return false;
     }
 
-    public function compile(array $config): Repository\RabbitMQRepository
+    public function compile(array $config): Rejection\Factory\Repository\RabbitMQRepository
     {
         $builder = new Rejection\Builder\RabbitMQBuilder(
             stepUuid: compileValueWhenExpression($this->interpreter, uniqid()),
@@ -76,6 +76,6 @@ final readonly class RabbitMQFactory implements Configurator\FactoryInterface
             $builder->withExchange(compileValueWhenExpression($this->interpreter, $config['exchange']));
         }
 
-        return new Repository\RabbitMQRepository($builder);
+        return new Rejection\Factory\Repository\RabbitMQRepository($builder);
     }
 }

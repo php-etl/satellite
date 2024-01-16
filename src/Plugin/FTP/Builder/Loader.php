@@ -113,7 +113,7 @@ final class Loader implements StepBuilderInterface
                                 new Node\Expr\ArrayDimFetch(
                                     new Node\Expr\PropertyFetch(
                                         new Node\Expr\Variable('this'),
-                                        new Node\Identifier('servers')
+                                        new Identifier('servers')
                                     ),
                                     new Node\Scalar\LNumber($index),
                                 ),
@@ -124,7 +124,7 @@ final class Loader implements StepBuilderInterface
                                         new Node\Expr\ArrayDimFetch(
                                             new Node\Expr\PropertyFetch(
                                                 new Node\Expr\Variable('this'),
-                                                new Node\Identifier('serversMapping')
+                                                new Identifier('serversMapping')
                                             ),
                                             dim: new Node\Scalar\LNumber($index),
                                         ),
@@ -222,7 +222,7 @@ final class Loader implements StepBuilderInterface
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('__construct'),
+                            name: new Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'params' => [
@@ -255,7 +255,7 @@ final class Loader implements StepBuilderInterface
                                                 new Node\Expr\ArrayDimFetch(
                                                     new Node\Expr\PropertyFetch(
                                                         new Node\Expr\Variable('this'),
-                                                        new Node\Identifier('servers')
+                                                        new Identifier('servers')
                                                     ),
                                                     new Node\Scalar\LNumber($index),
                                                 ),
@@ -269,7 +269,7 @@ final class Loader implements StepBuilderInterface
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('load'),
+                            name: new Identifier('load'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'stmts' => [
@@ -315,7 +315,7 @@ final class Loader implements StepBuilderInterface
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('createDirectories'),
+                            name: new Identifier('createDirectories'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'returnType' => new Node\Expr\ConstFetch(new Node\Name('void')),
@@ -528,7 +528,7 @@ final class Loader implements StepBuilderInterface
                             new Node\Expr\ArrayDimFetch(
                                 var: new Node\Expr\PropertyFetch(
                                     var: new Node\Expr\Variable('this'),
-                                    name: new Node\Identifier('servers')
+                                    name: new Identifier('servers')
                                 ),
                                 dim: new Node\Scalar\LNumber($key),
                             ),
