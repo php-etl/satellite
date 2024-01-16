@@ -93,7 +93,7 @@ final class SatelliteDependencyInjection
                     $definition->setFactory([$service['factory']['class'], $service['factory']['method']]);
                 }
 
-                $definition->setPublic($config['use'] === $identifier ? true : $service['public']);
+                $definition->setPublic($config['use'] === $identifier || $service['public']);
             }
         }
 
