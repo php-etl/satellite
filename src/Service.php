@@ -241,8 +241,7 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/workflow-console-runtime:*',
             'psr/log:*',
             'monolog/monolog:*',
-            'symfony/dotenv:^6.0',
-            'symfony/dependency-injection:^6.0',
+            'symfony/dotenv:^6.0'
         );
 
         $repository->addFiles(
@@ -339,8 +338,7 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/pipeline-console-runtime:*',
             'psr/log:*',
             'monolog/monolog:*',
-            'symfony/dotenv:^6.0',
-            'symfony/dependency-injection:^6.0',
+            'symfony/dotenv:^6.0'
         );
 
         if (\array_key_exists('expression_language', $config['pipeline'])

@@ -13,11 +13,14 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
     name: 'custom',
+    dependencies: [
+        'symfony/dependency-injection:^6.0'
+    ],
     steps: [
         new Configurator\Pipeline\StepExtractor(),
         new Configurator\Pipeline\StepTransformer(),
         new Configurator\Pipeline\StepLoader(),
-    ],
+    ]
 )] final readonly class Service implements Configurator\PipelinePluginInterface
 {
     private Processor $processor;
