@@ -14,7 +14,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[Configurator\Action(
     name: 'custom',
     dependencies: [
-        'symfony/dependency-injection:^6.0'
+        'symfony/dependency-injection:^6.0',
     ],
 )]
 final readonly class Service implements Configurator\ActionInterface

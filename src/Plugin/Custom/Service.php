@@ -14,7 +14,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 #[Configurator\Pipeline(
     name: 'custom',
     dependencies: [
-        'symfony/dependency-injection:^6.0'
+        'symfony/dependency-injection:^6.0',
     ],
     steps: [
         new Configurator\Pipeline\StepExtractor(),
