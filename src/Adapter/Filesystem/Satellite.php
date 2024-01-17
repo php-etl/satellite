@@ -48,15 +48,11 @@ final class Satellite implements Configurator\SatelliteInterface
                     fclose($stream);
                 }
             } else {
-                $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
-                if (!$stream) {
-                    $dirname = dirname($this->workdir.'/'.$file->getPath());
-                    if (!is_dir($dirname))
-                    {
-                        mkdir($dirname, 0755, true);
-                    }
-                    $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
+                $dirname = dirname($this->workdir.'/'.$file->getPath());
+                if (!file_exists($dirname)) {
+                    mkdir($dirname, 0755, true);
                 }
+                $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
                 stream_copy_to_stream($file->asResource(), $stream);
                 fclose($stream);
             }
