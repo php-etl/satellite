@@ -23,7 +23,7 @@ final class HookRuntime
                                     args: [
                                         new Node\Arg(
                                             value: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class)
+                                                class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger')
                                             )
                                         ),
                                     ]

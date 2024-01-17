@@ -88,6 +88,12 @@ final class CreateCommand extends Console\Command\Command
             return self::FAILURE;
         }
 
+        if (!\array_key_exists('version', $configuration)) {
+            $style->warning('The current version of your configuration does not allow you to use Cloud commands. Please update your configuration at least to version 0.3.');
+
+            return self::INVALID;
+        }
+
         $auth = new Satellite\Cloud\Auth();
 
         try {
@@ -121,16 +127,17 @@ final class CreateCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        $pipeline = new Satellite\Cloud\Pipeline($context);
-        if (!\array_key_exists('version', $configuration)) {
-            foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($configuration['satellite'])) as $command) {
+
+        foreach ($configuration['satellites'] as $code => $satellite) {
+            $satellite['code'] = $code;
+            $instance = match (true) {
+                \array_key_exists('pipeline', $satellite) => new Satellite\Cloud\Pipeline($context),
+                \array_key_exists('workflow', $satellite) => new Satellite\Cloud\Workflow($context),
+                default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
+            };
+
+            foreach ($instance->create($instance::fromLegacyConfiguration($satellite)) as $command) {
                 $bus->push($command);
-            }
-        } else {
-            foreach ($configuration['satellites'] as $satellite) {
-                foreach ($pipeline->create(Satellite\Cloud\Pipeline::fromLegacyConfiguration($satellite)) as $command) {
-                    $bus->push($command);
-                }
             }
         }
 

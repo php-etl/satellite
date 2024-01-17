@@ -15,9 +15,9 @@ interface PipelineInterface
 
     public static function fromApiWithCode(Client $client, string $code, array $configuration): DTO\ReferencedPipeline;
 
-    public function create(DTO\PipelineInterface $pipeline): DTO\CommandBatch;
+    public function create(DTO\PipelineInterface&DTO\SatelliteInterface $pipeline): DTO\CommandBatch;
 
-    public function update(DTO\ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch;
+    public function update(DTO\ReferencedPipeline $actual, DTO\PipelineInterface&DTO\SatelliteInterface $desired): DTO\CommandBatch;
 
-    public function remove(DTO\PipelineId $id): DTO\CommandBatch;
+    public function remove(PipelineId $id): DTO\CommandBatch;
 }
