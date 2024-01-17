@@ -33,7 +33,7 @@ final readonly class Action
             $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
+                new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
             );
         }
 

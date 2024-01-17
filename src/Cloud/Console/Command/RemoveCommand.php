@@ -22,11 +22,13 @@ final class RemoveCommand extends Console\Command\Command
         $this->addOption('url', 'u', mode: Console\Input\InputArgument::OPTIONAL, description: 'Base URL of the cloud instance', default: 'https://app.gyroscops.com');
         $this->addOption('beta', mode: Console\Input\InputOption::VALUE_NONE, description: 'Shortcut to set the cloud instance to https://beta.gyroscops.com');
         $this->addOption('ssl', mode: Console\Input\InputOption::VALUE_NEGATABLE, description: 'Enable or disable SSL');
-        $this->addArgument('config', Console\Input\InputArgument::REQUIRED);
+        $this->addOption('output', mode: Console\Input\InputOption::VALUE_OPTIONAL, description: 'Specify the path of the resulting tarball when building for Docker');
+        $this->addArgument('config', mode: Console\Input\InputArgument::REQUIRED);
     }
 
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output): int
     {
+        $configuration = [];
         $style = new Console\Style\SymfonyStyle(
             $input,
             $output,
@@ -56,10 +58,6 @@ final class RemoveCommand extends Console\Command\Command
                 } catch (LoaderLoadException) {
                 }
             }
-
-            if (!isset($configuration)) {
-                throw new \RuntimeException('Could not find configuration file.');
-            }
         }
 
         for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
@@ -86,6 +84,12 @@ final class RemoveCommand extends Console\Command\Command
             $style->error($exception->getMessage());
 
             return self::FAILURE;
+        }
+
+        if (!\array_key_exists('version', $configuration)) {
+            $style->warning('The current version of your configuration does not allow you to use Cloud commands. Please update your configuration at least to version 0.3.');
+
+            return self::INVALID;
         }
 
         $auth = new Satellite\Cloud\Auth();
@@ -120,9 +124,13 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        $pipeline = new Satellite\Cloud\Pipeline($context);
-        $model = Satellite\Cloud\Pipeline::fromApiWithCode($client, $configuration['satellite']['pipeline']['code'], $configuration['satellite']['pipeline']);
-        foreach ($pipeline->remove($model->id()) as $command) {
+        $instance = match (true) {
+            \array_key_exists('pipeline', $configuration) => new Satellite\Cloud\Pipeline($context),
+            \array_key_exists('workflow', $configuration) => new Satellite\Cloud\Workflow($context),
+            default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
+        };
+
+        foreach ($instance->remove($instance::fromApiWithCode($client, array_key_first($configuration['satellites']))->id()) as $command) {
             $bus->push($command);
         }
 

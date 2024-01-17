@@ -146,7 +146,7 @@ final class Merge implements StepBuilderInterface
                                                                 var: new Node\Expr\Variable('line'),
                                                                 expr: new Node\Expr\Yield_(
                                                                     value: new Node\Expr\New_(
-                                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket:'),
+                                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
                                                                         args: [
                                                                             new Node\Arg(
                                                                                 new Node\Expr\PropertyFetch(

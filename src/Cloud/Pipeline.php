@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\AuthList;
+use Kiboko\Component\Satellite\Cloud\DTO\Composer;
 use Kiboko\Component\Satellite\Cloud\DTO\Package;
 use Kiboko\Component\Satellite\Cloud\DTO\PipelineId;
 use Kiboko\Component\Satellite\Cloud\DTO\ProbeList;
@@ -27,7 +28,7 @@ final readonly class Pipeline implements PipelineInterface
 
         return new DTO\Pipeline(
             $configuration['pipeline']['name'] ?? sprintf('Pipeline %s', $random),
-            $configuration['pipeline']['code'] ?? sprintf('pipeline_%s', $random),
+            $configuration['code'] ?? sprintf('pipeline_%s', $random),
             new DTO\StepList(
                 ...array_map(function (array $stepConfig, int $order) {
                     $name = $stepConfig['name'] ?? sprintf('step%d', $order);
@@ -51,34 +52,36 @@ final readonly class Pipeline implements PipelineInterface
                     );
                 }, $configuration['pipeline']['steps'], range(0, (is_countable($configuration['pipeline']['steps']) ? \count($configuration['pipeline']['steps']) : 0) - 1))
             ),
-            new DTO\Autoload(
-                ...array_map(
-                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                    array_keys($configuration['composer']['autoload']['psr4'] ?? []),
-                    $configuration['composer']['autoload']['psr4'] ?? [],
-                )
-            ),
-            new DTO\PackageList(
-                ...array_map(
-                    function (string $namespace) {
-                        $parts = explode(':', $namespace);
+            new Composer(
+                new DTO\Autoload(
+                    ...array_map(
+                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        array_keys($configuration['composer']['autoload']['psr4'] ?? []),
+                        $configuration['composer']['autoload']['psr4'] ?? [],
+                    )
+                ),
+                new DTO\PackageList(
+                    ...array_map(
+                        function (string $namespace) {
+                            $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1]);
-                    },
-                    $configuration['composer']['require'] ?? [],
-                )
-            ),
-            new RepositoryList(
-                ...array_map(
-                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                    $configuration['composer']['repositories'] ?? [],
-                )
-            ),
-            new AuthList(
-                ...array_map(
-                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                    $configuration['composer']['auth'] ?? [],
-                )
+                            return new Package($parts[0], $parts[1]);
+                        },
+                        $configuration['composer']['require'] ?? [],
+                    )
+                ),
+                new RepositoryList(
+                    ...array_map(
+                        fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                        $configuration['composer']['repositories'] ?? [],
+                    )
+                ),
+                new AuthList(
+                    ...array_map(
+                        fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                        $configuration['composer']['auth'] ?? [],
+                    )
+                ),
             ),
         );
     }
@@ -150,56 +153,55 @@ final readonly class Pipeline implements PipelineInterface
                     );
                 }, $steps, range(0, \count($steps)))
             ),
-            new DTO\Autoload(
-                ...array_map(
-                    fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                    array_keys($configuration['composer']['autoload']['psr4'] ?? []),
-                    $model->getAutoload(),
-                )
-            ),
-            new DTO\PackageList(
-                ...array_map(
-                    function (string $namespace) {
-                        $parts = explode(':', $namespace);
+            new Composer(
+                new DTO\Autoload(
+                    ...array_map(
+                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        array_keys($configuration['composer']['autoload']['psr4'] ?? []),
+                        $model->getAutoload(),
+                    )
+                ),
+                new DTO\PackageList(
+                    ...array_map(
+                        function (string $namespace) {
+                            $parts = explode(':', $namespace);
 
-                        return new Package($parts[0], $parts[1]);
-                    },
-                    $model->getPackages(),
-                )
-            ),
-            new RepositoryList(
-                ...array_map(
-                    fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                    $model->getRepositories(),
-                )
-            ),
-            new AuthList(
-                ...array_map(
-                    fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                    $model->getAuths(),
-                )
+                            return new Package($parts[0], $parts[1]);
+                        },
+                        $model->getPackages(),
+                    )
+                ),
+                new RepositoryList(
+                    ...array_map(
+                        fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
+                        $model->getRepositories(),
+                    )
+                ),
+                new AuthList(
+                    ...array_map(
+                        fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
+                        $model->getAuths(),
+                    )
+                ),
             ),
         );
     }
 
-    public function create(DTO\PipelineInterface $pipeline): DTO\CommandBatch
+    public function create(DTO\PipelineInterface&DTO\SatelliteInterface $pipeline): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
             new Command\Pipeline\DeclarePipelineCommand(
                 $pipeline->code(),
                 $pipeline->label(),
                 $pipeline->steps(),
-                $pipeline->autoload(),
-                $pipeline->packages(),
-                $pipeline->repositories(),
-                $pipeline->auths(),
+                $pipeline->composer(),
                 $this->context->organization(),
                 $this->context->workspace(),
             )
         );
     }
 
-    public function update(ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch
+    public function update(ReferencedPipeline $actual, DTO\PipelineInterface&DTO\SatelliteInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
             throw new \RuntimeException('Code does not match between actual and desired pipeline definition.');
@@ -213,7 +215,7 @@ final readonly class Pipeline implements PipelineInterface
         $commands = $diff->diff($actual->steps(), $desired->steps());
 
         // Check the changes in the list of autoloads
-        if (\count($actual->autoload()) !== \count($desired->autoload())) {
+        if (\count($actual->autoload()) !== \count($desired->composer()->autoload())) {
             // TODO: make diff of the autoload
         }
 
