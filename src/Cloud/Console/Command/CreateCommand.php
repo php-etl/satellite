@@ -89,7 +89,7 @@ final class CreateCommand extends Console\Command\Command
         }
 
         if (!\array_key_exists('version', $configuration)) {
-            $style->warning('The current version of your configuration does not allow you to use Cloud commands. Please update your configuration to version 0.3.');
+            $style->warning('The current version of your configuration does not allow you to use Cloud commands. Please update your configuration at least to version 0.3.');
 
             return self::INVALID;
         }
