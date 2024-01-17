@@ -25,6 +25,7 @@ $app->addCommands([
     new \Kiboko\Component\Satellite\Console\Command\ValidateCommand(),
     new \Kiboko\Component\Satellite\Console\Command\PipelineRunCommand(),
     new \Kiboko\Component\Satellite\Console\Command\WorkflowRunCommand(),
+    new \Kiboko\Component\Satellite\Console\Command\RunCommand(),
 ]);
 
 $app->run(new Input\ArgvInput(), new Output\ConsoleOutput());

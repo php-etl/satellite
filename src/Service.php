@@ -238,6 +238,10 @@ final class Service implements Configurator\FactoryInterface
             'php-etl/pipeline-contracts:>=0.5.1 <0.6',
             'php-etl/action-contracts:>=0.2.0 <0.3',
             'php-etl/workflow:*',
+            'php-etl/workflow-console-runtime:*',
+            'psr/log:*',
+            'monolog/monolog:*',
+            'symfony/dotenv:^6.0'
         );
 
         $repository->addFiles(
@@ -328,16 +332,13 @@ final class Service implements Configurator\FactoryInterface
         $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
 
         $repository->addPackages(
+            'php-etl/satellite-contracts:>=0.1.1 <0.2',
             'php-etl/pipeline-contracts:>=0.5.1 <0.6',
             'php-etl/pipeline:*',
-            'php-etl/console-state:*',
             'php-etl/pipeline-console-runtime:*',
-            'php-etl/workflow-console-runtime:*',
             'psr/log:*',
             'monolog/monolog:*',
-            'symfony/console:^6.0',
-            'symfony/dotenv:^6.0',
-            'symfony/dependency-injection:^6.0',
+            'symfony/dotenv:^6.0'
         );
 
         if (\array_key_exists('expression_language', $config['pipeline'])
