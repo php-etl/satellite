@@ -13,10 +13,7 @@ final class DeclarePipelineCommand implements Command
         public string $code,
         public string $label,
         public DTO\StepList $steps,
-        public DTO\Autoload $autoload,
-        public DTO\PackageList $packages,
-        public DTO\RepositoryList $repositories,
-        public DTO\AuthList $auths,
+        public DTO\Composer $composer,
         public DTO\OrganizationId $organizationId,
         public DTO\WorkspaceId $project,
     ) {

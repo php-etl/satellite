@@ -35,11 +35,6 @@ final readonly class ReplacePipelineStepCommandHandler
             throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\ReplacePipelineStepFailedException('Something went wrong while replacing a step from the pipeline.');
-        }
-
         return new Cloud\Event\ReplacedPipelineStep($result->id);
     }
 }

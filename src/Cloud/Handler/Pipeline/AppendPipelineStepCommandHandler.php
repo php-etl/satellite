@@ -35,11 +35,6 @@ final readonly class AppendPipelineStepCommandHandler
             throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step. It seems the data you sent was invalid, please check your input.', previous: $exception);
         }
 
-        if (null === $result) {
-            // TODO: change the exception message, it doesn't give enough details on how to fix the issue
-            throw new Cloud\AppendPipelineStepFailedException('Something went wrong while trying to append a pipeline step.');
-        }
-
         return new Cloud\Event\AppendedPipelineStep($result->id);
     }
 }
