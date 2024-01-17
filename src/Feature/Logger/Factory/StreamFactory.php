@@ -50,7 +50,7 @@ final readonly class StreamFactory implements Configurator\FactoryInterface
         return false;
     }
 
-    public function compile(array $config): Repository\StreamRepository
+    public function compile(array $config): Logger\Factory\Repository\StreamRepository
     {
         $builder = new Logger\Builder\Monolog\StreamBuilder($config['path']);
 
@@ -66,6 +66,6 @@ final readonly class StreamFactory implements Configurator\FactoryInterface
             $builder->withLocking($config['use_locking']);
         }
 
-        return new Repository\StreamRepository($builder);
+        return new Logger\Factory\Repository\StreamRepository($builder);
     }
 }

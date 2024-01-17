@@ -8,7 +8,7 @@ use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use Symfony\Component\Config;
 
-class ConfigLoader implements ConfigLoaderInterface
+class ConfigLoader implements Satellite\ConfigLoaderInterface
 {
     public function __construct(private readonly string $basePath)
     {

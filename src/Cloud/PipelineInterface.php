@@ -19,5 +19,5 @@ interface PipelineInterface
 
     public function update(DTO\ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch;
 
-    public function remove(DTO\PipelineId $id): DTO\CommandBatch;
+    public function remove(PipelineId $id): DTO\CommandBatch;
 }

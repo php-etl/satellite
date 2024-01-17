@@ -63,7 +63,7 @@ class Action implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Repository\Action
+    public function compile(array $config): Custom\Factory\Repository\Action
     {
         $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
 
@@ -74,7 +74,7 @@ class Action implements Configurator\FactoryInterface
 
         $container = (new SatelliteDependencyInjection(...$this->providers))($config);
 
-        $repository = new Repository\Action($builder);
+        $repository = new Custom\Factory\Repository\Action($builder);
 
         $dumper = new PhpDumper($container);
         $repository->addFiles(
