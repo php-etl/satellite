@@ -23,17 +23,5 @@ return static function (RectorConfig $rectorConfig): void {
         SymfonyLevelSetList::UP_TO_SYMFONY_60,
     ]);
 
-    $rectorConfig->skip([StringClassNameToClassConstantRector::class => [
-        __DIR__ . '/src/Plugin/Filtering/Builder/Drop.php',
-        __DIR__ . '/src/Plugin/Filtering/Builder/Reject.php',
-        __DIR__ . '/src/Plugin/SFTP/Builder/Extractor.php',
-        __DIR__ . '/src/Plugin/SFTP/Builder/Loader.php',
-        __DIR__ . '/src/Plugin/Batching/Builder/Fork.php',
-        __DIR__ . '/src/Plugin/Batching/Builder/Merge.php',
-        __DIR__ . '/src/Feature/Rejection/Builder/RabbitMQBuilder.php',
-        __DIR__ . '/src/Feature/Rejection/Builder/Rejection.php',
-        __DIR__ . '/src/Pipeline/Extractor.php',
-        __DIR__ . '/src/Pipeline/Loader.php',
-        __DIR__ . '/src/Pipeline/Transformer.php',
-    ]]);
+    $rectorConfig->skip([StringClassNameToClassConstantRector::class]);
 };

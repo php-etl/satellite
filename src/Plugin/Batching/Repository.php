@@ -15,7 +15,7 @@ final readonly class Repository implements Configurator\StepRepositoryInterface
     {
     }
 
-    public function addFiles(Packaging\FileInterface|Packaging\DirectoryInterface ...$files): self
+    public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
         return $this;
     }
