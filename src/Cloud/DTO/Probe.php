@@ -10,5 +10,6 @@ final class Probe
         public string $label,
         public string $code,
         public int $order,
-    ) {}
+    ) {
+    }
 }

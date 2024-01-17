@@ -18,7 +18,8 @@ final readonly class Pipeline implements PipelineInterface
 {
     public function __construct(
         private Context $context,
-    ) {}
+    ) {
+    }
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Pipeline
     {
@@ -82,7 +83,7 @@ final readonly class Pipeline implements PipelineInterface
         );
     }
 
-    public static function fromApiWithId(Api\Client $client, PipelineId $id, array $configuration): DTO\ReferencedPipeline
+    public static function fromApiWithId(Api\Client $client, PipelineId $id, array $configuration): ReferencedPipeline
     {
         $item = $client->getPipelineItem($id->asString());
 
@@ -98,7 +99,7 @@ final readonly class Pipeline implements PipelineInterface
         );
     }
 
-    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): DTO\ReferencedPipeline
+    public static function fromApiWithCode(Api\Client $client, string $code, array $configuration): ReferencedPipeline
     {
         $collection = $client->getPipelineCollection(['code' => $code]);
 
@@ -198,7 +199,7 @@ final readonly class Pipeline implements PipelineInterface
         );
     }
 
-    public function update(DTO\ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch
+    public function update(ReferencedPipeline $actual, DTO\PipelineInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
             throw new \RuntimeException('Code does not match between actual and desired pipeline definition.');
@@ -219,7 +220,7 @@ final readonly class Pipeline implements PipelineInterface
         return new DTO\CommandBatch(...$commands);
     }
 
-    public function remove(DTO\PipelineId $id): DTO\CommandBatch
+    public function remove(PipelineId $id): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
             new Command\Pipeline\RemovePipelineCommand($id),

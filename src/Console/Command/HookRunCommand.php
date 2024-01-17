@@ -31,7 +31,7 @@ class HookRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('Nothing is compiled at the provided path');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
@@ -45,6 +45,6 @@ class HookRunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 }

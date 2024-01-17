@@ -13,7 +13,9 @@ final class CustomBuilder implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly string $className) {}
+    public function __construct(private readonly string $className)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): StepBuilderInterface
     {

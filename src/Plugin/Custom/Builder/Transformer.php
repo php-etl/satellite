@@ -13,7 +13,9 @@ final class Transformer implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function __construct(private readonly Node\Expr $service, private readonly string $containerNamespace) {}
+    public function __construct(private readonly Node\Expr $service, private readonly string $containerNamespace)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {

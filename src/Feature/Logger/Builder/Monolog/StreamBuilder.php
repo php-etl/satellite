@@ -13,7 +13,9 @@ final class StreamBuilder implements MonologBuilderInterface
     private ?bool $useLocking = false;
     private iterable $formatters = [];
 
-    public function __construct(private readonly string $path) {}
+    public function __construct(private readonly string $path)
+    {
+    }
 
     public function withLevel(string $level): self
     {

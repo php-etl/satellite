@@ -76,6 +76,6 @@ final class ValidateCommand extends Console\Command\Command
 
         $style->writeln(json_encode($configuration, \JSON_PRETTY_PRINT));
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 }

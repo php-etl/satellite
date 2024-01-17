@@ -50,7 +50,7 @@ final readonly class GelfFactory implements Configurator\FactoryInterface
         return false;
     }
 
-    public function compile(array $config): Repository\GelfRepository
+    public function compile(array $config): Logger\Factory\Repository\GelfRepository
     {
         $builder = new Logger\Builder\Monolog\GelfBuilder();
 
@@ -74,6 +74,6 @@ final readonly class GelfFactory implements Configurator\FactoryInterface
             );
         }
 
-        return new Repository\GelfRepository($builder);
+        return new Logger\Factory\Repository\GelfRepository($builder);
     }
 }

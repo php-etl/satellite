@@ -10,7 +10,8 @@ final readonly class AdapterChoice
 {
     public function __construct(
         private array $adapters,
-    ) {}
+    ) {
+    }
 
     public function __invoke(array $configuration): Configurator\SatelliteBuilderInterface
     {
@@ -22,7 +23,7 @@ final readonly class AdapterChoice
             }
         }
 
-        \assert($factory instanceof \Kiboko\Contract\Configurator\Adapter\FactoryInterface, new AdapterNotFoundException('No compatible adapter was found for your satellite configuration.'));
+        \assert($factory instanceof Configurator\Adapter\FactoryInterface, new AdapterNotFoundException('No compatible adapter was found for your satellite configuration.'));
 
         return $factory($configuration);
     }

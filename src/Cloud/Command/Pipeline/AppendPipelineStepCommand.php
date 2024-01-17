@@ -13,5 +13,6 @@ final class AppendPipelineStepCommand implements Command
     public function __construct(
         public PipelineId $pipeline,
         public Step $step,
-    ) {}
+    ) {
+    }
 }

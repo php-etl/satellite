@@ -33,7 +33,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled workflow at the provided path');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
@@ -64,7 +64,7 @@ final class WorkflowRunCommand extends Console\Command\Command
         if (!file_exists('workflow.php')) {
             $style->error('The provided path does not contain a workflow, did you mean to run "run:pipeline"?');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
         /** @var callable(runtime: WorkflowRuntimeInterface): \Runtime $workflow */
         $workflow = include 'workflow.php';
@@ -80,7 +80,7 @@ final class WorkflowRunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 
     private function formatTime(float $time): string

@@ -27,7 +27,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
-        $this->configuration = new Configuration();
+        $this->configuration = new Custom\Configuration();
     }
 
     public function interpreter(): ExpressionLanguage

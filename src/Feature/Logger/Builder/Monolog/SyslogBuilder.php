@@ -13,7 +13,9 @@ final class SyslogBuilder implements MonologBuilderInterface
     private ?int $logopts = null;
     private iterable $formatters = [];
 
-    public function __construct(private readonly string $ident) {}
+    public function __construct(private readonly string $ident)
+    {
+    }
 
     public function withLevel(string $level): self
     {

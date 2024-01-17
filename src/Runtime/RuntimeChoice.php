@@ -14,9 +14,10 @@ final readonly class RuntimeChoice
         private FactoryInterface $service,
         private Satellite\Adapter\AdapterChoice $adapterChoice,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
-    public function __invoke(array $configuration): RuntimeInterface
+    public function __invoke(array $configuration): Satellite\Runtime\RuntimeInterface
     {
         $satellite = ($this->adapterChoice)($configuration)->build();
 
