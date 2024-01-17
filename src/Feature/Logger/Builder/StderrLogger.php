@@ -15,7 +15,7 @@ final class StderrLogger implements Builder
             class: new Node\Stmt\Class_(
                 name: null,
                 subNodes: [
-                    'extends' => new Node\Name\FullyQualified(\Psr\Log\AbstractLogger::class),
+                    'extends' => new Node\Name\FullyQualified('Psr\\Log\\AbstractLogger'),
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
                             name: new Node\Identifier(name: 'log'),

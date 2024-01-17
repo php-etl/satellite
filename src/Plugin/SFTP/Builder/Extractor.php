@@ -87,7 +87,7 @@ final class Extractor implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\LoaderInterface::class),
+                        new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\LoaderInterface'),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
@@ -135,7 +135,7 @@ final class Extractor implements StepBuilderInterface
                                                 new Node\Expr\Assign(
                                                     var: new Node\Expr\Variable('bucket'),
                                                     expr: new Node\Expr\New_(
-                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\ComplexResultBucket::class)
+                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\ComplexResultBucket')
                                                     )
                                                 )
                                             ),
