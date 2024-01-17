@@ -128,7 +128,7 @@ final readonly class Workflow implements WorkflowInterface
         );
     }
 
-    public static function fromApiWithId(Api\Client $client, WorkflowId $id): DTO\ReferencedWorkflow
+    public static function fromApiWithId(Api\Client $client, WorkflowId $id): ReferencedWorkflow
     {
         /** @var Api\Model\WorkflowJsonldRead|Api\Model\WorkflowRead $item */
         $item = $client->getWorkflowItem($id->asString());
@@ -145,7 +145,7 @@ final readonly class Workflow implements WorkflowInterface
         );
     }
 
-    public static function fromApiWithCode(Api\Client $client, string $code): DTO\ReferencedWorkflow
+    public static function fromApiWithCode(Api\Client $client, string $code): ReferencedWorkflow
     {
         $collection = $client->getWorkflowCollection(['code' => $code]);
 
@@ -258,7 +258,7 @@ final readonly class Workflow implements WorkflowInterface
         );
     }
 
-    public function update(DTO\ReferencedWorkflow $actual, DTO\SatelliteInterface&DTO\WorkflowInterface $desired): DTO\CommandBatch
+    public function update(ReferencedWorkflow $actual, DTO\SatelliteInterface&DTO\WorkflowInterface $desired): DTO\CommandBatch
     {
         if ($actual->code() !== $desired->code()) {
             throw new \RuntimeException('Code does not match between actual and desired workflow definition.');
@@ -273,7 +273,7 @@ final readonly class Workflow implements WorkflowInterface
         return new DTO\CommandBatch(...$commands);
     }
 
-    public function remove(DTO\WorkflowId $id): DTO\CommandBatch
+    public function remove(WorkflowId $id): DTO\CommandBatch
     {
         return new DTO\CommandBatch(
             new Command\Workflow\RemoveWorkflowCommand($id),

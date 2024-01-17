@@ -10,7 +10,7 @@ use Kiboko\Component\Satellite\Cloud;
 final readonly class RemoveWorkflowCommandHandler
 {
     public function __construct(
-        private \Gyroscops\Api\Client $client,
+        private Api\Client $client,
     ) {
     }
 
