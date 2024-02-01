@@ -95,7 +95,7 @@ final class Reject implements StepBuilderInterface
         return new Node\Expr\New_(
             class: new Node\Stmt\Class_(null, [
                 'implements' => [
-                    new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\TransformerInterface::class),
+                    new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
                 ],
                 'stmts' => [
                     (new Builder\Method('transform'))
