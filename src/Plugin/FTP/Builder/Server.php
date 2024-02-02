@@ -18,7 +18,9 @@ final class Server implements StepBuilderInterface
     private ?Node\Expr $passiveMode = null;
     private ?Node\Expr $basePath = null;
 
-    public function __construct(private readonly Node\Expr $host, private ?Node\Expr $port = null, private ?Node\Expr $timeout = null) {}
+    public function __construct(private readonly Node\Expr $host, private ?Node\Expr $port = null, private ?Node\Expr $timeout = null)
+    {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {

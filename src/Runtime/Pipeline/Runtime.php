@@ -17,7 +17,8 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
     public function __construct(
         private array $config,
         private string $filename = 'pipeline.php'
-    ) {}
+    ) {
+    }
 
     public function getFilename(): string
     {
@@ -51,7 +52,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Pipeline\PipelineRuntimeInterface::class),
+                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Pipeline\\PipelineRuntimeInterface'),
                             ),
                         ],
                         'stmts' => [

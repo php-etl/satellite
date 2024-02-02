@@ -18,7 +18,8 @@ final class Action implements ActionBuilderInterface
         private readonly Node\Expr $password,
         private readonly Node\Expr $localFilePath,
         private readonly Node\Expr $serverFilePath,
-    ) {}
+    ) {
+    }
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -37,7 +38,7 @@ final class Action implements ActionBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\Component\Action\Flow\SFTP\UploadFile'),
+            class: new Node\Name\FullyQualified('Kiboko\\Component\\Action\\Flow\\SFTP\\UploadFile'),
             args: [
                 new Node\Arg(
                     value: $this->host,

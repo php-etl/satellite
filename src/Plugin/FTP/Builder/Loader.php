@@ -21,7 +21,9 @@ final class Loader implements StepBuilderInterface
     private iterable $putStatements = [];
     private array $serversMapping = [];
 
-    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
+    }
 
     public function addServerBasePath(Node\Expr $base_path): void
     {
@@ -111,7 +113,7 @@ final class Loader implements StepBuilderInterface
                                 new Node\Expr\ArrayDimFetch(
                                     new Node\Expr\PropertyFetch(
                                         new Node\Expr\Variable('this'),
-                                        new Node\Identifier('servers')
+                                        new Identifier('servers')
                                     ),
                                     new Node\Scalar\LNumber($index),
                                 ),
@@ -122,7 +124,7 @@ final class Loader implements StepBuilderInterface
                                         new Node\Expr\ArrayDimFetch(
                                             new Node\Expr\PropertyFetch(
                                                 new Node\Expr\Variable('this'),
-                                                new Node\Identifier('serversMapping')
+                                                new Identifier('serversMapping')
                                             ),
                                             dim: new Node\Scalar\LNumber($index),
                                         ),
@@ -216,17 +218,17 @@ final class Loader implements StepBuilderInterface
                 name: null,
                 subNodes: [
                     'implements' => [
-                        new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\LoaderInterface::class),
+                        new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\LoaderInterface'),
                     ],
                     'stmts' => [
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('__construct'),
+                            name: new Identifier('__construct'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'params' => [
                                     new Node\Param(
                                         var: new Node\Expr\Variable('logger'),
-                                        type: new Node\Name\FullyQualified(name: \Psr\Log\LoggerInterface::class),
+                                        type: new Node\Name\FullyQualified(name: 'Psr\\Log\\LoggerInterface'),
                                         flags: Node\Stmt\Class_::MODIFIER_PRIVATE,
                                     ),
                                 ],
@@ -253,7 +255,7 @@ final class Loader implements StepBuilderInterface
                                                 new Node\Expr\ArrayDimFetch(
                                                     new Node\Expr\PropertyFetch(
                                                         new Node\Expr\Variable('this'),
-                                                        new Node\Identifier('servers')
+                                                        new Identifier('servers')
                                                     ),
                                                     new Node\Scalar\LNumber($index),
                                                 ),
@@ -267,7 +269,7 @@ final class Loader implements StepBuilderInterface
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('load'),
+                            name: new Identifier('load'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'stmts' => [
@@ -289,7 +291,7 @@ final class Loader implements StepBuilderInterface
                                                 new Node\Expr\Assign(
                                                     var: new Node\Expr\Variable('bucket'),
                                                     expr: new Node\Expr\New_(
-                                                        class: new Node\Name\FullyQualified(\Kiboko\Component\Bucket\ComplexResultBucket::class)
+                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\ComplexResultBucket')
                                                     )
                                                 )
                                             ),
@@ -313,7 +315,7 @@ final class Loader implements StepBuilderInterface
                             ],
                         ),
                         new Node\Stmt\ClassMethod(
-                            name: new Node\Identifier('createDirectories'),
+                            name: new Identifier('createDirectories'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
                                 'returnType' => new Node\Expr\ConstFetch(new Node\Name('void')),
@@ -508,7 +510,7 @@ final class Loader implements StepBuilderInterface
                 ],
             ),
             args: [
-                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified(\Psr\Log\NullLogger::class))),
+                new Node\Arg(value: $this->logger ?? new Node\Expr\New_(new Node\Name\FullyQualified('Psr\\Log\\NullLogger'))),
             ]
         );
     }
@@ -526,7 +528,7 @@ final class Loader implements StepBuilderInterface
                             new Node\Expr\ArrayDimFetch(
                                 var: new Node\Expr\PropertyFetch(
                                     var: new Node\Expr\Variable('this'),
-                                    name: new Node\Identifier('servers')
+                                    name: new Identifier('servers')
                                 ),
                                 dim: new Node\Scalar\LNumber($key),
                             ),

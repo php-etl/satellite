@@ -20,7 +20,8 @@ final class RabbitMQBuilder implements Builder
         private readonly Node\Expr $port,
         private readonly Node\Expr $vhost,
         private readonly Node\Expr $topic,
-    ) {}
+    ) {
+    }
 
     public function withAuthentication(
         Node\Expr $user,
@@ -43,25 +44,25 @@ final class RabbitMQBuilder implements Builder
     public function getNode(): Node\Expr
     {
         $args = [
-            new Node\Arg($this->host, name: new Node\Identifier('host')),
-            new Node\Arg($this->vhost, name: new Node\Identifier('vhost')),
-            new Node\Arg($this->topic, name: new Node\Identifier('topic')),
-            new Node\Arg($this->stepUuid, name: new Node\Identifier('stepUuid')),
+            new Node\Arg($this->host, name: new Identifier('host')),
+            new Node\Arg($this->vhost, name: new Identifier('vhost')),
+            new Node\Arg($this->topic, name: new Identifier('topic')),
+            new Node\Arg($this->stepUuid, name: new Identifier('stepUuid')),
         ];
 
         if (null !== $this->exchange) {
-            $args[] = new Node\Arg($this->exchange, name: new Node\Identifier('exchange'));
+            $args[] = new Node\Arg($this->exchange, name: new Identifier('exchange'));
         }
 
         if (null !== $this->port) {
-            $args[] = new Node\Arg($this->port, name: new Node\Identifier('port'));
+            $args[] = new Node\Arg($this->port, name: new Identifier('port'));
         }
 
         if (null !== $this->user) {
             array_push(
                 $args,
-                new Node\Arg($this->user, name: new Node\Identifier('user')),
-                new Node\Arg($this->password, name: new Node\Identifier('password')),
+                new Node\Arg($this->user, name: new Identifier('user')),
+                new Node\Arg($this->password, name: new Identifier('password')),
             );
 
             return new Node\Expr\StaticCall(

@@ -10,7 +10,8 @@ final readonly class AddedPipelineComposerPSR4Autoload
         private string $id,
         private string $namespace,
         private array $paths,
-    ) {}
+    ) {
+    }
 
     public function getId(): string
     {

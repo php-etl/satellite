@@ -15,15 +15,15 @@ final class APIRuntime
             args: [
                 new Node\Arg(
                     value: new Node\Expr\New_(
-                        class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\Pipeline::class),
+                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\Pipeline'),
                         args: [
                             new Node\Arg(
                                 value: new Node\Expr\New_(
-                                    class: new Node\Name\FullyQualified(\Kiboko\Component\Pipeline\PipelineRunner::class),
+                                    class: new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\PipelineRunner'),
                                     args: [
                                         new Node\Arg(
                                             value: new Node\Expr\New_(
-                                                class: new Node\Name\FullyQualified(\Psr\Log\NullLogger::class)
+                                                class: new Node\Name\FullyQualified('Psr\\Log\\NullLogger')
                                             )
                                         ),
                                     ]

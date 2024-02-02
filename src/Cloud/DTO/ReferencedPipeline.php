@@ -9,7 +9,8 @@ final readonly class ReferencedPipeline implements PipelineInterface
     public function __construct(
         private PipelineId $id,
         private Pipeline $decorated,
-    ) {}
+    ) {
+    }
 
     public function id(): PipelineId
     {

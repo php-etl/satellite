@@ -15,7 +15,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Extractor implements StepInterface
 {
-    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(private ?string $plugin, private ?string $key, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
+    }
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
@@ -33,7 +35,7 @@ final readonly class Extractor implements StepInterface
             $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
+                new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
             );
         }
 
@@ -45,7 +47,7 @@ final readonly class Extractor implements StepInterface
             $rejection = $compiled->getBuilder()->getNode();
         } else {
             $rejection = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullRejection::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullRejection'),
             );
         }
 
@@ -57,7 +59,7 @@ final readonly class Extractor implements StepInterface
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Pipeline\NullState::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullState'),
             );
         }
 

@@ -9,7 +9,9 @@ use PhpParser\Node;
 
 final readonly class ActionBuilder implements Builder
 {
-    public function __construct(private Builder $builder) {}
+    public function __construct(private Builder $builder)
+    {
+    }
 
     public function getNode(): Node\Expr
     {
@@ -19,7 +21,7 @@ final readonly class ActionBuilder implements Builder
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
-                        type: new Node\Name\FullyQualified(\Kiboko\Component\Runtime\Action\ActionRuntimeInterface::class),
+                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Action\\ActionRuntimeInterface'),
                     ),
                 ],
                 'stmts' => [

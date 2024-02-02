@@ -15,7 +15,7 @@ final class ComposerScripts
     public static function postInstall(Event $event): void
     {
         self::updatePlugins(
-            $packages = new Composer\Accumulator(),
+            $packages = new Accumulator(),
             $repository = $event->getComposer()
                 ->getRepositoryManager()
                 ->getLocalRepository(),
@@ -26,7 +26,7 @@ final class ComposerScripts
     public static function postUpdate(Event $event): void
     {
         self::updatePlugins(
-            $packages = new Composer\Accumulator(),
+            $packages = new Accumulator(),
             $repository = $event->getComposer()
                 ->getRepositoryManager()
                 ->getLocalRepository(),

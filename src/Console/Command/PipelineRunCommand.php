@@ -33,7 +33,7 @@ final class PipelineRunCommand extends Console\Command\Command
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled pipeline at the provided path');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
 
         $cwd = getcwd();
@@ -69,7 +69,7 @@ final class PipelineRunCommand extends Console\Command\Command
         if (!file_exists('pipeline.php')) {
             $style->error('The provided path does not contain one single pipeline, did you mean to run "run:workflow"?');
 
-            return \Symfony\Component\Console\Command\Command::FAILURE;
+            return Console\Command\Command::FAILURE;
         }
         /** @var callable(runtime: PipelineRuntimeInterface): \Runtime $pipeline */
         $pipeline = include 'pipeline.php';
@@ -85,7 +85,7 @@ final class PipelineRunCommand extends Console\Command\Command
 
         chdir($cwd);
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 
     private function formatTime(float $time): string

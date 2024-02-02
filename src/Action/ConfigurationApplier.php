@@ -10,18 +10,19 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ConfigurationApplier
 {
-    private ?Action $action = null;
+    private ?Satellite\Action\Action $action = null;
     private array $packages = [];
 
     public function __construct(
         private readonly string $plugin,
         private readonly FactoryInterface $service,
         private readonly ExpressionLanguage $interpreter,
-    ) {}
+    ) {
+    }
 
     public function withAction(): self
     {
-        $this->action = new Action($this->plugin, clone $this->interpreter);
+        $this->action = new Satellite\Action\Action($this->plugin, clone $this->interpreter);
 
         return $this;
     }

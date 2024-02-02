@@ -8,7 +8,8 @@ final readonly class PipelineId implements \Stringable
 {
     public function __construct(
         private string $reference,
-    ) {}
+    ) {
+    }
 
     public function asString(): string
     {

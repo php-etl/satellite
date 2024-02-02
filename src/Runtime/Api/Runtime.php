@@ -14,7 +14,9 @@ use Psr\Log\LoggerInterface;
 
 final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 {
-    public function __construct(private array $config, private string $filename = 'api.php') {}
+    public function __construct(private array $config, private string $filename = 'api.php')
+    {
+    }
 
     public function getFilename(): string
     {
@@ -243,7 +245,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('request'),
-                        type: new Node\Name\FullyQualified(\Psr\Http\Message\RequestInterface::class),
+                        type: new Node\Name\FullyQualified('Psr\\Http\\Message\\RequestInterface'),
                     ),
                 ],
                 'uses' => [
@@ -254,7 +256,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                     new Node\Stmt\Expression(
                         expr: new Node\Expr\Assign(
                             var: new Node\Expr\Variable('interpreter'),
-                            expr: new Node\Expr\New_(new Node\Name(\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)),
+                            expr: new Node\Expr\New_(new Node\Name('Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage')),
                         ),
                     ),
                     new Node\Stmt\Expression(

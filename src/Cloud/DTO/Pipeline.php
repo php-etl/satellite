@@ -14,7 +14,8 @@ final readonly class Pipeline implements PipelineInterface
         private PackageList $packages,
         private RepositoryList $repositories,
         private AuthList $auths,
-    ) {}
+    ) {
+    }
 
     public function code(): string
     {

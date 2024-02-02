@@ -11,12 +11,12 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 final readonly class Configuration implements Configurator\RuntimeConfigurationInterface
 {
     private Satellite\Runtime\Pipeline\Configuration $pipelineConfiguration;
-    private Satellite\Runtime\Workflow\Action\Configuration $actionConfiguration;
+    private Action\Configuration $actionConfiguration;
 
     public function __construct()
     {
         $this->pipelineConfiguration = new Satellite\Runtime\Pipeline\Configuration();
-        $this->actionConfiguration = new Satellite\Runtime\Workflow\Action\Configuration();
+        $this->actionConfiguration = new Action\Configuration();
     }
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self

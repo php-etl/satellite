@@ -111,7 +111,8 @@ final class BuildCommand extends Console\Command\Command
                     new class($output) extends Log\AbstractLogger {
                         public function __construct(
                             private readonly Console\Output\OutputInterface $output,
-                        ) {}
+                        ) {
+                        }
 
                         public function log($level, $message, array $context = []): void
                         {
@@ -125,6 +126,6 @@ final class BuildCommand extends Console\Command\Command
             }
         }
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Console\Command\Command::SUCCESS;
     }
 }

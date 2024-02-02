@@ -13,7 +13,8 @@ final class Action implements Builder
 
     public function __construct(
         private readonly Node\Expr $runtime,
-    ) {}
+    ) {
+    }
 
     public function addAction(
         Builder|Node\Expr $loader,

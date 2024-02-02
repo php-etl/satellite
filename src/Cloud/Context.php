@@ -14,7 +14,8 @@ final readonly class Context
         private Api\Client $client,
         private Auth $auth,
         private string $url,
-    ) {}
+    ) {
+    }
 
     public function changeOrganization(OrganizationId $organization): void
     {

@@ -15,7 +15,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final readonly class Action
 {
-    public function __construct(private ?string $plugin, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()) {}
+    public function __construct(private ?string $plugin, private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
+    {
+    }
 
     public function __invoke(array $config, ActionBuilder $action, RepositoryInterface $repository): void
     {
@@ -31,7 +33,7 @@ final readonly class Action
             $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Psr\Log\NullLogger::class),
+                new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
             );
         }
 
@@ -43,7 +45,7 @@ final readonly class Action
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified(\Kiboko\Contract\Action\NullState::class),
+                new Node\Name\FullyQualified('Kiboko\\Contract\\Action\\NullState'),
             );
         }
 

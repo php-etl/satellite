@@ -10,7 +10,9 @@ use Kiboko\Contract\Packaging;
 
 final readonly class Repository implements Configurator\StepRepositoryInterface
 {
-    public function __construct(private Builder\Loader|Builder\Server $builder) {}
+    public function __construct(private Builder\Loader|Builder\Server $builder)
+    {
+    }
 
     public function addFiles(Packaging\DirectoryInterface|Packaging\FileInterface ...$files): self
     {
