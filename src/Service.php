@@ -257,7 +257,7 @@ final class Service implements Configurator\FactoryInterface
                     /** @var WorkflowRuntimeInterface $runtime */
                     $runtime = require __DIR__ . '/runtime.php';
                     
-                    /** @var callable(runtime: WorkflowConsoleRuntime): WorkflowConsoleRuntime $workflow */
+                    /** @var callable(runtime: WorkflowRuntimeInterface): WorkflowRuntimeInterface $workflow */
                     $workflow = require __DIR__ . '/workflow.php';
                     
                     chdir(__DIR__);
