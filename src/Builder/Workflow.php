@@ -87,7 +87,7 @@ final class Workflow implements Builder
                         args: [
                             new Node\Arg(
                                 new Node\Expr\StaticCall(
-                                    new Node\Name\FullyQualified('Kiboko\\Component\\Workflow\\JobCode'),
+                                    new Node\Name\FullyQualified('Kiboko\\Contract\\Satellite\\CodeInterface'),
                                     new Node\Identifier('fromString'),
                                     [
                                         new Node\Arg(new Node\Scalar\String_($code)),
