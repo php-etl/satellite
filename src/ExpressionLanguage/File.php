@@ -14,7 +14,7 @@ final class File extends ExpressionFunction
             $name,
             function (string $value): string {
                 $pattern = <<<'PHP'
-                    (function () {
+                    (function () use ($input) {
                         $resource = \tmpfile();
                         if ($resource === false) {
                             throw new \RuntimeException('Could not open temporary file.');
