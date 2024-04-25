@@ -14,7 +14,7 @@ final class TemporaryFile extends ExpressionFunction
             $name,
             function (string $value): string {
                 $pattern = <<<'PHP'
-                    (function ($data) {
+                    (function ($data) use ($input) {
                         if (!is_string($data)) {
                             return null;
                         }
@@ -22,7 +22,7 @@ final class TemporaryFile extends ExpressionFunction
                         fwrite($stream, $data);
                         fseek($stream, 0, SEEK_SET);
                         return $stream;
-                    })(%s);
+                    })(%s)
                     PHP;
 
                 return sprintf($pattern, $value);
