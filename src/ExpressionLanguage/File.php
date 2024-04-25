@@ -24,7 +24,7 @@ final class File extends ExpressionFunction
                         \fseek($resource, 0, \SEEK_SET);
 
                         return \stream_get_meta_data($resource)['uri'];
-                    })();
+                    })()
                     PHP;
 
                 return sprintf($pattern, $value);
