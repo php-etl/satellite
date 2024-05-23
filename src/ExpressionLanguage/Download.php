@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
-use PhpSpec\Locator\Resource;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 
 final class Download extends ExpressionFunction
@@ -27,10 +26,11 @@ final class Download extends ExpressionFunction
                 return sprintf($pattern, $value, $context);
             },
             function (string $value, string $context = '') {
-                $resource = fopen($context . $value, 'r');
-                if ($resource === false) {
+                $resource = fopen($context.$value, 'r');
+                if (false === $resource) {
                     throw new \RuntimeException('Could not open file.');
                 }
+
                 return $resource;
             },
         );
