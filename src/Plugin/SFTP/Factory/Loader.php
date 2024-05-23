@@ -63,7 +63,7 @@ class Loader implements Configurator\FactoryInterface
             && \is_array($config['loader']['servers'])
         ) {
             foreach ($config['loader']['servers'] as $server) {
-                $serverFactory = new SFTP\Factory\Server($this->interpreter);
+                $serverFactory = new Server($this->interpreter);
 
                 $loader = $serverFactory->compile($server);
                 $serverBuilder = $loader->getBuilder();

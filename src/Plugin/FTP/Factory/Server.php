@@ -54,7 +54,7 @@ class Server implements Configurator\FactoryInterface
         }
     }
 
-    public function compile(array $config): FTP\Factory\Repository\Repository
+    public function compile(array $config): Repository\Repository
     {
         $builder = new FTP\Builder\Server(compileValueWhenExpression($this->interpreter, $config['host']), compileValueWhenExpression($this->interpreter, $config['port']), compileValueWhenExpression($this->interpreter, $config['timeout']));
 
@@ -74,7 +74,7 @@ class Server implements Configurator\FactoryInterface
         $builder->withPassiveMode(compileValueWhenExpression($this->interpreter, $config['passif_mode']));
 
         try {
-            return new FTP\Factory\Repository\Repository($builder);
+            return new Repository\Repository($builder);
         } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException(message: $exception->getMessage(), previous: $exception);
         }

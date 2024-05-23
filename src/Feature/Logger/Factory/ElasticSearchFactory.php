@@ -53,7 +53,7 @@ final readonly class ElasticSearchFactory implements Configurator\FactoryInterfa
         return false;
     }
 
-    public function compile(array $config): Logger\Factory\Repository\ElasticSearchRepository
+    public function compile(array $config): Repository\ElasticSearchRepository
     {
         $builder = new Logger\Builder\Monolog\ElasticSearchBuilder($this->interpreter);
 
@@ -69,6 +69,6 @@ final readonly class ElasticSearchFactory implements Configurator\FactoryInterfa
             $builder->withIndex($config['index']);
         }
 
-        return new Logger\Factory\Repository\ElasticSearchRepository($builder);
+        return new Repository\ElasticSearchRepository($builder);
     }
 }
