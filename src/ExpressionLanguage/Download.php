@@ -15,7 +15,7 @@ final class Download extends ExpressionFunction
             function (string $value, string $context = ''): string {
                 $pattern = <<<'PHP'
                     (function () use($input) {
-                        $resource = \fopen(%s %s, 'r');
+                        $resource = \fopen(%s%s, 'r');
                         if ($resource === false) {
                             throw new \RuntimeException('Could not open file.');
                         }
