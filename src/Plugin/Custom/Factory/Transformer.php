@@ -69,7 +69,7 @@ class Transformer implements Configurator\FactoryInterface
 
         $builder = new Custom\Builder\Transformer(
             compileValueWhenExpression($this->interpreter, $config['use']),
-            sprintf('GyroscopsGenerated\\%s', $containerName),
+            sprintf('GyroscopsGenerated\%s', $containerName),
         );
 
         $container = (new SatelliteDependencyInjection(...$this->providers))($config);
