@@ -6,7 +6,7 @@ namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 
-final class Download extends ExpressionFunction
+final class Open extends ExpressionFunction
 {
     public function __construct(string $name)
     {
