@@ -38,7 +38,7 @@ final class Action implements ActionBuilderInterface
     public function getNode(): Node
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Action\\Flow\\SFTP\\UploadFile'),
+            class: new Node\Name\FullyQualified('Kiboko\Component\Action\Flow\SFTP\UploadFile'),
             args: [
                 new Node\Arg(
                     value: $this->host,

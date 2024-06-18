@@ -11,7 +11,7 @@ final readonly class TestBuilder implements MonologBuilderInterface
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\TestHandler'),
+            class: new Node\Name\FullyQualified('Monolog\Handler\TestHandler'),
         );
     }
 }

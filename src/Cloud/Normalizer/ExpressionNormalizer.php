@@ -9,12 +9,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ExpressionNormalizer implements NormalizerInterface
 {
-    public function normalize(mixed $object, string $format = null, array $context = []): string
+    public function normalize(mixed $object, ?string $format = null, array $context = []): string
     {
         return (string) $object;
     }
 
-    public function supportsNormalization(mixed $data, string $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null): bool
     {
         return $data instanceof Expression;
     }

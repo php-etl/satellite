@@ -21,7 +21,7 @@ final readonly class ActionBuilder implements Builder
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('runtime'),
-                        type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Action\\ActionRuntimeInterface'),
+                        type: new Node\Name\FullyQualified('Kiboko\Component\Runtime\Action\ActionRuntimeInterface'),
                     ),
                 ],
                 'stmts' => [
