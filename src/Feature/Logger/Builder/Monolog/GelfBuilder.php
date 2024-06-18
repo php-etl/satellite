@@ -68,7 +68,7 @@ final class GelfBuilder implements MonologBuilderInterface
         if (null !== $this->level) {
             $arguments[] = new Node\Arg(
                 value: new Node\Expr\New_(
-                    class: new Node\Name\FullyQualified('Gelf\\Publisher'),
+                    class: new Node\Name\FullyQualified('Gelf\Publisher'),
                     args: [
                         new Node\Arg(
                             value: $this->buildTransport(),
@@ -81,7 +81,7 @@ final class GelfBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\GelfHandler'),
+            class: new Node\Name\FullyQualified('Monolog\Handler\GelfHandler'),
             args: $arguments,
         );
 
@@ -126,7 +126,7 @@ final class GelfBuilder implements MonologBuilderInterface
         }
 
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Gelf\\Transport\\TcpTransport'),
+            class: new Node\Name\FullyQualified('Gelf\Transport\TcpTransport'),
             args: $arguments,
         );
     }
@@ -202,7 +202,7 @@ final class GelfBuilder implements MonologBuilderInterface
 
                     new Node\Stmt\Return_(
                         new Node\Expr\New_(
-                            class: new Node\Name\FullyQualified('Gelf\\Transport\\AmqpTransport'),
+                            class: new Node\Name\FullyQualified('Gelf\Transport\AmqpTransport'),
                             args: [
                                 new Node\Arg(
                                     value: new Node\Expr\New_(
