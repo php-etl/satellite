@@ -17,6 +17,7 @@ final class Provider implements ExpressionFunctionProviderInterface
             new Base64Decode('base64Decode'),
             new TemporaryFile('temporaryFile'),
             new InSql('inSql'),
+            new Open('open'),
         ];
     }
 }

@@ -35,7 +35,7 @@ final readonly class Transformer implements StepInterface
             $logger = $compiled->getBuilder()->getNode();
         } else {
             $logger = new Node\Expr\New_(
-                new Node\Name\FullyQualified('Psr\\Log\\NullLogger'),
+                new Node\Name\FullyQualified('Psr\Log\NullLogger'),
             );
         }
 
@@ -47,7 +47,7 @@ final readonly class Transformer implements StepInterface
             $rejection = $compiled->getBuilder()->getNode();
         } else {
             $rejection = new Node\Expr\New_(
-                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullRejection'),
+                new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\NullRejection'),
             );
         }
 
@@ -59,7 +59,7 @@ final readonly class Transformer implements StepInterface
             $state = $compiled->getBuilder()->getNode();
         } else {
             $state = new Node\Expr\New_(
-                new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\NullState'),
+                new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\NullState'),
             );
         }
 

@@ -51,7 +51,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\Hook\\HookRuntime'),
+                                type: new Node\Name\FullyQualified('Kiboko\Component\Runtime\Hook\HookRuntime'),
                             ),
                         ],
                         'stmts' => $this->buildHookClosure($builder),
@@ -73,12 +73,12 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                     type: Node\Expr\Include_::TYPE_REQUIRE
                 ),
             ),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\BasePath'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Utils\\Dispatcher'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Uuid'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\BasePath'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\Utils\Dispatcher'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\Uuid'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\Psr7'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\Psr7Server'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\HttpHandlerRunner\Emitter\SapiEmitter'))]),
         ];
     }
 
@@ -88,14 +88,14 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
             new Node\Stmt\Expression(
                 expr: new Node\Expr\Assign(
                     var: new Node\Expr\Variable('psr17Factory'),
-                    expr: new Node\Expr\New_(new Node\Name('Psr7\\Factory\\Psr17Factory')),
+                    expr: new Node\Expr\New_(new Node\Name('Psr7\Factory\Psr17Factory')),
                 ),
             ),
             new Node\Stmt\Expression(
                 expr: new Node\Expr\Assign(
                     var: new Node\Expr\Variable('creator'),
                     expr: new Node\Expr\New_(
-                        class: new Node\Name('Psr7Server\\ServerRequestCreator'),
+                        class: new Node\Name('Psr7Server\ServerRequestCreator'),
                         args: [
                             new Node\Arg(new Node\Expr\Variable('psr17Factory')),
                             new Node\Arg(new Node\Expr\Variable('psr17Factory')),

@@ -53,14 +53,14 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                 ),
             ),
             new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('FastRoute'), 'NikiFastRoute')]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\FastRoute'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Utils\\Dispatcher'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\Uuid'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\BasePath'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\\RequestHandler'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\\Psr7Server'))]),
-            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\\HttpHandlerRunner\\Emitter\\SapiEmitter'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\FastRoute'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\Utils\Dispatcher'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\Uuid'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\BasePath'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Middlewares\RequestHandler'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\Psr7'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Nyholm\Psr7Server'))]),
+            new Node\Stmt\Use_([new Node\Stmt\UseUse(new Node\Name('Laminas\HttpHandlerRunner\Emitter\SapiEmitter'))]),
 
             new Node\Stmt\Return_(
                 new Node\Expr\Closure(
@@ -69,7 +69,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                         'params' => [
                             new Node\Param(
                                 var: new Node\Expr\Variable('runtime'),
-                                type: new Node\Name\FullyQualified('Kiboko\\Component\\Runtime\\API\\APIRuntime'),
+                                type: new Node\Name\FullyQualified('Kiboko\Component\Runtime\API\APIRuntime'),
                             ),
                         ],
                         'stmts' => $this->buildAPIClosure($builder),
@@ -85,14 +85,14 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
             new Node\Stmt\Expression(
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('psr17Factory'),
-                    new Node\Expr\New_(new Node\Name('Psr7\\Factory\\Psr17Factory')),
+                    new Node\Expr\New_(new Node\Name('Psr7\Factory\Psr17Factory')),
                 ),
             ),
             new Node\Stmt\Expression(
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('creator'),
                     new Node\Expr\New_(
-                        new Node\Name('Psr7Server\\ServerRequestCreator'),
+                        new Node\Name('Psr7Server\ServerRequestCreator'),
                         [
                             new Node\Arg(new Node\Expr\Variable('psr17Factory')),
                             new Node\Arg(new Node\Expr\Variable('psr17Factory')),
@@ -116,7 +116,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                 new Node\Expr\Assign(
                     new Node\Expr\Variable('fastRouteDispatcher'),
                     new Node\Expr\FuncCall(
-                        new Node\Name('NikiFastRoute\\simpleDispatcher'),
+                        new Node\Name('NikiFastRoute\simpleDispatcher'),
                         [
                             new Node\Arg(
                                 new Node\Expr\Closure([
@@ -124,7 +124,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                                         new Node\Param(
                                             new Node\Expr\Variable('router'),
                                             null,
-                                            new Node\Name('NikiFastRoute\\RouteCollector')
+                                            new Node\Name('NikiFastRoute\RouteCollector')
                                         ),
                                     ],
                                     'uses' => [
@@ -245,7 +245,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                 'params' => [
                     new Node\Param(
                         var: new Node\Expr\Variable('request'),
-                        type: new Node\Name\FullyQualified('Psr\\Http\\Message\\RequestInterface'),
+                        type: new Node\Name\FullyQualified('Psr\Http\Message\RequestInterface'),
                     ),
                 ],
                 'uses' => [
@@ -256,7 +256,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                     new Node\Stmt\Expression(
                         expr: new Node\Expr\Assign(
                             var: new Node\Expr\Variable('interpreter'),
-                            expr: new Node\Expr\New_(new Node\Name('Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage')),
+                            expr: new Node\Expr\New_(new Node\Name('Symfony\Component\ExpressionLanguage\ExpressionLanguage')),
                         ),
                     ),
                     new Node\Stmt\Expression(

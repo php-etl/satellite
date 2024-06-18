@@ -16,7 +16,7 @@ final readonly class LogstashFormatterBuilder implements Builder
     public function getNode(): Node\Expr
     {
         return new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Formatter\\LogstashFormatter'),
+            class: new Node\Name\FullyQualified('Monolog\Formatter\LogstashFormatter'),
             args: [
                 new Node\Arg(
                     value: new Node\Scalar\String_($this->applicationName),

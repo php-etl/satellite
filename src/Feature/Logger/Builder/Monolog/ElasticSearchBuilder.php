@@ -57,7 +57,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
                 value: new Node\Expr\MethodCall(
                     var: new Node\Expr\MethodCall(
                         var: new Node\Expr\StaticCall(
-                            class: new Node\Name\FullyQualified('Elasticsearch\\ClientBuilder'),
+                            class: new Node\Name\FullyQualified('Elasticsearch\ClientBuilder'),
                             name: new Node\Identifier('create'),
                         ),
                         name: new Node\Identifier('setHosts'),
@@ -98,7 +98,7 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\ElasticsearchHandler'),
+            class: new Node\Name\FullyQualified('Monolog\Handler\ElasticsearchHandler'),
             args: $arguments,
         );
 

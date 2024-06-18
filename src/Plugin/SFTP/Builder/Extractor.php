@@ -137,7 +137,7 @@ final class Extractor implements StepBuilderInterface
                                                 new Node\Expr\Assign(
                                                     var: new Node\Expr\Variable('bucket'),
                                                     expr: new Node\Expr\New_(
-                                                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\ComplexResultBucket')
+                                                        class: new Node\Name\FullyQualified('Kiboko\Component\Bucket\ComplexResultBucket')
                                                     )
                                                 )
                                             ),
