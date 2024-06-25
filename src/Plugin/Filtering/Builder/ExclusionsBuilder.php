@@ -40,6 +40,12 @@ final class ExclusionsBuilder
                                                 name: new Node\Identifier('reason')
                                             ),
                                             new Node\Arg(
+                                                value: new Node\Expr\ConstFetch(
+                                                    name: new Node\Name('null')
+                                                ),
+                                                name: new Node\Identifier('exception')
+                                            ),
+                                            new Node\Arg(
                                                 value: new Node\Expr\Variable('input'),
                                                 name: new Node\Identifier('values')
                                             ),
