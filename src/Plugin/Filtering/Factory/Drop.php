@@ -14,6 +14,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Drop implements Configurator\FactoryInterface
 {
@@ -59,19 +60,25 @@ class Drop implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Filtering\Factory\Repository\Drop
+    public function compile(array $config): Repository\Drop
     {
         $interpreter = clone $this->interpreter;
 
         $builder = new Filtering\Builder\Drop();
 
-        $repository = new Filtering\Factory\Repository\Drop($builder);
+        $repository = new Repository\Drop($builder);
 
+        $exclusionBuilder = new Filtering\Builder\ExclusionsBuilder();
         foreach ($config as $condition) {
-            $builder->withExclusions(
-                compileExpression($interpreter, $condition['when'])
-            );
+            $exclusionBuilder
+                ->withCondition(
+                    compileExpression($interpreter, $condition['when']),
+                    compileValueWhenExpression($interpreter, $condition['reason']),
+                )
+            ;
         }
+
+        $builder->withExclusions(...$exclusionBuilder->build());
 
         return $repository;
     }

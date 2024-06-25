@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Plugin\Filtering\Builder;
 
-use Kiboko\Component\Bucket\AcceptanceResultBucket;
-use Kiboko\Component\Bucket\RejectionResultBucket;
-use Kiboko\Component\Bucket\RejectionWithReasonResultBucket;
 use Kiboko\Contract\Configurator\StepBuilderInterface;
 use PhpParser\Builder;
 use PhpParser\Node;
@@ -16,7 +13,8 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
-    private ?ExclusionsBuilder $exclusions = null;
+    /** @var list<?Node\Expr> */
+    private array $exclusions = [];
 
     public function withLogger(Node\Expr $logger): self
     {
@@ -39,9 +37,9 @@ final class Reject implements StepBuilderInterface
         return $this;
     }
 
-    public function withExclusions(ExclusionsBuilder $builder): self
+    public function withExclusions(Node ...$exclusions): self
     {
-        $this->exclusions = $builder;
+        array_push($this->exclusions, ...$exclusions);
 
         return $this;
     }
@@ -69,7 +67,7 @@ final class Reject implements StepBuilderInterface
                                     new Node\Name('true'),
                                 ),
                                 [
-                                    ...$this->exclusions->getNode(),
+                                    ...$this->exclusions,
                                     new Node\Stmt\Expression(
                                         new Node\Expr\Assign(
                                             new Node\Expr\Variable('input'),
@@ -84,11 +82,6 @@ final class Reject implements StepBuilderInterface
                                         ),
                                     ),
                                 ],
-                            ),
-                            new Node\Stmt\Expression(
-                                new Node\Expr\Yield_(
-                                    new Node\Expr\Variable('input')
-                                ),
                             ),
                         ])
                         ->getNode(),

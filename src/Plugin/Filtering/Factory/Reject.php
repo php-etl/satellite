@@ -60,23 +60,25 @@ class Reject implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Filtering\Factory\Repository\Reject
+    public function compile(array $config): Repository\Reject
     {
         $interpreter = clone $this->interpreter;
 
         $builder = new Filtering\Builder\Reject();
 
-        $repository = new Filtering\Factory\Repository\Reject($builder);
+        $repository = new Repository\Reject($builder);
 
         $exclusionBuilder = new Filtering\Builder\ExclusionsBuilder();
         foreach ($config as $condition) {
             $exclusionBuilder
                 ->withCondition(
                     compileExpression($interpreter, $condition['when']),
-                    \array_key_exists('reason', $condition) ? compileValueWhenExpression($interpreter, $condition['reason']) : null,
-                );
+                    compileValueWhenExpression($interpreter, $condition['reason']),
+                )
+            ;
         }
-        $builder->withExclusions($exclusionBuilder);
+
+        $builder->withExclusions(...$exclusionBuilder->build());
 
         return $repository;
     }
