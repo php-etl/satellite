@@ -23,8 +23,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private iterable $command = [];
     /** @var iterable<string> */
     private iterable $tags = [];
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerJsonFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null;
     /** @var iterable<array<string, string>> */
     private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
@@ -67,7 +67,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withComposerFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
-        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -77,7 +77,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
-        string $destinationPath = null
+        ?string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
@@ -92,7 +92,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
@@ -132,42 +132,42 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withGithubOauthAuthentication(string $token, string $url = 'github.com'): self
+    public function withGithubOauthAuthentication(string $token, string $domain = 'github.com'): self
     {
-        $this->authenticationTokens[$url] = [
+        $this->authenticationTokens[$domain] = [
             'type' => 'github-token',
-            'url' => $url,
-            'token' => $token
+            'url' => $domain,
+            'token' => $token,
         ];
 
         return $this;
     }
 
-    public function withGitlabOauthAuthentication(string $token, string $url = 'gitlab.com'): self
+    public function withGitlabOauthAuthentication(string $token, string $domain = 'gitlab.com'): self
     {
-        $this->authenticationTokens[$url] = [
+        $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-oauth',
-            'url' => $url,
-            'token' => $token
+            'url' => $domain,
+            'token' => $token,
         ];
 
         return $this;
     }
 
-    public function withGitlabTokenAuthentication(string $token, string $url = 'gitlab.com'): self
+    public function withGitlabTokenAuthentication(string $token, string $domain = 'gitlab.com'): self
     {
-        $this->authenticationTokens[$url] = [
+        $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-token',
-            'url' => $url,
-            'token' => $token
+            'url' => $domain,
+            'token' => $token,
         ];
 
         return $this;
     }
 
-    public function withHttpBasicAuthentication(string $url, string $username, string $password): self
+    public function withHttpBasicAuthentication(string $domain, string $username, string $password): self
     {
-        $this->authenticationTokens[$url] = [
+        $this->authenticationTokens[$domain] = [
             'type' => 'http-basic',
             'username' => $username,
             'password' => $password,
@@ -176,11 +176,11 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withHttpBearerAuthentication(string $url, string $token): self
+    public function withHttpBearerAuthentication(string $domain, string $token): self
     {
-        $this->authenticationTokens[$url] = [
+        $this->authenticationTokens[$domain] = [
             'type' => 'http-bearer',
-            'token' => $token
+            'token' => $token,
         ];
 
         return $this;
