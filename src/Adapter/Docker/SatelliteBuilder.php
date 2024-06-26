@@ -132,6 +132,60 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
+    public function withGithubOauthAuthentication(string $token, string $url = 'github.com'): self
+    {
+        $this->authenticationTokens[$url] = [
+            'type' => 'github-token',
+            'url' => $url,
+            'token' => $token
+        ];
+
+        return $this;
+    }
+
+    public function withGitlabOauthAuthentication(string $token, string $url = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$url] = [
+            'type' => 'gitlab-oauth',
+            'url' => $url,
+            'token' => $token
+        ];
+
+        return $this;
+    }
+
+    public function withGitlabTokenAuthentication(string $token, string $url = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$url] = [
+            'type' => 'gitlab-token',
+            'url' => $url,
+            'token' => $token
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBasicAuthentication(string $url, string $username, string $password): self
+    {
+        $this->authenticationTokens[$url] = [
+            'type' => 'http-basic',
+            'username' => $username,
+            'password' => $password,
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBearerAuthentication(string $url, string $token): self
+    {
+        $this->authenticationTokens[$url] = [
+            'type' => 'http-bearer',
+            'token' => $token
+        ];
+
+        return $this;
+    }
+
     public function withTags(string ...$tags): self
     {
         $this->tags = $tags;
@@ -201,8 +255,15 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         }
 
         if (\count($this->authenticationTokens) > 0) {
-            foreach ($this->authenticationTokens as $url => $token) {
-                $dockerfile->push(new Dockerfile\PHP\ComposerAuthenticationToken($url, $token));
+            foreach ($this->authenticationTokens as $url => $authentication) {
+                match ($authentication['type']) {
+                    'gitlab-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabOauthAuthentication($authentication['token'])),
+                    'gitlab-token' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabTokenAuthentication($authentication['token'])),
+                    'github-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGithubOauthAuthentication($authentication['token'])),
+                    'http-basic' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBasicAuthentication($url, $authentication['username'], $authentication['password'])),
+                    'http-bearer' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBearerAuthentication($url, $authentication['token'])),
+                    default => new \LogicException(),
+                };
             }
         }
 

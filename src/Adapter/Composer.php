@@ -219,4 +219,61 @@ final class Composer
             $token
         );
     }
+
+    public function addGitlabOauthAuthentication(string $token, string $url = 'gitlab.com'): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            sprintf('gitlab-oauth.%s', $url),
+            'token',
+            $token
+        );
+    }
+
+    public function addGitlabTokenAuthentication(string $token, string $url = 'gitlab.com'): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            sprintf('gitlab-token.%s', $url),
+            $token
+        );
+    }
+
+    public function addGithubOauthAuthentication(string $token): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            'github-oauth.github.com',
+            $token
+        );
+    }
+
+    public function addHttpBasicAuthentication(string $url, string $username, string $password): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            sprintf('http-basic.%s', $url),
+            $username,
+            $password,
+        );
+    }
+
+    public function addHttpBearerAuthentication(string $url, string $token): void
+    {
+        $this->command(
+            'composer',
+            'config',
+            '--auth',
+            sprintf('bearer.%s', $url),
+            $token
+        );
+    }
 }

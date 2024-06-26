@@ -106,6 +106,62 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
+    public function withGitlabOauthAuthentication(string $token, string $domain = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'gitlab-oauth',
+            'url' => $domain,
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withGitlabTokenAuthentication(string $token, string $domain = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'gitlab-token',
+            'url' => $domain,
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withGithubOauthAuthentication(string $token, string $domain = 'github.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'github-oauth',
+            'url' => $domain,
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBasicAuthentication(string $domain, string $username, string $password): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'http-basic',
+            'url' => $domain,
+            'username' => $username,
+            'password' => $password,
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBearerAuthentication(string $domain, string $token): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'http-basic',
+            'url' => $domain,
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
     public function build(): Configurator\SatelliteInterface
     {
         if (!file_exists($this->workdir)) {
@@ -153,8 +209,15 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         }
 
         if (\count($this->authenticationTokens) > 0) {
-            foreach ($this->authenticationTokens as $url => $token) {
-                $composer->addAuthenticationToken($url, $token);
+            foreach ($this->authenticationTokens as $url => $authentication) {
+                match ($authentication['type']) {
+                    'gitlab-oauth' => $composer->addGitlabOauthAuthentication($authentication['token']),
+                    'gitlab-token' => $composer->addGitlabTokenAuthentication($authentication['token']),
+                    'github-oauth' => $composer->addGithubOauthAuthentication($authentication['token']),
+                    'http-basic' => $composer->addHttpBasicAuthentication($url, $authentication['username'], $authentication['password']),
+                    'http-bearer' => $composer->addHttpBearerAuthentication($url, $authentication['token']),
+                    default => $composer->addAuthenticationToken($url, $authentication['token']),
+                };
             }
         }
 
