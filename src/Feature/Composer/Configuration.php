@@ -75,9 +75,9 @@ final class Configuration implements FeatureConfigurationInterface
                         ->always(function ($value) {
                             if (isset($value['url']) && isset($value['token']) && !isset($value['type'])) {
                                 $value['type'] = 'http-basic';
-                                $value['url'] = substr($value['url'], strpos($value['url'], 'http-basic.') + strlen('http-basic.'));
-                                $value['username'] = $value['username'] ?? 'token';
-                                $value['password'] = $value['password'] ?? $value['token'];
+                                $value['url'] = substr((string) $value['url'], strpos((string) $value['url'], 'http-basic.') + strlen('http-basic.'));
+                                $value['username'] ??= 'token';
+                                $value['password'] ??= $value['token'];
                                 unset($value['token']);
                             }
 
