@@ -209,9 +209,9 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
                     'gitlab-oauth' => $composer->addGitlabOauthAuthentication($authentication['token'], $url),
                     'gitlab-token' => $composer->addGitlabTokenAuthentication($authentication['token'], $url),
                     'github-oauth' => $composer->addGithubOauthAuthentication($authentication['token'], $url),
-                    'http-basic' => $composer->addHttpBasicAuthentication($url, $authentication['username'], $url),
+                    'http-basic' => $composer->addHttpBasicAuthentication($url, $authentication['username'], $authentication['password']),
                     'http-bearer' => $composer->addHttpBearerAuthentication($url, $authentication['token']),
-                    default => $composer->addAuthenticationToken($url, $authentication['token']),
+                    default => throw new \LogicException(),
                 };
             }
         }
