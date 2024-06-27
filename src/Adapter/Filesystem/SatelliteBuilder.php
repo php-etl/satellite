@@ -20,8 +20,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     ];
     private array $authenticationTokens = [];
     private array $repositories = [];
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerJsonFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null;
     /** @var iterable<array<string, string>> */
     private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
@@ -55,7 +55,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withComposerFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
-        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -65,7 +65,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
-        string $destinationPath = null
+        ?string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
@@ -80,7 +80,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
@@ -110,7 +110,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-oauth',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -121,7 +120,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-token',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -132,7 +130,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'github-oauth',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -143,7 +140,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'http-basic',
-            'url' => $domain,
             'username' => $username,
             'password' => $password,
         ];
@@ -155,7 +151,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'http-basic',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -211,10 +206,10 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         if (\count($this->authenticationTokens) > 0) {
             foreach ($this->authenticationTokens as $url => $authentication) {
                 match ($authentication['type']) {
-                    'gitlab-oauth' => $composer->addGitlabOauthAuthentication($authentication['token']),
-                    'gitlab-token' => $composer->addGitlabTokenAuthentication($authentication['token']),
-                    'github-oauth' => $composer->addGithubOauthAuthentication($authentication['token']),
-                    'http-basic' => $composer->addHttpBasicAuthentication($url, $authentication['username'], $authentication['password']),
+                    'gitlab-oauth' => $composer->addGitlabOauthAuthentication($authentication['token'], $url),
+                    'gitlab-token' => $composer->addGitlabTokenAuthentication($authentication['token'], $url),
+                    'github-oauth' => $composer->addGithubOauthAuthentication($authentication['token'], $url),
+                    'http-basic' => $composer->addHttpBasicAuthentication($url, $authentication['username'], $url),
                     'http-bearer' => $composer->addHttpBearerAuthentication($url, $authentication['token']),
                     default => $composer->addAuthenticationToken($url, $authentication['token']),
                 };

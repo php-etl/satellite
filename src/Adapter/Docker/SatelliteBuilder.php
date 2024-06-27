@@ -136,7 +136,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'github-token',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -147,7 +146,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-oauth',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -158,7 +156,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     {
         $this->authenticationTokens[$domain] = [
             'type' => 'gitlab-token',
-            'url' => $domain,
             'token' => $token,
         ];
 
@@ -257,9 +254,9 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         if (\count($this->authenticationTokens) > 0) {
             foreach ($this->authenticationTokens as $url => $authentication) {
                 match ($authentication['type']) {
-                    'gitlab-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabOauthAuthentication($authentication['token'])),
-                    'gitlab-token' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabTokenAuthentication($authentication['token'])),
-                    'github-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGithubOauthAuthentication($authentication['token'])),
+                    'gitlab-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabOauthAuthentication($authentication['token'], $authentication['url'])),
+                    'gitlab-token' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabTokenAuthentication($authentication['token'], $authentication['url'])),
+                    'github-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGithubOauthAuthentication($authentication['token'], $authentication['url'])),
                     'http-basic' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBasicAuthentication($url, $authentication['username'], $authentication['password'])),
                     'http-bearer' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBearerAuthentication($url, $authentication['token'])),
                     default => new \LogicException(),

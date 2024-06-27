@@ -243,13 +243,13 @@ final class Composer
         );
     }
 
-    public function addGithubOauthAuthentication(string $token): void
+    public function addGithubOauthAuthentication(string $token, string $url = 'github.com'): void
     {
         $this->command(
             'composer',
             'config',
             '--auth',
-            'github-oauth.github.com',
+            sprintf('github-oauth.%s', $url),
             $token
         );
     }
