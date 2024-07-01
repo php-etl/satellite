@@ -53,7 +53,7 @@ final readonly class Workflow implements WorkflowInterface
                             return new DTO\Workflow\Pipeline(
                                 $name,
                                 new JobCode($code),
-                                \count($config['pipeline']['steps']) > 0 ? new StepList(
+                                (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) > 0 ? new StepList(
                                     ...array_map(fn (array $step, int $order) => new Step(
                                         $step['name'] ?? sprintf('step%d', $order),
                                         new StepCode($step['code'] ?? sprintf('step%d', $order)),
