@@ -21,12 +21,16 @@ use Symfony\Component\ExpressionLanguage\Expression;
 final readonly class Workflow implements WorkflowInterface
 {
     public function __construct(
-        private Context $context,
+        private ContextInterface $context,
     ) {
     }
 
     public static function fromLegacyConfiguration(array $configuration): DTO\Workflow
     {
+        if (empty($configuration)) {
+            throw new \RuntimeException('Workflow configuration is empty');
+        }
+
         $random = bin2hex(random_bytes(4));
 
         return new DTO\Workflow(
@@ -49,7 +53,7 @@ final readonly class Workflow implements WorkflowInterface
                             return new DTO\Workflow\Pipeline(
                                 $name,
                                 new JobCode($code),
-                                new StepList(
+                                \count($config['pipeline']['steps']) > 0 ? new StepList(
                                     ...array_map(fn (array $step, int $order) => new Step(
                                         $step['name'] ?? sprintf('step%d', $order),
                                         new StepCode($step['code'] ?? sprintf('step%d', $order)),
@@ -60,7 +64,7 @@ final readonly class Workflow implements WorkflowInterface
                                         $config['pipeline']['steps'],
                                         range(0, (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) - 1)
                                     ),
-                                ),
+                                ) : new StepList(),
                                 $order
                             );
                         }

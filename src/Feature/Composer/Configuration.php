@@ -73,9 +73,9 @@ final class Configuration implements FeatureConfigurationInterface
                     ->arrayPrototype()
                         ->beforeNormalization()
                         ->always(function ($value) {
-                            if (isset($value['url']) && isset($value['token']) && !isset($value['type'])) {
+                            if (isset($value['url'], $value['token']) && !isset($value['type'])) {
                                 $value['type'] = 'http-basic';
-                                $value['url'] = substr((string) $value['url'], strpos((string) $value['url'], 'http-basic.') + strlen('http-basic.'));
+                                $value['url'] = substr((string) $value['url'], strpos((string) $value['url'], 'http-basic.') + \strlen('http-basic.'));
                                 $value['username'] ??= 'token';
                                 $value['password'] ??= $value['token'];
                                 unset($value['token']);
@@ -103,6 +103,7 @@ final class Configuration implements FeatureConfigurationInterface
                                         }
                                         break;
                                 }
+
                                 return $v;
                             })
                         ->end()

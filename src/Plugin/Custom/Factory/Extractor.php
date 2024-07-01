@@ -63,7 +63,7 @@ class Extractor implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Custom\Factory\Repository\Extractor
+    public function compile(array $config): Repository\Extractor
     {
         $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
 
@@ -74,7 +74,7 @@ class Extractor implements Configurator\FactoryInterface
 
         $container = (new SatelliteDependencyInjection(...$this->providers))($config);
 
-        $repository = new Custom\Factory\Repository\Extractor($builder);
+        $repository = new Repository\Extractor($builder);
 
         $dumper = new PhpDumper($container);
         $repository->addFiles(
