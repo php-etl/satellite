@@ -8,7 +8,7 @@ use PhpParser\Node;
 
 final class ExclusionsBuilder
 {
-    /** @var list<array{condition: Node\Expr, reason: ?Node\Expr}> $exclusions */
+    /** @var list<array{condition: Node\Expr, reason: ?Node\Expr}> */
     private array $exclusions = [];
 
     public function withCondition(Node\Expr $condition, ?Node\Expr $reason): self
