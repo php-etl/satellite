@@ -121,14 +121,14 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "map": { "$ref": "fastmap.json#/$defs/fastmap-items" }
+                "map": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" }
               }
             },
             {
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "object": { "$ref": "fastmap.json#/$defs/fastmap-items" },
+                "object": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" },
                 "class": { "type": "string" }
               }
             }

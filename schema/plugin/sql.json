@@ -3,9 +3,211 @@
   "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/sql.json",
   "title": "SQL plugin for Middleware Satellite",
   "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" }
-  }
+  "$defs": {
+    "connection": {
+      "type": "object",
+      "properties": {
+        "dsn": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "username": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "password": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+        "persistent": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-boolean" },
+        "shared": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-boolean" }
+      }
+    },
+    "query-parameters": {
+      "oneOf": [
+        {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "object",
+              "properties": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-any" }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "from": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": "object",
+              "properties": {
+                "value": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-any" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "query-list": {
+      "type": "array",
+      "items": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
+        "connection": { "$ref": "#/$defs/connection"},
+        "before": { "$ref": "#/$defs/query-list"},
+        "after": { "$ref": "#/$defs/query-list"},
+        "extractor": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                "parameters": { "$ref": "#/$defs/query-parameters"}
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "conditional": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "condition":{ "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" },
+                      "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                      "parameters": { "$ref": "#/$defs/query-parameters"}
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
+        "connection": { "$ref": "#/$defs/connection"},
+        "before": { "$ref": "#/$defs/query-list"},
+        "after": { "$ref": "#/$defs/query-list"},
+        "lookup": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                "parameters": { "$ref": "#/$defs/query-parameters"},
+                "merge": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "map": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "object": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" },
+                        "class": { "type": "string" }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "conditional": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "condition":{ "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" },
+                      "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                      "parameters": { "$ref": "#/$defs/query-parameters"},
+                      "merge": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "map": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "object": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugin/fastmap.json#/$defs/fastmap-items" },
+                              "class": { "type": "string" }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
+        "connection": { "$ref": "#/$defs/connection"},
+        "before": { "$ref": "#/$defs/query-list"},
+        "after": { "$ref": "#/$defs/query-list"},
+        "loader": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                "parameters": { "$ref": "#/$defs/query-parameters"}
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "conditional": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "condition":{ "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" },
+                      "query": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-string" },
+                      "parameters": { "$ref": "#/$defs/query-parameters"}
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

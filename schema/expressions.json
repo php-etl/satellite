@@ -54,6 +54,21 @@
         { "type": "number" }
       ]
     },
+    "expression-or-boolean": {
+      "oneOf": [
+        { "$ref": "#/$defs/bundled-expression" },
+        { "type": "boolean" }
+      ]
+    },
+    "expression-or-any": {
+      "oneOf": [
+        { "$ref": "#/$defs/bundled-expression" },
+        { "$ref": "#/$defs/datetime" },
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" }
+      ]
+    },
     "expression-or-datetime": {
       "oneOf": [
         { "$ref": "#/$defs/bundled-expression" },
