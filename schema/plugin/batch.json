@@ -3,15 +3,33 @@
   "$id": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/plugins/batch.json",
   "title": "Batch plugin for Middleware Satellite",
   "description": "A Satellite is a micro-service aimed at managing data pipelines and data processing",
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
-    "merge": {
+  "oneOf": [
+    {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "size": { "type": "integer" }
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
+        "fork": {
+          "type": "object",
+          "properties": {
+            "foreach": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" },
+            "do": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/bundled-expression" }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expression_language": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/definitions.json#/$defs/expression_language" },
+        "merge": {
+          "type": "object",
+          "properties": {
+            "size": { "$ref": "https://raw.githubusercontent.com/php-etl/satellite/master/schema/expressions.json#/$defs/expression-or-number" }
+          }
+        }
       }
     }
-  }
+  ]
 }
