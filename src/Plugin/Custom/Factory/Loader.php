@@ -63,18 +63,18 @@ class Loader implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Custom\Factory\Repository\Loader
+    public function compile(array $config): Repository\Loader
     {
         $containerName = sprintf('ProjectServiceContainer%s', ByteString::fromRandom(8)->toString());
 
         $builder = new Custom\Builder\Loader(
             compileValueWhenExpression($this->interpreter, $config['use']),
-            sprintf('GyroscopsGenerated\\%s', $containerName),
+            sprintf('GyroscopsGenerated\%s', $containerName),
         );
 
         $container = (new SatelliteDependencyInjection(...$this->providers))($config);
 
-        $repository = new Custom\Factory\Repository\Loader($builder);
+        $repository = new Repository\Loader($builder);
 
         $dumper = new PhpDumper($container);
         $repository->addFiles(

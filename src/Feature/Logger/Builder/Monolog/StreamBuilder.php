@@ -76,7 +76,7 @@ final class StreamBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\StreamHandler'),
+            class: new Node\Name\FullyQualified('Monolog\Handler\StreamHandler'),
             args: $arguments,
         );
 

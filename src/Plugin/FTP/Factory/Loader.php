@@ -63,7 +63,7 @@ class Loader implements Configurator\FactoryInterface
             && \is_array($config['loader']['servers'])
         ) {
             foreach ($config['loader']['servers'] as $server) {
-                $serverFactory = new FTP\Factory\Server($this->interpreter);
+                $serverFactory = new Server($this->interpreter);
                 $builder->addServerBasePath(compileValueWhenExpression($this->interpreter, $server['base_path']));
 
                 $loader = $serverFactory->compile($server);
@@ -87,7 +87,7 @@ class Loader implements Configurator\FactoryInterface
         }
 
         try {
-            return new FTP\Factory\Repository\Repository($builder);
+            return new Repository\Repository($builder);
         } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException(message: $exception->getMessage(), previous: $exception);
         }

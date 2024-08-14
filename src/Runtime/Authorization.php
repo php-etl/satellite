@@ -35,7 +35,7 @@ final class Authorization
         }
 
         return new Node\Expr\New_(
-            new Node\Name('Tuupola\\Middleware\\HttpBasicAuthentication'),
+            new Node\Name('Tuupola\Middleware\HttpBasicAuthentication'),
             [
                 new Node\Arg(
                     value: new Node\Expr\Array_(
@@ -56,7 +56,7 @@ final class Authorization
     private function buildJwt(string $secret)
     {
         return new Node\Expr\New_(
-            new Node\Name('Tuupola\\Middleware\\JwtAuthentication'),
+            new Node\Name('Tuupola\Middleware\JwtAuthentication'),
             [
                 new Node\Arg(
                     value: new Node\Expr\Array_(

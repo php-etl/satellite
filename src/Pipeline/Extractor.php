@@ -74,7 +74,7 @@ final readonly class Extractor implements StepInterface
 
         $pipeline->addExtractor(
             new Node\Expr\StaticCall(
-                new Node\Name\FullyQualified('Kiboko\\Component\\Pipeline\\StepCode'),
+                new Node\Name\FullyQualified('Kiboko\Component\Pipeline\StepCode'),
                 new Node\Identifier('fromString'),
                 [
                     new Node\Arg(new Node\Scalar\String_($code)),

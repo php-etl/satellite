@@ -66,14 +66,14 @@ final class RabbitMQBuilder implements Builder
             );
 
             return new Node\Expr\StaticCall(
-                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+                class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\Rejection'),
                 name: new Identifier('withAuthentication'),
                 args: $args,
             );
         }
 
         return new Node\Expr\StaticCall(
-            class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
+            class: new Node\Name\FullyQualified('Kiboko\Component\Flow\RabbitMQ\Rejection'),
             name: new Identifier('withoutAuthentication'),
             args: $args,
         );
