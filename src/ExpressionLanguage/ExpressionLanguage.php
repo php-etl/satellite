@@ -9,7 +9,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLan
 
 final class ExpressionLanguage extends BaseExpressionLanguage
 {
-    public function __construct(CacheItemPoolInterface $cache = null, array $providers = [])
+    public function __construct(?CacheItemPoolInterface $cache = null, array $providers = [])
     {
         parent::__construct($cache, [
             ...$providers,

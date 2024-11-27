@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite;
 
-use Kiboko\Component\Satellite;
 use Kiboko\Contract\Configurator\InvalidConfigurationException;
 use Symfony\Component\Config;
 
-class ConfigLoader implements Satellite\ConfigLoaderInterface
+class ConfigLoader implements ConfigLoaderInterface
 {
     public function __construct(private readonly string $basePath)
     {
@@ -120,8 +119,8 @@ class ConfigLoader implements Satellite\ConfigLoaderInterface
         $locator = new Config\FileLocator([$this->basePath]);
 
         $loaderResolver = new Config\Loader\LoaderResolver([
-            new Satellite\Console\Config\YamlFileLoader($locator),
-            new Satellite\Console\Config\JsonFileLoader($locator),
+            new Console\Config\YamlFileLoader($locator),
+            new Console\Config\JsonFileLoader($locator),
         ]);
 
         $delegatingLoader = new Config\Loader\DelegatingLoader($loaderResolver);

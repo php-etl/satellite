@@ -18,7 +18,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 final class Service implements Configurator\FactoryInterface
 {
     private readonly Processor $processor;
-    private readonly Satellite\Configuration $configuration;
+    private readonly Configuration $configuration;
     private readonly ExpressionLanguage $interpreter;
     /** @var array<string, Configurator\Adapter\FactoryInterface> */
     private array $adapters = [];
@@ -35,16 +35,16 @@ final class Service implements Configurator\FactoryInterface
     /** @var array<string, Satellite\Action\ConfigurationApplier> */
     private array $actionPlugins = [];
 
-    public function __construct(ExpressionLanguage $expressionLanguage = null)
+    public function __construct(?ExpressionLanguage $expressionLanguage = null)
     {
         $this->processor = new Processor();
-        $this->configuration = new Satellite\Configuration();
+        $this->configuration = new Configuration();
         $this->interpreter = $expressionLanguage ?? new Satellite\ExpressionLanguage\ExpressionLanguage();
     }
 
-    public function adapterChoice(): Satellite\Adapter\AdapterChoice
+    public function adapterChoice(): Adapter\AdapterChoice
     {
-        return new Satellite\Adapter\AdapterChoice($this->adapters);
+        return new Adapter\AdapterChoice($this->adapters);
     }
 
     private function addAdapter(Configurator\Adapter $attribute, Configurator\Adapter\FactoryInterface $adapter): self
@@ -55,7 +55,7 @@ final class Service implements Configurator\FactoryInterface
         return $this;
     }
 
-    private function addRuntime(Configurator\Runtime $attribute, Satellite\Runtime\FactoryInterface $runtime): self
+    private function addRuntime(Configurator\Runtime $attribute, Runtime\FactoryInterface $runtime): self
     {
         $this->runtimes[$attribute->name] = $runtime;
         $this->configuration->addRuntime($attribute->name, $runtime->configuration());
@@ -87,7 +87,7 @@ final class Service implements Configurator\FactoryInterface
         $this->configuration->addPlugin($attribute->name, $plugin->configuration());
         $this->pipelines[$attribute->name] = $plugin;
 
-        $this->plugins[$attribute->name] = $applier = new Satellite\Pipeline\ConfigurationApplier($attribute->name, $plugin, $plugin->interpreter());
+        $this->plugins[$attribute->name] = $applier = new Pipeline\ConfigurationApplier($attribute->name, $plugin, $plugin->interpreter());
         $applier->withPackages(...$attribute->dependencies);
 
         foreach ($attribute->steps as $step) {
@@ -112,7 +112,7 @@ final class Service implements Configurator\FactoryInterface
         $this->configuration->addAction($attribute->name, $action->configuration());
         $this->actions[$attribute->name] = $action;
 
-        $this->actionPlugins[$attribute->name] = $applier = new Satellite\Action\ConfigurationApplier($attribute->name, $action, $action->interpreter());
+        $this->actionPlugins[$attribute->name] = $applier = new Action\ConfigurationApplier($attribute->name, $action, $action->interpreter());
         $applier->withPackages(...$attribute->dependencies);
 
         $applier->withAction();
@@ -128,14 +128,14 @@ final class Service implements Configurator\FactoryInterface
                 foreach (expectAttributes($adapter, Configurator\Adapter::class) as $attribute) {
                     $this->addAdapter($attribute, $adapter);
                 }
-            } catch (Satellite\MissingAttributeException) {
+            } catch (MissingAttributeException) {
             }
         }
 
         return $this;
     }
 
-    public function registerRuntimes(Satellite\Runtime\FactoryInterface ...$runtimes): self
+    public function registerRuntimes(Runtime\FactoryInterface ...$runtimes): self
     {
         foreach ($runtimes as $runtime) {
             /** @var Configurator\Runtime $attribute */
@@ -225,13 +225,13 @@ final class Service implements Configurator\FactoryInterface
         throw new \LogicException('Not implemented');
     }
 
-    private function compileWorkflow(array $config): Satellite\Builder\Repository\Workflow
+    private function compileWorkflow(array $config): Builder\Repository\Workflow
     {
-        $workflow = new Satellite\Builder\Workflow(
+        $workflow = new Builder\Workflow(
             new Node\Expr\Variable('runtime')
         );
 
-        $repository = new Satellite\Builder\Repository\Workflow($workflow);
+        $repository = new Builder\Repository\Workflow($workflow);
 
         $repository->addPackages(
             'php-etl/satellite-contracts:>=0.1.1 <0.2',
@@ -274,7 +274,7 @@ final class Service implements Configurator\FactoryInterface
                 'runtime.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\Workflow\WorkflowRuntime())->getNode()
+                        (new Builder\Workflow\WorkflowRuntime())->getNode()
                     )
                 )
             )
@@ -291,7 +291,7 @@ final class Service implements Configurator\FactoryInterface
                         $pipelineFilename,
                         new Packaging\Asset\AST(
                             new Node\Stmt\Return_(
-                                (new Satellite\Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                                (new Builder\Workflow\PipelineBuilder($pipeline->getBuilder()))->getNode()
                             )
                         )
                     )
@@ -308,7 +308,7 @@ final class Service implements Configurator\FactoryInterface
                         $actionFilename,
                         new Packaging\Asset\AST(
                             new Node\Stmt\Return_(
-                                (new Satellite\Builder\Workflow\ActionBuilder($action->getBuilder()))->getNode()
+                                (new Builder\Workflow\ActionBuilder($action->getBuilder()))->getNode()
                             )
                         )
                     )
@@ -323,13 +323,13 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compilePipelineJob(array $config): Satellite\Builder\Repository\Pipeline
+    private function compilePipelineJob(array $config): Builder\Repository\Pipeline
     {
-        $pipeline = new Satellite\Builder\Pipeline(
+        $pipeline = new Builder\Pipeline(
             new Node\Expr\Variable('runtime'),
         );
 
-        $repository = new Satellite\Builder\Repository\Pipeline($pipeline);
+        $repository = new Builder\Repository\Pipeline($pipeline);
 
         $repository->addPackages(
             'php-etl/satellite-contracts:>=0.1.1 <0.2',
@@ -360,13 +360,13 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileActionJob(array $config): Satellite\Builder\Repository\Action
+    private function compileActionJob(array $config): Builder\Repository\Action
     {
-        $action = new Satellite\Builder\Action(
+        $action = new Builder\Action(
             new Node\Expr\Variable('runtime'),
         );
 
-        $repository = new Satellite\Builder\Repository\Action($action);
+        $repository = new Builder\Repository\Action($action);
 
         $actions = array_intersect_key($this->actionPlugins, $config['action']);
         foreach ($actions as $action) {
@@ -376,7 +376,7 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compilePipeline(array $config): Satellite\Builder\Repository\Pipeline
+    private function compilePipeline(array $config): Builder\Repository\Pipeline
     {
         $repository = $this->compilePipelineJob($config);
 
@@ -411,7 +411,7 @@ final class Service implements Configurator\FactoryInterface
                 'runtime.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\Pipeline\ConsoleRuntime())->getNode()
+                        (new Builder\Pipeline\ConsoleRuntime())->getNode()
                     )
                 )
             )
@@ -420,11 +420,11 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileApi(array $config): Satellite\Builder\Repository\API
+    private function compileApi(array $config): Builder\Repository\API
     {
-        $apiBuilder = new Satellite\Builder\API();
+        $apiBuilder = new Builder\API();
 
-        $repository = new Satellite\Builder\Repository\API($apiBuilder);
+        $repository = new Builder\Repository\API($apiBuilder);
 
         $pipelineMapping = [];
 
@@ -440,7 +440,7 @@ final class Service implements Configurator\FactoryInterface
                         $pipelineFilename,
                         new Packaging\Asset\AST(
                             new Node\Stmt\Return_(
-                                (new Satellite\Builder\API\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                                (new Builder\API\PipelineBuilder($pipeline->getBuilder()))->getNode()
                             )
                         )
                     )
@@ -492,7 +492,7 @@ final class Service implements Configurator\FactoryInterface
                 'hook.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\Hook\HookRuntime())->getNode()
+                        (new Builder\Hook\HookRuntime())->getNode()
                     )
                 )
             )
@@ -503,7 +503,7 @@ final class Service implements Configurator\FactoryInterface
                 'runtime.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\API\APIRuntime())->getNode()
+                        (new Builder\API\APIRuntime())->getNode()
                     )
                 )
             )
@@ -524,11 +524,11 @@ final class Service implements Configurator\FactoryInterface
         return $repository;
     }
 
-    private function compileHook(array $config): Satellite\Builder\Repository\Hook
+    private function compileHook(array $config): Builder\Repository\Hook
     {
-        $hookBuilder = new Satellite\Builder\Hook();
+        $hookBuilder = new Builder\Hook();
 
-        $repository = new Satellite\Builder\Repository\Hook($hookBuilder);
+        $repository = new Builder\Repository\Hook($hookBuilder);
 
         $repository->addFiles(
             new Packaging\File(
@@ -563,7 +563,7 @@ final class Service implements Configurator\FactoryInterface
                 'runtime.php',
                 new Packaging\Asset\AST(
                     new Node\Stmt\Return_(
-                        (new Satellite\Builder\Hook\HookRuntime())->getNode()
+                        (new Builder\Hook\HookRuntime())->getNode()
                     )
                 )
             )
@@ -591,7 +591,7 @@ final class Service implements Configurator\FactoryInterface
                     $pipelineFilename,
                     new Packaging\Asset\AST(
                         new Node\Stmt\Return_(
-                            (new Satellite\Builder\Hook\PipelineBuilder($pipeline->getBuilder()))->getNode()
+                            (new Builder\Hook\PipelineBuilder($pipeline->getBuilder()))->getNode()
                         )
                     )
                 )

@@ -32,7 +32,7 @@
         "php-etl/configurator-contracts": "0.8.*",
         "php-etl/satellite-toolbox": "*",
         "php-etl/gyroscops-api-client": "^0.3.0",
-        "php-etl/dockerfile": "*",
+        "php-etl/dockerfile": "dev-composer-authentication",
         "composer/composer": "*",
         "symfony/deprecation-contracts": "*",
         "react/child-process": "^0.7",

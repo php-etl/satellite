@@ -58,7 +58,14 @@ final readonly class Factory implements Configurator\Adapter\FactoryInterface
 
             if (\array_key_exists('auth', $configuration['composer']) && (is_countable($configuration['composer']['auth']) ? \count($configuration['composer']['auth']) : 0) > 0) {
                 foreach ($configuration['composer']['auth'] as $auth) {
-                    $builder->withAuthenticationToken($auth['url'], $auth['token']);
+                    match ($auth['type']) {
+                        'gitlab-oauth' => $builder->withGitlabOauthAuthentication($auth['token'], $auth['url'] ?? 'gitlab.com'),
+                        'gitlab-token' => $builder->withGitlabTokenAuthentication($auth['token'], $auth['url'] ?? 'gitlab.com'),
+                        'github-oauth' => $builder->withGithubOauthAuthentication($auth['token'], $auth['url'] ?? 'github.com'),
+                        'http-basic' => $builder->withHttpBasicAuthentication($auth['url'], $auth['username'], $auth['password']),
+                        'http-bearer' => $builder->withHttpBearerAuthentication($auth['url'], $auth['token']),
+                        default => throw new \LogicException(),
+                    };
                 }
             }
         }

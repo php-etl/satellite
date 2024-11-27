@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "546a5d2a5f2a1ec065e2ec9b2060f6fa",
+    "content-hash": "16b487ad7c3523adbcb82e4d60eda5c7",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1483,16 +1483,16 @@
         },
         {
             "name": "php-etl/dockerfile",
-            "version": "v0.2.2",
+            "version": "dev-composer-authentication",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-etl/dockerfile.git",
-                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b"
+                "reference": "f49ec82ae87c903f2e5239b1b9bd6b668e75d5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
-                "reference": "703bb1d58e95d4b8e68140b3f7712af27e5e7c1b",
+                "url": "https://api.github.com/repos/php-etl/dockerfile/zipball/f49ec82ae87c903f2e5239b1b9bd6b668e75d5a6",
+                "reference": "f49ec82ae87c903f2e5239b1b9bd6b668e75d5a6",
                 "shasum": ""
             },
             "require": {
@@ -1529,9 +1529,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-etl/dockerfile/issues",
-                "source": "https://github.com/php-etl/dockerfile/tree/v0.2.2"
+                "source": "https://github.com/php-etl/dockerfile/tree/composer-authentication"
             },
-            "time": "2024-01-10T13:35:47+00:00"
+            "time": "2024-07-01T13:41:29+00:00"
         },
         {
             "name": "php-etl/gyroscops-api-client",
@@ -9245,7 +9245,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "php-etl/dockerfile": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -9253,5 +9255,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
