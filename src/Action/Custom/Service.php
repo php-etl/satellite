@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Action\Custom;
 
-use Kiboko\Component\Satellite\Action\Custom;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
@@ -26,7 +25,7 @@ final readonly class Service implements Configurator\ActionInterface
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
-        $this->configuration = new Custom\Configuration();
+        $this->configuration = new Configuration();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -78,7 +77,7 @@ final readonly class Service implements Configurator\ActionInterface
             }
         }
 
-        $actionFactory = new Custom\Factory\Action($this->interpreter);
+        $actionFactory = new Factory\Action($this->interpreter);
 
         return $actionFactory->compile($config);
     }
