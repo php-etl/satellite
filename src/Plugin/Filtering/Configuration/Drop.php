@@ -28,6 +28,13 @@ final class Drop implements ConfigurationInterface
                             ->then(asExpression())
                         ->end()
                     ->end()
+                    ->scalarNode('reason')
+                        ->cannotBeEmpty()
+                        ->validate()
+                            ->ifTrue(isExpression())
+                            ->then(asExpression())
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

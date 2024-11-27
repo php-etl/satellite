@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Cloud;
 
 use Gyroscops\Api\Client;
-use Kiboko\Component\Satellite;
 use React\Promise\Deferred;
 use React\Promise\PromiseInterface;
 
@@ -22,16 +21,16 @@ final class CommandBus
     public static function withStandardHandlers(Client $client): self
     {
         return new self([
-            Satellite\Cloud\Command\Pipeline\DeclarePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\DeclarePipelineCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Satellite\Cloud\Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AppendPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AppendPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\RemovePipelineCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddAfterPipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddAfterPipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\AddBeforePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\ReplacePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Pipeline\RemovePipelineStepCommand::class => new Satellite\Cloud\Handler\Pipeline\RemovePipelineStepCommandHandler($client),
-            Satellite\Cloud\Command\Workflow\DeclareWorkflowCommand::class => new Satellite\Cloud\Handler\Workflow\DeclareWorkflowCommandHandler($client),
-            Satellite\Cloud\Command\Workflow\RemoveWorkflowCommand::class => new Satellite\Cloud\Handler\Workflow\RemoveWorkflowCommandHandler($client),
+            Command\Pipeline\DeclarePipelineCommand::class => new Handler\Pipeline\DeclarePipelineCommandHandler($client),
+            Command\Pipeline\AddPipelineComposerPSR4AutoloadCommand::class => new Handler\Pipeline\AddPipelineComposerPSR4AutoloadCommandHandler($client),
+            Command\Pipeline\AppendPipelineStepCommand::class => new Handler\Pipeline\AppendPipelineStepCommandHandler($client),
+            Command\Pipeline\RemovePipelineCommand::class => new Handler\Pipeline\RemovePipelineCommandHandler($client),
+            Command\Pipeline\AddAfterPipelineStepCommand::class => new Handler\Pipeline\AddAfterPipelineStepCommandHandler($client),
+            Command\Pipeline\AddBeforePipelineStepCommand::class => new Handler\Pipeline\AddBeforePipelineStepCommandHandler($client),
+            Command\Pipeline\ReplacePipelineStepCommand::class => new Handler\Pipeline\ReplacePipelineStepCommandHandler($client),
+            Command\Pipeline\RemovePipelineStepCommand::class => new Handler\Pipeline\RemovePipelineStepCommandHandler($client),
+            Command\Workflow\DeclareWorkflowCommand::class => new Handler\Workflow\DeclareWorkflowCommandHandler($client),
+            Command\Workflow\RemoveWorkflowCommand::class => new Handler\Workflow\RemoveWorkflowCommandHandler($client),
         ]);
     }
 

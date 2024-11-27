@@ -54,7 +54,7 @@ class Server implements Configurator\FactoryInterface
         }
     }
 
-    public function compile(array $config): SFTP\Factory\Repository\Repository
+    public function compile(array $config): Repository\Repository
     {
         $builder = new SFTP\Builder\Server(compileValueWhenExpression($this->interpreter, $config['host']), compileValueWhenExpression($this->interpreter, $config['port']));
 
@@ -83,7 +83,7 @@ class Server implements Configurator\FactoryInterface
         }
 
         try {
-            return new SFTP\Factory\Repository\Repository($builder);
+            return new Repository\Repository($builder);
         } catch (Symfony\InvalidConfigurationException|Symfony\InvalidTypeException $exception) {
             throw new Configurator\InvalidConfigurationException(message: $exception->getMessage(), previous: $exception);
         }
