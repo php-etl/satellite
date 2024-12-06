@@ -20,7 +20,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     /** @var array<string, array<string, string>> */
     private array $composerAutoload = [
         'psr4' => [
-            'GyroscopsGenerated\\' => './build/',
+            'GyroscopsGenerated\\' => './',
         ],
     ];
 
