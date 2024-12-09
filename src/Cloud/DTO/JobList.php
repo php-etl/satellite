@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Cloud\DTO;
 
-use Kiboko\Component\Satellite\Cloud\DTO;
-
 readonly class JobList implements \Countable, \IteratorAggregate
 {
     private array $jobs;
 
     public function __construct(
-        DTO\Workflow\JobInterface ...$job,
+        Workflow\JobInterface ...$job,
     ) {
         $this->jobs = $job;
     }
@@ -21,7 +19,7 @@ readonly class JobList implements \Countable, \IteratorAggregate
         $jobs = $this->jobs;
 
         /* @phpstan-ignore-next-line */
-        usort($jobs, fn (DTO\Workflow\JobInterface $left, DTO\Workflow\JobInterface $right) => $left->order <=> $right->order);
+        usort($jobs, fn (Workflow\JobInterface $left, Workflow\JobInterface $right) => $left->order <=> $right->order);
 
         return new \ArrayIterator($jobs);
     }
@@ -31,13 +29,13 @@ readonly class JobList implements \Countable, \IteratorAggregate
         $jobs = $this->jobs;
 
         /* @phpstan-ignore-next-line */
-        usort($jobs, fn (DTO\Workflow\JobInterface $left, DTO\Workflow\JobInterface $right) => $left->order <=> $right->order);
+        usort($jobs, fn (Workflow\JobInterface $left, Workflow\JobInterface $right) => $left->order <=> $right->order);
 
         /* @phpstan-ignore-next-line */
-        return array_map(fn (DTO\Workflow\JobInterface $job) => $job->code->asString(), $jobs);
+        return array_map(fn (Workflow\JobInterface $job) => $job->code->asString(), $jobs);
     }
 
-    public function get(string $code): DTO\Workflow\JobInterface
+    public function get(string $code): Workflow\JobInterface
     {
         foreach ($this->jobs as $job) {
             if ($job->code->asString() === $code) {
