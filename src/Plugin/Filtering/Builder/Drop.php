@@ -122,7 +122,21 @@ final class Drop implements StepBuilderInterface
                                                         new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
+                                                                class: new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
+                                                                args: [
+                                                                    new Node\Arg(
+                                                                        new Node\Expr\MethodCall(
+                                                                            new Node\Expr\Variable('exception'),
+                                                                            'getMessage'
+                                                                        ),
+                                                                    ),
+                                                                    new Node\Expr\ConstFetch(
+                                                                        new Node\Expr\Variable('exception'),
+                                                                    ),
+                                                                    new Node\Arg(
+                                                                        new Node\Expr\Variable('input'),
+                                                                    ),
+                                                                ],
                                                             ),
                                                         ),
                                                     ),
