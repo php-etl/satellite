@@ -14,6 +14,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 use function Kiboko\Component\SatelliteToolbox\Configuration\compileExpression;
+use function Kiboko\Component\SatelliteToolbox\Configuration\compileValueWhenExpression;
 
 class Reject implements Configurator\FactoryInterface
 {
@@ -59,19 +60,25 @@ class Reject implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Filtering\Factory\Repository\Reject
+    public function compile(array $config): Repository\Reject
     {
         $interpreter = clone $this->interpreter;
 
         $builder = new Filtering\Builder\Reject();
 
-        $repository = new Filtering\Factory\Repository\Reject($builder);
+        $repository = new Repository\Reject($builder);
 
+        $exclusionBuilder = new Filtering\Builder\ExclusionsBuilder();
         foreach ($config as $condition) {
-            $builder->withExclusions(
-                compileExpression($interpreter, $condition['when'])
-            );
+            $exclusionBuilder
+                ->withCondition(
+                    compileExpression($interpreter, $condition['when']),
+                    compileValueWhenExpression($interpreter, $condition['reason']),
+                )
+            ;
         }
+
+        $builder->withExclusions(...$exclusionBuilder->build());
 
         return $repository;
     }
