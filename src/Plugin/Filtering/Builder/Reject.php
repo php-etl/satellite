@@ -122,10 +122,23 @@ final class Reject implements StepBuilderInterface
                                                         new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
-                                                                [
-                                                                    new Node\Arg(new Node\Expr\Variable('input')),
-                                                                ]
+                                                                class: new Node\Name\FullyQualified(
+                                                                    \Kiboko\Component\Bucket\RejectionResultBucket::class
+                                                                ),
+                                                                args: [
+                                                                    new Node\Arg(
+                                                                        new Node\Expr\MethodCall(
+                                                                            new Node\Expr\Variable('exception'),
+                                                                            'getMessage'
+                                                                        ),
+                                                                    ),
+                                                                    new Node\Expr\ConstFetch(
+                                                                        new Node\Expr\Variable('exception'),
+                                                                    ),
+                                                                    new Node\Arg(
+                                                                        new Node\Expr\Variable('input'),
+                                                                    ),
+                                                                ],
                                                             ),
                                                         ),
                                                     ),
