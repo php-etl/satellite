@@ -130,7 +130,7 @@ final class Drop implements StepBuilderInterface
                                                                             'getMessage'
                                                                         ),
                                                                     ),
-                                                                    new Node\Expr\ConstFetch(
+                                                                    new Node\Arg(
                                                                         new Node\Expr\Variable('exception'),
                                                                     ),
                                                                     new Node\Arg(
