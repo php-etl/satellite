@@ -76,7 +76,7 @@ final class SyslogBuilder implements MonologBuilderInterface
         }
 
         $instance = new Node\Expr\New_(
-            class: new Node\Name\FullyQualified('Monolog\\Handler\\SyslogHandler'),
+            class: new Node\Name\FullyQualified('Monolog\Handler\SyslogHandler'),
             args: $arguments,
         );
 

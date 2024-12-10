@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Plugin\Custom;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
-use Kiboko\Component\Satellite\Plugin\Custom;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -30,7 +29,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
-        $this->configuration = new Custom\Configuration();
+        $this->configuration = new Configuration();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -83,13 +82,13 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         }
 
         if (\array_key_exists('extractor', $config)) {
-            return (new Custom\Factory\Extractor($interpreter, $config['expression_language'] ?? []))->compile($config['extractor']);
+            return (new Factory\Extractor($interpreter, $config['expression_language'] ?? []))->compile($config['extractor']);
         }
         if (\array_key_exists('transformer', $config)) {
-            return (new Custom\Factory\Transformer($interpreter, $config['expression_language'] ?? []))->compile($config['transformer']);
+            return (new Factory\Transformer($interpreter, $config['expression_language'] ?? []))->compile($config['transformer']);
         }
         if (\array_key_exists('loader', $config)) {
-            return (new Custom\Factory\Loader($interpreter, $config['expression_language'] ?? []))->compile($config['loader']);
+            return (new Factory\Loader($interpreter, $config['expression_language'] ?? []))->compile($config['loader']);
         }
 
         throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');

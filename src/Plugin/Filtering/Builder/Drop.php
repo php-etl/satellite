@@ -95,7 +95,7 @@ final class Drop implements StepBuilderInterface
         return new Node\Expr\New_(
             class: new Node\Stmt\Class_(null, [
                 'implements' => [
-                    new Node\Name\FullyQualified('Kiboko\\Contract\\Pipeline\\TransformerInterface'),
+                    new Node\Name\FullyQualified('Kiboko\Contract\Pipeline\TransformerInterface'),
                 ],
                 'stmts' => [
                     (new Builder\Method('transform'))
@@ -122,7 +122,7 @@ final class Drop implements StepBuilderInterface
                                                         new Node\Expr\Variable('input'),
                                                         new Node\Expr\Yield_(
                                                             new Node\Expr\New_(
-                                                                new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\RejectionResultBucket'),
+                                                                new Node\Name\FullyQualified('Kiboko\Component\Bucket\RejectionResultBucket'),
                                                             ),
                                                         ),
                                                     ),
@@ -136,7 +136,7 @@ final class Drop implements StepBuilderInterface
                                             new Node\Expr\Variable('input'),
                                             new Node\Expr\Yield_(
                                                 new Node\Expr\New_(
-                                                    new Node\Name\FullyQualified('Kiboko\\Component\\Bucket\\AcceptanceResultBucket'),
+                                                    new Node\Name\FullyQualified('Kiboko\Component\Bucket\AcceptanceResultBucket'),
                                                     [
                                                         new Node\Arg(new Node\Expr\Variable('input')),
                                                     ]
