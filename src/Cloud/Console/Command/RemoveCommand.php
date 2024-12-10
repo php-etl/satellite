@@ -124,14 +124,18 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         $context = new Satellite\Cloud\Context($client, $auth, $url);
-        $instance = match (true) {
-            \array_key_exists('pipeline', $configuration) => new Satellite\Cloud\Pipeline($context),
-            \array_key_exists('workflow', $configuration) => new Satellite\Cloud\Workflow($context),
-            default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
-        };
 
-        foreach ($instance->remove($instance::fromApiWithCode($client, array_key_first($configuration['satellites']))->id()) as $command) {
-            $bus->push($command);
+        foreach ($configuration['satellites'] as $code => $satellite) {
+            $satellite['code'] = $code;
+            $instance = match (true) {
+                \array_key_exists('pipeline', $satellite) => new Satellite\Cloud\Pipeline($context),
+                \array_key_exists('workflow', $satellite) => new Satellite\Cloud\Workflow($context),
+                default => throw new \RuntimeException('Invalid runtime satellite configuration.'),
+            };
+
+            foreach ($instance->remove($instance::fromApiWithCode($client, array_key_first($configuration['satellites']))->id()) as $command) {
+                $bus->push($command);
+            }
         }
 
         $bus->execute();
