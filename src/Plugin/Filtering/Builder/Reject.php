@@ -137,7 +137,9 @@ final class Reject implements StepBuilderInterface
                                                                 ),
                                                                 args: [
                                                                     new Node\Arg(
-                                                                        new Node\Scalar\String_($this->reason),
+                                                                        $this->reason !== null
+                                                                            ? new Node\Scalar\String_($this->reason)
+                                                                            : new Node\Expr\ConstFetch(new Node\Name('null')),
                                                                     ),
                                                                     new Node\Arg(
                                                                         new Node\Expr\ConstFetch(new Node\Name('null')),
