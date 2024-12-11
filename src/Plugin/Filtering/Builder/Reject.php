@@ -13,6 +13,9 @@ final class Reject implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
+
+    private ?string $reason = null;
+
     /** @var list<?Node\Expr> */
     private array $exclusions = [];
 
@@ -44,6 +47,13 @@ final class Reject implements StepBuilderInterface
     public function withExclusions(Node\Expr ...$exclusions): self
     {
         array_push($this->exclusions, ...$exclusions);
+
+        return $this;
+    }
+
+    public function withReason(string $reason): self
+    {
+        $this->reason = $reason;
 
         return $this;
     }
@@ -127,13 +137,10 @@ final class Reject implements StepBuilderInterface
                                                                 ),
                                                                 args: [
                                                                     new Node\Arg(
-                                                                        new Node\Expr\MethodCall(
-                                                                            new Node\Expr\Variable('exception'),
-                                                                            'getMessage'
-                                                                        ),
+                                                                        new Node\Scalar\String_($this->reason),
                                                                     ),
                                                                     new Node\Arg(
-                                                                        new Node\Expr\Variable('exception'),
+                                                                        new Node\Expr\ConstFetch(new Node\Name('null')),
                                                                     ),
                                                                     new Node\Arg(
                                                                         new Node\Expr\Variable('input'),
