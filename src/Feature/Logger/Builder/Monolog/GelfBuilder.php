@@ -25,7 +25,7 @@ final class GelfBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function withTCPTransport(string $host = null, int $port = null): self
+    public function withTCPTransport(?string $host = null, ?int $port = null): self
     {
         $this->transport = 'tcp';
         $this->host = $host;
@@ -34,7 +34,7 @@ final class GelfBuilder implements MonologBuilderInterface
         return $this;
     }
 
-    public function withAMQPTransport(string $queue, string $channel, string $vhost, string $host = null, int $port = null, float $timeout = null): self
+    public function withAMQPTransport(string $queue, string $channel, string $vhost, ?string $host = null, ?int $port = null, ?float $timeout = null): self
     {
         $this->transport = 'amqp';
         $this->queue = $queue;

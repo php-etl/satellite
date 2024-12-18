@@ -106,8 +106,6 @@ class RunCommand extends Console\Command\Command
 
             \$satellite(\$runtime);
             \$runtime->run();
-
-            \$autoload->unregister();
             PHP;
 
         $stream = fopen('php://temp', 'r+');
@@ -175,8 +173,6 @@ class RunCommand extends Console\Command\Command
 
             \$satellite(\$runtime);
             \$runtime->run();
-
-            \$autoload->unregister();
             PHP;
 
         $stream = fopen('php://temp', 'r+');

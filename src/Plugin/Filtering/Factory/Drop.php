@@ -59,13 +59,13 @@ class Drop implements Configurator\FactoryInterface
     /**
      * @throws Configurator\ConfigurationExceptionInterface
      */
-    public function compile(array $config): Filtering\Factory\Repository\Drop
+    public function compile(array $config): Repository\Drop
     {
         $interpreter = clone $this->interpreter;
 
         $builder = new Filtering\Builder\Drop();
 
-        $repository = new Filtering\Factory\Repository\Drop($builder);
+        $repository = new Repository\Drop($builder);
 
         foreach ($config as $condition) {
             $builder->withExclusions(
