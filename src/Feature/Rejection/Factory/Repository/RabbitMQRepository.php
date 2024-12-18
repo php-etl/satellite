@@ -15,7 +15,7 @@ final class RabbitMQRepository implements Configurator\RepositoryInterface
     {
         $this->files = [];
         $this->packages = [
-            'php-etl/rabbitmq-flow:*',
+            'php-etl/rabbitmq-flow:dev-feature/client-middleware',
         ];
     }
 

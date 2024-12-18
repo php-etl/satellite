@@ -46,13 +46,7 @@ final class RabbitMQBuilder implements Builder
         $args = [
             new Node\Arg($this->host, name: new Identifier('host')),
             new Node\Arg($this->vhost, name: new Identifier('vhost')),
-            new Node\Arg($this->topic, name: new Identifier('topic')),
-            new Node\Arg($this->stepUuid, name: new Identifier('stepUuid')),
         ];
-
-        if (null !== $this->exchange) {
-            $args[] = new Node\Arg($this->exchange, name: new Identifier('exchange'));
-        }
 
         if (null !== $this->port) {
             $args[] = new Node\Arg($this->port, name: new Identifier('port'));
@@ -64,18 +58,22 @@ final class RabbitMQBuilder implements Builder
                 new Node\Arg($this->user, name: new Identifier('user')),
                 new Node\Arg($this->password, name: new Identifier('password')),
             );
-
-            return new Node\Expr\StaticCall(
-                class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
-                name: new Identifier('withAuthentication'),
-                args: $args,
-            );
         }
 
-        return new Node\Expr\StaticCall(
+        return new Node\Expr\New_(
             class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\Rejection'),
-            name: new Identifier('withoutAuthentication'),
-            args: $args,
+            args: [
+                new Node\Arg(
+                    new Node\Expr\StaticCall(
+                        class: new Node\Name\FullyQualified('Kiboko\\Component\\Flow\\RabbitMQ\\ClientMiddleware'),
+                        name: new Node\Name('getInstance'),
+                        args: $args,
+                    ),
+                ),
+                new Node\Arg($this->topic, name: new Identifier('topic')),
+                new Node\Arg($this->stepUuid, name: new Identifier('stepUuid')),
+                $this->exchange !== null ? new Node\Arg($this->exchange, name: new Identifier('exchange')) : new Node\Arg(new Node\Expr\ConstFetch(new Node\Name('null')), name: new Identifier('exchange')),
+            ],
         );
     }
 }
