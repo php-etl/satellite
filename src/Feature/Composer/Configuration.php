@@ -71,14 +71,65 @@ final class Configuration implements FeatureConfigurationInterface
                 ->end()
                 ->arrayNode('auth')
                     ->arrayPrototype()
+                        ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (isset($value['url'], $value['token']) && !isset($value['type'])) {
+                                $value['type'] = 'http-basic';
+                                $value['url'] = substr((string) $value['url'], strpos((string) $value['url'], 'http-basic.') + \strlen('http-basic.'));
+                                $value['username'] ??= 'token';
+                                $value['password'] ??= $value['token'];
+                                unset($value['token']);
+                            }
+
+                            return $value;
+                        })
+                        ->end()
+                        ->validate()
+                            ->always(function ($v) {
+                                switch ($v['type']) {
+                                    case 'http-basic':
+                                        if (empty($v['url']) || empty($v['username']) || empty($v['password'])) {
+                                            throw new \InvalidArgumentException('For http-basic auth, url, username, and password are required.');
+                                        }
+                                        break;
+                                    case 'http-bearer':
+                                        if (empty($v['url']) || empty($v['token'])) {
+                                            throw new \InvalidArgumentException('For http-bearer auth, url and token are required.');
+                                        }
+                                        break;
+                                    default:
+                                        if (empty($v['token'])) {
+                                            throw new \InvalidArgumentException('For gitlab-oauth, gitlab-token or github-oauth, only token is required and url is optional.');
+                                        }
+                                        break;
+                                }
+
+                                return $v;
+                            })
+                        ->end()
                         ->children()
-                            ->scalarNode('url')->isRequired()->end()
+                            ->enumNode('type')
+                                ->isRequired()
+                                ->values(['http-basic', 'http-bearer', 'gitlab-oauth', 'gitlab-token', 'github-oauth'])
+                            ->end()
+                            ->scalarNode('url')->end()
                             ->scalarNode('token')
                                 ->validate()
                                     ->ifTrue(isExpression())
                                     ->then(asExpression())
                                 ->end()
-                                ->isRequired()
+                            ->end()
+                            ->scalarNode('username')
+                                ->validate()
+                                    ->ifTrue(isExpression())
+                                    ->then(asExpression())
+                                ->end()
+                            ->end()
+                            ->scalarNode('password')
+                                ->validate()
+                                    ->ifTrue(isExpression())
+                                    ->then(asExpression())
+                                ->end()
                             ->end()
                         ->end()
                     ->end()

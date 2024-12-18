@@ -23,8 +23,8 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     private iterable $command = [];
     /** @var iterable<string> */
     private iterable $tags = [];
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
-    private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerJsonFile = null;
+    private PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null;
     /** @var iterable<array<string, string>> */
     private iterable $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
@@ -67,7 +67,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withComposerFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
-        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -77,7 +77,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
-        string $destinationPath = null
+        ?string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
@@ -92,7 +92,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
@@ -128,6 +128,57 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
     public function withComposerAuthenticationToken(string $url, string $auth): self
     {
         $this->authenticationTokens[$url] = $auth;
+
+        return $this;
+    }
+
+    public function withGithubOauthAuthentication(string $token, string $domain = 'github.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'github-token',
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withGitlabOauthAuthentication(string $token, string $domain = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'gitlab-oauth',
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withGitlabTokenAuthentication(string $token, string $domain = 'gitlab.com'): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'gitlab-token',
+            'token' => $token,
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBasicAuthentication(string $domain, string $username, string $password): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'http-basic',
+            'username' => $username,
+            'password' => $password,
+        ];
+
+        return $this;
+    }
+
+    public function withHttpBearerAuthentication(string $domain, string $token): self
+    {
+        $this->authenticationTokens[$domain] = [
+            'type' => 'http-bearer',
+            'token' => $token,
+        ];
 
         return $this;
     }
@@ -201,8 +252,15 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         }
 
         if (\count($this->authenticationTokens) > 0) {
-            foreach ($this->authenticationTokens as $url => $token) {
-                $dockerfile->push(new Dockerfile\PHP\ComposerAuthenticationToken($url, $token));
+            foreach ($this->authenticationTokens as $url => $authentication) {
+                match ($authentication['type']) {
+                    'gitlab-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabOauthAuthentication($authentication['token'], $authentication['url'])),
+                    'gitlab-token' => $dockerfile->push(new Dockerfile\PHP\ComposerGitlabTokenAuthentication($authentication['token'], $authentication['url'])),
+                    'github-oauth' => $dockerfile->push(new Dockerfile\PHP\ComposerGithubOauthAuthentication($authentication['token'], $authentication['url'])),
+                    'http-basic' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBasicAuthentication($url, $authentication['username'], $authentication['password'])),
+                    'http-bearer' => $dockerfile->push(new Dockerfile\PHP\ComposerHttpBearerAuthentication($url, $authentication['token'])),
+                    default => new \LogicException(),
+                };
             }
         }
 

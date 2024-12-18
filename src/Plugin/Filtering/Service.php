@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Plugin\Filtering;
 
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
-use Kiboko\Component\Satellite\Plugin\Filtering;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
@@ -26,7 +25,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         private ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage()
     ) {
         $this->processor = new Processor();
-        $this->configuration = new Filtering\Configuration();
+        $this->configuration = new Configuration();
     }
 
     public function interpreter(): ExpressionLanguage
@@ -79,11 +78,11 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
         }
 
         if (\array_key_exists('reject', $config)) {
-            return (new Filtering\Factory\Reject($interpreter, $config['expression_language'] ?? []))->compile($config['reject']);
+            return (new Factory\Reject($interpreter, $config['expression_language'] ?? []))->compile($config['reject']);
         }
 
         if (\array_key_exists('drop', $config)) {
-            return (new Filtering\Factory\Drop($interpreter, $config['expression_language'] ?? []))->compile($config['drop']);
+            return (new Factory\Drop($interpreter, $config['expression_language'] ?? []))->compile($config['drop']);
         }
 
         throw new \RuntimeException('No possible pipeline step, expecting "extractor", "transformer" or "loader".');

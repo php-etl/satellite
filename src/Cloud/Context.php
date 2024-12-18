@@ -8,7 +8,7 @@ use Gyroscops\Api;
 use Kiboko\Component\Satellite\Cloud\DTO\OrganizationId;
 use Kiboko\Component\Satellite\Cloud\DTO\WorkspaceId;
 
-final readonly class Context
+final readonly class Context implements ContextInterface
 {
     public function __construct(
         private Api\Client $client,

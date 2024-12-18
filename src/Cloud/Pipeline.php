@@ -18,7 +18,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 final readonly class Pipeline implements PipelineInterface
 {
     public function __construct(
-        private Context $context,
+        private ContextInterface $context,
     ) {
     }
 
