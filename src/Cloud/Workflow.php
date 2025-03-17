@@ -49,15 +49,13 @@ final readonly class Workflow implements WorkflowInterface
                                 $name,
                                 new JobCode($code),
                                 new StepList(
-                                    ...array_map(function (string $code, array $step, int $order) {
-                                            return new Step(
-                                                $step['name'] ?? sprintf('step%d', $order),
-                                                new StepCode($code ?? sprintf('step%d', $order)),
-                                                $step,
-                                                new ProbeList(),
-                                                $order
-                                            );
-                                        },
+                                    ...array_map(fn(string $code, array $step, int $order) => new Step(
+                                        $step['name'] ?? sprintf('step%d', $order),
+                                        new StepCode($code ?? sprintf('step%d', $order)),
+                                        $step,
+                                        new ProbeList(),
+                                        $order
+                                    ),
                                         array_keys($config['pipeline']['steps']),
                                         $config['pipeline']['steps'],
                                         range(0, (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) - 1)
