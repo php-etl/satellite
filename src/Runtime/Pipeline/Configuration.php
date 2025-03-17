@@ -44,6 +44,7 @@ final class Configuration implements Configurator\RuntimeConfigurationInterface
 
         /* @phpstan-ignore-next-line */
         $builder->getRootNode()
+            ->useAttributeAsKey('code')
             ->requiresAtLeastOneElement()
             ->cannotBeEmpty()
             ->isRequired()
