@@ -34,10 +34,9 @@ final readonly class Workflow implements WorkflowInterface
             $configuration['code'] ?? sprintf('workflow%s', $random),
             new DTO\JobList(
                 ...array_map(
-                    function (array $config, int $order) {
+                    function (string $code, array $config, int $order) {
                         if (\array_key_exists('pipeline', $config)) {
                             $name = $config['pipeline']['name'] ?? sprintf('pipeline%d', $order);
-                            $code = $config['pipeline']['code'] ?? sprintf('pipeline%d', $order);
                             unset($config['pipeline']['name'], $config['pipeline']['code']);
 
                             array_walk_recursive($config, function (&$value): void {
@@ -50,13 +49,14 @@ final readonly class Workflow implements WorkflowInterface
                                 $name,
                                 new JobCode($code),
                                 new StepList(
-                                    ...array_map(fn (array $step, int $order) => new Step(
+                                    ...array_map(fn(string $code, array $step, int $order) => new Step(
                                         $step['name'] ?? sprintf('step%d', $order),
-                                        new StepCode($step['code'] ?? sprintf('step%d', $order)),
+                                        new StepCode($code ?? sprintf('step%d', $order)),
                                         $step,
                                         new ProbeList(),
                                         $order
                                     ),
+                                        array_keys($config['pipeline']['steps']),
                                         $config['pipeline']['steps'],
                                         range(0, (is_countable($config['pipeline']['steps']) ? \count($config['pipeline']['steps']) : 0) - 1)
                                     ),
@@ -67,7 +67,6 @@ final readonly class Workflow implements WorkflowInterface
 
                         if (\array_key_exists('action', $config)) {
                             $name = $config['action']['name'] ?? sprintf('action%d', $order);
-                            $code = $config['action']['code'] ?? sprintf('action%d', $order);
                             unset($config['action']['name'], $config['action']['code']);
 
                             array_walk_recursive($config, function (&$value): void {
@@ -90,8 +89,9 @@ final readonly class Workflow implements WorkflowInterface
 
                         throw new \RuntimeException('This type is currently not supported.');
                     },
+                    array_keys($configuration['workflow']['jobs']),
                     $configuration['workflow']['jobs'],
-                    range(0, (is_countable($configuration['workflow']['jobs']) ? \count($configuration['workflow']['jobs']) : 0) - 1)
+                    range(0, (is_countable($configuration['workflow']['jobs']) ? \count($configuration['workflow']['jobs']) : 0) - 1),
                 )
             ),
             new Composer(

@@ -350,7 +350,9 @@ final class Service implements Configurator\FactoryInterface
             }
         }
 
-        foreach ($config['pipeline']['steps'] as $step) {
+        foreach ($config['pipeline']['steps'] as $code => $step) {
+            $step['code'] = $code;
+
             $plugins = array_intersect_key($this->plugins, $step);
             foreach ($plugins as $plugin) {
                 $plugin->appendTo($step, $repository);
