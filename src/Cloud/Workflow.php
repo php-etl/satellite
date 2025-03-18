@@ -39,11 +39,20 @@ final readonly class Workflow implements WorkflowInterface
                             $name = $config['pipeline']['name'] ?? sprintf('pipeline%d', $order);
                             unset($config['pipeline']['name'], $config['pipeline']['code']);
 
-                            array_walk_recursive($config, function (&$value): void {
-                                if ($value instanceof Expression) {
-                                    $value = '@='.$value;
+                            array_walk_recursive(
+                                $config,
+                                function (&$value, $key) {
+                                    if ($value instanceof Expression && $key === 'expression') {
+                                        $value = (string) $value;
+                                    }
+
+                                    if ($value instanceof Expression) {
+                                        $value = '@=' . $value;
+                                    }
+
+                                    return $value;
                                 }
-                            });
+                            );
 
                             return new DTO\Workflow\Pipeline(
                                 $name,
@@ -69,11 +78,20 @@ final readonly class Workflow implements WorkflowInterface
                             $name = $config['action']['name'] ?? sprintf('action%d', $order);
                             unset($config['action']['name'], $config['action']['code']);
 
-                            array_walk_recursive($config, function (&$value): void {
-                                if ($value instanceof Expression) {
-                                    $value = '@='.$value;
+                            array_walk_recursive(
+                                $config,
+                                function (&$value, $key) {
+                                    if ($value instanceof Expression && $key === 'expression') {
+                                        $value = (string) $value;
+                                    }
+
+                                    if ($value instanceof Expression) {
+                                        $value = '@=' . $value;
+                                    }
+
+                                    return $value;
                                 }
-                            });
+                            );
 
                             $configuration = $config['action'];
                             unset($config['action']);
