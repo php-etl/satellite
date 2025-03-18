@@ -50,7 +50,7 @@ final readonly class SyslogFactory implements Configurator\FactoryInterface
         return false;
     }
 
-    public function compile(array $config): Logger\Factory\Repository\SyslogRepository
+    public function compile(array $config): Repository\SyslogRepository
     {
         $builder = new Logger\Builder\Monolog\SyslogBuilder($config['ident']);
 
@@ -66,6 +66,6 @@ final readonly class SyslogFactory implements Configurator\FactoryInterface
             $builder->withLogopts($config['logopts']);
         }
 
-        return new Logger\Factory\Repository\SyslogRepository($builder);
+        return new Repository\SyslogRepository($builder);
     }
 }

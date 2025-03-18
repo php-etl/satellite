@@ -77,7 +77,7 @@ final class Server implements StepBuilderInterface
         return $this;
     }
 
-    public function withPrivateKeyAuthentication(Node\Expr $username, Node\Expr $publicKey, Node\Expr $privateKey, Node\Expr $privateKeyPassphrase = null): self
+    public function withPrivateKeyAuthentication(Node\Expr $username, Node\Expr $publicKey, Node\Expr $privateKey, ?Node\Expr $privateKeyPassphrase = null): self
     {
         $this->username = $username;
         $this->publicKey = $publicKey;
