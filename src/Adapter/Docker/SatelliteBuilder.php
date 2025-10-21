@@ -12,7 +12,7 @@ use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
-    private string $workdir = '/var/www/html/';
+    private string $workdir = '/app/';
     /** @var iterable<string> */
     private iterable $composerRequire = [];
     private iterable $repositories = [];

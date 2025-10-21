@@ -1,7 +1,7 @@
 satellite:
 #  docker:
 #    from: php:8.0-cli-alpine
-#    workdir: /var/www/html
+#    workdir: /app
 #    tags:
 #      - kiboko/satellite:foo
 #      - kiboko/satellite:bar
