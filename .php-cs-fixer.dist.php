@@ -35,6 +35,11 @@ return (new PhpCsFixer\Config())
         'ereg_to_preg' => true,
         'dir_constant' => true,
         'method_chaining_indentation' => false,
+        'string_implicit_backslashes' => [
+            'single_quoted' => 'escape',
+            'heredoc' => 'escape',
+            'double_quoted' => 'escape'
+        ]
     ])
     ->setFinder($finder)
     ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line
