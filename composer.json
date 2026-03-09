@@ -38,7 +38,8 @@
         "react/child-process": "^0.7",
         "react/async": "^4.1",
         "react/promise-timer": "^1.10",
-        "symfony/http-client": "^6.0"
+        "symfony/http-client": "^6.0",
+        "spiral/framework": "^3.17"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
@@ -83,7 +84,8 @@
         "bin-dir": "bin",
         "allow-plugins": {
             "php-http/discovery": true,
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "spiral/composer-publish-plugin": true
         }
     },
     "bin": ["bin/satellite", "bin/cloud"],
