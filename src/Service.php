@@ -7,6 +7,7 @@ namespace Kiboko\Component\Satellite;
 use Kiboko\Component\Packaging;
 use Kiboko\Component\Satellite;
 use Kiboko\Component\Satellite\DependencyInjection\SatelliteDependencyInjection;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Kiboko\Contract\Configurator;
 use PhpParser\Node;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -209,16 +210,43 @@ final class Service implements Configurator\FactoryInterface
      */
     public function compile(array $config): Configurator\RepositoryInterface
     {
+        if (\array_key_exists('pipeline', $config)) {
+            throw new \RuntimeException(
+                'satellite.pipeline is no longer supported. Please run: satellite migrate:pipeline-to-workflow'
+            );
+        }
+
         if (\array_key_exists('workflow', $config)) {
             return $this->compileWorkflow($config);
         }
-        if (\array_key_exists('pipeline', $config)) {
-            return $this->compilePipeline($config);
+        if (\array_key_exists('workflows', $config)
+            && \is_array($config['workflows'])
+            && \count($config['workflows']) > 0
+        ) {
+            $config['workflow'] = $config['workflows'][0];
+
+            return $this->compileWorkflow($config);
         }
         if (\array_key_exists('http_hook', $config)) {
             return $this->compileHook($config);
         }
+        if (\array_key_exists('webhooks', $config)
+            && \is_array($config['webhooks'])
+            && \count($config['webhooks']) > 0
+        ) {
+            $config['http_hook'] = $config['webhooks'][0];
+
+            return $this->compileHook($config);
+        }
         if (\array_key_exists('http_api', $config)) {
+            return $this->compileApi($config);
+        }
+        if (\array_key_exists('rest', $config)
+            && \is_array($config['rest'])
+            && \count($config['rest']) > 0
+        ) {
+            $config['http_api'] = $config['rest'][0];
+
             return $this->compileApi($config);
         }
 
@@ -227,6 +255,21 @@ final class Service implements Configurator\FactoryInterface
 
     private function compileWorkflow(array $config): Satellite\Builder\Repository\Workflow
     {
+        $workflowConfig = $config['workflow'];
+        $jobs = $workflowConfig['jobs'] ?? [];
+
+        // Normalize v1 format: jobs as list with id → map keyed by id
+        if (\is_array($jobs) && isset($jobs[0])) {
+            $normalizedJobs = [];
+            foreach ($jobs as $job) {
+                $code = $job['id'] ?? $job['code'] ?? null;
+                if ($code !== null) {
+                    $normalizedJobs[$code] = $job;
+                }
+            }
+            $workflowConfig['jobs'] = $normalizedJobs;
+        }
+
         $workflow = new Satellite\Builder\Workflow(
             new Node\Expr\Variable('runtime')
         );
@@ -280,7 +323,7 @@ final class Service implements Configurator\FactoryInterface
             )
         );
 
-        foreach ($config['workflow']['jobs'] as $code => $job) {
+        foreach ($workflowConfig['jobs'] as $code => $job) {
             if (\array_key_exists('pipeline', $job)) {
                 $pipeline = $this->compilePipelineJob($job);
                 $pipelineFilename = sprintf('%s.php', uniqid('pipeline'));
@@ -345,8 +388,14 @@ final class Service implements Configurator\FactoryInterface
             && \is_array($config['pipeline']['expression_language'])
             && \count($config['pipeline']['expression_language'])
         ) {
-            foreach ($config['pipeline']['expression_language'] as $provider) {
-                $this->interpreter->registerProvider(new $provider());
+            foreach ($config['pipeline']['expression_language'] as $providerClass) {
+                $provider = new $providerClass();
+                if (!$provider instanceof ExpressionFunctionProviderInterface) {
+                    throw new Configurator\InvalidConfigurationException(
+                        \sprintf('Provider class "%s" must implement %s.', $providerClass, ExpressionFunctionProviderInterface::class)
+                    );
+                }
+                $this->interpreter->registerProvider($provider);
             }
         }
 
@@ -514,12 +563,14 @@ final class Service implements Configurator\FactoryInterface
         $container = new SatelliteDependencyInjection();
 
         $dumper = new PhpDumper($container($config['http_api']));
+        $dump = $dumper->dump();
+        if (!\is_string($dump)) {
+            throw new \RuntimeException('PhpDumper::dump() with as_files=false must return string.');
+        }
         $repository->addFiles(
             new Packaging\File(
                 'container.php',
-                new Packaging\Asset\InMemory(
-                    $dumper->dump()
-                )
+                new Packaging\Asset\InMemory($dump)
             ),
         );
 
@@ -574,12 +625,14 @@ final class Service implements Configurator\FactoryInterface
         $container = new SatelliteDependencyInjection();
 
         $dumper = new PhpDumper($container($config));
+        $dump = $dumper->dump();
+        if (!\is_string($dump)) {
+            throw new \RuntimeException('PhpDumper::dump() with as_files=false must return string.');
+        }
         $repository->addFiles(
             new Packaging\File(
                 'container.php',
-                new Packaging\Asset\InMemory(
-                    $dumper->dump()
-                )
+                new Packaging\Asset\InMemory($dump)
             ),
         );
 

@@ -43,15 +43,20 @@ final class UpdateCommand extends Console\Command\Command
             $ssl = $input->getOption('ssl') ?? true;
         }
 
+        $basePath = getcwd();
+        if (false === $basePath) {
+            throw new \RuntimeException('Could not get current working directory.');
+        }
+
         $filename = $input->getArgument('config');
         if (null !== $filename) {
-            $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
+            $configuration = (new Satellite\ConfigLoader($basePath))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
 
             foreach ($possibleFiles as $filename) {
                 try {
-                    $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
+                    $configuration = (new Satellite\ConfigLoader($basePath))->loadFile($filename);
                     break;
                 } catch (LoaderLoadException) {
                 }
@@ -62,7 +67,7 @@ final class UpdateCommand extends Console\Command\Command
             }
         }
 
-        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+        for ($directory = $basePath; '/' !== $directory; $directory = \dirname($directory)) {
             if (file_exists($directory.'/.gyro.php')) {
                 break;
             }

@@ -1,0 +1,591 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#2 \\$requestBody of method Gyroscops\\\\Api\\\\Client\\:\\:addComposerAuthPipelinePipelineItem\\(\\) expects Gyroscops\\\\Api\\\\Model\\\\PipelineAddPipelineComposerAuthCommandInput\\|Gyroscops\\\\Api\\\\Model\\\\PipelineAddPipelineComposerAuthCommandInputJsonld\\|null, Gyroscops\\\\Api\\\\Model\\\\PipelineAddPipelineComposerPSR4AutoloadCommandInput given\\.$#"
+			count: 1
+			path: src/Cloud/Handler/Pipeline/AddPipelineComposerPSR4AutoloadCommandHandler.php
+
+		-
+			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
+			count: 3
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineRead\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesStepsIdProbesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineStepProbe\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Dead catch \\- AssertionError is never thrown in the try block\\.$#"
+			count: 2
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, string\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Auth given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Repository given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesStepsIdProbesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineStepProbe\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<string\\>\\|null given\\.$#"
+			count: 3
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#3 \\$order of class Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Probe constructor expects int, int\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Parameter \\#3 \\.\\.\\.\\$arrays of function array_map expects array, array\\<string\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 1 and \\*NEVER\\* will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Pipeline.php
+
+		-
+			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
+			count: 3
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimeWorkflowsGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\WorkflowRead\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Dead catch \\- AssertionError is never thrown in the try block\\.$#"
+			count: 2
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Instanceof between Gyroscops\\\\Api\\\\Model\\\\WorkflowJsonldRead\\|Gyroscops\\\\Api\\\\Model\\\\WorkflowRead and Gyroscops\\\\Api\\\\Model\\\\PipelineRead will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_keys expects array, array\\<string\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(Gyroscops\\\\Api\\\\Model\\\\Step, int\\<0, max\\>\\)\\: mixed\\)\\|null, Closure\\(Gyroscops\\\\Api\\\\Model\\\\PipelineStepRead, int\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Step given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(Gyroscops\\\\Api\\\\Model\\\\WorkflowJobJsonldRead\\|Gyroscops\\\\Api\\\\Model\\\\WorkflowJobRead, int\\<0, max\\>\\)\\: mixed\\)\\|null, Closure\\(Gyroscops\\\\Api\\\\Model\\\\Job, int\\)\\: \\(Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Action\\|Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Pipeline\\) given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed, int\\<\\-1, max\\>\\)\\: mixed\\)\\|null, Closure\\(string, array, int\\)\\: \\(Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Action\\|Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Pipeline\\) given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed, int\\<\\-1, max\\>\\)\\: mixed\\)\\|null, Closure\\(string, array, int\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Step given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(mixed, string\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Auth given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Repository given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<Gyroscops\\\\Api\\\\Model\\\\Step\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<Gyroscops\\\\Api\\\\Model\\\\WorkflowJobJsonldRead\\|Gyroscops\\\\Api\\\\Model\\\\WorkflowJobRead\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<string\\>\\|null given\\.$#"
+			count: 3
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#3 \\$config of class Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Step constructor expects array, array\\<string\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#3 \\$configuration of class Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Action constructor expects array, iterable\\<\\(int\\|string\\), string\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#3 \\.\\.\\.\\$arrays of function array_map expects array, array\\<string\\>\\|null given\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 1 and \\*NEVER\\* will always evaluate to false\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Variable \\$code on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: src/Cloud/Workflow.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of class ArrayIterator constructor expects array\\<TKey of \\(int\\|string\\), TValue\\>, iterable\\<Composer\\\\Package\\\\PackageInterface\\> given\\.$#"
+			count: 1
+			path: src/Composer/Accumulator.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable\\<Composer\\\\Package\\\\PackageInterface\\> given\\.$#"
+			count: 1
+			path: src/Composer/Accumulator.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between null and mixed will always evaluate to false\\.$#"
+			count: 1
+			path: src/ConfigLoader.php
+
+		-
+			message: "#^Method class@anonymous/Console/Command/BuildCommand\\.php\\:111\\:\\:log\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: src/Console/Command/BuildCommand.php
+
+		-
+			message: "#^Method class@anonymous/Console/Command/BuildCommand\\.php\\:89\\:\\:log\\(\\) has parameter \\$message with no type specified\\.$#"
+			count: 1
+			path: src/Console/Command/BuildCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$messages of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:writeln\\(\\) expects iterable\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Console/Command/Migrate/MigrateHttpApiToRestCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$messages of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:writeln\\(\\) expects iterable\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Console/Command/Migrate/MigrateHttpHookToWebhookCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$messages of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:writeln\\(\\) expects iterable\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Console/Command/Migrate/MigratePipelineToWorkflowCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$messages of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:writeln\\(\\) expects iterable\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Console/Command/Migrate/MigrateWorkflowJobsToGraphCommand.php
+
+		-
+			message: "#^Cannot call method on\\(\\) on React\\\\Stream\\\\ReadableStreamInterface\\|React\\\\Stream\\\\WritableStreamInterface\\|null\\.$#"
+			count: 4
+			path: src/Console/Command/RunCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class React\\\\Stream\\\\ReadableResourceStream constructor expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: src/Console/Command/RunCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fseek expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: src/Console/Command/RunCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: src/Console/Command/RunCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$messages of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:writeln\\(\\) expects iterable\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Console/Command/ValidateCommand.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Console\\\\Config\\\\JsonFileLoader\\:\\:load\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Console/Config/JsonFileLoader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Console\\\\Config\\\\JsonFileLoader\\:\\:supports\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Console/Config/JsonFileLoader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Console\\\\Config\\\\YamlFileLoader\\:\\:load\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Console/Config/YamlFileLoader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Console\\\\Config\\\\YamlFileLoader\\:\\:supports\\(\\) has parameter \\$type with no type specified\\.$#"
+			count: 1
+			path: src/Console/Config/YamlFileLoader.php
+
+		-
+			message: "#^Parameter \\#1 \\$provider of method Symfony\\\\Component\\\\DependencyInjection\\\\ContainerBuilder\\:\\:addExpressionLanguageProvider\\(\\) expects Symfony\\\\Component\\\\ExpressionLanguage\\\\ExpressionFunctionProviderInterface, object given\\.$#"
+			count: 1
+			path: src/DependencyInjection/SatelliteDependencyInjection.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fseek expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: src/ExpressionLanguage/TemporaryFile.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: src/ExpressionLanguage/TemporaryFile.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable given\\.$#"
+			count: 2
+			path: src/Feature/Logger/Builder/Monolog/ElasticSearchBuilder.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of function Kiboko\\\\Component\\\\SatelliteToolbox\\\\Configuration\\\\compileValueWhenExpression expects array\\|bool\\|float\\|int\\|string\\|Symfony\\\\Component\\\\ExpressionLanguage\\\\Expression\\|null, iterable given\\.$#"
+			count: 1
+			path: src/Feature/Logger/Builder/Monolog/ElasticSearchBuilder.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable given\\.$#"
+			count: 1
+			path: src/Feature/Logger/Builder/Monolog/GelfBuilder.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable given\\.$#"
+			count: 1
+			path: src/Feature/Logger/Builder/Monolog/StreamBuilder.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable given\\.$#"
+			count: 1
+			path: src/Feature/Logger/Builder/Monolog/SyslogBuilder.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_push expects array, iterable given\\.$#"
+			count: 2
+			path: src/Feature/Logger/Builder/MonologLogger.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, iterable given\\.$#"
+			count: 1
+			path: src/Feature/Logger/Builder/MonologLogger.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of class PhpParser\\\\Node\\\\Arg constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 1
+			path: src/Feature/Rejection/Builder/RabbitMQBuilder.php
+
+		-
+			message: "#^Parameter \\#3 \\$repository of callable Kiboko\\\\Component\\\\Satellite\\\\Pipeline\\\\StepInterface expects Kiboko\\\\Contract\\\\Configurator\\\\StepRepositoryInterface, Kiboko\\\\Contract\\\\Configurator\\\\RepositoryInterface given\\.$#"
+			count: 1
+			path: src/Pipeline/ConfigurationApplier.php
+
+		-
+			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
+			count: 1
+			path: src/Pipeline/Extractor.php
+
+		-
+			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Extractor.php
+
+		-
+			message: "#^Parameter \\#4 \\$state of method Kiboko\\\\Component\\\\Satellite\\\\Builder\\\\Pipeline\\:\\:addExtractor\\(\\) expects PhpParser\\\\Builder\\|PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Extractor.php
+
+		-
+			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
+			count: 1
+			path: src/Pipeline/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Loader.php
+
+		-
+			message: "#^Parameter \\#4 \\$state of method Kiboko\\\\Component\\\\Satellite\\\\Builder\\\\Pipeline\\:\\:addLoader\\(\\) expects PhpParser\\\\Builder\\|PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
+			count: 1
+			path: src/Pipeline/Transformer.php
+
+		-
+			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Transformer.php
+
+		-
+			message: "#^Parameter \\#4 \\$state of method Kiboko\\\\Component\\\\Satellite\\\\Builder\\\\Pipeline\\:\\:addTransformer\\(\\) expects PhpParser\\\\Builder\\|PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
+			count: 1
+			path: src/Pipeline/Transformer.php
+
+		-
+			message: "#^Cannot access an offset on iterable\\.$#"
+			count: 2
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$content with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$index with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$mode with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$path with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$server with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_keys expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\MethodCall constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 3
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\PropertyFetch constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\FTP\\\\Builder\\\\Server\\:\\:getBasePath\\(\\) should return PhpParser\\\\Node\\\\Expr but returns PhpParser\\\\Node\\\\Expr\\|null\\.$#"
+			count: 1
+			path: src/Plugin/FTP/Builder/Server.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of class PhpParser\\\\Node\\\\Arg constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 4
+			path: src/Plugin/FTP/Builder/Server.php
+
+		-
+			message: "#^Class Kiboko\\\\Component\\\\Bucket\\\\RejectionResultBucket not found\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Drop.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$exclusions of method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\Filtering\\\\Builder\\\\Drop\\:\\:buildExclusions\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Drop.php
+
+		-
+			message: "#^Parameter \\#2 \\$right of class PhpParser\\\\Node\\\\Expr\\\\BinaryOp\\\\BooleanAnd constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Drop.php
+
+		-
+			message: "#^Class Kiboko\\\\Component\\\\Bucket\\\\RejectionResultBucket not found\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Reject.php
+
+		-
+			message: "#^Parameter \\#1 \\.\\.\\.\\$exclusions of method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\Filtering\\\\Builder\\\\Reject\\:\\:buildExclusions\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Reject.php
+
+		-
+			message: "#^Parameter \\#2 \\$right of class PhpParser\\\\Node\\\\Expr\\\\BinaryOp\\\\BooleanAnd constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 1
+			path: src/Plugin/Filtering/Builder/Reject.php
+
+		-
+			message: "#^Cannot access an offset on iterable\\.$#"
+			count: 2
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor\\:\\:getPutNode\\(\\) has parameter \\$content with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor\\:\\:getPutNode\\(\\) has parameter \\$index with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor\\:\\:getPutNode\\(\\) has parameter \\$mode with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor\\:\\:getPutNode\\(\\) has parameter \\$path with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor\\:\\:getPutNode\\(\\) has parameter \\$server with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_keys expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\MethodCall constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 3
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\PropertyFetch constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Extractor.php
+
+		-
+			message: "#^Cannot access an offset on iterable\\.$#"
+			count: 2
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$content with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$index with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$mode with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$path with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\:\\:getPutNode\\(\\) has parameter \\$server with no type specified\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_keys expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, iterable given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\MethodCall constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 3
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Parameter \\$name of class PhpParser\\\\Node\\\\Expr\\\\PropertyFetch constructor expects PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\|string, PhpParser\\\\Node\\\\Name given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Loader.php
+
+		-
+			message: "#^Method Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Server\\:\\:getBasePath\\(\\) should return PhpParser\\\\Node\\\\Expr but returns PhpParser\\\\Node\\\\Expr\\|null\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Builder/Server.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of class PhpParser\\\\Node\\\\Arg constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
+			count: 4
+			path: src/Plugin/SFTP/Builder/Server.php
+
+		-
+			message: "#^Parameter \\#1 \\$builder of class Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Factory\\\\Repository\\\\Repository constructor expects Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Loader\\|Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Server, Kiboko\\\\Component\\\\Satellite\\\\Plugin\\\\SFTP\\\\Builder\\\\Extractor given\\.$#"
+			count: 1
+			path: src/Plugin/SFTP/Factory/Extractor.php
+
+		-
+			message: "#^Parameter \\#2 \\$feature of method Kiboko\\\\Component\\\\Satellite\\\\Runtime\\\\Api\\\\Configuration\\:\\:addFeature\\(\\) expects Kiboko\\\\Contract\\\\Configurator\\\\FeatureConfigurationInterface, Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface given\\.$#"
+			count: 1
+			path: src/Runtime/Api/Factory.php
+
+		-
+			message: "#^Parameter \\#2 \\$feature of method Kiboko\\\\Component\\\\Satellite\\\\Runtime\\\\HttpHook\\\\Configuration\\:\\:addFeature\\(\\) expects Kiboko\\\\Contract\\\\Configurator\\\\FeatureConfigurationInterface, Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface given\\.$#"
+			count: 1
+			path: src/Runtime/HttpHook/Factory.php
+
+		-
+			message: "#^Parameter \\#2 \\$feature of method Kiboko\\\\Component\\\\Satellite\\\\Runtime\\\\Pipeline\\\\Configuration\\:\\:addFeature\\(\\) expects Kiboko\\\\Contract\\\\Configurator\\\\FeatureConfigurationInterface, Symfony\\\\Component\\\\Config\\\\Definition\\\\ConfigurationInterface given\\.$#"
+			count: 1
+			path: src/Runtime/Pipeline/Factory.php

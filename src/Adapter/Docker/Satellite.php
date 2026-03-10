@@ -21,9 +21,10 @@ final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags = [];
-    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
-    private iterable $files;
-    private iterable $dependencies = [];
+    /** @var array<int|string, Packaging\DirectoryInterface|Packaging\FileInterface> */
+    private array $files;
+    /** @var string[] */
+    private array $dependencies = [];
 
     public function __construct(
         private readonly Dockerfile\Dockerfile $dockerfile,
@@ -82,11 +83,14 @@ final class Satellite implements Configurator\SatelliteInterface
 
         $input = new ReadableResourceStream($archive->asResource());
 
-        $input->pipe($process->stdin);
+        if ($process->stdin !== null) {
+            $input->pipe($process->stdin);
+        }
 
         $this->execute($logger, $process);
 
-        if (0 !== $process->getExitCode()) {
+        $exitCode = $process->getExitCode();
+        if ($exitCode !== null && 0 !== $exitCode) {
             throw new \RuntimeException('Process exited unexpectedly.');
         }
     }
@@ -96,12 +100,16 @@ final class Satellite implements Configurator\SatelliteInterface
         Process $process,
         float $timeout = 300
     ): void {
-        $process->stdout->on('data', function ($chunk) use ($logger): void {
-            $logger->debug($chunk);
-        });
-        $process->stderr->on('data', function ($chunk) use ($logger): void {
-            $logger->info($chunk);
-        });
+        if ($process->stdout !== null) {
+            $process->stdout->on('data', function ($chunk) use ($logger): void {
+                $logger->debug($chunk);
+            });
+        }
+        if ($process->stderr !== null) {
+            $process->stderr->on('data', function ($chunk) use ($logger): void {
+                $logger->info($chunk);
+            });
+        }
 
         $deferred = new Deferred();
 
@@ -113,8 +121,9 @@ final class Satellite implements Configurator\SatelliteInterface
 
         await(timeout($deferred->promise(), $timeout));
 
-        if (0 !== $process->getExitCode()) {
-            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $process->getExitCode()), $process->getExitCode());
+        $exitCode = $process->getExitCode();
+        if ($exitCode !== null && 0 !== $exitCode) {
+            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $exitCode), $exitCode);
         }
     }
 }

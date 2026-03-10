@@ -11,13 +11,13 @@ use Kiboko\Contract\Packaging as PackagingContract;
 
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
-    /** @var iterable<string> */
-    private iterable $composerRequire = [];
+    /** @var string[] */
+    private array $composerRequire = [];
     private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
     private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
     private readonly iterable $files;
-    /** @var array<string, array<string, string>> */
+    /** @var array<string, array<string, string|array<int|string, string>>> */
     private array $composerAutoload = [
         'psr4' => [
             'GyroscopsGenerated\\' => './',
@@ -48,7 +48,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withComposerFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
-        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -58,20 +58,21 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
-        string $destinationPath = null
+        ?string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
         }
 
+        $destPath = $destinationPath ?? $source->getPath();
         $this->files->append(new \ArrayIterator([
-            new Packaging\File($destinationPath, $source),
+            $destPath => new Packaging\File($destPath, $source),
         ]));
 
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->files->append(new \RecursiveIteratorIterator($source, \RecursiveIteratorIterator::SELF_FIRST));
 
@@ -86,10 +87,16 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         );
 
         if (null !== $this->composerJsonFile) {
-            $satellite->withFile($this->composerJsonFile);
+            $composerJson = $this->composerJsonFile instanceof PackagingContract\FileInterface
+                ? $this->composerJsonFile
+                : new Packaging\VirtualFile($this->composerJsonFile);
+            $satellite->withFile($composerJson);
 
             if (null !== $this->composerLockFile) {
-                $satellite->withFile($this->composerLockFile);
+                $composerLock = $this->composerLockFile instanceof PackagingContract\FileInterface
+                    ? $this->composerLockFile
+                    : new Packaging\VirtualFile($this->composerLockFile);
+                $satellite->withFile($composerLock);
             }
         }
 

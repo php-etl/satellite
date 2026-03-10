@@ -74,13 +74,16 @@ final class Auth
         }
 
         $token = $client->postCredentialsItem($data);
-        try {
-            \assert($token instanceof Api\Model\Token);
-        } catch (\AssertionError) {
+        if (!$token instanceof Api\Model\Token) {
             throw new AccessDeniedException('Could not authenticate with the provided credentials.');
         }
 
-        return $token->getToken();
+        $tokenValue = $token->getToken();
+        if (null === $tokenValue) {
+            throw new AccessDeniedException('Could not authenticate with the provided credentials.');
+        }
+
+        return $tokenValue;
     }
 
     public function changeOrganization(

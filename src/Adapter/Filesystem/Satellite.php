@@ -11,9 +11,10 @@ use Psr\Log\LoggerInterface;
 
 final class Satellite implements Configurator\SatelliteInterface
 {
-    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
-    private iterable $files;
-    private iterable $dependencies = [];
+    /** @var array<int|string, Packaging\DirectoryInterface|Packaging\FileInterface> */
+    private array $files;
+    /** @var string[] */
+    private array $dependencies = [];
 
     public function __construct(
         private readonly string $workdir,
@@ -44,8 +45,10 @@ final class Satellite implements Configurator\SatelliteInterface
             if ($file instanceof Packaging\DirectoryInterface) {
                 foreach (new \RecursiveIteratorIterator($file) as $current) {
                     $stream = fopen($this->workdir.'/'.$current->getPath(), 'wb');
-                    stream_copy_to_stream($current->asResource(), $stream);
-                    fclose($stream);
+                    if (false !== $stream) {
+                        stream_copy_to_stream($current->asResource(), $stream);
+                        fclose($stream);
+                    }
                 }
             } else {
                 $dirname = \dirname($this->workdir.'/'.$file->getPath());
@@ -53,8 +56,10 @@ final class Satellite implements Configurator\SatelliteInterface
                     mkdir($dirname, 0o755, true);
                 }
                 $stream = fopen($this->workdir.'/'.$file->getPath(), 'wb');
-                stream_copy_to_stream($file->asResource(), $stream);
-                fclose($stream);
+                if (false !== $stream) {
+                    stream_copy_to_stream($file->asResource(), $stream);
+                    fclose($stream);
+                }
             }
         }
 

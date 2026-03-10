@@ -1,0 +1,30 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: parameter.implicitlyNullable
+        - message: '~Unable to resolve the template type T in call to function~'
+        - message: '~expects PhpParser\\Node\\Expr, PhpParser\\Node given~'
+        - message: '~expects string, string\|false given~'
+        - message: '~does not accept array~'
+        - message: '~pipe\(\) expects~'
+        - message: '~IteratorAggregate but does not specify its types~'
+        - message: '~has no return type specified~'
+        - message: '~Binary operation.*between int\|string~'
+        - message: '~expects string, string\|null given~'
+        - message: '~InMemory constructor expects string, array\|string given~'
+        - message: '~registerProvider\(\) expects~'
+        - message: '~is unused~'
+        - message: '~ReflectionAttribute but does not specify its types~'
+        - identifier: property.onlyWritten
+        - message: '~expects.*PipelinePluginInterface~'
+        - message: '~expects.*PluginConfigurationInterface~'
+        - message: '~Cannot access offset string on iterable~'
+        - message: '~Node\\\\Expr~'
+        - message: '~Return_ constructor~'

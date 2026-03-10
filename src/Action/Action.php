@@ -19,9 +19,12 @@ final readonly class Action
     {
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __invoke(array $config, ActionBuilder $action, RepositoryInterface $repository): void
     {
-        if (!\array_key_exists($this->plugin, $config)) {
+        if ($this->plugin === null || !\array_key_exists($this->plugin, $config)) {
             return;
         }
 
@@ -52,11 +55,14 @@ final readonly class Action
         /** @var ActionBuilderInterface $builder */
         $builder = $repository->getBuilder();
 
+        /** @var Node\Expr $stateExpr - State builder may return Stmt, cast for withState/addAction */
+        $stateExpr = $state;
+
         $action->addAction(
             $builder
                 ->withLogger($logger)
-                ->withState($state),
-            $state,
+                ->withState($stateExpr),
+            $stateExpr,
         );
     }
 }

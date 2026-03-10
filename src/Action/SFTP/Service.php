@@ -8,6 +8,7 @@ use Kiboko\Component\Satellite\Action\SFTP\Factory\Action;
 use Kiboko\Component\Satellite\Action\SFTP\Factory\Repository\Repository;
 use Kiboko\Component\Satellite\ExpressionLanguage as Satellite;
 use Kiboko\Contract\Configurator;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -72,8 +73,14 @@ final readonly class Service implements Configurator\ActionInterface
             && \is_array($config['expression_language'])
             && \count($config['expression_language'])
         ) {
-            foreach ($config['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider());
+            foreach ($config['expression_language'] as $providerClass) {
+                $provider = new $providerClass();
+                if (!$provider instanceof ExpressionFunctionProviderInterface) {
+                    throw new Configurator\InvalidConfigurationException(
+                        \sprintf('Provider class "%s" must implement %s.', $providerClass, ExpressionFunctionProviderInterface::class)
+                    );
+                }
+                $interpreter->registerProvider($provider);
             }
         }
 

@@ -11,6 +11,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 final class ConfigurationApplier
 {
     private ?Satellite\Action\Action $action = null;
+
+    /** @var array<int, string> */
     private array $packages = [];
 
     public function __construct(
@@ -34,11 +36,16 @@ final class ConfigurationApplier
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function appendTo(array $config, Satellite\Builder\Repository\Action $action): void
     {
         $repository = $this->service->compile($config[$this->plugin]);
 
-        ($this->action)($config, $action->getBuilder(), $repository);
+        if ($this->action !== null) {
+            ($this->action)($config, $action->getBuilder(), $repository);
+        }
 
         $action->addPackages(...$this->packages);
 

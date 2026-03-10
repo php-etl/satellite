@@ -8,7 +8,9 @@ use PhpParser\Node;
 
 final class Action implements ActionBuilderInterface
 {
+    /** @phpstan-ignore property.onlyWritten (interface contract, reserved for future use) */
     private ?Node\Expr $logger = null;
+    /** @phpstan-ignore property.onlyWritten (interface contract, reserved for future use) */
     private ?Node\Expr $state = null;
 
     public function __construct(

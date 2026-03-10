@@ -13,23 +13,25 @@ use Kiboko\Contract\Packaging as PackagingContract;
 final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 {
     private string $workdir = '/app/';
-    /** @var iterable<string> */
-    private iterable $composerRequire = [];
-    private iterable $repositories = [];
-    private iterable $authenticationTokens = [];
-    /** @var iterable<string> */
-    private iterable $entrypoint = [];
-    /** @var iterable<string> */
-    private iterable $command = [];
-    /** @var iterable<string> */
-    private iterable $tags = [];
+    /** @var string[] */
+    private array $composerRequire = [];
+    /** @var array<string, array{type: string, url: string}> */
+    private array $repositories = [];
+    /** @var array<string, string> */
+    private array $authenticationTokens = [];
+    /** @var string[] */
+    private array $entrypoint = [];
+    /** @var string[] */
+    private array $command = [];
+    /** @var string[] */
+    private array $tags = [];
     private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile = null;
     private null|PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null;
-    /** @var iterable<array<string, string>> */
-    private iterable $paths = [];
+    /** @var array<int, array{0: string, 1: string}> */
+    private array $paths = [];
     /** @var \AppendIterator<string,PackagingContract\FileInterface, \Iterator<string,PackagingContract\FileInterface>> */
     private readonly iterable $files;
-    /** @var array<string, array<string, string>> */
+    /** @var array<string, array<string, string|array<int|string, string>>> */
     private array $composerAutoload = [
         'psr4' => [
             'GyroscopsGenerated\\' => './',
@@ -67,7 +69,7 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withComposerFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $composerJsonFile,
-        PackagingContract\AssetInterface|PackagingContract\FileInterface $composerLockFile = null
+        PackagingContract\AssetInterface|PackagingContract\FileInterface|null $composerLockFile = null
     ): self {
         $this->composerJsonFile = $composerJsonFile;
         $this->composerLockFile = $composerLockFile;
@@ -77,22 +79,23 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
 
     public function withFile(
         PackagingContract\AssetInterface|PackagingContract\FileInterface $source,
-        string $destinationPath = null
+        ?string $destinationPath = null
     ): self {
         if (!$source instanceof PackagingContract\FileInterface) {
             $source = new Packaging\VirtualFile($source);
         }
 
-        $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
+        $destPath = $destinationPath ?? $source->getPath();
+        $this->paths[] = [$source->getPath(), $destPath];
 
         $this->files->append(new \ArrayIterator([
-            new Packaging\File($destinationPath, $source),
+            $destPath => new Packaging\File($destPath, $source),
         ]));
 
         return $this;
     }
 
-    public function withDirectory(PackagingContract\DirectoryInterface $source, string $destinationPath = null): self
+    public function withDirectory(PackagingContract\DirectoryInterface $source, ?string $destinationPath = null): self
     {
         $this->paths[] = [$source->getPath(), $destinationPath ?? $source->getPath()];
 
@@ -153,13 +156,13 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
         if (null !== $this->composerJsonFile) {
             $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.json'));
             $this->files->append(new \ArrayIterator([
-                new Packaging\File('composer.json', $this->composerJsonFile),
+                'composer.json' => new Packaging\File('composer.json', $this->composerJsonFile),
             ]));
 
             if (null !== $this->composerLockFile) {
                 $dockerfile->push(new Dockerfile\Dockerfile\Copy('composer.json', 'composer.lock'));
                 $this->files->append(new \ArrayIterator([
-                    new Packaging\File('composer.lock', $this->composerLockFile),
+                    'composer.lock' => new Packaging\File('composer.lock', $this->composerLockFile),
                 ]));
             }
 

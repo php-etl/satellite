@@ -24,6 +24,9 @@ class Action implements Configurator\FactoryInterface
     private readonly Processor $processor;
     private readonly ConfigurationInterface $configuration;
 
+    /**
+     * @param array<int, class-string> $providers
+     */
     public function __construct(
         private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage(),
         private readonly array $providers = [],
@@ -77,12 +80,14 @@ class Action implements Configurator\FactoryInterface
         $repository = new Custom\Factory\Repository\Action($builder);
 
         $dumper = new PhpDumper($container);
+        $dump = $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated']);
+        if (!\is_string($dump)) {
+            throw new \RuntimeException('PhpDumper::dump() with as_files=false must return string.');
+        }
         $repository->addFiles(
             new Packaging\File(
                 sprintf('%s.php', $containerName),
-                new Packaging\Asset\InMemory(
-                    $dumper->dump(['class' => $containerName, 'namespace' => 'GyroscopsGenerated'])
-                )
+                new Packaging\Asset\InMemory($dump)
             ),
         );
 

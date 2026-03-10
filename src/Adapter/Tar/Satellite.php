@@ -13,9 +13,10 @@ final class Satellite implements Configurator\SatelliteInterface
 {
     /** @var string[] */
     private array $imageTags = [];
-    /** @var iterable<Packaging\DirectoryInterface|Packaging\FileInterface> */
-    private iterable $files;
-    private iterable $dependencies = [];
+    /** @var array<int|string, Packaging\DirectoryInterface|Packaging\FileInterface> */
+    private array $files;
+    /** @var string[] */
+    private array $dependencies = [];
 
     public function __construct(
         private readonly string $outputPath,
@@ -53,7 +54,14 @@ final class Satellite implements Configurator\SatelliteInterface
         mkdir(\dirname($this->outputPath), 0o755, true);
 
         $stream = gzopen($this->outputPath, 'wb');
-        \assert(false !== $stream, new \ErrorException(error_get_last()['message'], filename: error_get_last()['file'], line: error_get_last()['line']));
+        if (false === $stream) {
+            $error = error_get_last();
+            throw new \ErrorException(
+                $error['message'] ?? 'Failed to open output file',
+                filename: $error['file'] ?? '',
+                line: $error['line'] ?? 0
+            );
+        }
         stream_copy_to_stream($archive->asResource(), $stream);
         gzclose($stream);
     }

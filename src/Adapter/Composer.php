@@ -14,13 +14,15 @@ use function React\Promise\Timer\timeout;
 
 final class Composer
 {
-    public function __construct(private readonly string $workdir, private ?LoggerInterface $logger = null)
+    private LoggerInterface $logger;
+
+    public function __construct(private readonly string $workdir, ?LoggerInterface $logger = null)
     {
-        $this->logger ??= new class() extends AbstractLogger {
-            public function log($level, $message, array $context = []): void
+        $this->logger = $logger ?? new class() extends AbstractLogger {
+            public function log($level, string|\Stringable $message, array $context = []): void
             {
                 $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper((string) $level));
-                fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim($message, \PHP_EOL)));
+                fwrite(\STDERR, $prefix.str_replace(\PHP_EOL, $prefix, rtrim((string) $message, \PHP_EOL)));
             }
         };
     }
@@ -29,12 +31,16 @@ final class Composer
     {
         $process->start();
 
-        $process->stdout->on('data', function ($chunk): void {
-            $this->logger->debug($chunk);
-        });
-        $process->stderr->on('data', function ($chunk): void {
-            $this->logger->info($chunk);
-        });
+        if ($process->stdout !== null) {
+            $process->stdout->on('data', function ($chunk): void {
+                $this->logger->debug($chunk);
+            });
+        }
+        if ($process->stderr !== null) {
+            $process->stderr->on('data', function ($chunk): void {
+                $this->logger->info($chunk);
+            });
+        }
 
         $deferred = new Deferred();
 
@@ -46,8 +52,9 @@ final class Composer
 
         await(timeout($deferred->promise(), $timeout));
 
-        if (0 !== $process->getExitCode()) {
-            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $process->getExitCode()), $process->getExitCode());
+        $exitCode = $process->getExitCode();
+        if ($exitCode !== null && 0 !== $exitCode) {
+            throw new ComposerFailureException($process->getCommand(), sprintf('Process exited unexpectedly with output: %s', $exitCode), $exitCode);
         }
     }
 
@@ -165,11 +172,16 @@ final class Composer
      */
     public function autoload(array $autoloads): void
     {
-        $composer = json_decode(file_get_contents($this->workdir.'/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
+        $contents = file_get_contents($this->workdir.'/composer.json');
+        if (false === $contents) {
+            throw new \RuntimeException('Could not read composer.json');
+        }
+        $composer = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
         foreach ($autoloads as $type => $autoload) {
             match ($type) {
                 'psr4' => $composer['autoload']['psr-4'] = $autoload,
                 'file' => $composer['autoload']['file'] = $autoload,
+                default => throw new \InvalidArgumentException(\sprintf('Unknown autoload type: %s', $type)),
             };
         }
         file_put_contents($this->workdir.'/composer.json', json_encode($composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
