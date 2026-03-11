@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\ExpressionLanguage;
 
+use Kiboko\Component\Satellite\Exception\StreamException;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 
 final class TemporaryFile extends ExpressionFunction
@@ -32,6 +33,9 @@ final class TemporaryFile extends ExpressionFunction
                     return null;
                 }
                 $stream = fopen('php://temp', 'r+');
+                if (false === $stream) {
+                    throw StreamException::couldNotOpen('php://temp');
+                }
                 fwrite($stream, $content);
                 fseek($stream, 0, \SEEK_SET);
 

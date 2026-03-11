@@ -6,6 +6,8 @@ namespace Kiboko\Component\Satellite\Cloud\Console\Command;
 
 use Gyroscops\Api;
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Exception\PluginNotFoundException;
+use Kiboko\Component\Satellite\Exception\WorkingDirectoryException;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Console;
@@ -47,7 +49,7 @@ final class RemoveCommand extends Console\Command\Command
 
         $basePath = getcwd();
         if (false === $basePath) {
-            throw new \RuntimeException('Could not get current working directory.');
+            throw WorkingDirectoryException::couldNotGet();
         }
 
         $filename = $input->getArgument('config');
@@ -72,7 +74,7 @@ final class RemoveCommand extends Console\Command\Command
         }
 
         if (!file_exists($directory.'/.gyro.php')) {
-            throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
+            throw PluginNotFoundException::gyroscopsPlugins();
         }
 
         $context = new Satellite\Console\RuntimeContext(

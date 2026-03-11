@@ -22,12 +22,8 @@ class ConfigLoader implements Satellite\ConfigLoaderInterface
         $config = $loader->load($path);
         $currentPath = \dirname($path);
 
-        if (null === $config) {
+        if ($config === null || $config === []) {
             throw new InvalidConfigurationException('Provided configuration seems to be empty or in an unsupported format. Supported formats are YAML and JSON.');
-        }
-
-        if (null === $config) {
-            throw new InvalidConfigurationException('Provided configuration seems to be empty, supported formats are YAML and JSON.');
         }
 
         if (\array_key_exists('imports', $config)) {

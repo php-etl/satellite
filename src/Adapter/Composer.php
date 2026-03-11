@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Adapter;
 
+use Kiboko\Component\Satellite\Exception\ComposerException;
+use Kiboko\Component\Satellite\Exception\InvalidAutoloadTypeException;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use React\ChildProcess\Process;
@@ -174,14 +176,14 @@ final class Composer
     {
         $contents = file_get_contents($this->workdir.'/composer.json');
         if (false === $contents) {
-            throw new \RuntimeException('Could not read composer.json');
+            throw ComposerException::couldNotRead('composer.json');
         }
         $composer = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
         foreach ($autoloads as $type => $autoload) {
             match ($type) {
                 'psr4' => $composer['autoload']['psr-4'] = $autoload,
                 'file' => $composer['autoload']['file'] = $autoload,
-                default => throw new \InvalidArgumentException(\sprintf('Unknown autoload type: %s', $type)),
+                default => throw InvalidAutoloadTypeException::unknownType($type),
             };
         }
         file_put_contents($this->workdir.'/composer.json', json_encode($composer, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));

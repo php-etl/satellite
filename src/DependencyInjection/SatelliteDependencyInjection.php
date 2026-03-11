@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\DependencyInjection;
 
+use Kiboko\Component\Satellite\Exception\ConfigurationProviderException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -24,8 +26,12 @@ final class SatelliteDependencyInjection
     {
         $container = new ContainerBuilder();
 
-        foreach ($this->providers as $provider) {
-            $container->addExpressionLanguageProvider(new $provider());
+        foreach ($this->providers as $providerClass) {
+            $provider = new $providerClass();
+            if (!$provider instanceof ExpressionFunctionProviderInterface) {
+                throw ConfigurationProviderException::mustImplementProviderInterface($providerClass);
+            }
+            $container->addExpressionLanguageProvider($provider);
         }
 
         if (\array_key_exists('parameters', $config)

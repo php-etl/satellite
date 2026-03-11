@@ -16,7 +16,8 @@ final class GelfBuilder implements MonologBuilderInterface
     private ?float $timeout = null;
     private ?string $queue = null;
     private ?string $channel = null;
-    private iterable $formatters = [];
+    /** @var Node\Expr[] */
+    private array $formatters = [];
 
     public function withLevel(string $level): self
     {

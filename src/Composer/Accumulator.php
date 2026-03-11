@@ -9,8 +9,8 @@ use Composer\Package\PackageInterface;
 
 final class Accumulator implements \IteratorAggregate, \Stringable
 {
-    /** @var iterable|PackageInterface[] */
-    private iterable $packages = [];
+    /** @var PackageInterface[] */
+    private array $packages = [];
 
     public function __construct()
     {

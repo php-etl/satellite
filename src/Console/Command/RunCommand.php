@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kiboko\Component\Satellite\Console\Command;
 
+use Kiboko\Component\Satellite\Exception\StreamException;
 use React\ChildProcess\Process;
 use React\Promise\Deferred;
 use React\Stream\ReadableResourceStream;
@@ -28,6 +29,24 @@ class RunCommand extends Console\Command\Command
             $output,
         );
 
+        try {
+            return $this->doExecute($input, $output, $style);
+        } catch (StreamException $e) {
+            $style->error($e->getMessage());
+
+            return self::FAILURE;
+        } catch (\Throwable $e) {
+            $style->error($e->getMessage());
+            if ($output->isVerbose()) {
+                $style->writeln($e->getTraceAsString());
+            }
+
+            return self::FAILURE;
+        }
+    }
+
+    private function doExecute(InputInterface $input, OutputInterface $output, Console\Style\SymfonyStyle $style): int
+    {
         if (!file_exists($input->getArgument('path').'/vendor/autoload.php')) {
             $style->error('There is no compiled satellite at the provided path.');
 
@@ -111,6 +130,9 @@ class RunCommand extends Console\Command\Command
             PHP;
 
         $stream = fopen('php://temp', 'r+');
+        if (false === $stream) {
+            throw StreamException::couldNotOpen('php://temp');
+        }
         fwrite($stream, $source);
         fseek($stream, 0, \SEEK_SET);
 
@@ -128,14 +150,20 @@ class RunCommand extends Console\Command\Command
 
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) use ($style): void {
-            $style->text($chunk);
-        });
-        $process->stderr->on('data', function ($chunk) use ($style): void {
-            $style->info($chunk);
-        });
+        if ($process->stdout !== null) {
+            $process->stdout->on('data', function ($chunk) use ($style): void {
+                $style->text($chunk);
+            });
+        }
+        if ($process->stderr !== null) {
+            $process->stderr->on('data', function ($chunk) use ($style): void {
+                $style->info($chunk);
+            });
+        }
 
-        $input->pipe($process->stdin);
+        if ($process->stdin !== null) {
+            $input->pipe($process->stdin);
+        }
 
         return $process;
     }
@@ -180,6 +208,9 @@ class RunCommand extends Console\Command\Command
             PHP;
 
         $stream = fopen('php://temp', 'r+');
+        if (false === $stream) {
+            throw StreamException::couldNotOpen('php://temp');
+        }
         fwrite($stream, $source);
         fseek($stream, 0, \SEEK_SET);
 
@@ -197,14 +228,20 @@ class RunCommand extends Console\Command\Command
 
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) use ($style): void {
-            $style->text($chunk);
-        });
-        $process->stderr->on('data', function ($chunk) use ($style): void {
-            $style->info($chunk);
-        });
+        if ($process->stdout !== null) {
+            $process->stdout->on('data', function ($chunk) use ($style): void {
+                $style->text($chunk);
+            });
+        }
+        if ($process->stderr !== null) {
+            $process->stderr->on('data', function ($chunk) use ($style): void {
+                $style->info($chunk);
+            });
+        }
 
-        $input->pipe($process->stdin);
+        if ($process->stdin !== null) {
+            $input->pipe($process->stdin);
+        }
 
         return $process;
     }

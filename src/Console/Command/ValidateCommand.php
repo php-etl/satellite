@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Kiboko\Component\Satellite\Console\Command;
 
 use Kiboko\Component\Satellite;
+use Kiboko\Component\Satellite\Exception\ConfigurationNotFoundException;
+use Kiboko\Component\Satellite\Exception\PluginNotFoundException;
+use Kiboko\Component\Satellite\Exception\WorkingDirectoryException;
 use Symfony\Component\Config;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Console;
@@ -27,33 +30,56 @@ final class ValidateCommand extends Console\Command\Command
             $output,
         );
 
+        try {
+            return $this->doExecute($input, $output, $style);
+        } catch (ConfigurationNotFoundException|PluginNotFoundException|WorkingDirectoryException $e) {
+            $style->error($e->getMessage());
+
+            return self::FAILURE;
+        } catch (\Throwable $e) {
+            $style->error($e->getMessage());
+            if ($output->isVerbose()) {
+                $style->writeln($e->getTraceAsString());
+            }
+
+            return self::FAILURE;
+        }
+    }
+
+    private function doExecute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output, Console\Style\SymfonyStyle $style): int
+    {
+        $basePath = getcwd();
+        if (false === $basePath) {
+            throw WorkingDirectoryException::couldNotGet();
+        }
+
         $filename = $input->getArgument('config');
         if (null !== $filename) {
-            $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
+            $configuration = (new Satellite\ConfigLoader($basePath))->loadFile($filename);
         } else {
             $possibleFiles = ['satellite.yaml', 'satellite.yml', 'satellite.json'];
 
             foreach ($possibleFiles as $filename) {
                 try {
-                    $configuration = (new Satellite\ConfigLoader(getcwd()))->loadFile($filename);
+                    $configuration = (new Satellite\ConfigLoader($basePath))->loadFile($filename);
                     break;
                 } catch (LoaderLoadException) {
                 }
             }
 
             if (!isset($configuration)) {
-                throw new \RuntimeException('Could not find configuration file.');
+                throw ConfigurationNotFoundException::fileNotFound();
             }
         }
 
-        for ($directory = getcwd(); '/' !== $directory; $directory = \dirname($directory)) {
+        for ($directory = $basePath; '/' !== $directory; $directory = \dirname($directory)) {
             if (file_exists($directory.'/.gyro.php')) {
                 break;
             }
         }
 
         if (!file_exists($directory.'/.gyro.php')) {
-            throw new \RuntimeException('Could not load Gyroscops Satellite plugins.');
+            throw PluginNotFoundException::gyroscopsPlugins();
         }
 
         $context = new Satellite\Console\RuntimeContext(
@@ -74,7 +100,8 @@ final class ValidateCommand extends Console\Command\Command
 
         $style->success('The configuration is valid.');
 
-        $style->writeln(json_encode($configuration, \JSON_PRETTY_PRINT));
+        $json = json_encode($configuration, \JSON_PRETTY_PRINT);
+        $style->writeln(\is_string($json) ? $json : '{}');
 
         return Console\Command\Command::SUCCESS;
     }

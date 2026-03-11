@@ -9,8 +9,10 @@ use PhpParser\Node;
 
 final class MonologLogger implements Builder
 {
-    private iterable $handlers = [];
-    private iterable $processors = [];
+    /** @var Node\Expr[] */
+    private array $handlers = [];
+    /** @var Node\Expr[] */
+    private array $processors = [];
 
     public function __construct(private readonly string $channel)
     {

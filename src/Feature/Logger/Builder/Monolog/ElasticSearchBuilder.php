@@ -15,8 +15,10 @@ final class ElasticSearchBuilder implements MonologBuilderInterface
 {
     private ?string $level = null;
     private ?string $index = null;
-    private iterable $hosts = [];
-    private iterable $formatters = [];
+    /** @var array<int, array|Expression|string> */
+    private array $hosts = [];
+    /** @var Node\Expr[] */
+    private array $formatters = [];
 
     public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
     {

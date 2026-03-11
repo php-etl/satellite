@@ -11,7 +11,8 @@ final class StreamBuilder implements MonologBuilderInterface
     private ?string $level = null;
     private ?int $filePermissions = 0o755;
     private ?bool $useLocking = false;
-    private iterable $formatters = [];
+    /** @var Node\Expr[] */
+    private array $formatters = [];
 
     public function __construct(private readonly string $path)
     {

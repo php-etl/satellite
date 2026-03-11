@@ -11,7 +11,8 @@ final class SyslogBuilder implements MonologBuilderInterface
     private ?string $level = null;
     private ?int $facility = null;
     private ?int $logopts = null;
-    private iterable $formatters = [];
+    /** @var Node\Expr[] */
+    private array $formatters = [];
 
     public function __construct(private readonly string $ident)
     {
