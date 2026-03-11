@@ -1,0 +1,17 @@
+# Fixture : satellite.pipeline (format déprécié — à migrer)
+# Référence : plan migration v1 — utiliser satellite migrate:pipeline-to-workflow
+#
+# Ce format est rejeté par le compilateur. Commande de migration :
+#   satellite migrate:pipeline-to-workflow
+
+satellite:
+  label: "Pipeline standalone (à migrer)"
+  pipeline:
+    steps:
+      - csv:
+          extractor:
+            file_path: 'data/input.csv'
+      - stream:
+          loader:
+            destination: 'data/output.ldjson'
+            format: 'json'

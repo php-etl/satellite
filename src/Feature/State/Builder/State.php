@@ -13,9 +13,9 @@ final class State implements StepBuilderInterface
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
 
-    public function getNode(): Node\Stmt
+    public function getNode(): Node\Expr
     {
-        return new Node\Stmt\Nop();
+        return new Node\Expr\ConstFetch(new Node\Name('null'));
     }
 
     public function withLogger(Node\Expr $logger): StepBuilderInterface

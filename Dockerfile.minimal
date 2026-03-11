@@ -1,0 +1,25 @@
+# Image OCI minimale pour le compiler Satellite
+#
+# Prérequis: extraire le binaire FrankenPHP depuis l'image de build
+#   docker build -t satellite-frankenphp -f compiler/static-build.Dockerfile .
+#   docker cp $(docker create --name tmp satellite-frankenphp):/go/src/app/dist/frankenphp-linux-x86_64 satellite
+#   docker rm tmp
+#
+# Build de l'image minimale:
+#   cp satellite compiler/  # ou build-arg
+#   docker build -t satellite:minimal -f compiler/Dockerfile.minimal compiler/
+#
+# Le binaire FrankenPHP (gnu) nécessite glibc. Pour binaire musl statique, utiliser FROM scratch.
+
+FROM debian:bookworm-slim
+
+# Réduire la surface d'attaque
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY satellite /usr/local/bin/satellite
+RUN chmod +x /usr/local/bin/satellite
+
+# FrankenPHP: ./satellite php-cli bin/satellite <args>
+ENTRYPOINT ["/usr/local/bin/satellite"]
+CMD ["php-cli", "bin/satellite", "--help"]

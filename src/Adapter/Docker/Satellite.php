@@ -114,7 +114,7 @@ final class Satellite implements Configurator\SatelliteInterface
         $deferred = new Deferred();
 
         $process->on('exit', function () use ($deferred): void {
-            $deferred->resolve();
+            $deferred->resolve(null);
         });
 
         $logger->debug(sprintf('Starting process "%s".', $process->getCommand()));

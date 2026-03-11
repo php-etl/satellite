@@ -37,8 +37,12 @@ final class MatchesJSONSchema extends Constraint
 
         $message = '- Property: %s, Constraint: %s, Message: %s';
         $this->messages = array_map(
-            fn (array $exception) =>
-                sprintf($message, $exception['property'], $exception['constraint'], $exception['message']),
+            fn (array $exception) => sprintf(
+                $message,
+                $exception['property'],
+                \is_array($exception['constraint']) ? ($exception['constraint']['name'] ?? (string) $exception['constraint']) : (string) $exception['constraint'],
+                $exception['message']
+            ),
             $validator->getErrors(),
         );
 

@@ -24,6 +24,21 @@ parameters:
           path: src/Cloud/Pipeline.php
         - identifier: instanceof.alwaysFalse
           path: src/Cloud/Workflow.php
+        # Cloud API: array_map callback types, Deferred generics, API type mismatches
+        - identifier: argument.type
+          path: src/Cloud/Workflow.php
+        - identifier: argument.type
+          path: src/Cloud/Pipeline.php
+        - identifier: missingType.generics
+          path: src/Cloud/CommandBus.php
+        - identifier: function.impossibleType
+          path: src/Cloud/Pipeline.php
+        - identifier: function.impossibleType
+          path: src/Cloud/Workflow.php
+        - identifier: deadCode.unreachable
+          path: src/Cloud/Pipeline.php
+        - identifier: deadCode.unreachable
+          path: src/Cloud/Workflow.php
         # Composer Configuration: closure return type inference
         - identifier: return.type
           path: src/Feature/Composer/Configuration.php

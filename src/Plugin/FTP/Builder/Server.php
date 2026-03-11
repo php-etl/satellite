@@ -91,7 +91,7 @@ final class Server implements StepBuilderInterface
 
     private function compileAuthentication(): iterable
     {
-        if (null !== $this->password) {
+        if (null !== $this->password && null !== $this->username) {
             yield new Node\Stmt\Expression(
                 new Node\Expr\FuncCall(
                     name: new Node\Name('ftp_login'),

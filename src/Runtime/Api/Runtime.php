@@ -128,8 +128,8 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                                         ),
                                     ],
                                     'uses' => [
-                                        new Node\Expr\Variable('runtime'),
-                                        new Node\Expr\Variable('psr17Factory'),
+                                        new Node\Expr\ClosureUse(new Node\Expr\Variable('runtime')),
+                                        new Node\Expr\ClosureUse(new Node\Expr\Variable('psr17Factory')),
                                     ],
                                     'stmts' => iterator_to_array(
                                         $this->compileRoutes($builder, new Node\Expr\Variable('router'))
@@ -218,6 +218,14 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
+    /**
+     * @return Node\Stmt
+     */
+    private function asStmt(Node $node): Node\Stmt
+    {
+        return $node instanceof Node\Stmt ? $node : new Node\Stmt\Expression($node);
+    }
+
     private function compileRoutes(Builder $builder, Node\Expr\Variable $router): \Iterator
     {
         foreach ($this->config['http_api']['routes'] as $routeConfig) {
@@ -249,8 +257,8 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                     ),
                 ],
                 'uses' => [
-                    new Node\Expr\Variable('runtime'),
-                    new Node\Expr\Variable('psr17Factory'),
+                    new Node\Expr\ClosureUse(new Node\Expr\Variable('runtime')),
+                    new Node\Expr\ClosureUse(new Node\Expr\Variable('psr17Factory')),
                 ],
                 'stmts' => [
                     new Node\Stmt\Expression(
@@ -333,7 +341,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                             )
                         )
                     ),
-                    $builder->getNode(),
+                    $this->asStmt($builder->getNode()),
                 ],
             ],
         );

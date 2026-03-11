@@ -89,7 +89,7 @@ final class Server implements StepBuilderInterface
 
     private function compileAuthentication(): iterable
     {
-        if (null !== $this->password) {
+        if (null !== $this->password && null !== $this->username) {
             yield new Node\Stmt\Expression(
                 new Node\Expr\FuncCall(
                     name: new Node\Name('ssh2_auth_password'),
@@ -106,7 +106,7 @@ final class Server implements StepBuilderInterface
                     ],
                 ),
             );
-        } elseif (null !== $this->privateKey) {
+        } elseif (null !== $this->privateKey && null !== $this->publicKey && null !== $this->username) {
             yield new Node\Stmt\Expression(
                 new Node\Expr\FuncCall(
                     name: new Node\Name('ssh2_auth_pubkey_file'),

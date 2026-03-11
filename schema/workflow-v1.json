@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://php-etl.github.io/satellite/schema/workflow-v1.json",
+  "title": "Workflow v1",
+  "description": "Format v1 du compilateur satellite — inputs, jobs, outputs avec ActivationRule et inputBindings",
+  "type": "object",
+  "required": ["workflow"],
+  "properties": {
+    "workflow": {
+      "type": "object",
+      "required": ["name", "inputs", "jobs", "outputs"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nom du workflow"
+        },
+        "inputs": {
+          "type": "array",
+          "description": "Nœuds d'entrée du workflow",
+          "items": {
+            "$ref": "#/$defs/InputNode"
+          }
+        },
+        "jobs": {
+          "type": "array",
+          "description": "Jobs du workflow (pipeline ou action)",
+          "items": {
+            "$ref": "#/$defs/Job"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "description": "Nœuds de sortie du workflow",
+          "items": {
+            "$ref": "#/$defs/OutputNode"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ActivationRule": {
+      "type": "object",
+      "required": ["condition", "inputBindings"],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "description": "Expression ExpressionLanguage pour l'activation",
+          "default": "true"
+        },
+        "inputBindings": {
+          "type": "array",
+          "description": "Liaisons des entrées vers les nœuds sources",
+          "items": {
+            "$ref": "#/$defs/InputBinding"
+          }
+        }
+      }
+    },
+    "InputBinding": {
+      "type": "object",
+      "required": ["inputName", "sourceNodeId"],
+      "properties": {
+        "inputName": {
+          "type": "string",
+          "description": "Nom de l'entrée"
+        },
+        "sourceNodeId": {
+          "type": "string",
+          "description": "ID du nœud source"
+        },
+        "outputKey": {
+          "type": "string",
+          "description": "Clé de sortie du nœud source",
+          "default": "out"
+        }
+      }
+    },
+    "InputNode": {
+      "type": "object",
+      "required": ["id", "activationRule"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifiant unique du nœud input"
+        },
+        "label": {
+          "type": "string",
+          "description": "Libellé affiché"
+        },
+        "activationRule": {
+          "$ref": "#/$defs/ActivationRule"
+        }
+      }
+    },
+    "Job": {
+      "type": "object",
+      "required": ["id", "type", "activationRule"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifiant unique du job (ex: n1, n2)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["pipeline", "action"],
+          "description": "Type de job"
+        },
+        "label": {
+          "type": "string",
+          "description": "Libellé affiché"
+        },
+        "pipeline": {
+          "type": "object",
+          "description": "Configuration pipeline (si type=pipeline)",
+          "properties": {
+            "steps": {
+              "type": "array",
+              "description": "Étapes du pipeline"
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "description": "Configuration action (si type=action)"
+        },
+        "activationRule": {
+          "$ref": "#/$defs/ActivationRule"
+        }
+      }
+    },
+    "OutputNode": {
+      "type": "object",
+      "required": ["id", "activationRule"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifiant unique du nœud output"
+        },
+        "label": {
+          "type": "string",
+          "description": "Libellé affiché"
+        },
+        "inputStrategy": {
+          "type": "string",
+          "enum": ["any", "merge", "race"],
+          "description": "Stratégie pour nœuds multi-sources",
+          "default": "any"
+        },
+        "activationRule": {
+          "$ref": "#/$defs/ActivationRule"
+        }
+      }
+    }
+  }
+}

@@ -19,7 +19,9 @@ final readonly class Factory implements Satellite\Runtime\FactoryInterface
 
     public function addFeature(string $name, Configurator\FactoryInterface $feature): self
     {
-        $this->configuration->addFeature($name, $feature->configuration());
+        $configuration = $feature->configuration();
+        \assert($configuration instanceof Configurator\FeatureConfigurationInterface);
+        $this->configuration->addFeature($name, $configuration);
 
         return $this;
     }

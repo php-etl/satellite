@@ -1,0 +1,90 @@
+# Fixture : workflow DAG — cas Fork et cas Merge
+# Référence : plan migration v1 — inputs, jobs, outputs séparés
+#
+# Graphe :
+#     input
+#        |
+#       n1 (Extract) ——— FORK : n1 alimente n2 et n3 en parallèle
+#      /  \
+#    n2    n3  (Transform A, Transform B)
+#      \  /
+#    output ——— MERGE : output consomme n2 et n3 (inputStrategy: merge)
+
+workflow:
+  name: "Workflow DAG"
+  inputs:
+    - id: input
+      label: "Entrée"
+      activationRule:
+        condition: "true"
+        inputBindings: []
+  jobs:
+    # FORK : n1 a une seule source (input), mais alimente n2 et n3 en parallèle
+    - id: n1
+      type: pipeline
+      label: "Extract"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/input.csv'
+          - stream:
+              loader:
+                destination: 'data/n1.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: input
+            outputKey: out
+    - id: n2
+      type: pipeline
+      label: "Transform A"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/n1.ldjson'
+          - stream:
+              loader:
+                destination: 'data/n2.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n1
+            outputKey: out
+    - id: n3
+      type: pipeline
+      label: "Transform B"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/n1.ldjson'
+          - stream:
+              loader:
+                destination: 'data/n3.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n1
+            outputKey: out
+  outputs:
+    # MERGE : output a plusieurs sources (n2 et n3), inputStrategy: merge
+    - id: output
+      label: "Résultat"
+      inputStrategy: merge
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n2
+            outputKey: out
+          - inputName: config
+            sourceNodeId: n3
+            outputKey: out

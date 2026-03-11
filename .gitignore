@@ -1,5 +1,6 @@
 /.env
 /vendor/
+/satellite
 /generated
 bin/
 .gyro.php

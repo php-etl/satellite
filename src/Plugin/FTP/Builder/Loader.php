@@ -323,7 +323,7 @@ final class Loader implements StepBuilderInterface
                             name: new Identifier('createDirectories'),
                             subNodes: [
                                 'flags' => Node\Stmt\Class_::MODIFIER_PUBLIC,
-                                'returnType' => new Node\Expr\ConstFetch(new Node\Name('void')),
+                                'returnType' => new Node\Identifier('void'),
                                 'params' => [
                                     new Node\Param(
                                         var: new Node\Expr\Variable('ftpcon')

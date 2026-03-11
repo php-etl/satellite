@@ -6,6 +6,7 @@ namespace Kiboko\Component\Satellite\Pipeline;
 
 use Kiboko\Component\Satellite\Builder\Repository\Pipeline;
 use Kiboko\Contract\Configurator\FactoryInterface;
+use Kiboko\Contract\Configurator\StepRepositoryInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ConfigurationApplier
@@ -51,6 +52,7 @@ final class ConfigurationApplier
     public function appendTo(array $config, Pipeline $pipeline): void
     {
         $repository = $this->service->compile($config[$this->plugin]);
+        \assert($repository instanceof StepRepositoryInterface);
 
         /** @var StepInterface $step */
         foreach ($this->steps as $step) {

@@ -302,7 +302,7 @@ class RunCommand extends Console\Command\Command
         $deferred = new Deferred();
 
         $process->on('exit', function () use ($deferred): void {
-            $deferred->resolve();
+            $deferred->resolve(null);
         });
 
         $style->info(sprintf('Starting process "%s".', $process->getCommand()));

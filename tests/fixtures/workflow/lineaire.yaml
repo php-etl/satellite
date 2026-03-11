@@ -1,0 +1,75 @@
+# Fixture : workflow linéaire (input → pipeline → pipeline → action → output)
+# Référence : plan migration v1 — inputs, jobs, outputs séparés
+
+workflow:
+  name: "Exemple workflow"
+  inputs:
+    - id: input
+      label: "Entrée"
+      activationRule:
+        condition: "true"
+        inputBindings: []
+  jobs:
+    - id: n1
+      type: pipeline
+      label: "Extract CSV"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/input.csv'
+          - stream:
+              loader:
+                destination: 'data/step1.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: input
+            outputKey: out
+    - id: n2
+      type: pipeline
+      label: "Transform"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/step1.ldjson'
+          - stream:
+              loader:
+                destination: 'data/step2.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n1
+            outputKey: out
+    - id: n3
+      type: pipeline
+      label: "Load"
+      pipeline:
+        steps:
+          - csv:
+              extractor:
+                file_path: 'data/step2.ldjson'
+          - stream:
+              loader:
+                destination: 'data/output.ldjson'
+                format: 'json'
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n2
+            outputKey: out
+  outputs:
+    - id: output
+      label: "Résultat"
+      activationRule:
+        condition: "true"
+        inputBindings:
+          - inputName: data
+            sourceNodeId: n3
+            outputKey: out

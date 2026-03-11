@@ -25,7 +25,9 @@
         {"type": "path", "url": "../plugins/shopify"},
         {"type": "path", "url": "../plugins/spreadsheet"},
         {"type": "path", "url": "../plugins/sql"},
-        {"type": "path", "url": "../plugins/sylius"}
+        {"type": "path", "url": "../plugins/sylius"},
+        {"type": "path", "url": "../runtime/bucket"},
+        {"type": "path", "url": "../tools/packaging"}
     ],
     "type": "library",
     "license": "MIT",
@@ -49,34 +51,35 @@
         "symfony/config": "^6.0",
         "symfony/yaml": "^6.0",
         "symfony/dependency-injection": "^6.0",
-        "nikic/php-parser": "^4.15",
+        "nikic/php-parser": "^5.6",
         "nyholm/psr7": "^1.5",
         "psr/http-client": "^1.0",
-        "react/promise": "^2.9",
+        "react/promise": "^3.3",
         "symfony/dotenv": "^6.0",
         "php-etl/packaging": "*",
         "php-etl/configurator-contracts": "*",
         "php-etl/satellite-toolbox": "*",
+        "php-etl/bucket": "*",
         "php-etl/gyroscops-api-client": "*",
         "php-etl/dockerfile": "*",
-        "composer/composer": "*",
+        "composer/composer": "^2.9",
         "symfony/deprecation-contracts": "*",
         "react/child-process": "^0.7",
         "react/async": "^4.1",
         "react/promise-timer": "^1.10",
         "symfony/http-client": "^6.0",
-        "spiral/framework": "^3.14.10 <3.15.1"
+        "spiral/framework": "^3.15.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
         "phpstan/phpstan": "^2.2",
-        "infection/infection": "^0.26",
         "fakerphp/faker": "^1.9",
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^6.5",
         "rector/rector": "^2.0",
         "php-etl/phpunit-extension": "*",
         "mikey179/vfsstream": "^1.6",
-        "friendsofphp/php-cs-fixer": "^3.38"
+        "friendsofphp/php-cs-fixer": "^3.38",
+        "infection/infection": "^0.32"
     },
     "suggest": {
         "php-etl/array-expression-language": "A set of function for arrays manipulation",
