@@ -147,7 +147,7 @@ final readonly class Pipeline implements PipelineInterface
                         new StepCode($step->getCode()),
                         $step->getConfiguration(),
                         new ProbeList(
-                            ...array_map(fn (Api\Model\PipelineStepProbe $probe) => new DTO\Probe($probe->getLabel(), $probe->getCode(), $probe->getOrder()), $probes)
+                            ...array_map(fn (Api\Model\PipelineStepProbe $probe) => new DTO\Probe($probe->getLabel(), $probe->getCode(), $probe->getOrder() ?? 0), $probes)
                         ),
                         $order
                     );
@@ -157,8 +157,8 @@ final readonly class Pipeline implements PipelineInterface
                 new DTO\Autoload(
                     ...array_map(
                         fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                        array_keys($configuration['composer']['autoload']['psr4'] ?? []),
-                        $model->getAutoload(),
+                        array_keys($model->getAutoload() ?? []),
+                        $model->getAutoload() ?? [],
                     )
                 ),
                 new DTO\PackageList(
@@ -168,19 +168,19 @@ final readonly class Pipeline implements PipelineInterface
 
                             return new Package($parts[0], $parts[1]);
                         },
-                        $model->getPackages(),
+                        $model->getPackages() ?? [],
                     )
                 ),
                 new RepositoryList(
                     ...array_map(
                         fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                        $model->getRepositories(),
+                        $model->getRepositories() ?? [],
                     )
                 ),
                 new AuthList(
                     ...array_map(
                         fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                        $model->getAuths(),
+                        $model->getAuths() ?? [],
                     )
                 ),
             ),
