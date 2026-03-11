@@ -1,134 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
-			count: 4
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineRead\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesStepsIdProbesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineStepProbe\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Dead catch \\- AssertionError is never thrown in the try block\\.$#"
-			count: 2
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, string\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Auth given\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Repository given\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of function array_map expects array, \\(Gyroscops\\\\Api\\\\Model\\\\RuntimePipelinesStepsIdProbesGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\PipelineStepProbe\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface given\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between 1 and \\*NEVER\\* will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Pipeline.php
-
-		-
-			message: "#^Call to function assert\\(\\) with false will always evaluate to false\\.$#"
-			count: 4
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Call to function is_array\\(\\) with \\(Gyroscops\\\\Api\\\\Model\\\\RuntimeWorkflowsGetLdjsonResponse200&iterable\\<Gyroscops\\\\Api\\\\Model\\\\WorkflowRead\\>\\)\\|Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Dead catch \\- AssertionError is never thrown in the try block\\.$#"
-			count: 2
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Instanceof between Gyroscops\\\\Api\\\\Model\\\\WorkflowJsonldRead\\|Gyroscops\\\\Api\\\\Model\\\\WorkflowRead and Gyroscops\\\\Api\\\\Model\\\\PipelineRead will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(Gyroscops\\\\Api\\\\Model\\\\Step, int\\<0, max\\>\\)\\: mixed\\)\\|null, Closure\\(Gyroscops\\\\Api\\\\Model\\\\PipelineStepRead, int\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Step given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(Gyroscops\\\\Api\\\\Model\\\\WorkflowJobJsonldRead\\|Gyroscops\\\\Api\\\\Model\\\\WorkflowJobRead, int\\<0, max\\>\\)\\: mixed\\)\\|null, Closure\\(Gyroscops\\\\Api\\\\Model\\\\Job, int\\)\\: \\(Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Action\\|Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Pipeline\\) given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed, int\\<\\-1, max\\>\\)\\: mixed\\)\\|null, Closure\\(string, array, int\\)\\: \\(Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Action\\|Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Workflow\\\\Pipeline\\) given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int\\|string, mixed, int\\<\\-1, max\\>\\)\\: mixed\\)\\|null, Closure\\(string, array, int\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Step given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(mixed, string\\)\\: mixed\\)\\|null, Closure\\(string, array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\PSR4AutoloadConfig given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Auth given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(string\\)\\: mixed\\)\\|null, Closure\\(array\\)\\: Kiboko\\\\Component\\\\Satellite\\\\Cloud\\\\DTO\\\\Repository given\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between 1 and \\*NEVER\\* will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cloud/Workflow.php
-
-		-
-			message: "#^Parameter \\#1 \\$provider of method Symfony\\\\Component\\\\DependencyInjection\\\\ContainerBuilder\\:\\:addExpressionLanguageProvider\\(\\) expects Symfony\\\\Component\\\\ExpressionLanguage\\\\ExpressionFunctionProviderInterface, object given\\.$#"
-			count: 1
-			path: src/DependencyInjection/SatelliteDependencyInjection.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of class PhpParser\\\\Node\\\\Arg constructor expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\|null given\\.$#"
-			count: 1
-			path: src/Feature/Rejection/Builder/RabbitMQBuilder.php
-
-		-
 			message: "#^Parameter \\#3 \\$repository of callable Kiboko\\\\Component\\\\Satellite\\\\Pipeline\\\\StepInterface expects Kiboko\\\\Contract\\\\Configurator\\\\StepRepositoryInterface, Kiboko\\\\Contract\\\\Configurator\\\\RepositoryInterface given\\.$#"
 			count: 1
 			path: src/Pipeline/ConfigurationApplier.php
-
-		-
-			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
-			count: 1
-			path: src/Pipeline/Extractor.php
 
 		-
 			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
@@ -141,11 +16,6 @@ parameters:
 			path: src/Pipeline/Extractor.php
 
 		-
-			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
-			count: 1
-			path: src/Pipeline/Loader.php
-
-		-
 			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
 			count: 1
 			path: src/Pipeline/Loader.php
@@ -154,11 +24,6 @@ parameters:
 			message: "#^Parameter \\#4 \\$state of method Kiboko\\\\Component\\\\Satellite\\\\Builder\\\\Pipeline\\:\\:addLoader\\(\\) expects PhpParser\\\\Builder\\|PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"
 			count: 1
 			path: src/Pipeline/Loader.php
-
-		-
-			message: "#^Parameter \\#1 \\$key of function array_key_exists expects int\\|string, string\\|null given\\.$#"
-			count: 1
-			path: src/Pipeline/Transformer.php
 
 		-
 			message: "#^Parameter \\#1 \\$state of method Kiboko\\\\Contract\\\\Configurator\\\\StepBuilderInterface\\:\\:withState\\(\\) expects PhpParser\\\\Node\\\\Expr, PhpParser\\\\Node\\\\Expr\\\\New_\\|PhpParser\\\\Node\\\\Stmt given\\.$#"

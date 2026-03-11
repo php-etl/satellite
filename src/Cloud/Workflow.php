@@ -136,9 +136,7 @@ final readonly class Workflow implements WorkflowInterface
         /** @var Api\Model\WorkflowJsonldRead|Api\Model\WorkflowRead $item */
         $item = $client->getWorkflowItem($id->asString());
 
-        try {
-            \assert($item instanceof Api\Model\WorkflowRead);
-        } catch (\AssertionError) {
+        if (!$item instanceof Api\Model\WorkflowRead) {
             throw new AccessDeniedException('Could not retrieve the workflow.');
         }
 
@@ -152,22 +150,20 @@ final readonly class Workflow implements WorkflowInterface
     {
         $collection = $client->getWorkflowCollection(['code' => $code]);
 
-        try {
-            \assert(\is_array($collection));
-        } catch (\AssertionError) {
+        if (!\is_array($collection)) {
+            throw new AccessDeniedException('Could not retrieve the workflow.');
+        }
+        if (1 !== \count($collection)) {
+            throw new \OverflowException('There seems to be several workflows with the same code, please contact your Customer Success Manager.');
+        }
+        $item = $collection[0];
+        if (!$item instanceof Api\Model\WorkflowRead) {
             throw new AccessDeniedException('Could not retrieve the workflow.');
         }
 
-        try {
-            \assert(1 === \count($collection));
-            \assert($collection[0] instanceof Api\Model\WorkflowRead);
-        } catch (\AssertionError) {
-            throw new \OverflowException('There seems to be several workflows with the same code, please contact your Customer Success Manager.');
-        }
-
         return new ReferencedWorkflow(
-            new WorkflowId($collection[0]->getId()),
-            self::fromApiModel($client, $collection[0])
+            new WorkflowId($item->getId()),
+            self::fromApiModel($client, $item)
         );
     }
 
@@ -236,12 +232,12 @@ final readonly class Workflow implements WorkflowInterface
                 ),
                 new DTO\PackageList(
                     ...array_map(
-                        function (string $namespace) {
-                            $parts = explode(':', $namespace);
+                        function (int|string $namespace) {
+                            $parts = explode(':', (string) $namespace);
 
                             return new Package($parts[0], $parts[1] ?? '*');
                         },
-                        $workflow->getPackages() ?? [],
+                        array_keys($workflow->getPackages() ?? []),
                     )
                 ),
                 new RepositoryList(

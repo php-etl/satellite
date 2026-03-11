@@ -28,10 +28,11 @@ final class SatelliteDependencyInjection
 
         foreach ($this->providers as $providerClass) {
             $provider = new $providerClass();
-            if (!$provider instanceof ExpressionFunctionProviderInterface) {
+            if ($provider instanceof ExpressionFunctionProviderInterface) {
+                $container->addExpressionLanguageProvider($provider);
+            } else {
                 throw ConfigurationProviderException::mustImplementProviderInterface($providerClass);
             }
-            $container->addExpressionLanguageProvider($provider);
         }
 
         if (\array_key_exists('parameters', $config)

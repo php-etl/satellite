@@ -55,19 +55,22 @@ final readonly class Pipeline implements PipelineInterface
             new Composer(
                 new DTO\Autoload(
                     ...array_map(
-                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        fn (int|string $namespace, mixed $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig(
+                            (string) $namespace,
+                            ...(is_array($paths) && isset($paths['paths']) ? (array) $paths['paths'] : []),
+                        ),
                         array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                         $configuration['composer']['autoload']['psr4'] ?? [],
                     )
                 ),
                 new DTO\PackageList(
                     ...array_map(
-                        function (string $namespace) {
-                            $parts = explode(':', $namespace);
+                        function (int|string $namespace) {
+                            $parts = explode(':', (string) $namespace);
 
-                            return new Package($parts[0], $parts[1]);
+                            return new Package($parts[0], $parts[1] ?? '*');
                         },
-                        $configuration['composer']['require'] ?? [],
+                        array_keys($configuration['composer']['require'] ?? []),
                     )
                 ),
                 new RepositoryList(
@@ -90,9 +93,7 @@ final readonly class Pipeline implements PipelineInterface
     {
         $item = $client->getPipelineItem($id->asString());
 
-        try {
-            \assert($item instanceof Api\Model\PipelineRead);
-        } catch (\AssertionError) {
+        if (!$item instanceof Api\Model\PipelineRead) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
 
@@ -106,21 +107,20 @@ final readonly class Pipeline implements PipelineInterface
     {
         $collection = $client->getPipelineCollection(['code' => $code]);
 
-        try {
-            \assert(\is_array($collection));
-        } catch (\AssertionError) {
+        if (!\is_array($collection)) {
             throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
-        try {
-            \assert(1 === \count($collection));
-            \assert($collection[0] instanceof Api\Model\PipelineRead);
-        } catch (\AssertionError) {
+        if (1 !== \count($collection)) {
             throw new \OverflowException('There seems to be several pipelines with the same code, please contact your Customer Success Manager.');
+        }
+        $item = $collection[0];
+        if (!$item instanceof Api\Model\PipelineRead) {
+            throw new AccessDeniedException('Could not retrieve the pipeline.');
         }
 
         return new ReferencedPipeline(
-            new PipelineId($collection[0]->getId()),
-            self::fromApiModel($client, $collection[0], $configuration)
+            new PipelineId($item->getId()),
+            self::fromApiModel($client, $item, $configuration)
         );
     }
 
@@ -129,9 +129,7 @@ final readonly class Pipeline implements PipelineInterface
         // Todo : update with the new endpoint, need to update the client
         $steps = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($model->getId());
 
-        try {
-            \assert(\is_array($steps));
-        } catch (\AssertionError) {
+        if (!\is_array($steps)) {
             throw new AccessDeniedException('Could not retrieve the pipeline steps.');
         }
 
@@ -141,6 +139,7 @@ final readonly class Pipeline implements PipelineInterface
             new DTO\StepList(
                 ...array_map(function (Api\Model\PipelineStep $step, int $order) use ($client) {
                     $probes = $client->apiPipelineStepsProbesGetSubresourcePipelineStepSubresource($step->getId());
+                    $probes = \is_array($probes) ? $probes : iterator_to_array($probes);
 
                     return new DTO\Step(
                         $step->getLabel(),
@@ -156,19 +155,22 @@ final readonly class Pipeline implements PipelineInterface
             new Composer(
                 new DTO\Autoload(
                     ...array_map(
-                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        fn (int|string $namespace, mixed $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig(
+                            (string) $namespace,
+                            ...(is_array($paths) && isset($paths['paths']) ? (array) $paths['paths'] : []),
+                        ),
                         array_keys($model->getAutoload() ?? []),
                         $model->getAutoload() ?? [],
                     )
                 ),
                 new DTO\PackageList(
                     ...array_map(
-                        function (string $namespace) {
-                            $parts = explode(':', $namespace);
+                        function (int|string $namespace) {
+                            $parts = explode(':', (string) $namespace);
 
-                            return new Package($parts[0], $parts[1]);
+                            return new Package($parts[0], $parts[1] ?? '*');
                         },
-                        $model->getPackages() ?? [],
+                        array_keys($model->getPackages() ?? []),
                     )
                 ),
                 new RepositoryList(

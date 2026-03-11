@@ -24,7 +24,7 @@ final readonly class Loader implements StepInterface
 
     public function __invoke(array $config, Pipeline $pipeline, StepRepositoryInterface $repository): void
     {
-        if (null !== $this->key
+        if (null !== $this->plugin && null !== $this->key
             && (!\array_key_exists($this->plugin, $config) || !\array_key_exists($this->key, $config[$this->plugin]))
         ) {
             return;

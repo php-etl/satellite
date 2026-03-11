@@ -55,7 +55,7 @@ final class RabbitMQBuilder implements Builder
             $args[] = new Node\Arg($this->exchange, name: new Identifier('exchange'));
         }
 
-        if (null !== $this->user) {
+        if (null !== $this->user && null !== $this->password) {
             array_push(
                 $args,
                 new Node\Arg($this->user, name: new Identifier('user')),
