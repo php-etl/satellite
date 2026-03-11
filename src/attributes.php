@@ -9,7 +9,7 @@ function extractAttributes(object $object, string $class): \Traversable
     $reflection = new \ReflectionObject($object);
     $attributes = $reflection->getAttributes($class);
 
-    /** @var \ReflectionAttribute $attribute */
+    /** @var \ReflectionAttribute<object> $attribute */
     foreach ($attributes as $attribute) {
         yield $attribute->newInstance();
     }
@@ -23,7 +23,7 @@ function expectAttributes(object $object, string $class): \Traversable
         throw new \RuntimeException('the provided configuration object should have a '.$class.' attribute defined.');
     }
 
-    /** @var \ReflectionAttribute $attribute */
+    /** @var \ReflectionAttribute<object> $attribute */
     foreach ($attributes as $attribute) {
         yield $attribute->newInstance();
     }

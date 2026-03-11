@@ -134,7 +134,7 @@ final readonly class Workflow implements WorkflowInterface
         $item = $client->getWorkflowItem($id->asString());
 
         try {
-            \assert($item instanceof Api\Model\PipelineRead);
+            \assert($item instanceof Api\Model\WorkflowRead);
         } catch (\AssertionError) {
             throw new AccessDeniedException('Could not retrieve the workflow.');
         }

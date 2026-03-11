@@ -15,4 +15,9 @@ final readonly class Action implements JobInterface
         public int $order,
     ) {
     }
+
+    public function getCode(): JobCode
+    {
+        return $this->code;
+    }
 }

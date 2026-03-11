@@ -55,14 +55,9 @@ final readonly class Action
         /** @var ActionBuilderInterface $builder */
         $builder = $repository->getBuilder();
 
-        /** @var Node\Expr $stateExpr - State builder may return Stmt, cast for withState/addAction */
-        $stateExpr = $state;
-
         $action->addAction(
-            $builder
-                ->withLogger($logger)
-                ->withState($stateExpr),
-            $stateExpr,
+            $builder->withLogger($logger)->withState($state),
+            $state,
         );
     }
 }

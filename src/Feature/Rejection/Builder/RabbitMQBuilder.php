@@ -45,6 +45,7 @@ final class RabbitMQBuilder implements Builder
     {
         $args = [
             new Node\Arg($this->host, name: new Identifier('host')),
+            new Node\Arg($this->port, name: new Identifier('port')),
             new Node\Arg($this->vhost, name: new Identifier('vhost')),
             new Node\Arg($this->topic, name: new Identifier('topic')),
             new Node\Arg($this->stepUuid, name: new Identifier('stepUuid')),
@@ -52,10 +53,6 @@ final class RabbitMQBuilder implements Builder
 
         if (null !== $this->exchange) {
             $args[] = new Node\Arg($this->exchange, name: new Identifier('exchange'));
-        }
-
-        if (null !== $this->port) {
-            $args[] = new Node\Arg($this->port, name: new Identifier('port'));
         }
 
         if (null !== $this->user) {

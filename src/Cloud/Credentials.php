@@ -17,7 +17,7 @@ final class Credentials
     ) {
     }
 
-    public function __debugInfo(): ?array
+    public function __debugInfo(): array
     {
         return [
             'login' => $this->username,

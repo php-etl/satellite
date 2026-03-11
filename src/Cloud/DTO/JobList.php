@@ -33,14 +33,13 @@ readonly class JobList implements \Countable, \IteratorAggregate
         /* @phpstan-ignore-next-line */
         usort($jobs, fn (DTO\Workflow\JobInterface $left, DTO\Workflow\JobInterface $right) => $left->order <=> $right->order);
 
-        /* @phpstan-ignore-next-line */
-        return array_map(fn (DTO\Workflow\JobInterface $job) => $job->code->asString(), $jobs);
+        return array_map(fn (DTO\Workflow\JobInterface $job) => $job->getCode()->asString(), $jobs);
     }
 
     public function get(string $code): DTO\Workflow\JobInterface
     {
         foreach ($this->jobs as $job) {
-            if ($job->code->asString() === $code) {
+            if ($job->getCode()->asString() === $code) {
                 return $job;
             }
         }

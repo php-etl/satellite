@@ -172,7 +172,6 @@ final class SatelliteBuilder implements Configurator\SatelliteBuilderInterface
             $dockerfile->push(new Dockerfile\PHP\ComposerInit(sprintf('satellite/%s', substr(hash('sha512', random_bytes(64)), 0, 64))));
             $dockerfile->push(new Dockerfile\PHP\ComposerMinimumStability('dev'));
             if (\array_key_exists('psr4', $this->composerAutoload)
-                && \is_array($this->composerAutoload['psr4'])
                 && \count($this->composerAutoload['psr4']) > 0
             ) {
                 $dockerfile->push(new Dockerfile\PHP\ComposerAutoload($this->composerAutoload));

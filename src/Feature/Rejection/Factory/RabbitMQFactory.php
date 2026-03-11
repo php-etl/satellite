@@ -65,7 +65,7 @@ final readonly class RabbitMQFactory implements Configurator\FactoryInterface
             topic: compileValueWhenExpression($this->interpreter, $config['topic']),
         );
 
-        if (\array_key_exists('user', $config) && \array_key_exists('user', $config)) {
+        if (\array_key_exists('user', $config) && \array_key_exists('password', $config)) {
             $builder->withAuthentication(
                 compileValueWhenExpression($this->interpreter, $config['user']),
                 compileValueWhenExpression($this->interpreter, $config['password']),

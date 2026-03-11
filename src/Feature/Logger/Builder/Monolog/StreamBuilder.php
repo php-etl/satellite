@@ -9,8 +9,8 @@ use PhpParser\Node;
 final class StreamBuilder implements MonologBuilderInterface
 {
     private ?string $level = null;
-    private ?int $filePermissions = 0o755;
-    private ?bool $useLocking = false;
+    private int $filePermissions = 0o755;
+    private bool $useLocking = false;
     /** @var Node\Expr[] */
     private array $formatters = [];
 
@@ -62,19 +62,15 @@ final class StreamBuilder implements MonologBuilderInterface
             );
         }
 
-        if (null !== $this->filePermissions) {
-            $arguments[] = new Node\Arg(
-                value: new Node\Scalar\LNumber($this->filePermissions, ['kind' => Node\Scalar\LNumber::KIND_OCT]),
-                name: new Node\Identifier('filePermission'),
-            );
-        }
+        $arguments[] = new Node\Arg(
+            value: new Node\Scalar\LNumber($this->filePermissions, ['kind' => Node\Scalar\LNumber::KIND_OCT]),
+            name: new Node\Identifier('filePermission'),
+        );
 
-        if (null !== $this->useLocking) {
-            $arguments[] = new Node\Arg(
-                value: new Node\Expr\ConstFetch(new Node\Name($this->useLocking ? 'true' : 'false')),
-                name: new Node\Identifier('useLocking'),
-            );
-        }
+        $arguments[] = new Node\Arg(
+            value: new Node\Expr\ConstFetch(new Node\Name($this->useLocking ? 'true' : 'false')),
+            name: new Node\Identifier('useLocking'),
+        );
 
         $instance = new Node\Expr\New_(
             class: new Node\Name\FullyQualified('Monolog\\Handler\\StreamHandler'),

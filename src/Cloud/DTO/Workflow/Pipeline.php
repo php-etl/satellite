@@ -16,4 +16,9 @@ final readonly class Pipeline implements JobInterface
         public int $order,
     ) {
     }
+
+    public function getCode(): JobCode
+    {
+        return $this->code;
+    }
 }

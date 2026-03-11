@@ -38,7 +38,9 @@ final class File extends ExpressionFunction
                 fwrite($resource, $value);
                 fseek($resource, 0, \SEEK_SET);
 
-                return stream_get_meta_data($resource)['uri'];
+                $meta = stream_get_meta_data($resource);
+
+                return $meta['uri'] ?? throw new \RuntimeException('Stream URI not found.');
             },
         );
     }
