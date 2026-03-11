@@ -43,8 +43,9 @@ final class ConfigurationApplier
     {
         $repository = $this->service->compile($config[$this->plugin]);
 
-        if ($this->action !== null) {
-            ($this->action)($config, $action->getBuilder(), $repository);
+        $actionPlugin = $this->action;
+        if ($actionPlugin !== null) {
+            $actionPlugin($config, $action->getBuilder(), $repository);
         }
 
         $action->addPackages(...$this->packages);

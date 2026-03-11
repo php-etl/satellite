@@ -12,7 +12,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /** @var array<string, Configurator\ActionConfigurationInterface> */
-    private iterable $actions = [];
+    private array $actions = [];
 
     public function addAction(string $name, Configurator\ActionConfigurationInterface $action): self
     {

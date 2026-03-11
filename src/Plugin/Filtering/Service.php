@@ -9,6 +9,7 @@ use Kiboko\Component\Satellite\Plugin\Filtering;
 use Kiboko\Contract\Configurator;
 use Symfony\Component\Config\Definition\Exception as Symfony;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 #[Configurator\Pipeline(
@@ -73,8 +74,15 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
             && \is_array($config['expression_language'])
             && \count($config['expression_language'])
         ) {
-            foreach ($config['expression_language'] as $provider) {
-                $interpreter->registerProvider(new $provider());
+            foreach ($config['expression_language'] as $providerClass) {
+                $provider = new $providerClass();
+                if ($provider instanceof ExpressionFunctionProviderInterface) {
+                    $interpreter->registerProvider($provider);
+                } else {
+                    throw new Configurator\InvalidConfigurationException(
+                        \sprintf('Provider class "%s" must implement %s.', $providerClass, ExpressionFunctionProviderInterface::class)
+                    );
+                }
             }
         }
 

@@ -11,11 +11,11 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 final class Configuration implements Configurator\RuntimeConfigurationInterface
 {
     /** @var array<string, Configurator\PluginConfigurationInterface> */
-    private iterable $plugins = [];
+    private array $plugins = [];
     /** @var array<string, Configurator\FeatureConfigurationInterface> */
-    private iterable $features = [];
+    private array $features = [];
     /** @var array<string, Configurator\ActionConfigurationInterface> */
-    private iterable $actions = [];
+    private array $actions = [];
 
     public function addPlugin(string $name, Configurator\PluginConfigurationInterface $plugin): self
     {

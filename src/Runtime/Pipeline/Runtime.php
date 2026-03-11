@@ -44,6 +44,9 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
 
     public function build(Builder $builder): array
     {
+        $node = $builder->getNode();
+        \assert($node instanceof Node\Expr);
+
         return [
             new Node\Stmt\Return_(
                 new Node\Expr\Closure(
@@ -56,9 +59,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
                             ),
                         ],
                         'stmts' => [
-                            new Node\Stmt\Expression(
-                                $builder->getNode()
-                            ),
+                            new Node\Stmt\Expression(expr: $node),
                         ],
                     ]
                 ),

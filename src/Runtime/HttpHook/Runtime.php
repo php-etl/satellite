@@ -61,7 +61,10 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
-    private function buildAutoload()
+    /**
+     * @return list<Node\Stmt>
+     */
+    private function buildAutoload(): array
     {
         return [
             new Node\Stmt\Expression(
@@ -139,7 +142,7 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
         ];
     }
 
-    private function buildDispatcher(Builder $builder)
+    private function buildDispatcher(Builder $builder): Node\Stmt\Expression
     {
         return new Node\Stmt\Expression(
             expr: new Node\Expr\Assign(
@@ -197,7 +200,10 @@ final readonly class Runtime implements Satellite\Runtime\RuntimeInterface
         );
     }
 
-    private function buildDispatcherClosure(Builder $builder)
+    /**
+     * @return list<Node\Stmt>
+     */
+    private function buildDispatcherClosure(Builder $builder): array
     {
         return [
             new Node\Stmt\Expression(

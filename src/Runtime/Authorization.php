@@ -20,7 +20,7 @@ final class Authorization
         throw new \Exception('"authorization" must be set.');
     }
 
-    private function buildBasic(array $users)
+    private function buildBasic(array $users): Node\Expr\New_
     {
         $array = [];
         foreach ($users as $credentials) {
@@ -53,7 +53,7 @@ final class Authorization
         );
     }
 
-    private function buildJwt(string $secret)
+    private function buildJwt(string $secret): Node\Expr\New_
     {
         return new Node\Expr\New_(
             new Node\Name('Tuupola\\Middleware\\JwtAuthentication'),

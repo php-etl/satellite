@@ -76,12 +76,13 @@ final readonly class Service implements Configurator\ActionInterface
         ) {
             foreach ($config['expression_language'] as $providerClass) {
                 $provider = new $providerClass();
-                if (!$provider instanceof ExpressionFunctionProviderInterface) {
+                if ($provider instanceof ExpressionFunctionProviderInterface) {
+                    $interpreter->registerProvider($provider);
+                } else {
                     throw new Configurator\InvalidConfigurationException(
                         \sprintf('Provider class "%s" must implement %s.', $providerClass, ExpressionFunctionProviderInterface::class)
                     );
                 }
-                $interpreter->registerProvider($provider);
             }
         }
 

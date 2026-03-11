@@ -21,6 +21,7 @@ final class Composer
     public function __construct(private readonly string $workdir, ?LoggerInterface $logger = null)
     {
         $this->logger = $logger ?? new class() extends AbstractLogger {
+            /** @param \Psr\Log\LogLevel::* $level */
             public function log($level, string|\Stringable $message, array $context = []): void
             {
                 $prefix = sprintf(\PHP_EOL.'[%s] ', strtoupper((string) $level));

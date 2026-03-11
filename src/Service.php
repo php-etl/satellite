@@ -390,12 +390,13 @@ final class Service implements Configurator\FactoryInterface
         ) {
             foreach ($config['pipeline']['expression_language'] as $providerClass) {
                 $provider = new $providerClass();
-                if (!$provider instanceof ExpressionFunctionProviderInterface) {
+                if ($provider instanceof ExpressionFunctionProviderInterface) {
+                    $this->interpreter->registerProvider($provider);
+                } else {
                     throw new Configurator\InvalidConfigurationException(
                         \sprintf('Provider class "%s" must implement %s.', $providerClass, ExpressionFunctionProviderInterface::class)
                     );
                 }
-                $this->interpreter->registerProvider($provider);
             }
         }
 
