@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1aabd9e92a016afd7ad954eeff49bf60",
+    "content-hash": "9c22f1c1a5e47cafc192db7c14ae9d16",
     "packages": [
         {
             "name": "brick/math",
@@ -2570,7 +2570,7 @@
             "dist": {
                 "type": "path",
                 "url": "../runtime/bucket",
-                "reference": "ed5756e39e06cc8a43f417a22229c90d4b25553f"
+                "reference": "62eadd4dadfa9aa8ba321e3de0a400a570677094"
             },
             "require": {
                 "php": "^8.4",
@@ -2578,9 +2578,9 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
-                "phpstan/phpstan": "^2.2",
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^10.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2676,7 +2676,7 @@
             "dist": {
                 "type": "path",
                 "url": "../contracts/configurator-contracts",
-                "reference": "9db5ba627222ddfeccb6330dc0b8c0339cf5e25f"
+                "reference": "268d75d825234d991bb190759df1cbb89a005dfa"
             },
             "require": {
                 "nikic/php-parser": "^5.6",
@@ -2688,8 +2688,8 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
-                "phpstan/phpstan": "^2.2",
-                "rector/rector": "^2.0"
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2727,7 +2727,7 @@
             "dist": {
                 "type": "path",
                 "url": "../dockerfile",
-                "reference": "6b78b2f7fa0e7adaae92257f7571ef57d346baf7"
+                "reference": "475d87d24d0c86e9327307558f64a98f815afdfb"
             },
             "require": {
                 "php": "^8.4",
@@ -2736,9 +2736,9 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
                 "infection/infection": "^0.26",
-                "phpstan/phpstan": "^2.2",
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^10.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2776,7 +2776,7 @@
             "dist": {
                 "type": "path",
                 "url": "../cloud-api-client",
-                "reference": "e8161ba25296f55729702b0d688473a9a30e5f3f"
+                "reference": "37f1133ddb04e219939fc9c67427e98fa62a8065"
             },
             "require": {
                 "jane-php/open-api-runtime": "^7.4",
@@ -2785,7 +2785,8 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
                 "jane-php/open-api-3": "^7.4",
-                "rector/rector": "^2.0"
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2823,7 +2824,7 @@
             "dist": {
                 "type": "path",
                 "url": "../tools/packaging",
-                "reference": "cdf32007e0fddc622249418af6d2a66122f0c292"
+                "reference": "eeeba5471da6f85aee38fd03dd634a33b1d6058d"
             },
             "require": {
                 "nikic/php-parser": "^5.6",
@@ -2834,8 +2835,8 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
                 "infection/infection": "^0.26",
-                "phpstan/phpstan": "^2.2",
-                "rector/rector": "^0.15"
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2877,7 +2878,7 @@
             "dist": {
                 "type": "path",
                 "url": "../contracts/packaging-contracts",
-                "reference": "35f83e5ffe0652f7d66e0e5d76ccbb5accf146e3"
+                "reference": "a260afd186c19523b039978522ff904c738498b8"
             },
             "require": {
                 "nikic/php-parser": "^5.6",
@@ -2885,8 +2886,8 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
-                "phpstan/phpstan": "^2.2",
-                "rector/rector": "^2.0"
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -2924,7 +2925,7 @@
             "dist": {
                 "type": "path",
                 "url": "../toolbox",
-                "reference": "84fd87027a54a30c18085f4a999f41831b9eb9e0"
+                "reference": "f7ec7bacef70ec7edf7066f04099f22da22b57d0"
             },
             "require": {
                 "nikic/php-parser": "^5.6",
@@ -2938,10 +2939,10 @@
                 "infection/infection": "^0.26",
                 "mikey179/vfsstream": "^1.6",
                 "php-etl/phpunit-extension": "*",
-                "phpstan/phpstan": "^2.2",
+                "phpstan/phpstan": "^2.1",
                 "phpunit/php-invoker": "*",
                 "phpunit/phpunit": "^10.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -10720,7 +10721,7 @@
             "dist": {
                 "type": "path",
                 "url": "../phpunit-extension",
-                "reference": "6ee628466d088b8b75e92bc5645dff3f7067acbe"
+                "reference": "aaf820f2b2e32abd38a48c605ff0f7960755b16c"
             },
             "require": {
                 "fakerphp/faker": "^1.19",
@@ -10736,8 +10737,8 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.38",
                 "infection/infection": "^0.26.18",
-                "phpstan/phpstan": "^2.2",
-                "rector/rector": "^2.0"
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -10832,13 +10833,13 @@
             "dist": {
                 "type": "path",
                 "url": "../contracts/satellite-contracts",
-                "reference": "12c71812b5e622c53590f73a43a1122843aabc4e"
+                "reference": "9492a6c88dfd6c1e2cdd9019664c1fd5e5b11eb9"
             },
             "require": {
                 "php": "^8.4"
             },
             "require-dev": {
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "extra": {
@@ -10934,11 +10935,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.x-dev",
+            "version": "2.1.40",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/371ccf9b722eb8ce713f5cd2297da229bd0c79f9",
-                "reference": "371ccf9b722eb8ce713f5cd2297da229bd0c79f9",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
+                "reference": "9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
                 "shasum": ""
             },
             "require": {
@@ -10947,7 +10948,6 @@
             "conflict": {
                 "phpstan/phpstan-shim": "*"
             },
-            "default-branch": true,
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -10984,7 +10984,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-11T10:33:58+00:00"
+            "time": "2026-02-23T15:04:35+00:00"
         },
         {
             "name": "psr/clock",
