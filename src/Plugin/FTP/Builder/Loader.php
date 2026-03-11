@@ -17,8 +17,10 @@ final class Loader implements StepBuilderInterface
     private ?Node\Expr $logger = null;
     private ?Node\Expr $rejection = null;
     private ?Node\Expr $state = null;
-    private iterable $servers = [];
-    private iterable $putStatements = [];
+    /** @var array<int, array<int|string, mixed>> */
+    private array $servers = [];
+    /** @var list<array{0: Node\Expr, 1: Node\Expr, 2: ?Node\Expr, 3: ?Node\Expr}> */
+    private array $putStatements = [];
     private array $serversMapping = [];
 
     public function __construct(private readonly ExpressionLanguage $interpreter = new Satellite\ExpressionLanguage())
@@ -101,7 +103,10 @@ final class Loader implements StepBuilderInterface
         }
     }
 
-    private function getPutNode($index, $server, $path, $content, $mode): array
+    /**
+     * @param array<int|string, mixed> $server
+     */
+    private function getPutNode(int $index, array $server, Node\Expr $path, Node\Expr $content, ?Node\Expr $mode): array
     {
         return [
             new Node\Stmt\If_(
@@ -152,9 +157,9 @@ final class Loader implements StepBuilderInterface
                             new Node\Expr\MethodCall(
                                 var: new Node\Expr\PropertyFetch(
                                     var: new Node\Expr\Variable('this'),
-                                    name: new Node\Name('logger'),
+                                    name: new Identifier('logger'),
                                 ),
-                                name: new Node\Name('alert'),
+                                name: new Identifier('alert'),
                                 args: [
                                     new Node\Arg(
                                         new Node\Expr\FuncCall(
@@ -186,7 +191,7 @@ final class Loader implements StepBuilderInterface
                         new Node\Stmt\Expression(
                             new Node\Expr\MethodCall(
                                 var: new Node\Expr\Variable('bucket'),
-                                name: new Node\Name('reject'),
+                                name: new Identifier('reject'),
                                 args: [
                                     new Node\Arg(
                                         new Node\Expr\Array_(
@@ -299,7 +304,7 @@ final class Loader implements StepBuilderInterface
                                             new Node\Stmt\Expression(
                                                 new Node\Expr\MethodCall(
                                                     var: new Node\Expr\Variable('bucket'),
-                                                    name: new Node\Name('accept'),
+                                                    name: new Identifier('accept'),
                                                     args: [
                                                         new Node\Arg(
                                                             new Node\Expr\Variable('input'),

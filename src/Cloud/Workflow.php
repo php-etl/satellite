@@ -51,7 +51,7 @@ final readonly class Workflow implements WorkflowInterface
                                 new StepList(
                                     ...array_map(fn(string $code, array $step, int $order) => new Step(
                                         $step['name'] ?? sprintf('step%d', $order),
-                                        new StepCode($code ?? sprintf('step%d', $order)),
+                                        new StepCode($code),
                                         $step,
                                         new ProbeList(),
                                         $order
@@ -97,7 +97,10 @@ final readonly class Workflow implements WorkflowInterface
             new Composer(
                 new DTO\Autoload(
                     ...array_map(
-                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
+                        fn (int|string $namespace, mixed $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig(
+                            (string) $namespace,
+                            ...(is_array($paths) && isset($paths['paths']) ? (array) $paths['paths'] : []),
+                        ),
                         array_keys($configuration['composer']['autoload']['psr4'] ?? []),
                         $configuration['composer']['autoload']['psr4'] ?? [],
                     )
@@ -186,36 +189,49 @@ final readonly class Workflow implements WorkflowInterface
                                 fn (Api\Model\PipelineStepRead $step, int $order) => new Step(
                                     $step->getLabel(),
                                     new StepCode($step->getCode()),
-                                    $step->getConfiguration(),
+                                    $step->getConfiguration() ?? [],
                                     /* TODO : implement probes when it is enabled */
                                     new ProbeList(),
                                     $order
                                 ),
-                                $steps = $job->getPipeline()->getSteps(),
-                                range(0, \count((array) $steps)),
+                                $job->getPipeline()->getSteps() ?? [],
+                                range(0, \count($job->getPipeline()->getSteps() ?? [])),
                             )),
                             $order
                         );
                     }
 
                     if (null !== $job->getAction()) {
+                        $configuration = $job->getAction()->getConfiguration();
+
                         return new DTO\Workflow\Action(
                             $job->getLabel(),
                             new JobCode($job->getCode()),
-                            $job->getAction()->getConfiguration(),
+                            $configuration !== null ? (is_array($configuration) ? $configuration : iterator_to_array($configuration)) : [],
                             $order,
                         );
                     }
 
                     throw new \RuntimeException('This type of job is not currently supported.');
-                }, $jobs = $workflow->getJobs(), range(0, \count((array) $jobs)))
+                }, $workflow->getJobs() ?? [], range(0, \count($workflow->getJobs() ?? [])))
             ),
             new Composer(
                 new DTO\Autoload(
                     ...array_map(
-                        fn (string $namespace, array $paths): DTO\PSR4AutoloadConfig => new DTO\PSR4AutoloadConfig($namespace, ...$paths['paths']),
-                        array_keys($workflow->getAutoload()),
-                        $model->getAutoload(),
+                        static function (int|string $_key, mixed $value): DTO\PSR4AutoloadConfig {
+                            if (is_array($value) && isset($value['paths'])) {
+                                return new DTO\PSR4AutoloadConfig((string) ($value['namespace'] ?? ''), ...(array) $value['paths']);
+                            }
+                            if (is_string($value)) {
+                                $parts = explode(':', $value, 2);
+
+                                return new DTO\PSR4AutoloadConfig($parts[0], $parts[1] ?? '');
+                            }
+
+                            return new DTO\PSR4AutoloadConfig('', '');
+                        },
+                        array_keys($autoload = $workflow->getAutoload() ?? []),
+                        $autoload,
                     )
                 ),
                 new DTO\PackageList(
@@ -225,19 +241,19 @@ final readonly class Workflow implements WorkflowInterface
 
                             return new Package($parts[0], $parts[1] ?? '*');
                         },
-                        $workflow->getPackages(),
+                        $workflow->getPackages() ?? [],
                     )
                 ),
                 new RepositoryList(
                     ...array_map(
                         fn (array $repository): DTO\Repository => new DTO\Repository($repository['name'], $repository['type'], $repository['url']),
-                        $workflow->getRepositories(),
+                        $workflow->getRepositories() ?? [],
                     )
                 ),
                 new AuthList(
                     ...array_map(
                         fn (array $repository): DTO\Auth => new DTO\Auth($repository['url'], $repository['token']),
-                        $workflow->getAuths(),
+                        $workflow->getAuths() ?? [],
                     )
                 ),
             ),

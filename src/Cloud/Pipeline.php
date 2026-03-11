@@ -50,7 +50,7 @@ final readonly class Pipeline implements PipelineInterface
                         ),
                         $order,
                     );
-                }, $configuration['pipeline']['steps'], range(0, (is_countable($configuration['pipeline']['steps']) ? \count($configuration['pipeline']['steps']) : 0) - 1))
+                }, $configuration['pipeline']['steps'] ?? [], range(0, (is_countable($configuration['pipeline']['steps'] ?? []) ? \count($configuration['pipeline']['steps'] ?? []) : 0) - 1))
             ),
             new Composer(
                 new DTO\Autoload(
