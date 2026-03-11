@@ -74,6 +74,7 @@ final class Drop implements StepBuilderInterface
 
         if (\count($exclusions) > 2) {
             $right = array_shift($exclusions);
+            \assert($right instanceof Node\Expr);
 
             return new Node\Expr\BinaryOp\BooleanAnd(
                 $this->buildExclusions(...$exclusions),
@@ -84,6 +85,7 @@ final class Drop implements StepBuilderInterface
         if (\count($exclusions) > 1) {
             $left = array_pop($exclusions);
             $right = array_pop($exclusions);
+            \assert($left instanceof Node\Expr && $right instanceof Node\Expr);
 
             return new Node\Expr\BinaryOp\BooleanAnd(
                 $left,
@@ -92,7 +94,10 @@ final class Drop implements StepBuilderInterface
         }
 
         if (\count($exclusions) > 0) {
-            return array_pop($exclusions);
+            $result = array_pop($exclusions);
+            \assert($result instanceof Node\Expr);
+
+            return $result;
         }
 
         return new Node\Expr\ConstFetch(
@@ -124,7 +129,7 @@ final class Drop implements StepBuilderInterface
                                 ),
                                 [
                                     new Node\Stmt\If_(
-                                        $this->buildExclusions(...$this->exclusions),
+                                        $this->buildExclusions(...array_filter($this->exclusions, static fn (?Node\Expr $e): bool => $e !== null)),
                                         [
                                             'stmts' => [
                                                 new Node\Stmt\Expression(

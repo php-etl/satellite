@@ -48,7 +48,7 @@ final class Server implements StepBuilderInterface
         return $this->host;
     }
 
-    public function getBasePath(): Node\Expr
+    public function getBasePath(): ?Node\Expr
     {
         return $this->basePath;
     }
@@ -125,10 +125,10 @@ final class Server implements StepBuilderInterface
                                     $this->host,
                                 ),
                                 new Node\Arg(
-                                    $this->port,
+                                    $this->port ?? new Node\Scalar\LNumber(21),
                                 ),
                                 new Node\Arg(
-                                    $this->timeout,
+                                    $this->timeout ?? new Node\Scalar\LNumber(90),
                                 ),
                             ],
                         ),
@@ -143,7 +143,7 @@ final class Server implements StepBuilderInterface
                                 value: new Node\Expr\Variable('connection')
                             ),
                             new Node\Arg(
-                                $this->passiveMode,
+                                $this->passiveMode ?? new Node\Expr\ConstFetch(new Node\Name('true')),
                             ),
                         ]
                     )

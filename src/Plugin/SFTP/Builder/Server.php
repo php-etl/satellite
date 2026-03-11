@@ -50,7 +50,7 @@ final class Server implements StepBuilderInterface
         return $this->host;
     }
 
-    public function getBasePath(): Node\Expr
+    public function getBasePath(): ?Node\Expr
     {
         return $this->basePath;
     }
@@ -146,7 +146,7 @@ final class Server implements StepBuilderInterface
                                     $this->host,
                                 ),
                                 new Node\Arg(
-                                    $this->port,
+                                    $this->port ?? new Node\Scalar\LNumber(22),
                                 ),
                             ],
                         ),
