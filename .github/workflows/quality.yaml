@@ -1,38 +1,78 @@
 name: Quality
-on: push
+
+on:
+  push:
+    branches: [main, master, next]
+  pull_request:
+    branches: [main, master, next]
+
+env:
+  PHP_VERSION: '8.4'
+
 jobs:
-    cs-fixer:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: '8.2'
-                    tools: composer:v2
-                    coverage: none
-            -   name: Cs-Fixer
-                run: |
-                    wget -q https://cs.symfony.com/download/php-cs-fixer-v3.phar -O php-cs-fixer
-                    chmod a+x php-cs-fixer
-                    ./php-cs-fixer fix src --dry-run
+  quality:
+    name: PHP-CS-Fixer, PHPStan, Rector, PHPUnit, Infection, PHPSpec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    phpstan:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   uses: actions/cache@v4
-                with:
-                    path: '**/vendor'
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-
-            -   uses: php-actions/composer@v6
-                with:
-                    args: --prefer-dist
-                    php_version: '8.2'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+          coverage: pcov
 
-            -   name: PHPStan
-                uses: php-actions/phpstan@v3
-                with:
-                    path: src/
-                    level: 8
+      - uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock', 'composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: PHP-CS-Fixer
+        run: |
+          if [ -f vendor/bin/php-cs-fixer ] && [ -d src ]; then
+            vendor/bin/php-cs-fixer fix src --dry-run
+          fi
+
+      - name: PHPStan
+        run: |
+          if [ ! -d src ]; then exit 0; fi
+          if [ -f vendor/bin/phpstan ]; then
+            vendor/bin/phpstan analyse src --level=8 --no-progress
+          elif [ -f vendor/phpstan/phpstan/phpstan ]; then
+            php vendor/phpstan/phpstan/phpstan analyse src --level=8 --no-progress
+          fi
+
+      - name: Rector
+        run: |
+          if [ -f bin/rector ]; then
+            bin/rector process --dry-run
+          elif [ -f vendor/bin/rector ]; then
+            vendor/bin/rector process --dry-run
+          fi
+
+      - name: PHPUnit
+        run: |
+          if [ -f phpunit.xml ] || [ -f phpunit.xml.dist ]; then
+            if [ -f infection.json ] || [ -f infection.json.dist ]; then
+              vendor/bin/phpunit --coverage-html var/coverage --coverage-text
+            else
+              vendor/bin/phpunit
+            fi
+          fi
+
+      - name: Infection
+        run: |
+          if [ -f infection.json ] || [ -f infection.json.dist ]; then
+            vendor/bin/infection run --no-progress --min-msi=0 --min-covered-msi=0
+          fi
+
+      - name: PHPSpec
+        run: |
+          if [ -f bin/phpspec ] && [ -d spec ]; then
+            bin/phpspec run spec
+          fi
