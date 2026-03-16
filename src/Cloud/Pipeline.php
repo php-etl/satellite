@@ -35,11 +35,20 @@ final readonly class Pipeline implements PipelineInterface
                     $code = $stepConfig['code'] ?? sprintf('step%d', $order);
                     unset($stepConfig['name'], $stepConfig['code']);
 
-                    array_walk_recursive($stepConfig, function (&$value): void {
-                        if ($value instanceof Expression) {
-                            $value = '@='.$value;
+                    array_walk_recursive(
+                        $stepConfig,
+                        function (&$value, $key) {
+                            if ($value instanceof Expression && $key === 'expression') {
+                                $value = (string) $value;
+                            }
+
+                            if ($value instanceof Expression) {
+                                $value = '@=' . $value;
+                            }
+
+                            return $value;
                         }
-                    });
+                    );
 
                     return new DTO\Step(
                         $name,
